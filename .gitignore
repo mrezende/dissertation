@@ -1,0 +1,17 @@
+.DS_Store
+*.ps
+*.dvi
+*.log
+*.aux
+*.blg
+*.toc
+*.brf
+*.ilg
+*.ind
+missfont.log
+*.bbl
+src/*.pdf
+*.out
+*.lof
+*.lot
+*.idx
