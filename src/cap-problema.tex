@@ -1,0 +1,44 @@
+%% ------------------------------------------------------------------------- %%
+\chapter{Problema}
+\label{cap:problema}
+
+Recapitular o problema em questão com mais detalhes e minúcia.
+
+%------------------------------------------------------
+\section{Problema de perguntas e respostas nos dados do StackOverFlow} 
+
+\subsection{Detalhes do dataset}
+
+ - Tamanho do dataset inicial
+ - Dados sobre as perguntas, respostas (tamanho, quantidade de palavras etc.)
+
+%------------------------------------------------------
+\section{Arquitetura proposta} 
+
+- Uso da rede LSTM/CNN 
+       - Utilizando cosine similarity
+       - Uso do word2vec para pergunta (linguagem natural) e outro para código (linguagem estruturada) - Verificar também se é viável usar o artigo Deep contextualized word representations ELMo representation (ao invés de word2vec) (According to the article: "We show that
+these representations can be easily added to
+existing models and significantly improve the
+state of the art across six challenging NLP
+problems, including question answering, textual entailment and sentiment analysis." )
+
+\subsection{Resultados preliminares}
+
+ - Lidando com overfitting (Uso de regularizacao ou early stopping) - Quantidade de hidden layers vai ser ajustada pela regularização
+         - Ajuste dos parâmetros de acordo com o dataset
+      
+          - Validacao do resultado 
+             - Uso do cross validation - Dado que o dataset é pequeno
+             - Análise dos resultados do cross validation para saber se o modelo aprendeu (É suficiente o resultado do cross validation para saber se o modelo aprendeu?)
+              - Resultados do cross validation:
+                  - Accuracy
+                  - Precision
+                  - Recall
+                  - F1 Score
+
+\subsection{Próximos passos}
+          - Dependendo do resultado, ao invés de coletar mais dados, tentar usar transfer learning. Transfer learning já existe em algoritmos de reconhecimento de imagem e recentemente foi implementado para NLP. É uma possibilidade. 
+                  
+\subsection{Considerações finais}
+
