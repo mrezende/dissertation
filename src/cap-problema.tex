@@ -70,17 +70,41 @@ Out[28]:
  \{'name': 'SEA', 'url': ''\}]\\ 
  \hline
 \end{tabular}
-\caption{Exemplo de pergunta \textit{how-to} no \textit{StackOverFlow}. Referência: \url{https://stackoverflow.com/questions/19675761/how-to-sort-a-list-using-python}}
+\caption{Exemplo de pergunta \textit{how-to} no \textit{StackOverFlow} com resposta aceita que contém apenas 1 (um) código-fonte como solução sugerida. Referência: \url{https://stackoverflow.com/questions/19675761/how-to-sort-a-list-using-python}}
 \label{table:exemplo-pergunta-stack-over-flow-howto}
 \end{table}
 
 
-No exemplo da tabela~\ref{table:exemplo-pergunta-stack-over-flow-howto}, a resposta aceita\footnote{Para uma resposta ser aceita no \textit{StackOverFlow}} pelo usuário, tem apenas um código-fonte como solução. Entretanto, a resposta aceita pelo usuário pode conter mais de um código-fonte. E cada código-fonte pode ser uma possível solução para a questão.
+No exemplo da tabela~\ref{table:exemplo-pergunta-stack-over-flow-howto}, a resposta aceita\footnote{Para uma resposta ser aceita no \textit{StackOverFlow}} pelo usuário, tem apenas um código-fonte como solução sugerida. Entretanto, as respostas podem conter mais de um código-fonte sugeridos. E cada código-fonte pode ser uma possível solução para a questão.
 
-Adicionar exemplo...
+\begin{table}[h!]
+\centering
+\begin{tabular}{ |p{14cm}| } 
+ \hline
+ \textbf{Pergunta:} How to count how many positions away an element is in a list? \\ \hline
+ \textbf{Descrição:} If I have a list of integers and I want to return the number of spaces away the maximum number is from the beginning of the list, how would I do that if given a list, list1? I should be able to return the integer '7' because 512 is the maximum and it is 7 spaces away.
 
-
-
+ list1=[34,5,1,7,5,3,8,512,8,43]
+ \\ \hline
+ \textbf{Resposta aceita pelo usuário:}\\ 
+ \hline
+ Use the builtin functions max and list.index
+\begin{lstlisting}[language=Python]
+>>> list1=[34,5,1,7,5,3,8,512,8,43]
+>>> max_ele = max(list1)
+>>> print(list1.index(max_ele))
+7
+\end{lstlisting}
+This can be done in a single line as
+\begin{lstlisting}[language=Python]
+print(list1.index(max(list1)))
+\end{lstlisting}\\
+ 
+ \hline
+\end{tabular}
+\caption{Exemplo de pergunta \textit{how-to} no \textit{StackOverFlow} com resposta aceita que contém apenas 1 (um) código-fonte como solução sugerida. Referência: \url{https://stackoverflow.com/questions/19675761/how-to-sort-a-list-using-python}}
+\label{table:exemplo-pergunta-stack-over-flow-howto}
+\end{table}
 
 \subsection{Detalhes do dataset}
 
