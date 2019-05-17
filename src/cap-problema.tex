@@ -11,13 +11,13 @@ O problema de pares de perguntas e códigos-fontes já foi discutido na seção~
 
 \begin{figure}[h]
 \includegraphics[width=12cm]{src/figuras/cap-problema/post-questions-total.png}
-\caption{Total de perguntas no \textit{StackOverFlow}. Google and the Google logo are registered trademarks of Google LLC, used with permission.}
+\caption{Total de perguntas no \textit{StackOverFlow} até 20 de março de 2019. Google and the Google logo are registered trademarks of Google LLC, used with permission.}
 \label{fig:bigquery-total-questions-stackoverflow}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=12cm]{src/figuras/cap-problema/post-questions-python-sql-total.png}
-\caption{Total de perguntas sobre Python e SQL no \textit{StackOverFlow}. Google and the Google logo are registered trademarks of Google LLC, used with permission.}
+\caption{Total de perguntas sobre Python e SQL no \textit{StackOverFlow} até 20 de março de 2019. Google and the Google logo are registered trademarks of Google LLC, used with permission.}
 \label{fig:bigquery-total-questions-python-sql-stackoverflow}
 \end{figure}
 
@@ -29,6 +29,56 @@ Somente com estes números, vê-se o potencial do \textit{StackOverFlow} como fo
     \item ferramentas de programação
     \item problemas referentes a desenvolvimento de software
 \end{itemize}
+
+Analisando estes tipos de perguntas, uma pergunta sobre ferramentas de programação, dificilmente levará a uma resposta cuja solução seja um código fonte. E se analisar cada um dos tópicos, verifica-se que nem todas as dúvidas vão levar a uma resposta com código-fonte. Muitas vezes, a resposta é somente uma orientação e não necessariamente leva a solução da pergunta feita por um usuário.
+
+Levando isso em consideração, \citeauthor{yao-2018} coletou a partir da base aberta de questões e respostas do \cite{stackoverflow-questions-topics-2019}, somente perguntas do tipo \textit{how-to} referentes as linguagens \textit{SQL} e \textit{Python}. Perguntas do tipo \textit{how-to}, normalmente tem apenas uma resposta curta e direta cuja solução é um código-fonte. Exemplo:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{ |p{14cm}| } 
+ \hline
+ \textbf{Pergunta:} how to sort a list using python? \\ \hline
+ \textbf{Descrição:} How I sort my python list below using name property,
+
+ [\{'name':'Accra','url':''\},
+  \{'name':'Dubai','url':''\},
+  \{'name':'Birmingham','url':''\},
+  \{'name':'Dhaka','url':''\},
+  \{'name':'Abu Dhabi','url':''\},
+  \{'name':'Lahore','url':''\},
+  \{'name':'Karachi','url':''\},
+  \{'name':'Kathmandu','url':''\},
+  \{'name':'SEA','url':''\}]
+ \\ \hline
+ \textbf{Resposta aceita pelo usuário:}\\ 
+ \hline
+ In [26]: L = [\{'name':'Accra','url':''\},\{'name':'Dubai','url':''\},\newline\{'name':'Birmingham','url':''\},\{'name':'Dhaka','url':''\},\newline\{'name':'Abu Dhabi','url':''\},\{'name':'Lahore','url':''\},\newline\{'name':'Karachi','url':''\},\{'name':'Kathmandu','url':''\},\newline\{'name':'SEA','url':''\}]
+
+In [27]: L.sort(key=lambda d:d['name'])
+
+In [28]: L
+Out[28]: 
+[\{'name': 'Abu Dhabi', 'url': ''\},
+ \{'name': 'Accra', 'url': ''\},
+ \{'name': 'Birmingham', 'url': ''\},
+ \{'name': 'Dhaka', 'url': ''\},
+ \{'name': 'Dubai', 'url': ''\},
+ \{'name': 'Karachi', 'url': ''\},
+ \{'name': 'Kathmandu', 'url': ''\},
+ \{'name': 'Lahore', 'url': ''\},
+ \{'name': 'SEA', 'url': ''\}]\\ 
+ \hline
+\end{tabular}
+\caption{Exemplo de pergunta \textit{how-to} no \textit{StackOverFlow}. Referência: \url{https://stackoverflow.com/questions/19675761/how-to-sort-a-list-using-python}}
+\label{table:exemplo-pergunta-stack-over-flow-howto}
+\end{table}
+
+
+No exemplo da tabela~\ref{table:exemplo-pergunta-stack-over-flow-howto}, a resposta aceita\footnote{Para uma resposta ser aceita no \textit{StackOverFlow}} pelo usuário, tem apenas um código-fonte como solução. Entretanto, a resposta aceita pelo usuário pode conter mais de um código-fonte. E cada código-fonte pode ser uma possível solução para a questão.
+
+Adicionar exemplo...
+
 
 
 
