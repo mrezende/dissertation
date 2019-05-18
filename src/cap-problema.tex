@@ -32,7 +32,11 @@ Somente com estes números, vê-se o potencial do \textit{StackOverFlow} como fo
 
 Analisando estes tipos de perguntas, uma pergunta sobre ferramentas de programação, dificilmente levará a uma resposta cuja solução seja um código fonte. E se analisar cada um dos tópicos, verifica-se que nem todas as dúvidas vão levar a uma resposta com código-fonte. Muitas vezes, a resposta é somente uma orientação e não necessariamente leva a solução da pergunta feita por um usuário.
 
-Levando isso em consideração, \citeauthor{yao-2018} coletou a partir da base aberta de questões e respostas do \cite{stackoverflow-questions-topics-2019}, somente perguntas do tipo \textit{how-to} referentes as linguagens \textit{SQL} e \textit{Python}. Perguntas do tipo \textit{how-to}, normalmente tem apenas uma resposta curta e direta cuja solução é um código-fonte. Exemplo:
+Levando isso em consideração, \citeauthor{yao-2018} coletou a partir da base aberta de questões e respostas do \cite{stackoverflow-questions-topics-2019}, somente perguntas do tipo \textit{how-to} referentes as linguagens \textit{SQL} e \textit{Python}. Perguntas do tipo \textit{how-to}, normalmente tem apenas uma resposta curta e direta cuja solução é um código-fonte. 
+
+Na tabela~\ref{table:exemplo-pergunta-stack-over-flow-howto}, temos um exemplo de pergunta \textit{how-to}, cuja resposta aceita pelo usuário contém apenas uma solução em código-fonte sugerida. Já na tabela~\ref{table:exemplo-pergunta-stack-over-flow-howto-two-code-solutions}, temos um exemplo no qual a resposta aceita pelo usuário, há mais de uma solução.
+
+
 
 \begin{table}[h!]
 \centering
@@ -41,33 +45,46 @@ Levando isso em consideração, \citeauthor{yao-2018} coletou a partir da base a
  \textbf{Pergunta:} how to sort a list using python? \\ \hline
  \textbf{Descrição:} How I sort my python list below using name property,
 
- [\{'name':'Accra','url':''\},
-  \{'name':'Dubai','url':''\},
-  \{'name':'Birmingham','url':''\},
-  \{'name':'Dhaka','url':''\},
-  \{'name':'Abu Dhabi','url':''\},
-  \{'name':'Lahore','url':''\},
-  \{'name':'Karachi','url':''\},
-  \{'name':'Kathmandu','url':''\},
-  \{'name':'SEA','url':''\}]
+\begin{lstlisting}[language=python]
+ [{'name':'Accra','url':''},
+  {'name':'Dubai','url':''},
+  {'name':'Birmingham','url':''},
+  {'name':'Dhaka','url':''},
+  {'name':'Abu Dhabi','url':''},
+  {'name':'Lahore','url':''},
+  {'name':'Karachi','url':''},
+  {'name':'Kathmandu','url':''},
+  {'name':'SEA','url':''}]
+\end{lstlisting}
  \\ \hline
  \textbf{Resposta aceita pelo usuário:}\\ 
  \hline
- In [26]: L = [\{'name':'Accra','url':''\},\{'name':'Dubai','url':''\},\newline\{'name':'Birmingham','url':''\},\{'name':'Dhaka','url':''\},\newline\{'name':'Abu Dhabi','url':''\},\{'name':'Lahore','url':''\},\newline\{'name':'Karachi','url':''\},\{'name':'Kathmandu','url':''\},\newline\{'name':'SEA','url':''\}]
+ 
+ \begin{lstlisting}[language=python]
+ In [26]: L = [{'name':'Accra','url':''},
+ {'name':'Dubai','url':''},
+ {'name':'Birmingham','url':''},
+ {'name':'Dhaka','url':''},
+ {'name':'Abu Dhabi','url':''},
+ {'name':'Lahore','url':''},
+ {'name':'Karachi','url':''},
+ {'name':'Kathmandu','url':''},
+ {'name':'SEA','url':''}]
 
 In [27]: L.sort(key=lambda d:d['name'])
 
 In [28]: L
-Out[28]: 
-[\{'name': 'Abu Dhabi', 'url': ''\},
- \{'name': 'Accra', 'url': ''\},
- \{'name': 'Birmingham', 'url': ''\},
- \{'name': 'Dhaka', 'url': ''\},
- \{'name': 'Dubai', 'url': ''\},
- \{'name': 'Karachi', 'url': ''\},
- \{'name': 'Kathmandu', 'url': ''\},
- \{'name': 'Lahore', 'url': ''\},
- \{'name': 'SEA', 'url': ''\}]\\ 
+Out[28]: [{'name': 'Abu Dhabi', 'url': ''},
+ {'name': 'Accra', 'url': ''},
+ {'name': 'Birmingham', 'url': ''},
+ {'name': 'Dhaka', 'url': ''},
+ {'name': 'Dubai', 'url': ''},
+ {'name': 'Karachi', 'url': ''},
+ {'name': 'Kathmandu', 'url': ''},
+ {'name': 'Lahore', 'url': ''},
+ {'name': 'SEA', 'url': ''}]
+\end{lstlisting}
+ \\ 
  \hline
 \end{tabular}
 \caption{Exemplo de pergunta \textit{how-to} no \textit{StackOverFlow} com resposta aceita que contém apenas 1 (um) código-fonte como solução sugerida. Referência: \url{https://stackoverflow.com/questions/19675761/how-to-sort-a-list-using-python}}
@@ -75,7 +92,6 @@ Out[28]:
 \end{table}
 
 
-No exemplo da tabela~\ref{table:exemplo-pergunta-stack-over-flow-howto}, a resposta aceita\footnote{Para uma resposta ser aceita no \textit{StackOverFlow}} pelo usuário, tem apenas um código-fonte como solução sugerida. Entretanto, as respostas podem conter mais de um código-fonte sugeridos. E cada código-fonte pode ser uma possível solução para a questão.
 
 \begin{table}[h!]
 \centering
@@ -83,28 +99,34 @@ No exemplo da tabela~\ref{table:exemplo-pergunta-stack-over-flow-howto}, a respo
  \hline
  \textbf{Pergunta:} How to count how many positions away an element is in a list? \\ \hline
  \textbf{Descrição:} If I have a list of integers and I want to return the number of spaces away the maximum number is from the beginning of the list, how would I do that if given a list, list1? I should be able to return the integer '7' because 512 is the maximum and it is 7 spaces away.
+ 
+\begin{lstlisting}[language=python]
+list1=[34,5,1,7,5,3,8,512,8,43]
+\end{lstlisting}
 
- list1=[34,5,1,7,5,3,8,512,8,43]
  \\ \hline
  \textbf{Resposta aceita pelo usuário:}\\ 
  \hline
  Use the builtin functions max and list.index
-\begin{lstlisting}[language=Python]
->>> list1=[34,5,1,7,5,3,8,512,8,43]
->>> max_ele = max(list1)
->>> print(list1.index(max_ele))
+\begin{lstlisting}[language=python]
+list1=[34,5,1,7,5,3,8,512,8,43]
+max_ele = max(list1)
+print(list1.index(max_ele))
 7
 \end{lstlisting}
 This can be done in a single line as
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[language=python]
 print(list1.index(max(list1)))
-\end{lstlisting}\\
+\end{lstlisting}
+\\
  
  \hline
 \end{tabular}
-\caption{Exemplo de pergunta \textit{how-to} no \textit{StackOverFlow} com resposta aceita que contém apenas 1 (um) código-fonte como solução sugerida. Referência: \url{https://stackoverflow.com/questions/19675761/how-to-sort-a-list-using-python}}
-\label{table:exemplo-pergunta-stack-over-flow-howto}
+\caption{Exemplo de pergunta \textit{how-to} no \textit{StackOverFlow} com resposta aceita que contém duas soluções sugeridas. Referência: \url{https://stackoverflow.com/questions/33587404/how-to-count-how-many-positions-away-an-element-is-in-a-list}}
+\label{table:exemplo-pergunta-stack-over-flow-howto-two-code-solutions}
 \end{table}
+
+
 
 \subsection{Detalhes do dataset}
 
