@@ -21,7 +21,7 @@ O problema de pares de perguntas e códigos-fontes já foi discutido na seção~
 \label{fig:bigquery-total-questions-python-sql-stackoverflow}
 \end{figure}
 
-Somente com estes números, vê-se o potencial do \textit{StackOverFlow} como fonte de perguntas em linguagem natural e a sua solução em código fonte \cite{yao-2018}. Porém, ao utilizar o \textit{StackOverFlow} como fonte de repositório de pares de perguntas e códigos-fontes, é necessário levar em consideração quais assuntos é permitido fazer a pergunta. De acordo com o guia de boas práticas do \cite{stackoverflow-questions-topics-2019}, são permitidas perguntas sobre:
+Somente com estes números, vê-se o potencial do \textit{StackOverFlow} como fonte de perguntas em linguagem natural e a sua solução em código fonte \cite{yao-2018}. Mas antes de utilizá-lo como fonte, é necessário levar em consideração quais assuntos é permitido fazer a pergunta. De acordo com o guia de boas práticas do \cite{stackoverflow-questions-topics-2019}, são permitidas perguntas sobre:
 
 \begin{itemize}
     \item um problema específico de programação
@@ -34,11 +34,20 @@ Analisando estes tipos de perguntas, uma pergunta sobre ferramentas de programa�
 
 Levando isso em consideração, \citeauthor{yao-2018} coletou a partir da base aberta de questões e respostas do \cite{stackoverflow-questions-topics-2019}, somente perguntas do tipo \textit{how-to-do-it} referentes as linguagens \textit{SQL} e \textit{Python}. Perguntas do tipo \textit{how-to-do-it}, normalmente tem apenas uma resposta curta e direta cuja solução é um trecho de código-fonte. 
 
-De acordo com \cite{yao-2018}, um trecho de código-fonte é solução quando o usuário consegue resolver o problema somente baseado nele. Uma resposta no \textit{StackOverFlow} pode conter múltiplos trechos de códigos-fontes. A tabela~\ref{table:exemplo-pergunta-stack-over-flow-how-to-do-it} tem um exemplo de uma pergunta no qual a resposta aceita\footnote{Resposta aceita contém um sinal de verificação verde. Esta resposta deve ser marcada como aceita pelo usuário que fez a pergunta.} pelo usuário contém múltiplos trechos de código-fonte.
+Ao final, foi coletado aproximadamente 148 mil pares de perguntas e trechos de código-fonte em \emph{Python} e em torno de 120 mil em \emph{SQL}. Os trechos de códigos-fontes foram extraídas das respostas aceitas\footnote{Resposta aceita contém um sinal de verificação verde. Esta resposta deve ser marcada como aceita pelo usuário que fez a pergunta.} pelos usuários\footnote{Usuário refere-se ao usuário que fez a pergunta no \textit{StackOverFlow}}. Uma resposta aceita no \textit{StackOverFlow} pode conter múltiplos trechos de códigos-fontes. A tabela~\ref{table:exemplo-pergunta-stack-over-flow-how-to-do-it} tem um exemplo de uma pergunta no qual a resposta aceita pelo usuário contém múltiplos trechos de código-fonte.
 
-Segundo \cite{yao-2018}, do conjunto \emph{\{C1, C2, C3, C4\}} de trechos, somente os \emph{C1} e \emph{C3} são consideradas soluções. \emph{C2} não é solução pois somente apresenta um exemplo de uso da função. E \emph{C4} é apenas um lembrete adicional ao usuário.
+Para \cite{yao-2018}, um trecho de código-fonte é solução quando o usuário consegue resolver o problema somente baseado nele.
+De acordo com esta definição, do conjunto \emph{\{C1, C2, C3, C4\}} de trechos do exemplo da tabela~\ref{table:exemplo-pergunta-stack-over-flow-how-to-do-it}, somente os \emph{C1} e \emph{C3} são consideradas soluções. \emph{C2} não é solução pois somente apresenta um exemplo de uso da função. E \emph{C4} é apenas um lembrete adicional ao usuário.
 
-Múltiplos trechos de código-fonte na resposta é comum segundo \cite{yao-2018}. Foi observado mais de 44\% de respostas aceitas em perguntas \textit{how-to-do-it} de \textit{Python} e mais de 34\% de \textit{SQL} com múltiplos trechos de código-fonte.  resposta aceita pelo usuário é aceita como um todo. não há indicação se o trecho de código é solução ou não \todo{arrumar}.
+Múltiplos trechos de código-fonte na resposta é comum segundo \cite{yao-2018}. Estes representam mais de 44\% das respostas coletadas em \textit{Python} e mais de 34\% em \textit{SQL}. O usuário ao aceitar uma resposta, ele aceita a resposta como um todo, com todos os trechos de código-fonte como solução para o seu problema. Não há nenhuma indicação explícita apontando qual dos múltiplos trechos de código-fonte serve como solução. 
+
+Para ter uma base de dados confiável com maior precisão e \textit{recall}, \cite{yao-2018} propôs a seguinte tarefa:
+
+\emph{Dado uma questão no \textit{StackOverFlow} e uma resposta aceita com múltiplos trechos de código-fonte, qual dos trechos de código-fonte são soluções ou não?}
+
+Após extrair os pares de perguntas e trechos de código-fonte, \cite{yao-2018} fez a seguinte pergunta no seu trabalho a 
+
+resposta aceita pelo usuário é aceita como um todo. não há indicação se o trecho de código é solução ou não \todo{arrumar}.
 
 
 
