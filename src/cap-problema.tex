@@ -41,13 +41,19 @@ De acordo com esta definição, do conjunto \emph{\{C1, C2, C3, C4\}} de trechos
 
 Múltiplos trechos de código-fonte na resposta é comum segundo \cite{yao-2018}. Estes representam mais de 44\% das respostas coletadas em \textit{Python} e mais de 34\% em \textit{SQL}. O usuário ao aceitar uma resposta, ele aceita a resposta como um todo, com todos os trechos de código-fonte como solução para o seu problema. Não há nenhuma indicação explícita apontando qual dos múltiplos trechos de código-fonte serve como solução. 
 
+Para ter uma base de dados mais confiável, no qual questões estejam pareados com trechos de código-fonte que sejam soluções, \cite{yao-2018} empregou 4 estudantes de graduação com conhecimento em \textit{Python} e \textit{SQL} para marcar os trechos de código-fonte de uma resposta aceita. Para cada trecho de uma resposta aceita, o estudante deve marcar com a anotação \emph{1}, se ele acha que somente este trecho soluciona o problema. Caso contrário, ele anota com \emph{0}. Um trecho de código-fonte é considerado solução, caso dois estudantes anotem com \emph{1}.
+
+Ao final, \cite{yao-2018} disponibilizou um conjunto contendo mais de 4800 pares de questões e trechos de códigos-fontes em \textit{Python} e mais de 3600 em \textit{SQL}. A partir destes dados, \cite{yao-2018} treinou um modelo de redes neurais recorrentes para responder a seguinte pergunta:
+
+\emph{Dado um conjunto de trechos de código-fonte de uma resposta aceita no StackOverFlow. Qual destes trechos soluciona a questão em si?}
+
+Este é um típico problema de pergunta e resposta, conforme mencionado na seção~\ref{sec:fundamentos}. 
+
 Para ter uma base de dados confiável com maior precisão e \textit{recall}, \cite{yao-2018} propôs a seguinte tarefa:
 
-\emph{Dado uma questão no \textit{StackOverFlow} e uma resposta aceita com múltiplos trechos de código-fonte, qual dos trechos de código-fonte são soluções ou não?}
+\emph{Dado uma questão no \textit{StackOverFlow} e uma resposta aceita com múltiplos trechos de código-fonte, qual dos trechos de código-fonte são soluções?}
 
-Após extrair os pares de perguntas e trechos de código-fonte, \cite{yao-2018} fez a seguinte pergunta no seu trabalho a 
 
-resposta aceita pelo usuário é aceita como um todo. não há indicação se o trecho de código é solução ou não \todo{arrumar}.
 
 
 
