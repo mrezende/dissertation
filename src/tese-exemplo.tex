@@ -39,8 +39,17 @@
 \usepackage[round,sort,nonamebreak]{natbib} % cita?o bibliogr?ica textual(plainnat-ime.bst)
 \fontsize{60}{62}\usefont{OT1}{cmr}{m}{n}{\selectfont}
 
+
+
 % todo-notes
 \usepackage[colorinlistoftodos]{todonotes}
+
+
+\usepackage[acronym, toc, xindy]{glossaries}
+
+
+\makenoidxglossaries
+\input{util/glossary.tex}
 
 % ---------------------------------------------------------------------------- %
 % Cabe?lhos similares ao TAOCP de Donald E. Knuth
@@ -113,6 +122,11 @@ framexrightmargin=10pt
 \renewcommand{\lstlistlistingname}{Lista de trechos de códigos-fontes}% List of Listings -> List of Algorithms
 
 % ---------------------------------------------------------------------------- %
+
+
+
+
+
 % Corpo do texto
 \begin{document}
 \frontmatter 
@@ -312,13 +326,6 @@ text text text.
 \tableofcontents    % imprime o sum?io
 
 % ---------------------------------------------------------------------------- %
-\chapter{Lista de Abreviaturas}
-\begin{tabular}{ll}
-         CFT         & Transformada contínua de Fourier (\emph{Continuous Fourier Transform})\\
-         DFT         & Transformada discreta de Fourier (\emph{Discrete Fourier Transform})\\
-        EIIP         & Potencial de interação elétron-íon (\emph{Electron-Ion Interaction Potentials})\\
-        STFT         & Tranformada de Fourier de tempo reduzido (\emph{Short-Time Fourier Transform})\\
-\end{tabular}
 
 % ---------------------------------------------------------------------------- %
 \chapter{Lista de Símbolos}
@@ -328,10 +335,15 @@ text text text.
         $\Psi$      & Transformada de Fourier de $\psi$\\
 \end{tabular}
 
+\clearpage
+\glsaddall
+\printnoidxglossaries
+\clearpage
+
 % ---------------------------------------------------------------------------- %
 % Listas de figuras e tabelas criadas automaticamente
 \listoffigures            
-\listoftables            
+\listoftables
 
 % ---------------------------------------------------------------------------- %
 % Cap?ulos do trabalho
