@@ -1,13 +1,13 @@
 \newglossaryentry{ml}
 {
     name=aprendizagem de máquina,
-    description={sistema ou programa que constrói um modelo preditivo a partir de dados de entrada \cite{glossary-ml}.}
+    description={sistema ou programa que constrói um modelo preditivo a partir de dados de entrada \citep{glossary-ml}.}
 }
 
 \newglossaryentry{modelo}
 {
     name=modelo,
-    description={Representação do que um sistema de \gls{ml} aprendeu a partir de dados de treinamento \cite{glossary-ml}.}
+    description={Representação do que um sistema de \gls{ml} aprendeu a partir de dados de treinamento \citep{glossary-ml}.}
 }
 
 \newglossaryentry{sof}
@@ -22,7 +22,31 @@
     description={GitHub é uma plataforma de hospedagem de código-fonte com controle de versão usando o Git.}
 }
 
+\newglossaryentry{representacao-distribuida}
+{
+    name=representação distribuída,
+    description={Representação distribuída signigica uma relação de muitos para muitos entre dois tipos de representações (por exemplo, conceitos e \gls{neuron}s) \citep{Hinton-distributed-representatons:1986}. 
+    \begin{itemize}
+        \item Cada conceito é representado por muitos \gls{neuron}s
+        \item Cada \gls{neuron} participa na representação de muitos conceitos
+    \end{itemize}
+    }
+}
+
+\newglossaryentry{neuron}
+{
+    name=neurônio,
+    description={Um neurônio é um nó numa rede neural, que tipicamente recebe múltiplos valores de entrada e gera um valor de resultado. O neurônio aplica uma função de ativação (transformação não-linear) na soma dos valores de entrada com seus respectivos pesos \citep{glossary-ml}.}
+}
+
+\newglossaryentry{mecanismo-atencao}{
+name=mecanismo de atenção,
+description={
+    Mecanismo utilizado comumente na tarefa de tradução por \gls{ml}. Este método lê uma sentença inteira de entrada e gera uma palavra traduzida por vez. E para cada momento que uma palavra é traduzida, o mecanismo de atenção foca em partes diferentes da sentença de entrada. \citep{Goodfellow-et-al-2016}.
+}}
+
 
 \newacronym{ide}{IDE}{Integrated Development Environment}
 
 \newacronym{rnn}{RNN}{Recurrent Neural Network}
+\newacronym{lstm}{LSTM}{Long Short Term Memory}
