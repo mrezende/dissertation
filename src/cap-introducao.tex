@@ -28,7 +28,17 @@ Por exemplo, \cite{Allamanis-bimodal-source-code-natural-language:2015} utilizou
 
 O problema do \textit{code retrieval} assemelha-se ao problema de \textit{question answering} em \acrshort{nlp}. Este problema consiste em dado uma questão e um conjunto de possíveis respostas, criar um modelo capaz de recuperar a resposta mais apropriada de acordo com a pergunta. No entanto, \textit{code retrieval} temos uma descrição e/ou questão em linguagem natural e a resposta é um código-fonte, uma linguagem formal.
 
-Neste caso, é necessário levar em consideração algumas peculiaridades do código-fonte no momento de representá-lo ao utilizar em algoritmos de aprendizgame de máquina. O código-fonte é uma linguagem formal, definida e provada matematicamente, tem muito mais neologismos que uma linguagem natural. 
+O código-fonte é uma linguagem formal, definida e provada matematicamente, tem muito mais neologismos que uma linguagem natural. E não tem ambiguidade. Além disso, é uma linguagem executável \todo{verificar referências e corrigir asserções}. Isto deve ser levado em consideração no momento de representar o código-fonte como entrada de dados para criar o modelo. \cite{Allamanis-bimodal-source-code-natural-language:2015} representou o código-fonte através de uma árvore sintática, fazendo uso do compilador. Já \cite{iyer-etal-2016-summarizing}, representou o código-fonte como uma sequência de \textit{tokens}, porém excluiu os valores literais numéricos e do tipo \textit{string}. Isto é uma forma de reduzir a quantidade de informações não relevantes na hora de criar o modelo.
+
+Dependendo do problema, outras formas de representação apresentam melhor performance. Por exemplo, num trabalho feito por XXX para encontrar erros em código-fonte utilizando redes neurais profundas, utilizou os dados de execução como fonte de entrada para o treinamento para obter o modelo. 
+
+\textit{Code retrieval} é um problema em aberto, assim como \textit{question answering}. 
+
+
+
+
+
+
 
 
 
