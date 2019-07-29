@@ -2,14 +2,13 @@
 \chapter{Introdução}
 \label{cap:introducao}
 
-Dado uma descrição em linguagem natural e um conjunto de trechos de código-fonte, recuperação de trecho de código-fonte ou \textit{code retrieval} consiste em recuperar um código que solucione ou seja mais apropriado a dada descrição \citep{Allamanis-bimodal-source-code-natural-language:2015}. Podemos dizer que \textit{code retrieval} busca associar uma descrição em linguagem natural a um código-fonte. 
+Dado uma questão ou descrição em linguagem natural e um conjunto de trechos de código-fonte, recuperação de trecho de código-fonte ou \textit{code retrieval} consiste em recuperar um código que solucione ou seja mais apropriado a dada descrição \citep{Allamanis-bimodal-source-code-natural-language:2015}. Podemos dizer que \textit{code retrieval} busca associar um texto em linguagem natural a um código-fonte. 
 
 Esta associação tem diversas aplicações como busca de código-fonte a partir de uma consulta em linguagem natural, documentação e geração de programas a partir de uma especificação, por exemplo \citep{Allamanis:2018:SML}. Em engenharia de software a associação entre código-fonte e texto em linguagem natural pode auxiliar na rastreabilidade de requisitos. Além disso, pode ajudar o desenvolvedor na geração de código-fonte. Um modelo pode gerar testes de unidade a partir de uma estória de usuário \todo{citar o artigo do vem 2019, caso seja aprovado}.
 
 O problema do \textit{code retrieval} assemelha-se ao problema de seleção de respostas ou \textit{answer selection} em \acrshort{nlp}. Este problema consiste em dado uma questão e um conjunto de possíveis respostas, ambos em linguagem natural, identificar qual resposta responde corretamente a pergunta \citep{lai-etal-2018-review}. 
 
-A proposta inicial deste trabalho é aplicar a arquitetura bi-LSTM com CNN proposta por \cite{tan-lstm-qa} no problema de \textit{code retrieval}. Esta arquitetura proposta por \cite{tan-lstm-qa} foi aplicada inicialmente para o problema de \textit{answer selection}. Nossa proposta é aplicar esta arquitetura no contexto do \textit{code retrieval}, pois segundo \cite{Allamanis:2018:SML}, código-fonte é uma forma de comunicação humana e tem propriedades estatísticas similares a corpora de linguagem natural \todo{citar o artigo vem 2019}.
-
+A proposta deste trabalho é aplicar uma arquitetura deep learning de \textit{answer selection} no problema de \textit{code retrieval}. Inicialmente utilizaremos a arquitetura bi-LSTM com CNN proposta por \cite{tan-lstm-qa}. Além de propor uma nova arquitetura para este problema, avaliaremos o modelo utilizando os dados de entrada da base StaQC, criada por \cite{yao-2018}. Esta base de dados é composta de milhares de pares de perguntas e trechos de código-fonte do StackOverFlow \todo{citar artigo do vem 2019}.
 
 
 
@@ -17,7 +16,11 @@ A proposta inicial deste trabalho é aplicar a arquitetura bi-LSTM com CNN propo
 \section{Considerações Preliminares}
 \label{sec:consideracoes_preliminares}
 
-lalalalala
+O foco deste trabalho é o problema do \textit{code retrieval}. Diferentemente dos trabalhos de \cite{iyer-etal-2016-summarizing} e \cite{Allamanis-bimodal-source-code-natural-language:2015} que abordaram também o problema de sumarização de código-fonte ou \textit{code summarization}. 
+
+Inicialmente aplicaremos a arquitetura bi-LSTM proposta por \cite{tan-lstm-qa}. Para os resultados preliminares, iremos compará-la com outras duas arquiteturas, uma CNN com uma camada \textit{hidde layer} de entrada. E outra mais simples que tem uma camada com a representação distribuída dos dados de entrada e posteriormente uma camada \textit{maxpool} e uma função de similaridade como saída.
+
+
 
 
 %% ------------------------------------------------------------------------- %%
