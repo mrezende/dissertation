@@ -20,24 +20,31 @@ O foco deste trabalho é o problema do \textit{code retrieval}. Diferentemente d
 
 Inicialmente aplicaremos a arquitetura bi-LSTM proposta por \cite{tan-lstm-qa}. Para os resultados preliminares, iremos compará-la com outras duas arquiteturas, uma CNN com uma camada \textit{hidde layer} de entrada. E outra mais simples que tem uma camada com a representação distribuída dos dados de entrada e posteriormente uma camada \textit{maxpool} e uma função de similaridade como saída.
 
-
+A base de dados disponibilizada por \cite{yao-2018} contém pares de questões e trechos de código-fonte em Python e SQL. A princípio utilizaremos apenas os pares de perguntas e código-fonte em Python.
 
 
 %% ------------------------------------------------------------------------- %%
 \section{Objetivos}
 \label{sec:objetivo}
 
-lalalalala
+O objetivo principal deste trabalho é propor uma nova abordagem para o problema do \textit{code retrieval}. Este problema será abordado sob a visão do \textit{answer selection}. Para isto, avaliaremos o desempenho de uma arquitetura deep learning de \textit{answer selection} no contexto do problema de \textit{code retrieval}.
 
 %% ------------------------------------------------------------------------- %%
 \section{Contribuições}
 \label{sec:contribucoes}
 
-lalala
+Dentre as contribuições deste trabalho estão:
+
+\begin{itemize}
+\item Proposta de uma nova abordagem para o problema de \textit{code retrieval};
+\item Avaliação de uma nova arquitetura para o problema;
+\item Avaliação do modelo utilizando uma nova base de dados disponibilizada por \cite{yao-2018};
+\item Disponibilização do código-fonte, desde o pré-processamento até a avaliação final, em um repositório público;
+\end{itemize}
 
 %% ------------------------------------------------------------------------- %%
 \section{Organização do Trabalho}
 \label{sec:organizacao_trabalho}
 
-No Capítulo~\ref{cap:trabalhos-relacionados}, apresentamos os conceitos e trabalhos relacionados ao problema de perguntas e respostas em processamento de linguagem natural. No capítulo~\ref{cap:problema}, discutimos o problema de pesquisa proposto para o presente trabalho, a arquitetura proposta e apontamos detalhes dos dados utilizados pertinentes a pesquisa. 
-No capítulo~\ref{cap:resultados-preliminares}, exibimos os resultados preliminares da arquitetura proposta utilizando os dados do \cite{yao-2018}. E também discutimos as principais dificuldades encontradas para adaptar a arquitetura do \cite{feng-2015} para resolver problema de pares de perguntas e códigos-fontes. Já no capítulo~\ref{cap:cronograma}, temos as considerações finais, proposta do cronograma e os próximos passos da pesquisa.
+No Capítulo~\ref{cap:trabalhos-relacionados}, apresentamos os conceitos e trabalhos relacionados ao problema de \textit{code retrieval}. No Capítulo~\ref{cap:problema}, discutimos o problema de pesquisa proposto para o presente trabalho, a arquitetura proposta e mostramos detalhes dos dados utilizados pertinentes a pesquisa. 
+No Capítulo~\ref{cap:resultados-preliminares}, exibimos os resultados preliminares da arquitetura proposta utilizando os dados de \cite{yao-2018}. E também discutimos as principais dificuldades encontradas para adaptar a arquitetura de \cite{tan-lstm-qa} para resolver o problema de \textit{code retrieval}. Já no capítulo~\ref{cap:cronograma}, temos as considerações finais, a proposta do cronograma e os próximos passos da pesquisa.

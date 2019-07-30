@@ -2,29 +2,26 @@
 \chapter{Trabalhos relacionados}
 \label{cap:trabalhos-relacionados}
 
-Este capítulo vai explicar sobre o problema de perguntas e respostas. Uso de redes neurais como CNN e LSTM para resolver este problema. Irá abordar também o problema de perguntas e respostas no caso de linguagem natural e linguagem estruturada (código-fonte).
+
 
 %% ------------------------------------------------------------------------- %%
-\section{Question answering problem}\index{Área do trabalho!fundamentos}
-\label{sec:fundamentos}
+\section{Recuperação de trecho de código-fonte ou \textit{Code retrieval}}
+\label{sec:code-retrieval}
 
 Maioria dos modelos que tentam resolver este problema concentram-se em perguntas e respostas de no máximo 1 parágrafo. Este é um desafio ainda a ser superado. Atualmente não há modelos que conseguem a partir de uma pergunta ou um tema responder com um artigo. 
 
 
 E um outro desafio proposto aqui é dado uma pergunta em uma linguagem natural, responder com um texto estruturado, código fonte em Python.
 
-
-
-
 %% ------------------------------------------------------------------------- %%
-\section{Redes neurais no problema de perguntas e respostas - verificar se utilizarei esta tradução}
-\label{sec:exemplo_codigo_fonte}
+\section{Seleção de respostas ou \textit{Answer selection}}
+\label{sec:answer-selection}
 
 O problema de perguntas e respostas é muito comum na área de processamento de linguagens naturais. Há vários datasets públicos a disposição para que pesquisadores proponham solução para este problema. E redes neurais desponta como o modelo mais utilizado para este tipo de problema atualmente. O mais comum é o uso de redes neurais recorrentes e convolucionais. 
 
 
 %% ------------------------------------------------------------------------- %%
-\section{Problema de perguntas e respostas entre linguagem natural e linguagem estruturada}
-\label{sec:algumas_referencias}
+\section{Uso de deep learning}
+\label{sec:uso-deep-learning}
 
 A maioria dos modelos citados na seção anterior tentam solucionar o problema de perguntas e respostas em linguagem natural. Porém, com o advento do Big Code, repositórios open source, outros problemas que envolvem uma complexidade maior surgem. Por exemplo, dado uma sentença em linguagem natural, uma pergunta, qual a resposta poderiamos ter em uma linguagem estrutural como Java, XML ou Python? Ou até mesmo SQL? A partir de análises de commits do github, podemos aferir a partir de uma estória de usuário, quais alterações são necessárias para concluir aquela tarefa, por exemplo. No nosso caso, a partir do database do stackoverflow, queremos saber a partir de uma pergunta, qual o código fonte é a solução.
