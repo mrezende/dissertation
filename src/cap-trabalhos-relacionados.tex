@@ -8,10 +8,11 @@
 \section{Recuperação de trecho de código-fonte ou \textit{Code retrieval}}
 \label{sec:code-retrieval}
 
-Maioria dos modelos que tentam resolver este problema concentram-se em perguntas e respostas de no máximo 1 parágrafo. Este é um desafio ainda a ser superado. Atualmente não há modelos que conseguem a partir de uma pergunta ou um tema responder com um artigo. 
+Segundo \cite{iyer-etal-2016-summarizing}, o problema de recuperação de trecho de código-fonte ou \textit{code retrieval} pode ser definido como:
 
+Seja $U_{C}$ o conjunto de trechos de código-fonte e $U_{N}$ o conjunto de descrições em linguagem natural. Dado um conjunto de treinamento com $J$ pares de descrições e código-fonte $(c_{j}, n_{j})$, $1 \leq j \leq J$, $c_{j} \in U_{C}$, $n_{j} \in U_{C}$. \textit{Code retrieval} é definido como:
 
-E um outro desafio proposto aqui é dado uma pergunta em uma linguagem natural, responder com um texto estruturado, código fonte em Python.
+\textbf{RET:} Para cada descrição $n \in U_{N}$, o objetivo é recuperar o trecho de código-fonte $c_{j}^{*}$ com o maior valor de acordo com a função $s$, $s \in (U_{C} X U_{N}) \rightarrow \R$
 
 %% ------------------------------------------------------------------------- %%
 \section{Seleção de respostas ou \textit{Answer selection}}
