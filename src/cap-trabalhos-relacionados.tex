@@ -12,7 +12,19 @@ Segundo \cite{iyer-etal-2016-summarizing}, o problema de recuperação de trecho
 
 Seja $U_{C}$ o conjunto de trechos de código-fonte e $U_{D}$ o conjunto de descrições em linguagem natural. 
 
-\textbf{RET:} Dado uma descrição $n \in U_{D}$ e um conjunto $C_{A}$ de trechos de código-fonte $\{c_{1}, c_{2}, ..., c_{n}\}$, $c_{i} \in U_{C}, 1 \leq i \leq n$. O objetivo é recuperar o trecho de código-fonte $c_{j}^{*}$ do conjunto $C_{A}$, que tenha o maior resultado de acordo com a função $s$, $s \in (U_{C} X U_{D}) \rightarrow \rm I\!R$.
+\textbf{RET:} Seja $n$ uma descrição, $n \in U_{D}$, e $C_{A}$ um conjunto trechos de código-fonte $\{c_{1}, c_{2}, ..., c_{m}\}$, $C_{A} \subset U_{C}$. Dado uma descrição $n$, o objetivo é recuperar o trecho de código-fonte $c_{j}^{*}$ do conjunto $C_{A}$, que obtenha o maior valor a partir de uma função $s$, $s \in (U_{C} X U_{D} \rightarrow \rm I\!R)$:
+
+\begin{equation}\label{eq:code-retrieval}
+c_{j}^{*} = \underset{c_{j}}{argmax} \{s(c_{j} , n)\}, 1 \leq j \leq m   
+\end{equation}
+
+
+Utilizaremos esta definição proposta por \cite{iyer-etal-2016-summarizing} neste trabalho. Uma das primeiras referências ao problema do \textit{code retrieval} foi o trabalho de \cite{Allamanis-bimodal-source-code-natural-language:2015}. E a definição formal do problema enunciada acima na equação~\ref{eq:code-retrieval} foi proposta posteriormente por \cite{iyer-etal-2016-summarizing}. 
+
+Há outros trabalhos que utilizam o termo \textit{code search} para o mesmo problema definido por \cite{iyer-etal-2016-summarizing}. Neste trabalho, tanto o termo \textit{code retrieval} quanto \textit{code search} irão referir-se ao mesmo problema.
+
+
+
 
 %% ------------------------------------------------------------------------- %%
 \section{Seleção de respostas ou \textit{Answer selection}}
