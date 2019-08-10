@@ -19,19 +19,24 @@ c_{j}^{*} = \underset{c_{j}}{argmax} \{s(c_{j} , n)\}, 1 \leq j \leq m
 \end{equation}
 
 
-Utilizaremos esta definição proposta por \cite{iyer-etal-2016-summarizing} neste trabalho. Uma das primeiras referências ao problema do \textit{code retrieval} foi o trabalho de \cite{Allamanis-bimodal-source-code-natural-language:2015}. E a definição formal do problema enunciada acima na equação~\ref{eq:code-retrieval} foi proposta posteriormente por \cite{iyer-etal-2016-summarizing}. 
+Esta definição servirá de base para o problema proposto para este trabalho. Uma das primeiras referências ao problema do \textit{code retrieval} foi o trabalho de \cite{Allamanis-bimodal-source-code-natural-language:2015}. E a definição formal do problema enunciada acima na equação~\ref{eq:code-retrieval} foi proposta posteriormente por \cite{iyer-etal-2016-summarizing}. 
 
 Há outros trabalhos \citep{Gu-deep-code-search:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019} que utilizam o termo \textit{code search} para o mesmo problema definido por \cite{iyer-etal-2016-summarizing}. Neste trabalho, tanto o termo \textit{code retrieval} quanto \textit{code search} irão referir-se ao mesmo problema.
 
+\subsection{Trabalhos relacionados}\label{sec:code-retrieval-trabalhos-relacionados}
 
+\textit{Code search} ou \textit{code retrieval} busca associar um texto em linguagem natural a um código-fonte. Esta associação tem diversas aplicações em engenharia de software conforme exposto no capítulo~\ref{cap:introducao}.
 
 
 %% ------------------------------------------------------------------------- %%
 \section{Seleção de respostas ou \textit{Answer selection}}
 \label{sec:answer-selection}
 
-O problema de perguntas e respostas é muito comum na área de processamento de linguagens naturais. Há vários datasets públicos a disposição para que pesquisadores proponham solução para este problema. E redes neurais desponta como o modelo mais utilizado para este tipo de problema atualmente. O mais comum é o uso de redes neurais recorrentes e convolucionais. 
+De acordo com \cite{shao-answer-selection:2019}, a definição formal para o problema de seleção de respostas ou \textit{answer selection} é:
 
+\textbf{Definição:} Dado uma questão $q$ e dois conjuntos de respostas, um conjunto com respostas candidatas $A$ contendo $m$ possíveis respostas para a questão $q$, i.e., $A : \{ a_{1}, a_{2}, . . ., a_{m}\}$ e um conjunto $G$ com as respostas de fato, i.e, $G : \{ g_{1}, g_{2}, . . ., g{n}\}$, onde $n$ é a quantidade de respostas corretas coletadas para $q$. O objetivo do \textit{answer selection} é selecionar a resposta correta de $q$ do conjunto $A$. Se a resposta selecionada $a_{X}$, tal que $a_{x} \in G$, então a seleção será considerada um sucesso. Caso contrário, falho.
+
+\subsection{Trabalhos relacionados}\label{sec:answer-selection-trabalhos-relacionados}
 
 %% ------------------------------------------------------------------------- %%
 \section{Uso de deep learning}
