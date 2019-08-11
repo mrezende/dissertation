@@ -29,7 +29,11 @@ Há outros trabalhos \citep{Gu-deep-code-search:2018, Sachdev-neural-code-search
 
 Conforme citado na seção~\ref{sec:code-retrieval}, o trabalho de \cite{Allamanis-bimodal-source-code-natural-language:2015} foi um dos primeiros sobre o problema do \textit{code retrieval}. Neste trabalho utilizou-se vetores de \gls{representacao-distribuida} tanto para as descrições quanto para os trechos de código-fonte. Uma função de classificação foi utilizada para combinar os vetores. A combinação foi feita usando operações aditivas ou multiplicativas. Ao final, o valor obtido a partir da função de classificação é transformada em probabilidade para avaliar qual trecho de código-fonte é mais relevante para uma determinada questão.
 
-Já \cite{iyer-etal-2016-summarizing} utilizou uma rede neural recorrente, mais especificamente \acrshort{lstm} com o \gls{mecanismo-atencao} para classificar o trecho de código-fonte de acordo com a questão.
+Já \cite{iyer-etal-2016-summarizing} utilizaram uma rede neural recorrente, mais especificamente \acrshort{lstm} com o \gls{mecanismo-atencao} para classificar o trecho de código-fonte de acordo com a questão. \cite{Chen-bi-variational-autoencoder:2018} utilizaram \acrfull{vae} para obter um vetor de \gls{representacao-distribuida} do código-fonte e descrição. E utilizaram algoritmos de similaridade para recuperar o trecho de código-fonte.
+
+\cite{Gu-deep-code-search:2018} utilizaram o conceito de \textit{joint embedding}, uma técnica para juntar dados heterogêneos em um mesmo espaço vetorial tal que conceitos similares de categorias diferentes ocupem regiões próximas do espaço. Para mapear as questões e trechos de código-fonte para o mesmo espaço vetorial, \cite{Gu-deep-code-search:2018} utilizaram uma rede neural bi-\acrshort{lstm} com uma camada \textit{maxpool} ao final. Para verificar a similaridade entre os vetores, foi utilizado a função de similaridade \textit{cosine}.
+
+\cite{Yao-coacor:2019} aprimoraram o \textit{code retrieval} combinando anotações com trechos de código-fonte. As anotações foram geradas por um modelo e aprimoradas através de aprendizagem por reforço (\textit{reinforcement learning}). Durante a aprendizagem por reforço, as anotações foram avaliadas para maximizar o sucesso na tarefa de \textit{code retrieval}.
 
 
 
