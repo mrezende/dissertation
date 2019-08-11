@@ -27,6 +27,11 @@ Há outros trabalhos \citep{Gu-deep-code-search:2018, Sachdev-neural-code-search
 
 \textit{Code search} ou \textit{code retrieval} busca associar um texto em linguagem natural a um código-fonte. Esta associação tem diversas aplicações em engenharia de software conforme exposto no capítulo~\ref{cap:introducao}.
 
+Conforme citado na seção~\ref{sec:code-retrieval}, o trabalho de \cite{Allamanis-bimodal-source-code-natural-language:2015} foi um dos primeiros sobre o problema do \textit{code retrieval}. Neste trabalho utilizou-se vetores de \gls{representacao-distribuida} tanto para as descrições quanto para os trechos de código-fonte. Uma função de classificação foi utilizada para combinar os vetores. A combinação foi feita usando operações aditivas ou multiplicativas. Ao final, o valor obtido a partir da função de classificação é transformada em probabilidade para avaliar qual trecho de código-fonte é mais relevante para uma determinada questão.
+
+Já \cite{iyer-etal-2016-summarizing} utilizou uma rede neural recorrente, mais especificamente \acrshort{lstm} com o \gls{mecanismo-atencao} para classificar o trecho de código-fonte de acordo com a questão.
+
+
 
 %% ------------------------------------------------------------------------- %%
 \section{Seleção de respostas ou \textit{Answer selection}}
