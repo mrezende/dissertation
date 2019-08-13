@@ -8,6 +8,12 @@
 \section{Recuperação de trecho de código-fonte ou \textit{Code retrieval}}
 \label{sec:code-retrieval}
 
+De acordo com \cite{Chen-bi-variational-autoencoder:2018}, a tarefa do \textit{code retrieval} consiste em:
+
+\emph{Dado uma descrição em linguagem natural, recuperar o trecho de código-fonte mais relevante, tal que os desenvolvedores possam encontrar rapidamente os trechos de código que atendam as suas necessidades.}
+
+De acordo com \cite{cambronero-deep-learning-code-search:2019}, o objetivo do \textit{code search} é recuperar um trecho de código-fonte a partir de um enorme repositório de código-fonte, que mais se aproxima da intenção do desenvolvedor, expressa em linguagem natural. 
+
 De acordo com \cite{iyer-etal-2016-summarizing}, o problema de recuperação de trecho de código-fonte ou \textit{code retrieval} é definido como:
 
 Seja $U_{C}$ o conjunto de trechos de código-fonte e $U_{D}$ o conjunto de descrições em linguagem natural. 
@@ -35,20 +41,7 @@ Já \cite{iyer-etal-2016-summarizing} utilizaram uma rede neural recorrente, mai
 
 \cite{Yao-coacor:2019} aprimoraram o \textit{code retrieval} combinando anotações com trechos de código-fonte. As anotações foram geradas por um modelo e aprimoradas através de aprendizagem por reforço (\textit{reinforcement learning}). Durante a aprendizagem por reforço, as anotações foram avaliadas para maximizar o sucesso na tarefa de \textit{code retrieval}.
 
-Um grupo do facebook utilizou uma abordagem diferente. A hipótese inicial deles é que o código-fonte contém informações suficientes para ser utilizada no problema do \textit{code retrieval}. Diferente dos trabalhos citados anteriormente, eles não fizeram uso inicialmente das questões. Para cada método ou função de uma classe em um projeto de código-aberto, eles extraíram nome de método, chamadas de API, constantes e textos literais. A partir destas informações extraídas, eles criaram um vetor de representação distribuída para o método, combinando o vetor de representação distribuída de cada palavra através de uma função que é o produto entre o inverso da frequência de ocorrência da palavra no método e o TF-IFD. Inicialmente, o resultado obtido foi comparável a outros métodos largamente utilizados em recuperação de documentos (information retrieval). Verificou-se que os acertos ocorriam apenas quando as perguntas continham as mesmas palavras dos trechos de código-fonte. Para aprimorar, eles mapearam palavras presentes nas perguntas para palavras equivalentes no código-fonte. Após este mapeamento, eles obtiveram resultados melhores que os 
+Um grupo do facebook utilizou uma abordagem diferente. A hipótese inicial deles é que o código-fonte contém informações suficientes para ser utilizada no problema do \textit{code retrieval}. Diferente dos trabalhos citados anteriormente, eles não fizeram uso inicialmente das questões. Para cada método ou função de uma classe em um projeto de código-aberto, eles extraíram nome de método, chamadas de API, constantes e textos literais. A partir destas informações extraídas, eles criaram um vetor de representação distribuída para o método, combinando o vetor de representação distribuída de cada palavra através de uma função que é o produto entre o inverso da frequência de ocorrência da palavra no método e o TF-IFD. 
 
-%% ------------------------------------------------------------------------- %%
-\section{Seleção de respostas ou \textit{Answer selection}}
-\label{sec:answer-selection}
+Inicialmente, o resultado obtido foi comparável a outros métodos largamente utilizados em recuperação de documentos (information retrieval). Verificou-se que os acertos ocorriam apenas quando as perguntas continham as mesmas palavras dos trechos de código-fonte. Para aprimorar, eles mapearam palavras presentes nas perguntas para palavras equivalentes no código-fonte. Isto foi feito através de um treinamento supervisionado. Após este mapeamento, eles conseguiram responder corretamente 2/3 dos pares de questões extraídos do StackOverFlow. Para eles, a resposta é considerada correta quando ela aparece entre os 10 primeiros resultados.
 
-De acordo com \cite{shao-answer-selection:2019}, a definição formal para o problema de seleção de respostas ou \textit{answer selection} é:
-
-\textbf{Definição:} Dado uma questão $q$ e dois conjuntos de respostas, um conjunto com respostas candidatas $A$ contendo $m$ possíveis respostas para a questão $q$, i.e., $A : \{ a_{1}, a_{2}, . . ., a_{m}\}$ e um conjunto $G$ com as respostas de fato, i.e, $G : \{ g_{1}, g_{2}, . . ., g{n}\}$, onde $n$ é a quantidade de respostas corretas coletadas para $q$. O objetivo do \textit{answer selection} é selecionar a resposta correta de $q$ do conjunto $A$. Se a resposta selecionada $a_{X}$, tal que $a_{x} \in G$, então a seleção será considerada um sucesso. Caso contrário, falho.
-
-\subsection{Trabalhos relacionados}\label{sec:answer-selection-trabalhos-relacionados}
-
-%% ------------------------------------------------------------------------- %%
-\section{Uso de deep learning}
-\label{sec:uso-deep-learning}
-
-A maioria dos modelos citados na seção anterior tentam solucionar o problema de perguntas e respostas em linguagem natural. Porém, com o advento do Big Code, repositórios open source, outros problemas que envolvem uma complexidade maior surgem. Por exemplo, dado uma sentença em linguagem natural, uma pergunta, qual a resposta poderiamos ter em uma linguagem estrutural como Java, XML ou Python? Ou até mesmo SQL? A partir de análises de commits do github, podemos aferir a partir de uma estória de usuário, quais alterações são necessárias para concluir aquela tarefa, por exemplo. No nosso caso, a partir do database do stackoverflow, queremos saber a partir de uma pergunta, qual o código fonte é a solução.
