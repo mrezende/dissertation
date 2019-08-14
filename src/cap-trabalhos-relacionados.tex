@@ -20,7 +20,7 @@ Dado uma questão em linguagem natural $Q$ e um conjunto com os trechos de códi
 
 Formalmente, para um conjunto de treinamento com pares de questões e trechos de código-fonte (<questão, trecho de código-fonte>), e.g., dados coletados do StackOverFlow por \cite{yao-2018}, \textit{code retrieval} é definido como:
 
-\textbf{Code Retrieval}: Dada uma questão em linguagem natural $Q$, um modelo $F_{r}$ irá aprender a recuperar o trecho de código-fonte $C^{*} \in \mathbb{C}$ com a maior pontuação.
+\textbf{Code Retrieval}: Dada uma questão em linguagem natural $Q$, um modelo $F_{r}$ irá aprender a recuperar o trecho de código-fonte $C^{*} \in \mathbb{C}$ com a maior pontuação:
 
 \begin{equation}\label{eq:code-retrieval}
 C^{*} = \underset{C \in \mathbb{C}}{argmax}\text{ } F_{r}(Q , C)
@@ -32,7 +32,7 @@ Neste trabalho, tanto o termo \textit{code retrieval} quanto \textit{code search
 
 \textit{Code search} ou \textit{code retrieval} busca associar um texto em linguagem natural a um código-fonte. Esta associação tem diversas aplicações em engenharia de software conforme exposto no capítulo~\ref{cap:introducao}.
 
-Conforme citado na seção~\ref{sec:code-retrieval}, o trabalho de \cite{Allamanis-bimodal-source-code-natural-language:2015} foi um dos primeiros sobre o problema do \textit{code retrieval}. Neste trabalho utilizou-se vetores de \gls{representacao-distribuida} tanto para as descrições quanto para os trechos de código-fonte. Uma função de classificação foi utilizada para combinar os vetores. A combinação foi feita usando operações aditivas ou multiplicativas. Ao final, o valor obtido a partir da função de classificação é transformada em probabilidade para avaliar qual trecho de código-fonte é mais relevante para uma determinada questão.
+O trabalho de \cite{Allamanis-bimodal-source-code-natural-language:2015} foi um dos primeiros sobre o problema do \textit{code retrieval}. Neste trabalho utilizou-se vetores de \gls{representacao-distribuida} tanto para as descrições quanto para os trechos de código-fonte. Uma função de classificação foi utilizada para combinar os vetores. A combinação foi feita usando operações aditivas ou multiplicativas. Ao final, o valor obtido a partir da função de classificação é convertida em probabilidade para avaliar qual trecho de código-fonte é mais relevante para uma determinada questão.
 
 Já \cite{iyer-etal-2016-summarizing} utilizaram uma rede neural recorrente, mais especificamente \acrshort{lstm} com o \gls{mecanismo-atencao} para classificar o trecho de código-fonte de acordo com a questão. \cite{Chen-bi-variational-autoencoder:2018} utilizaram \acrfull{vae} para obter um vetor de \gls{representacao-distribuida} do código-fonte e descrição. E utilizaram algoritmos de similaridade para recuperar o trecho de código-fonte.
 
@@ -40,7 +40,7 @@ Já \cite{iyer-etal-2016-summarizing} utilizaram uma rede neural recorrente, mai
 
 \cite{Yao-coacor:2019} aprimoraram o \textit{code retrieval} combinando anotações com trechos de código-fonte. As anotações foram geradas por um modelo e aprimoradas através de aprendizagem por reforço (\textit{reinforcement learning}). Durante a aprendizagem por reforço, as anotações foram avaliadas para maximizar o sucesso na tarefa de \textit{code retrieval}.
 
-Um grupo do facebook utilizou uma abordagem diferente. A hipótese inicial deles é que o código-fonte contém informações suficientes para ser utilizada no problema do \textit{code retrieval}. Diferente dos trabalhos citados anteriormente, eles não fizeram uso inicialmente das questões. Para cada método ou função de uma classe em um projeto de código-aberto, eles extraíram nome de método, chamadas de API, constantes e textos literais. A partir destas informações extraídas, eles criaram um vetor de representação distribuída para o método, combinando o vetor de representação distribuída de cada palavra através de uma função que é o produto entre o inverso da frequência de ocorrência da palavra no método e o TF-IFD. 
+Um grupo do Facebook\footnote{\url{https://www.facebook.com}}\citep{Sachdev-neural-code-search:2018} utilizou uma abordagem diferente. A hipótese inicial deles é que o código-fonte contém informações suficientes para ser utilizada no problema do \textit{code retrieval}. Diferente dos trabalhos citados anteriormente, eles não fizeram uso inicialmente das questões. Para cada método ou função de uma classe em um projeto de código-aberto, eles extraíram nome de método, chamadas de API, constantes e textos literais. A partir destas informações extraídas, eles criaram um vetor de representação distribuída para o método, combinando o vetor de representação distribuída com o peso \acrshort{tf-idf} de cada palavra. 
 
 Inicialmente, o resultado obtido foi comparável a outros métodos largamente utilizados em recuperação de documentos (information retrieval). Verificou-se que os acertos ocorriam apenas quando as perguntas continham as mesmas palavras dos trechos de código-fonte. Para aprimorar, eles mapearam palavras presentes nas perguntas para palavras equivalentes no código-fonte. Isto foi feito através de um treinamento supervisionado. Após este mapeamento, eles conseguiram responder corretamente 2/3 dos pares de questões extraídos do StackOverFlow. Para eles, a resposta é considerada correta quando ela aparece entre os 10 primeiros resultados.
 
