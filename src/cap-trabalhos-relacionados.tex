@@ -8,6 +8,7 @@
 \section{Recuperação de trecho de código-fonte ou \textit{Code retrieval}}
 \label{sec:code-retrieval}
 
+\subsection{Definição}\label{sec:code-retrieval-definicao}
 De acordo com \cite{Chen-bi-variational-autoencoder:2018}, a tarefa do \textit{code retrieval} consiste em:
 
 \emph{Dado uma descrição em linguagem natural, recuperar o trecho de código-fonte mais relevante, tal que os desenvolvedores possam encontrar rapidamente os trechos de código que atendam as suas necessidades.}
@@ -44,3 +45,8 @@ Um grupo do Facebook\footnote{\url{https://www.facebook.com}}\citep{Sachdev-neur
 
 Inicialmente, o resultado obtido foi comparável a outros métodos largamente utilizados em recuperação de documentos (information retrieval). Verificou-se que os acertos ocorriam apenas quando as perguntas continham as mesmas palavras dos trechos de código-fonte. Para aprimorar, eles mapearam palavras presentes nas perguntas para palavras equivalentes no código-fonte. Isto foi feito através de um treinamento supervisionado. Após este mapeamento, eles conseguiram responder corretamente 2/3 dos pares de questões extraídos do StackOverFlow. Para eles, a resposta é considerada correta quando ela aparece entre os 10 primeiros resultados.
 
+\section{Joint Embeddings}
+
+\subsection{Embeddings}
+
+De acordo com \cite{cambronero-deep-learning-code-search:2019}, \textit{embedding} é uma forma de representar um dado de entrada através de um vetor com valores reais ($\mathbb{R}$).
