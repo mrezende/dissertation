@@ -55,4 +55,7 @@ De acordo com \cite{cambronero-deep-learning-code-search:2019}, \textit{embeddin
     \mathbb{E}: \mathbb{X} \rightarrow \mathbb{R}^{d}
 \end{equation}
 
-A função $\mathbb{E}$ mapeia um dado de entrada $x$, $x \in \mathbb{X}$, para um vetor de \gls{representacao-distribuida} correspondente em um espaço vetorial de dimensão $d$.
+A função $\mathbb{E}$ mapeia um dado de entrada $x$, $x \in \mathbb{X}$, para um vetor de \gls{representacao-distribuida} correspondente em um espaço vetorial de dimensão $d$. O vetor de representação distribuída consegue representar características latentes do dado de entrada, diferentemente de uma representação \textit{one-hot encoding}. Durante a aprendizagem de representação (\textit{representation learning}), vetor de representação distribuída tem-se mostrado uma boa opção.
+
+No caso da função $\mathbb{E}$, pode-se utilizar um algortimo supervisionado, como redes neurais, ou não supervisionado, como o \textit{word2vec}. O vetor será composto pelos pesos da rede neural, optando por redes neurais. 
+
