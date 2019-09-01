@@ -47,7 +47,7 @@ Inicialmente, o resultado obtido foi comparável a outros métodos largamente ut
 
 \section{Joint Embeddings}
 
-\subsection{Embeddings}
+\subsection{Token Embedding}
 
 De acordo com \cite{cambronero-deep-learning-code-search:2019}, \textit{embedding} é uma forma de representar um dado de entrada através de um vetor com valores reais ($\mathbb{R}$). \textit{Embedding} pode ser definida como uma função $\mathbb{E}$, tal que:
 
@@ -55,7 +55,16 @@ De acordo com \cite{cambronero-deep-learning-code-search:2019}, \textit{embeddin
     \mathbb{E}: \mathbb{X} \rightarrow \mathbb{R}^{d}
 \end{equation}
 
-A função $\mathbb{E}$ mapeia um dado de entrada $x$, $x \in \mathbb{X}$, para um vetor de \gls{representacao-distribuida} correspondente em um espaço vetorial de dimensão $d$. O vetor de representação distribuída consegue representar características latentes do dado de entrada, diferentemente de uma representação \textit{one-hot encoding}. Durante a aprendizagem de representação (\textit{representation learning}), vetor de representação distribuída tem-se mostrado uma boa opção.
+A função $\mathbb{E}$ mapeia um dado de entrada $x$, $x \in \mathbb{X}$, para um vetor de \gls{representacao-distribuida} correspondente em um espaço vetorial de dimensão $d$. O vetor de representação distribuída consegue representar características latentes do dado de entrada, diferentemente de uma representação \textit{one-hot encoding}. O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras utilizadas em um mesmo contexto, tem significados similares.
 
 No caso da função $\mathbb{E}$, pode-se utilizar um algortimo supervisionado, como redes neurais, ou não supervisionado, como o \textit{word2vec}. O vetor será composto pelos pesos da rede neural, optando por redes neurais. 
+
+No caso do código-fonte, por exemplo, ao representá-lo como uma sequência de palavras, a função $E$ representará palavras que normalmente estão juntas, como vetores próximos no espaço vetorial $\mathbb{R}^{d}$. Na figura\todo{adicionar figura t2sne com wordvec de 20 palavras apenas}, podemos ver que a palavra \emph{for} aparece próxima a \emph{enumerate}. Assim como as palavras \emph{list}, \emph{tuple} e \emph{dict} estão próximas. 
+Esta figura é uma forma de exibir os vetores de representação distribuída em 2D. Esta representação distribuída das palavras foram geradas através do word2vec. O word2vec utiliza o skip-gram, no qual é exigido um parâmetro \textit{windows}, que define a quantidade de termos pŕoximos para considerar como similar. 
+
+\todo{adicionar um exemplo de código fonte e as palavras similares}
+
+
+
+
 
