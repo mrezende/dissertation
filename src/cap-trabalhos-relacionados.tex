@@ -47,7 +47,9 @@ Inicialmente, o resultado obtido foi comparável a outros métodos largamente ut
 
 \section{Joint Embeddings}
 
-Segundo \cite{Goodfellow-et-al-2016:representation-learning}, a forma como os dados são representados auxiliam no desempenho do algoritmo de aprendizagem de máquina. No caso do código-fonte, ao tratá-lo como texto, uma opção é representá-lo através de um vetor \textit{one-hot encoding}. 
+Segundo \cite{Goodfellow-et-al-2016:representation-learning}, um fator importante a ser levado em consideração é a forma como os dados são representados. Uma boa representação dos dados auxilia na aprendizagem do modelo e até reduz o erro nos testes. No caso do código-fonte, podemos tratá-lo como um texto formado por uma sequência de palavras.
+
+E esta sequência de palavras pode ser representada por um vetor de representação distribuída. Os vetores de representação distribuída conseguem identificar conceitos similares e representá-los próximos em um espaço vetorial. Esta é uma representação mais rica, pois consegue identificar características latentes dos dados de entrada, diferente de uma representação \textit{one-hot-encoding}, que é apenas simbólica, não h
 
 
 \subsection{Token Embedding}
