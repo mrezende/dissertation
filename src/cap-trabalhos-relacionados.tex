@@ -47,9 +47,12 @@ Inicialmente, o resultado obtido foi comparável a outros métodos largamente ut
 
 \section{Joint Embeddings}
 
-Segundo \cite{Goodfellow-et-al-2016:representation-learning}, um fator importante a ser levado em consideração é a forma como os dados são representados. Uma boa representação dos dados auxilia na aprendizagem do modelo e até reduz o erro nos testes. No caso do código-fonte, podemos tratá-lo como um texto formado por uma sequência de palavras.
+Segundo \cite{Goodfellow-et-al-2016:representation-learning}, um fator importante a ser levado em consideração é a forma como os dados são representados. Uma boa representação dos dados auxilia na aprendizagem do modelo e até reduz o erro nos testes. Uma boa representação deve ser robusta e generalizar bem, i.e., mudanças na forma como os dados estão distribuídos, alterações de domínio, ou tarefa, as características relevantes, causais, continuam fixas. 
 
-E esta sequência de palavras pode ser representada por um vetor de representação distribuída. Os vetores de representação distribuída conseguem identificar conceitos similares e representá-los próximos em um espaço vetorial. Esta é uma representação mais rica, pois consegue identificar características latentes dos dados de entrada, diferente de uma representação \textit{one-hot-encoding}, que é apenas simbólica, não h
+No caso do código-fonte, ao tratá-lo como um texto formado por uma sequência de palavras, uma boa representação é um vetor de representação distribuída. As redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída em comparação a um \gls{one-hot-encoding}. Distributed representations induce a rich similarity space, in which
+semantically close concepts (or inputs) are close in distance, a property that is
+absent from purely symbolic representations \citep{Goodfellow-et-al-2016:representation-learning}.
+
 
 
 \subsection{Token Embedding}

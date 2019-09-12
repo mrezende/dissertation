@@ -25,11 +25,23 @@
 \newglossaryentry{representacao-distribuida}
 {
     name=representação distribuída,
-    description={Representação distribuída signigica uma relação de muitos para muitos entre dois tipos de representações (por exemplo, conceitos e \gls{neuron}s) \citep{Hinton-distributed-representatons:1986}. 
+    description={Representação distribuída significa uma relação de muitos para muitos entre dois tipos de representações (por exemplo, conceitos e \gls{neuron}s) \citep{Hinton-distributed-representatons:1986}. 
     \begin{itemize}
         \item Cada conceito é representado por muitos \gls{neuron}s
         \item Cada \gls{neuron} participa na representação de muitos conceitos
     \end{itemize}
+    }
+}
+
+\newglossaryentry{one-hot-encoding}
+{
+    name=\textit{one-hot encoding},
+    description={\textit{one-hot encoding} é um vetor esparso que contém:
+    \begin{itemize}
+        \item Um elemento cujo valor é definido como 1
+        \item O restante dos elementos tem o valor definido como 0
+    \end{itemize}
+    \textit{One-hot enconding} normalmente é utilizado para representar palavras e ou atributos que contém uma quantidade finita de valores \citep{glossary-ml}.
     }
 }
 
