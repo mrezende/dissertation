@@ -49,6 +49,8 @@
 \usepackage{amssymb}
 
 
+
+
 \makenoidxglossaries
 \input{util/glossary.tex}
 
@@ -125,7 +127,30 @@ framexrightmargin=10pt
 % ---------------------------------------------------------------------------- %
 
 
+\usepackage{minted}
+\usepackage[most, minted]{tcolorbox}
 
+\newtcblisting{mypython}[1]{%
+listing engine=minted,
+minted style=colorful,
+minted language=python,
+listing only,
+title={#1}, fonttitle=\bfseries,
+enlarge top by=1cm,%     equivalent to mdframed 'skipabove'
+enlarge bottom by=1cm,%  equivalent to mdframed 'skipbelow'
+  }
+  
+\newtcblisting{mypythonembedding}[1]{%
+listing engine=minted,
+colback=green!5!white,colframe=green!75!black,
+minted language=python,
+listing only,
+fonttitle=\bfseries,
+enlarge top by=1cm,%     equivalent to mdframed 'skipabove'
+enlarge bottom by=1cm,%  equivalent to mdframed 'skipbelow'
+minted options= {escapeinside=||},
+title={#1}
+  }
 
 
 % Corpo do texto

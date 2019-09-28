@@ -33,11 +33,9 @@ Neste trabalho, tanto o termo \textit{code retrieval} quanto \textit{code search
 
 \section{Joint Embeddings}
 
-Segundo \cite{Goodfellow-et-al-2016:representation-learning}, um fator importante a ser levado em consideração é a forma como os dados são representados. Uma boa representação consegue identificar as características mais relevantes e os fatores causadores dos dados observados. Estas características são invariantes em relação aos dados de entrada. Uma boa representação pode ser utilizada em outras tarefas, em diferentes modalidades, i.e., o modelo encontrado que é útil para um cojunto de dados que segue uma distribuição $P1$, pode ser útil para um conjunto de dados que segue uma distribuição $P2$. Desde que os fatores encontrados para $P1$, sejam relevantes ou expliquem parte da variação em $P2$.
+Segundo \cite{Goodfellow-et-al-2016:representation-learning}, um fator importante a ser levado em consideração é a forma como os dados são representados. Uma boa representação consegue identificar as características relevantes e os fatores causadores dos dados observados. Estas características são invariantes em relação aos dados de entrada. Uma boa representação pode ser utilizada em outras tarefas, em diferentes modalidades, i.e., o modelo encontrado que é útil para um cojunto de dados que segue uma distribuição $P1$, pode ser útil para um conjunto de dados que segue uma distribuição $P2$. Desde que os fatores encontrados para $P1$, sejam relevantes ou expliquem parte da variação em $P2$.
 
-No caso do código-fonte, ao tratá-lo como um texto formado por uma sequência de palavras, uma boa representação é um vetor de representação distribuída. As redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída em comparação a um \gls{one-hot-encoding}. Distributed representations induce a rich similarity space, in which
-semantically close concepts (or inputs) are close in distance, a property that is
-absent from purely symbolic representations \citep{Goodfellow-et-al-2016:representation-learning}.
+No caso do código-fonte, ao tratá-lo como um texto formado por uma sequência de palavras, uma boa representação é um vetor de representação distribuída. As redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída em comparação a um \gls{one-hot-encoding}. Representação distribuída induz a um rico espaço de similaridade, no qual conceitos semanticamente similares (ou dados de entrada) estão próximos, uma propriedade que não está presente em representações puramente simbólicas \citep{Goodfellow-et-al-2016:representation-learning}.
 
 
 
@@ -49,14 +47,35 @@ De acordo com \cite{cambronero-deep-learning-code-search:2019}, \textit{embeddin
     \mathbb{E}: \mathbb{X} \rightarrow \mathbb{R}^{d}
 \end{equation}
 
-A função $\mathbb{E}$ mapeia um dado de entrada $x$, $x \in \mathbb{X}$, para um vetor de \gls{representacao-distribuida} correspondente em um espaço vetorial de dimensão $d$. O vetor de representação distribuída consegue representar características latentes do dado de entrada, diferentemente de uma representação \textit{one-hot encoding}. O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras utilizadas em um mesmo contexto, tem significados similares.
+A função $\mathbb{E}$ mapeia um dado de entrada $x$, $x \in \mathbb{X}$, para um vetor de \gls{representacao-distribuida} correspondente em um espaço vetorial de dimensão $d$. O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras de um mesmo contexto tem significados similares.
 
-No caso da função $\mathbb{E}$, pode-se utilizar um algortimo supervisionado, como redes neurais, ou não supervisionado, como o \textit{word2vec}. O vetor será composto pelos pesos da rede neural, optando por redes neurais. 
+Uma opção para a função $\mathbb{E}$ é utilizar o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} utiliza o algoritmo \textit{skip-gram} ou \acrshort{cbow}. A diferença basicamente entre eles é que o \acrshort{cbow} prediz uma palavra de acordo com as palavras do contexto e o \textit{skip-gram} faz o inverso, prediz as palavras do contexto dado uma palavra alvo \citep{mikolov2013distributed}.
 
-No caso do código-fonte, por exemplo, ao representá-lo como uma sequência de palavras, a função $E$ representará palavras que normalmente estão juntas, como vetores próximos no espaço vetorial $\mathbb{R}^{d}$. Na figura\todo{adicionar figura t2sne com wordvec de 20 palavras apenas}, podemos ver que a palavra \emph{for} aparece próxima a \emph{enumerate}. Assim como as palavras \emph{list}, \emph{tuple} e \emph{dict} estão próximas. 
-Esta figura é uma forma de exibir os vetores de representação distribuída em 2D. Esta representação distribuída das palavras foram geradas através do word2vec. O word2vec utiliza o skip-gram, no qual é exigido um parâmetro \textit{windows}, que define a quantidade de termos pŕoximos para considerar como similar. 
+Por exemplo, dado o trecho de código-fonte abaixo:
 
-\todo{adicionar um exemplo de código fonte e as palavras similares}
+\begin{mypython}{Python: Exemplo de código para escrever em um arquivo}
+with open(filename, mode) as file:
+    file.write(text)
+\end{mypython}
+
+Removendo os acentos, tabulações, quebra de linha e as pontuações, o código-fonte pode ser representado por um vetor formado pela seguinte sequência de palavras:
+
+\begin{mypythonembedding}{Trecho de código-fonte representado através de vetor de \textit{tokens}.}
+  ['with', 'open', 'filename', 'mode', 'as', 'file', 'file', 'write', 'text']
+\end{mypythonembedding}
+
+Neste caso, ao utilizar o \textit{skip-gram} do \textit{wordvec} para a palavra \emph{file}. Ele representará a palavra \emph{file} próxima das palavras \emph{mode}, \emph{as}, \emph{file}, \emph{write}, caso o parâmetro \textit{window} seja $2$. O parâmetro \textit{window} define basicamente quantas palavras a direita e a esquerda fazem parte do contexto.
+
+\begin{mypythonembedding}{Palavra \textit{file}, em amarelo, e as palavras similares, em verde.}
+  ['with', 'open', 'filename', |\colorbox{green}{mode}|, |\colorbox{green}{as}|, |\colorbox{yellow}{file}|, |\colorbox{green}{file}|, |\colorbox{green}{write}|, 'text']
+\end{mypythonembedding}
+
+\begin{figure}[h]
+\includegraphics[width=1\textwidth]{figuras/cap-trabalhos-relacionados/code-tsne-output.png}
+\caption{Total de perguntas sobre Python e SQL no \textit{StackOverFlow} até 20 de março de 2019. Google and the Google logo are registered trademarks of Google LLC, used with permission.}
+\label{fig:bigquery-total-questions-python-sql-stackoverflow}
+\end{figure}
+
 
 \subsection{Bags and sequence embeddings}
 
