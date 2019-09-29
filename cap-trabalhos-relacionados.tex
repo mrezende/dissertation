@@ -31,7 +31,7 @@ Neste trabalho, tanto o termo \textit{code retrieval} quanto \textit{code search
 
 
 
-\section{Joint Embeddings}
+\section{\textit{Joint Embeddings}}
 
 Segundo \cite{Goodfellow-et-al-2016:representation-learning}, um fator importante a ser levado em consideração é a forma como os dados são representados. Uma boa representação consegue identificar as características relevantes e os fatores causadores dos dados observados. Estas características são invariantes em relação aos dados de entrada. Uma boa representação pode ser utilizada em outras tarefas, em diferentes modalidades, i.e., o modelo encontrado que é útil para um cojunto de dados que segue uma distribuição $P1$, pode ser útil para um conjunto de dados que segue uma distribuição $P2$. Desde que os fatores encontrados para $P1$, sejam relevantes ou expliquem parte da variação em $P2$.
 
@@ -39,7 +39,7 @@ No caso do código-fonte, ao tratá-lo como um texto formado por uma sequência 
 
 
 
-\subsection{Token Embedding}
+\subsection{\textit{Token Embedding}}
 
 De acordo com \cite{cambronero-deep-learning-code-search:2019}, \textit{embedding} é uma forma de representar um dado de entrada através de um vetor com valores reais ($\mathbb{R}$). \textit{Embedding} pode ser definida como uma função $\mathbb{E}$, tal que:
 
@@ -70,7 +70,7 @@ Neste caso, ao utilizar o \textit{skip-gram} do \textit{wordvec} para a palavra 
   ['with', 'open', 'filename', |\colorbox{green}{mode}|, |\colorbox{green}{as}|, |\colorbox{yellow}{file}|, |\colorbox{green}{file}|, |\colorbox{green}{write}|, 'text']
 \end{mypythonembedding}
 
-\subsection{Bags and sequence embeddings}
+\subsection{\textit{Bags and sequence embeddings}}
 
 O vetor de representação distribuída de cada palavra pode ser combinada para gerar um vetor de representação distribuída para a sentença inteira, e.g., podemos ter um vetor de representação distribuída para a questão inteira, combinando os vetores de cada palavra que fazem parte da questão.
 
@@ -104,7 +104,11 @@ Sejam $\mathbb{Q}$ e $\mathbb{C}$ conjuntos de dados heterogêneos. \textit{Join
         \mathbb{Q} \xrightarrow{f} \mathbb{V}_{q} \rightarrow h_{\theta}(\mathbb{V}_{q}, \mathbb{V}_{c}) \leftarrow \mathbb{V}_{c} \xleftarrow{g} \mathbb{C}
 \end{equation}
 
-A função $f$, tal que $f: \mathbb{Q} \rightarrow \mathbb{R}^{d}$, mapeia os dados de $\mathbb{Q}$ para um espaço vetorial $\mathbb{V}$ de dimensão \emph{d}. A função $g$, $g: \mathbb{C} \rightarrow \mathbb{R}^{d}$, mapeia os dados do conjunto $\mathbb{C}$ para o mesmo espaço vetorial $\mathbb{V}$. A função $h_{\theta}$ calcula a similaridade entre dois vetores do mesmo espaço vetorial. 
+A função $f$, tal que $f: \mathbb{Q} \rightarrow \mathbb{R}^{d}$, mapeia os dados de $\mathbb{Q}$ para um espaço vetorial $\mathbb{V}$ de dimensão \emph{d}. A função $g$, $g: \mathbb{C} \rightarrow \mathbb{R}^{d}$, mapeia os dados do conjunto $\mathbb{C}$ para o mesmo espaço vetorial $\mathbb{V}$. A função $h_{\theta}$ calcula a similaridade entre dois vetores do mesmo espaço vetorial.
+
+
+O objetivo é aprender as funções $f$ e $g$ tal que para uma função de similaridade $h_{\theta}$, e.g., \textit{cosine}, e vetores $v_{q} \in \mathbb{V_q}$ e $v_{c} \in \mathbb{V}_q$,  $h_{\theta}(v_{q}, v_{c})$ seja maximizada para $v_{q}$ e seu correspondente vetor $v_{c}$.
+Através do \textit{joint embedding}, dados heterogêneos podem ser correlacionados \citep{Gu-deep-code-search:2018, cambronero-deep-learning-code-search:2019}.
 
     
 
