@@ -70,16 +70,43 @@ Neste caso, ao utilizar o \textit{skip-gram} do \textit{wordvec} para a palavra 
   ['with', 'open', 'filename', |\colorbox{green}{mode}|, |\colorbox{green}{as}|, |\colorbox{yellow}{file}|, |\colorbox{green}{file}|, |\colorbox{green}{write}|, 'text']
 \end{mypythonembedding}
 
-\begin{figure}[h]
-\includegraphics[width=1\textwidth]{figuras/cap-trabalhos-relacionados/code-tsne-output.png}
-\caption{Total de perguntas sobre Python e SQL no \textit{StackOverFlow} até 20 de março de 2019. Google and the Google logo are registered trademarks of Google LLC, used with permission.}
-\label{fig:bigquery-total-questions-python-sql-stackoverflow}
-\end{figure}
-
-
 \subsection{Bags and sequence embeddings}
 
-Conforme \cite{cambronero-deep-learning-code-search:2019}, os vetores de representação distribuída de cada termo ou palavra, i.e., os \textit{tokens embeddings}, podem ser tratados como \textit{bags}. Neste caso, a ordem das palavras não importa.
+O vetor de representação distribuída de cada palavra pode ser combinada para gerar um vetor de representação distribuída para a sentença inteira, e.g., podemos ter um vetor de representação distribuída para a questão inteira, combinando os vetores de cada palavra que fazem parte da questão.
+
+De acordo com \cite{cambronero-deep-learning-code-search:2019}, duas possíveis abordagens podem ser utilizadas. A primeira abordagem, podemos tratar o vetor de palavras como um \textit{bag}. Neste caso, a ordem das palavras não importa.
+
+Por exemplo, o vetor abaixo:
+
+\begin{mypythonembedding}{Vetor de \textit{tokens}.}
+  ['with', 'open', 'filename', 'mode', 'as', 'file', 'file', 'write', 'text']
+\end{mypythonembedding}
+
+Seria equivalente ao seguinte vetor:
+
+\begin{mypythonembedding}{Vetor de \textit{tokens} embaralhado.}
+['file', 'as', 'with', 'write', 'file', 'text', 'mode', 'open', 'filename']
+\end{mypythonembedding}
+
+Nesta abordagem, podemos utilizar uma rede neural que agrupa os tokens através de uma função de agrupamento que obtém o valor máximo, \textit{maxpool}, por exemplo.
+
+Na outra abordagem, a ordem é levada em consideração. Podemos utilizar o \acrfull{lstm}, uma variação do \acrfull{rnn}. As palavras serão fornecidas sequencialmente a rede neural.
+
+\subsection{\textit{Joint Embedding}}
+
+\textit{Joint embedding}, ou agrupamento de representação distribuída, é uma técnica para mapear dados heterogêneos para um mesmo espaço vetorial, de tal forma que os conceitos similares ocupem regiões próximas neste espaço \citep{Gu-deep-code-search:2018}.
+
+Os dados heterogêneos podem ser imagem e texto, por exemplo. E o objetivo é que cada imagem fique próxima de um texto somente quando houver uma correlação entre eles.
+
+Sejam $\mathbb{Q}$ e $\mathbb{C}$ conjuntos de dados heterogêneos. \textit{Joint embedding} pode ser formulado como:
+
+\begin{equation}
+        \mathbb{Q} \xrightarrow{f} \mathbb{V}_{q} \rightarrow h_{\theta}(\mathbb{V}_{q}, \mathbb{V}_{c}) \leftarrow \mathbb{V}_{c} \xleftarrow{g} \mathbb{C}
+\end{equation}
+
+A função $f$, tal que $f: \mathbb{Q} \rightarrow \mathbb{R}^{d}$, mapeia os dados de $\mathbb{Q}$ para um espaço vetorial $\mathbb{V}$ de dimensão \emph{d}. A função $g$, $g: \mathbb{C} \rightarrow \mathbb{R}^{d}$, mapeia os dados do conjunto $\mathbb{C}$ para o mesmo espaço vetorial $\mathbb{V}$. A função $h_{\theta}$ calcula a similaridade entre dois vetores do mesmo espaço vetorial. 
+
+    
 
 \section{Trabalhos relacionados}\label{sec:code-retrieval-trabalhos-relacionados}
 

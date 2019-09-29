@@ -138,5 +138,14 @@ problems, including question answering, textual entailment and sentiment analysi
 
 
 
+Na figura~\ref{fig:tsne-code-snippet-python} abaixo, podemos visualizar um exemplo da representação do vetor de representação distribuída gerada pelo \textit{word2vec}. Esta imagem foi criada com o auxílio da ferramenta \textit{t-SNE}. Ela auxilia na visualização de dados de dimensão elevada. Ela converte similaridades entre os dados para probabilidade conjunta e tenta minimizar a divergência \emph{Kullback-Leibler} entre as probabilidades conjuntas do vetor de dimensão menor e do vetor de dimensão mais alta. Em outras palavras, ela converte o vetor de dimensão elevada para um vetor de dimensão menor, enquanto tenta preservar a relativa similaridade entre os dados o mais próximo possível do original \citep{scikit-learn-tsne-2019, quora-tsne-2019}.
 
+
+
+
+\begin{figure}[h]
+\includegraphics[width=1\textwidth]{figuras/cap-trabalhos-relacionados/code-tsne-output.png}
+\caption{Representação em 2D do vetor de representação distribuída de trechos de código-fonte. Imagem gerada através da ferramenta t-SNE. E o vetor de representação distribuída foi criado a partir da amostra de trechos de código-fonte em Python disponibilizada por \cite{yao-2018}. Vetor criado utilizando o \textit{word2vec} com o algoritmo \textit{skip-gram} e o parâmetro \textit{window} com o valor $5$.}
+\label{fig:tsne-code-snippet-python}
+\end{figure}
 
