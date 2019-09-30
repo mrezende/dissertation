@@ -114,6 +114,9 @@ Através do \textit{joint embedding}, dados heterogêneos podem ser correlaciona
 
 \section{Trabalhos relacionados}\label{sec:code-retrieval-trabalhos-relacionados}
 
+Conforme \cite{cambronero-deep-learning-code-search:2019}, uma boa parte dos modelos propostos para o problema de \textit{code retrieval} utilizam a abordagem \textit{join embedding}. 
+
+
 \textit{Code search} ou \textit{code retrieval} busca associar um texto em linguagem natural a um código-fonte. Esta associação tem diversas aplicações em engenharia de software conforme exposto no capítulo~\ref{cap:introducao}.
 
 O trabalho de \cite{Allamanis-bimodal-source-code-natural-language:2015} foi um dos primeiros a abordar o problema do \textit{code retrieval}. Neste trabalho utilizou-se vetores de \gls{representacao-distribuida} tanto para as descrições quanto para os trechos de código-fonte. Uma função de classificação foi utilizada para combinar os vetores. A combinação foi feita usando operações aditivas ou multiplicativas. Ao final, o valor obtido a partir da função de classificação é convertida em probabilidade para avaliar qual trecho de código-fonte é mais relevante para uma determinada questão.
@@ -127,3 +130,7 @@ Já \cite{iyer-etal-2016-summarizing} utilizaram uma rede neural recorrente, mai
 Um grupo do Facebook\footnote{\url{https://www.facebook.com}}\citep{Sachdev-neural-code-search:2018} utilizou uma abordagem diferente. A hipótese inicial deles é que o código-fonte contém informações suficientes para ser utilizada no problema do \textit{code retrieval}. Diferente dos trabalhos citados anteriormente, eles não fizeram uso inicialmente das questões. Para cada método ou função de uma classe em um projeto de código-aberto, eles extraíram nome de método, chamadas de API, constantes e textos literais. A partir destas informações extraídas, eles criaram um vetor de representação distribuída para o método, combinando o vetor de representação distribuída com o peso \acrshort{tf-idf} de cada palavra. 
 
 Inicialmente, o resultado obtido foi comparável a outros métodos largamente utilizados em recuperação de documentos (information retrieval). Verificou-se que os acertos ocorriam apenas quando as perguntas continham as mesmas palavras dos trechos de código-fonte. Para aprimorar, eles mapearam palavras presentes nas perguntas para palavras equivalentes no código-fonte. Isto foi feito através de um treinamento supervisionado. Após este mapeamento, eles conseguiram responder corretamente 2/3 dos pares de questões extraídos do StackOverFlow. Para eles, a resposta é considerada correta quando ela aparece entre os 10 primeiros resultados.
+
+Já \cite{cambronero-deep-learning-code-search:2019} aprimoraram o modelo proposto por \cite{Sachdev-neural-code-search:2018}. Neste trabalho, eles combinaram o vetor de tokens utilizando um \gls{mecanismo-atencao} ao invés de \acrshort{tf-idf}. O mecanismo de atenção é uma camada supervisionada, exigindo treinamento supervisionado do modelo. 
+Somente com a adição da camada de atenção, o modelo proposto por \cite{cambronero-deep-learning-code-search:2019} foi capaz de superar outros modelos baseados em deep learning como, por exemplo, o modelo bi-LSTM de \cite{Gu-deep-code-search:2018}. 
+
