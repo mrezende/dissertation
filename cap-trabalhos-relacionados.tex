@@ -114,7 +114,52 @@ Através do \textit{joint embedding}, dados heterogêneos podem ser correlaciona
 
 \section{Trabalhos relacionados}\label{sec:code-retrieval-trabalhos-relacionados}
 
-Conforme \cite{cambronero-deep-learning-code-search:2019}, uma boa parte dos modelos propostos para o problema de \textit{code retrieval} utilizam a abordagem \textit{join embedding}. 
+Conforme \cite{cambronero-deep-learning-code-search:2019}, uma boa parte dos modelos propostos para o problema de \textit{code retrieval} utilizam a abordagem \textit{join embedding}. \cite{Allamanis-bimodal-source-code-natural-language:2015} criaram um modelo probabilístico para recuperar o trecho de código-fonte mais relevante para uma determinada questão. Ele combinou os vetores de representação de código-fonte e descrição em linguagem natural através de uma operação multiplicativa.
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ | p{8em} | p{8em} | p{8em} | p{8em} |  }
+\hline
+\textbf{Artigo} & \textbf{Representação da palavra} 
+& \textbf{Representação do texto} & \textbf{Ordem} \\
+\hline
+\cite{Allamanis-bimodal-source-code-natural-language:2015} & Representação distribuída / Árvore sintática & Média / Operação multiplicativa & Bag / Árvore sintática\\
+\hline 
+\cite{Chen-bi-variational-autoencoder:2018} & Representação distribuída & bi-\acrshort{vae} & Bag\\
+ \hline
+\cite{iyer-etal-2016-summarizing} & \gls{one-hot-encoding} & \acrshort{lstm} com \gls{mecanismo-atencao} & Sequencial\\
+ 
+ \hline
+ 
+ \cite{Gu-deep-code-search:2018} & \textit{word2vec} & bi-\acrshort{lstm} & Sequencial\\
+ \hline
+ 
+ \citep{Sachdev-neural-code-search:2018} & \textit{word2vec} & Média / \acrshort{tf-idf}  & Bag\\
+ 
+ \hline
+ 
+ \cite{cambronero-deep-learning-code-search:2019} & \textit{word2vec} & Média / \gls{mecanismo-atencao} & Bag \\
+ 
+ \hline
+ 
+\end{tabular}
+\caption{Estatística descritiva da amostra de 62.252 pares $(q_{i}, c_{i}^{+})$ em Python extraída do conjunto de dados disponibilizado por \cite{Yao-staqc:2018}.}
+\label{table:divisao-amostras}
+\end{table}
+
+sumário do modelo joint embedding:
+
+
+
+Sumário do dataset:
+
+\cite{Allamanis-bimodal-source-code-natural-language:2015} -> preprocessing code: 
+\cite{Chen-bi-variational-autoencoder:2018} -> 
+\cite{iyer-etal-2016-summarizing} -> 
+\cite{Gu-deep-code-search:2018} -> 
+\citep{Sachdev-neural-code-search:2018} -> 
+\cite{cambronero-deep-learning-code-search:2019} -> 
 
 
 \textit{Code search} ou \textit{code retrieval} busca associar um texto em linguagem natural a um código-fonte. Esta associação tem diversas aplicações em engenharia de software conforme exposto no capítulo~\ref{cap:introducao}.
@@ -133,4 +178,3 @@ Inicialmente, o resultado obtido foi comparável a outros métodos largamente ut
 
 Já \cite{cambronero-deep-learning-code-search:2019} aprimoraram o modelo proposto por \cite{Sachdev-neural-code-search:2018}. Neste trabalho, eles combinaram o vetor de tokens utilizando um \gls{mecanismo-atencao} ao invés de \acrshort{tf-idf}. O mecanismo de atenção é uma camada supervisionada, exigindo treinamento supervisionado do modelo. 
 Somente com a adição da camada de atenção, o modelo proposto por \cite{cambronero-deep-learning-code-search:2019} foi capaz de superar outros modelos baseados em deep learning como, por exemplo, o modelo bi-LSTM de \cite{Gu-deep-code-search:2018}. 
-
