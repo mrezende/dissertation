@@ -114,7 +114,7 @@ Através do \textit{joint embedding}, dados heterogêneos podem ser correlaciona
 
 \section{Trabalhos relacionados}\label{sec:code-retrieval-trabalhos-relacionados}
 
-Conforme \cite{cambronero-deep-learning-code-search:2019}, uma boa parte dos modelos propostos para o problema de \textit{code retrieval} utilizam a abordagem \textit{joint embedding}. Na tabela~\ref{table:summary-joint-embedding}, compilamos os principais trabalhos que utilizam esta abordagem. 
+Conforme \cite{cambronero-deep-learning-code-search:2019}, uma boa parte dos modelos propostos para o problema de \textit{code retrieval} utilizaram a abordagem \textit{joint embedding}. Na tabela~\ref{table:summary-joint-embedding}, compilamos os principais trabalhos que utilizam esta abordagem. 
 
 \begin{table}[h]
 \centering
@@ -122,9 +122,9 @@ Conforme \cite{cambronero-deep-learning-code-search:2019}, uma boa parte dos mod
 \hline
 \textbf{Artigo} & \textbf{Sumário} \\
 \hline
-\multirow{2}{8em}{\cite{Allamanis-bimodal-source-code-natural-language:2015}} & Representação distribuída para as questões/ Árvore sintática para o código-fonte\\
+\multirow{2}{8em}{\cite{Allamanis-bimodal-source-code-natural-language:2015}} & Representação distribuída para as questões / Árvore sintática para o código-fonte\\
 
-& Combinou os vetores de \textit{tokens} de questão através da operação de média / Combinou os \textit{tokens} de código-fonte usando operações multiplicativas\\
+& Combinou os vetores de \textit{tokens} de questão através da média / Combinou os \textit{tokens} de código-fonte usando operações multiplicativas\\
 
 \hline
  
@@ -164,21 +164,47 @@ Conforme \cite{cambronero-deep-learning-code-search:2019}, uma boa parte dos mod
 
 Conforme a tabela~\ref{table:summary-joint-embedding}, a maioria dos trabalhos representaram as palavras através de vetores de representação distribuída. Com exceção do \cite{iyer-etal-2016-summarizing} que optou por representar com \gls{one-hot-encoding}. Tanto o trabalho de \cite{Gu-deep-code-search:2018} quanto o trabalho de \cite{iyer-etal-2016-summarizing} optaram por representar uma sentença através do uso de redes neurais recorrentes, levando em consideração a ordem das palavras. Já \cite{Allamanis-bimodal-source-code-natural-language:2015} optou por representar as questões como um \textit{bag} de palavras, enquanto para os trechos de código-fonte optou-se por representar através de uma árvore sintática obtida através do compilador. Neste caso, a relação hierárquiva entre as palavras foi levada em consideração. Os outros trabalhos \cite{Chen-bi-variational-autoencoder:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019} optaram por uma abordagem mais simples e trataram o vetor de tokens como um \textit{bag}.
 
-O uso de redes neurais é um outro ponto em comum dos trabalhos reunidos na tabela~\ref{table:summary-joint-embedding}. Tanto que \cite{cambronero-deep-learning-code-search:2019} cunhou o termo \textit{neural code search}, o uso de redes neurais na recuperação de trecho de código-fonte. É interessante observar que nenhum trabalho verificou o desempenho das redes convolucionais neste problema. Sendo que as redes convolucionais apresentaram um bom desempenho em problemas similares em NLP \todo{citar trabalhos da YAO}.
+É interessante observar que nenhum trabalho verificou o desempenho das redes convolucionais neste problema. Sendo que as redes convolucionais apresentaram um bom desempenho em problemas similares em NLP \todo{citar trabalhos da YAO}.
 
-Infelizmente, não há um consenso sobre o conjunto de dados para avaliação do modelo. Isto deve-se, principalmete, a falta de um conjunto de dados curado e organizado para este problema. 
+Para avaliação do modelo, há uma diferença, basicamente, no corpus de busca. Corpus de busca entende-se como um conjunto formado por trechos de código-fonte no qual o modelo ou o sistema irá utilizar para recuperar o trecho de código mais relevante para uma questão. \cite{iyer-etal-2016-summarizing, Chen-bi-variational-autoencoder:2018} utilizaram um corpus de busca composto pelo trecho de código-fonte apontado como correto e outros 49 distratores para avaliação. Já \cite{Gu-deep-code-search:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019} utilizaram repositórios do Github.  
 
-sumário do modelo joint embedding:
+\begin{table}[h]
+\centering
+\begin{tabular}{  p{5cm} p{10cm}  }
+\hline
+\textbf{Artigo} & \textbf{Sumário} \\
+\hline
+\cite{Allamanis-bimodal-source-code-natural-language:2015} & \multirow{2}*{
+\begin{tabular}{l}Linguagem: C\#\\
+            \# de dados para treinamento: $24.812$\\
+            \# de questões anotadas manualmente para avaliação: N/D\\
+            Corpus de busca: 50\\
+                \end{tabular}
+} \\
 
+\cite{Chen-bi-variational-autoencoder:2018} &  \\
+
+ \hline
+ 
+\end{tabular}
+\caption{Sumário das diferentes abordagens adotadas pelos pesquisadores para o problema do \textit{code retrieval}. Tabela adaptada de \cite{cambronero-deep-learning-code-search:2019}}
+\label{table:summary-joint-embedding}
+\end{table}
 
 
 Sumário do dataset:
 
-\cite{Allamanis-bimodal-source-code-natural-language:2015} -> preprocessing code: syntax tree for source code, stackoverflow, title for questions, code snippet as code, C\#
-\cite{Chen-bi-variational-autoencoder:2018} -> title for question, code snippet for code answer, C\#, SQL like \cite{iyer-etal-2016-summarizing}, avaliação mesma do \cite{iyer-etal-2016-summarizing}.
-\cite{iyer-etal-2016-summarizing} -> stackoverflow, c# e SQL, title for question and code snippet as code answer, avalição feita com dados anotados manualmente.
-\cite{Gu-deep-code-search:2018} -> method name, api sequence and tokens for code, docstring for description language, github, java, avaliação nas 50 questoes mais votadas do SoF
-\citep{Sachdev-neural-code-search:2018} -> method name, api sequence, enums, string literals and comments for code, none for query. github for training and SoF for evaluation. Java
+\cite{Allamanis-bimodal-source-code-natural-language:2015} -> preprocessing code: syntax tree for source code, stackoverflow, title for questions, code snippet as code, C\#, treinamento: 24812, validação: 17462/11469
+\cite{Chen-bi-variational-autoencoder:2018} -> title for question, code snippet for code answer, C\#, SQL like \cite{iyer-etal-2016-summarizing}, avaliação mesma do \cite{iyer-etal-2016-summarizing}. This dataset contains 52812 pairs of <C# code,
+natural language description> for training, 6601 pairs for validation and 6602 pairs for test. For SQL, these numbers are 25671,3326 and 3340. 200 humman annottated for evaluation (100 for DEV and 100 for EVAL).
+
+
+\cite{iyer-etal-2016-summarizing} -> stackoverflow, c\# e SQL, title for question and code snippet as code answer, avalição feita com dados anotados manualmente. For the final dataset, we retain 66,015 C\# (title, query) pairs and 32,337 SQL pairs that are
+classified as clean, and use 80\% of these datasets for training, 10\% for validation and 10\% for test-ing. 200 humman annottated for evaluation (100 for DEV and 100 for EVAL).
+
+\cite{Gu-deep-code-search:2018} -> method name, api sequence and tokens for code, docstring for description language, github, java, avaliação nas 50 questoes mais votadas do SoF, CODEnn-Java-Train [15] Method name, api invocations, tokens/docstring 16mm training, search corpus 4mm, evaluation: java 50
+
+\citep{Sachdev-neural-code-search:2018} -> method name, api sequence, enums, string literals and comments for code, none for query. github for training and SoF for evaluation. GitHub-Android-Train Method/docstring 787k, search corpus: GitHub-Android-Search 5.5mm, evaluation: android-100
 \cite{cambronero-deep-learning-code-search:2019} -> method/docstring github, title and code snippet for sof. Java. Evaluation using SoF.
 
 
