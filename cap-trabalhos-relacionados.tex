@@ -170,56 +170,68 @@ Para avaliação do modelo, há uma diferença, basicamente, no corpus de busca.
 
 \begin{table}[h]
 \centering
-\begin{tabular}{ p{6em} p{6em} p{6em} p{8em} p{8em} }
+\begin{tabular}{ p{8em} p{6em} p{6em} p{8em} p{6em} }
 \hline
  &  & \textbf{Treinamento} & \multicolumn{2}{c}{\textbf{Avaliação}} \\
 \hline
 \textbf{Artigo} & \textbf{Linguagem} & \textbf{\# de dados} & \textbf{\# questões anotadas} & \textbf{Corpus de busca}  \\
 \hline
+
 \cite{Allamanis-bimodal-source-code-natural-language:2015} & C\# & $24.812$ & N/D & $50$ \\
 
-\cite{Chen-bi-variational-autoencoder:2018} & \multirow{2}{6em}[-1.5ex]{\centering C\# / SQL} &
-\multirow{2}{6em}[-1.5ex]{\centering $66.015$ / $25671$} & \multirow{2}{8em}[-1.5ex]{\centering $100$} & \multirow{2}{8em}[-1.5ex]{\centering $50$} \\
+\cite{Chen-bi-variational-autoencoder:2018} & \multirow{2}{6em}{\centering C\# / SQL} &
+\multirow{2}{6em}{\centering $66.015$ / $25671$} & \multirow{2}{8em}{\centering $100$} & \multirow{2}{8em}{\centering $50$} \\
 
 \cite{iyer-etal-2016-summarizing} &  &  &  &  \\
+
+\cite{Gu-deep-code-search:2018} & Java & $16$ milhões & $50$ & $4$ milhões \\
+
+\cite{Sachdev-neural-code-search:2018} & Java (Android) & $787$ mil & $100$ & $5,5$ milhões \\
+
+\cite{cambronero-deep-learning-code-search:2019} & Java / Java (Android) & $16$ milhões / $787$ mil & $50$ / $287$ & $4$ milhões / $5,5$ milhões \\
 
  \hline
  
 \end{tabular}
-\caption{Sumário das diferentes abordagens adotadas pelos pesquisadores para o problema do \textit{code retrieval}. Tabela adaptada de \cite{cambronero-deep-learning-code-search:2019}}
-\label{table:summary-joint-embedding}
+\caption{Relação da quantidade de dados utilizada para treinamento e avaliação dos modelos. A coluna \textbf{\# questões anotadas} refere-se a quantidade de questões anotadas manualmente para avaliação final do modelo.}
+\label{table:summary-training-data}
+\end{table}
+
+De acordo com a tabela~\ref{table:summary-training-data}, com exceção de \cite{Allamanis-bimodal-source-code-natural-language:2015}, todos os outros trabalhos avaliaram o modelo utilizando questões coletadas e anotadas manualmente. Uma análise e verificação manual das respostas feitas pelos modelos foi relizada em todos os trabalhos, com exceção do \cite{Allamanis-bimodal-source-code-natural-language:2015, cambronero-deep-learning-code-search:2019}. No caso do \cite{cambronero-deep-learning-code-search:2019} foi criado uma sistema de avalição automática, onde as respostas apontadas pelo modelo são consideradas corretas, quando a diferença entre elas e a resposta anotada como correta estão dentro de um certo intervalo.
+
+Com relação a fonte para coleta de dados para avaliação dos modelos, todos os trabalhos utilizaram o \acrfull{sof-ab} como principal fonte para a coleta das questões. Porém em relação ao corpus de busca, alguns trabalhos \citep{Gu-deep-code-search:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019} utilizaram o \acrfull{github-ab}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ p{8em} p{5em} p{5em} p{5em} p{5em} p{5em} }
+\hline
+ & \multicolumn{3}{c}{\textbf{Treinamento}} & \multicolumn{2}{c}{\textbf{Avaliação}} \\
+\hline
+\textbf{Artigo} & \textbf{Fonte} & \textbf{Questões} & \textbf{Código-Fonte} & \textbf{Fonte das questões} & \textbf{Fonte do corpus de busca}\\
+\hline
+
+\cite{Allamanis-bimodal-source-code-natural-language:2015} & \acrshort{sof-ab} & Título da postagem & Trecho de código-fonte & \acrshort{sof-ab} & \acrshort{sof-ab}\\
+
+\cite{Chen-bi-variational-autoencoder:2018} & \acrshort{sof-ab} & Título da postagem & Trecho de código-fonte & \acrshort{sof-ab} & \acrshort{sof-ab}\\
+
+\cite{iyer-etal-2016-summarizing} & \acrshort{sof-ab} & Título da postagem & Trecho de código-fonte & \acrshort{sof-ab} & \acrshort{sof-ab}\\
+
+\cite{Gu-deep-code-search:2018} & \acrshort{github-ab} & Docstring & Método & \acrshort{sof-ab} & \acrshort{github-ab}\\
+
+\cite{Sachdev-neural-code-search:2018} & \acrshort{github-ab} & N/D & Método	& \acrshort{sof-ab} & \acrshort{github-ab}\\
+
+\cite{cambronero-deep-learning-code-search:2019} & \acrshort{github-ab} / \acrshort{sof-ab} & Docstring / Título da postagem & Método / Trecho de código-fonte & \acrshort{sof-ab} & \acrshort{github-ab}\\
+
+ \hline
+ 
+\end{tabular}
+\caption{Repositórios utilizados para coleta dos dados de treinamento e avaliação dos modelos no problema de \textit{code retrieval}.}
+\label{table:summary-source-data}
 \end{table}
 
 
-Sumário do dataset:
+A composição dos pares de questões e trechos de código-fonte diferiu de acordo com a fonte utilizada para coleta dos dados. Os trabalhos que utilizaram o \acrfull{github-ab}, utilizaram os métodos como trecho de código-fonte e o \gls{docstring} deste método como descrição. No caso do \acrfull{sof-ab}, os pares foram formados pelo título da questão e pelo trecho de código-fonte da resposta aceita.
 
-\cite{Allamanis-bimodal-source-code-natural-language:2015} -> preprocessing code: syntax tree for source code, stackoverflow, title for questions, code snippet as code, C\#, treinamento: 24812, validação: 17462/11469
-\cite{Chen-bi-variational-autoencoder:2018} -> title for question, code snippet for code answer, C\#, SQL like \cite{iyer-etal-2016-summarizing}, avaliação mesma do \cite{iyer-etal-2016-summarizing}. This dataset contains 52812 pairs of <C# code,
-natural language description> for training, 6601 pairs for validation and 6602 pairs for test. For SQL, these numbers are 25671,3326 and 3340. 200 humman annottated for evaluation (100 for DEV and 100 for EVAL).
+De acordo com \cite{cambronero-deep-learning-code-search:2019}, os dados utilizados para compor os pares utilizados no treinamento do modelo, influenciam no desempenho do modelo na avaliação final. Em seu trabalho, foram observados um ganho no desempenho das redes neurais quando treinados com os títulos das questões e trechos de código-fonte do \acrfull{sof-ab}, ao invés de \gls{docstring} e métodos do \acrfull{github-ab}. 
 
-
-\cite{iyer-etal-2016-summarizing} -> stackoverflow, c\# e SQL, title for question and code snippet as code answer, avalição feita com dados anotados manualmente. For the final dataset, we retain 66,015 C\# (title, query) pairs and 32,337 SQL pairs that are
-classified as clean, and use 80\% of these datasets for training, 10\% for validation and 10\% for test-ing. 200 humman annottated for evaluation (100 for DEV and 100 for EVAL).
-
-\cite{Gu-deep-code-search:2018} -> method name, api sequence and tokens for code, docstring for description language, github, java, avaliação nas 50 questoes mais votadas do SoF, CODEnn-Java-Train [15] Method name, api invocations, tokens/docstring 16mm training, search corpus 4mm, evaluation: java 50
-
-\citep{Sachdev-neural-code-search:2018} -> method name, api sequence, enums, string literals and comments for code, none for query. github for training and SoF for evaluation. GitHub-Android-Train Method/docstring 787k, search corpus: GitHub-Android-Search 5.5mm, evaluation: android-100
-\cite{cambronero-deep-learning-code-search:2019} -> method/docstring github, title and code snippet for sof. Java. Evaluation using SoF.
-
-
-\textit{Code search} ou \textit{code retrieval} busca associar um texto em linguagem natural a um código-fonte. Esta associação tem diversas aplicações em engenharia de software conforme exposto no capítulo~\ref{cap:introducao}.
-
-O trabalho de \cite{Allamanis-bimodal-source-code-natural-language:2015} foi um dos primeiros a abordar o problema do \textit{code retrieval}. Neste trabalho utilizou-se vetores de \gls{representacao-distribuida} tanto para as descrições quanto para os trechos de código-fonte. Uma função de classificação foi utilizada para combinar os vetores. A combinação foi feita usando operações aditivas ou multiplicativas. Ao final, o valor obtido a partir da função de classificação é convertida em probabilidade para avaliar qual trecho de código-fonte é mais relevante para uma determinada questão.
-
-Já \cite{iyer-etal-2016-summarizing} utilizaram uma rede neural recorrente, mais especificamente \acrshort{lstm} com o \gls{mecanismo-atencao} para classificar o trecho de código-fonte de acordo com a questão. \cite{Chen-bi-variational-autoencoder:2018} utilizaram \acrfull{vae} para obter um vetor de \gls{representacao-distribuida} do código-fonte e descrição. E utilizaram algoritmos de similaridade para recuperar o trecho de código-fonte.
-
-\cite{Gu-deep-code-search:2018} utilizaram o conceito de \textit{joint embedding}, uma técnica para juntar dados heterogêneos em um mesmo espaço vetorial tal que conceitos similares de categorias diferentes ocupem regiões próximas do espaço. Para mapear as questões e trechos de código-fonte para o mesmo espaço vetorial, \cite{Gu-deep-code-search:2018} utilizaram uma rede neural bi-\acrshort{lstm} com uma camada \textit{maxpool} ao final. Para verificar a similaridade entre os vetores, foi utilizado a função de similaridade \textit{cosine}.
-
-\cite{Yao-coacor:2019} aprimoraram o \textit{code retrieval} combinando anotações com trechos de código-fonte. As anotações foram geradas por um modelo e aprimoradas através de aprendizagem por reforço (\textit{reinforcement learning}). Durante a aprendizagem por reforço, as anotações foram avaliadas para maximizar o sucesso na tarefa de \textit{code retrieval}.
-
-Um grupo do Facebook\footnote{\url{https://www.facebook.com}}\citep{Sachdev-neural-code-search:2018} utilizou uma abordagem diferente. A hipótese inicial deles é que o código-fonte contém informações suficientes para ser utilizada no problema do \textit{code retrieval}. Diferente dos trabalhos citados anteriormente, eles não fizeram uso inicialmente das questões. Para cada método ou função de uma classe em um projeto de código-aberto, eles extraíram nome de método, chamadas de API, constantes e textos literais. A partir destas informações extraídas, eles criaram um vetor de representação distribuída para o método, combinando o vetor de representação distribuída com o peso \acrshort{tf-idf} de cada palavra. 
-
-Inicialmente, o resultado obtido foi comparável a outros métodos largamente utilizados em recuperação de documentos (information retrieval). Verificou-se que os acertos ocorriam apenas quando as perguntas continham as mesmas palavras dos trechos de código-fonte. Para aprimorar, eles mapearam palavras presentes nas perguntas para palavras equivalentes no código-fonte. Isto foi feito através de um treinamento supervisionado. Após este mapeamento, eles conseguiram responder corretamente 2/3 dos pares de questões extraídos do StackOverFlow. Para eles, a resposta é considerada correta quando ela aparece entre os 10 primeiros resultados.
-
-Já \cite{cambronero-deep-learning-code-search:2019} aprimoraram o modelo proposto por \cite{Sachdev-neural-code-search:2018}. Neste trabalho, eles combinaram o vetor de tokens utilizando um \gls{mecanismo-atencao} ao invés de \acrshort{tf-idf}. O mecanismo de atenção é uma camada supervisionada, exigindo treinamento supervisionado do modelo. 
-Somente com a adição da camada de atenção, o modelo proposto por \cite{cambronero-deep-learning-code-search:2019} foi capaz de superar outros modelos baseados em deep learning como, por exemplo, o modelo bi-LSTM de \cite{Gu-deep-code-search:2018}. 
+Além da composição dos pares, a variação dos trechos de código-fonte por questão é um fator importante também. Em um trabalho recente, \cite{yao-2018} verificou que ao compor uma questão com mais de um trecho de código-fonte resultou em um ganho de mais de 10\% no desempenho final do modelo.
