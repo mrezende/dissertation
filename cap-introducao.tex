@@ -2,13 +2,20 @@
 \chapter{Introdução}
 \label{cap:introducao}
 
-Dado uma questão ou descrição em linguagem natural e um conjunto de trechos de código-fonte, recuperação de trecho de código-fonte ou \textit{code retrieval} consiste em recuperar um código que solucione ou seja mais apropriado a dada descrição \citep{Allamanis-bimodal-source-code-natural-language:2015}. Podemos dizer que \textit{code retrieval} busca associar um texto em linguagem natural a um código-fonte. 
 
-Esta associação tem diversas aplicações como busca de código-fonte a partir de uma consulta em linguagem natural, documentação e geração de programas a partir de uma especificação, por exemplo \citep{Allamanis:2018:SML}. Em engenharia de software a associação entre código-fonte e texto em linguagem natural pode auxiliar na rastreabilidade de requisitos. Além disso, pode ajudar o desenvolvedor na geração de código-fonte. Um modelo pode gerar testes de unidade a partir de uma estória de usuário \citep{marcelo-vem-2019}.
+Problema de recuperação de trecho de código-fonte ou \textit{code retrieval} consiste em recuperar um trecho de código-fonte a partir de um repositório, que atenda as intenções do desenvolvedor, descritas em linguagem natural \citep{cambronero-deep-learning-code-search:2019}. Podemos dizer que \textit{code retrieval} busca associar as intenções do desenvolvedor aos trechos de código-fonte.
 
-O problema do \textit{code retrieval} assemelha-se ao problema de seleção de respostas ou \textit{answer selection} em \acrshort{nlp}. Este problema consiste em dado uma questão e um conjunto de possíveis respostas, ambos em linguagem natural, identificar qual resposta responde corretamente a pergunta \citep{lai-etal-2018-review}. 
+Esta associação pode ser feita através de redes neurais. Uma abordagem é obter uma representação para a intenção e outra para os trechos de código-fonte e agrupá-las em um mesmo espaço vetorial. E o objetivo é fazer com que os vetores de representação das intenções do desenvolvedor aproximem-se dos vetores dos trechos de código-fonte que atendam as suas necessidades. 
 
-A proposta deste trabalho é aplicar uma arquitetura deep learning de \textit{answer selection} no problema de \textit{code retrieval}. Inicialmente utilizaremos a arquitetura bi-LSTM com CNN proposta por \cite{tan-lstm-qa}. Além de propor uma nova arquitetura para este problema, avaliaremos o modelo utilizando os dados de entrada da base StaQC, criada por \cite{yao-2018}. Esta base de dados é composta de milhares de pares de perguntas e trechos de código-fonte do StackOverFlow \citep{marcelo-vem-2019}.
+Esta é uma abordagem comumente utilizada quando aplica-se redes neurais para encontrar uma associação em dados de diferentes modalidades e domínios. Esta abordagem é utilizada em traduções, associação de imagem e texto e, até mesmo, no problema de perguntas e respostas e recomendações em \acrshort{nlp} \citep{lai-etal-2018-review, Zhang:2019:deep-learning-recommender-survey}.
+
+Um fator importante para a associação das representações é obter uma boa representação. Uma boa representação deve ser capaz de facilitar a aprendizagem de uma tarefa posterior \citep{Goodfellow-et-al-2016:representation-learning}. No caso de \textit{code retrieval}, uma boa representação deve ajudar na tarefa de aproximar as intenções dos trechos de código-fonte relevantes. 
+
+Além disso, uma boa representação pode ser útil para dados que seguem uma outra distribuição. Uma representação de trechos de código-fonte que foram coletadas de um site de dúvidas de programação podem ser utilizadas para encontrar trechos de código-fonte similares em repositórios de código aberto.
+
+A proposta deste trabalho é verificar o uso das redes convolucionais na aprendizagem de representação. Mais especificamente, queremos avaliar se as redes convolucionais auxiliam na obtenção de um modelo capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor.
+
+Para isto, avaliaremos o uso das redes convolucionais no problema de \textit{code retrieval}. Avaliaremos duas arquiteturas: Uma composta somente por uma camada de rede convolucional e outra composta por uma camada de rede neural recorrente e outra camada de rede convolucional. Além de propor uma nova arquitetura para este problema, avaliaremos o modelo utilizando os dados de entrada da base StaQC, criada por \cite{yao-2018}. Esta base de dados é composta de milhares de pares de perguntas e trechos de código-fonte do StackOverFlow.
 
 
 
@@ -18,7 +25,7 @@ A proposta deste trabalho é aplicar uma arquitetura deep learning de \textit{an
 
 O foco deste trabalho é o problema do \textit{code retrieval}. Diferentemente dos trabalhos de \cite{iyer-etal-2016-summarizing} e \cite{Allamanis-bimodal-source-code-natural-language:2015} que abordaram também o problema de sumarização de código-fonte ou \textit{code summarization}. 
 
-Inicialmente aplicaremos a arquitetura bi-\acrshort{lstm} com \acrshort{cnn} proposta por \cite{tan-lstm-qa}. Para os resultados preliminares, iremos compará-la com outras duas arquiteturas, uma CNN com uma camada \textit{hidden layer} de entrada. E outra mais simples que tem uma camada com a representação distribuída dos dados de entrada e posteriormente uma camada \textit{maxpool} e uma função de similaridade como saída.
+Avaliaremos duas arquiteturas: Uma arquitetura bi-\acrshort{lstm} com \acrshort{cnn} proposta por \cite{tan-lstm-qa} e outra somente com camada \acrshort{cnn}. Iremos compará-las com outras outras arquiteturas de referência e com a arquitetura proposta por \cite{cambronero-deep-learning-code-search:2019} que é o estado da arte para este problema.
 
 A base de dados disponibilizada por \cite{yao-2018} contém pares de questões e trechos de código-fonte em Python e SQL. A princípio utilizaremos apenas os pares de perguntas e código-fonte em Python.
 
@@ -27,7 +34,7 @@ A base de dados disponibilizada por \cite{yao-2018} contém pares de questões e
 \section{Objetivos}
 \label{sec:objetivo}
 
-O objetivo principal deste trabalho é propor uma nova abordagem para o problema do \textit{code retrieval}. Este problema será abordado sob a visão do \textit{answer selection}. Para isto, avaliaremos o desempenho de uma arquitetura deep learning de \textit{answer selection} no contexto do problema de \textit{code retrieval}.
+O objetivo principal deste trabalho é propor uma nova abordagem para o problema do \textit{code retrieval}. Queremos avaliar se o uso de redes convolucionais auxiliam na obtenção de um modelo que seja capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor.
 
 %% ------------------------------------------------------------------------- %%
 \section{Contribuições}

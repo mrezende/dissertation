@@ -15,39 +15,45 @@ De acordo com \cite{Chen-bi-variational-autoencoder:2018}, a tarefa do \textit{c
 
 Para \cite{cambronero-deep-learning-code-search:2019}, o objetivo do \textit{code search} é recuperar um trecho de código-fonte a partir de um enorme repositório de código-fonte, que mais se aproxima da intenção do desenvolvedor, expressa em linguagem natural. 
 
-Adotaremos a mesma definição proposta por \cite{iyer-etal-2016-summarizing, Yao-coacor:2019} para \textit{code retrieval}:
+Para formalizar, adotaremos a mesma definição proposta por \cite{iyer-etal-2016-summarizing, Yao-coacor:2019} para \textit{code retrieval}:
 
-Dado uma questão em linguagem natural $Q$ e um conjunto com os trechos de código-fonte candidatos $\mathbb{C}$, \textit{code retrieval} recupera o trecho de código $C^{*} \in \mathbb{C}$ que corresponde a dada questão.
+Seja $\mathbb{Q}$ um conjunto formado por questões e/ou intenções descritas em linguagem natural. Seja $\mathbb{C}$ um conjunto de trechos de códigos-fontes.
 
-Formalmente, para um conjunto de treinamento com pares de questões e trechos de código-fonte (<questão, trecho de código-fonte>), e.g., dados coletados do StackOverFlow por \cite{yao-2018}, \textit{code retrieval} é definido como:
+Dado uma questão em linguagem natural $q \in \mathbb{Q}$ e um conjunto com os trechos de código-fonte candidatos $\mathbb{C}_{a} \subset \mathbb{C}$, \textit{code retrieval} recupera o trecho de código $c^{+} \in \mathbb{C}_{a}$ que é a resposta correta observada a dada questão.
 
-\textbf{Code Retrieval}: Dada uma questão em linguagem natural $Q$, um modelo $F_{r}$ irá aprender a recuperar o trecho de código-fonte $C^{*} \in \mathbb{C}$ com a maior pontuação:
+Formalmente, para um conjunto de treinamento com pares de questões e trechos de código-fonte (<$q$, $c^{+}$>), \textit{code retrieval} é definido como:
+
+\textbf{Code Retrieval}: Dada uma questão em linguagem natural $q \in \mathbb{Q}$, um modelo $F_{r}$ irá aprender a recuperar o trecho de código-fonte $c^{+} \in \mathbb{C}_{a}$ com a maior pontuação:
 
 \begin{equation}\label{eq:code-retrieval}
-C^{*} = \underset{C \in \mathbb{C}}{argmax}\text{ } F_{r}(Q , C)
+c^{+} = \underset{c \in \mathbb{C}_{a}}{argmax}\text{ } F_{r}(q , c)
 \end{equation}
 
-Neste trabalho, tanto o termo \textit{code retrieval} quanto \textit{code search} irão referir-se ao mesmo problema.
+Neste trabalho, tanto o termo \textit{code retrieval} quanto \textit{code search} irão referir-se ao mesmo problema. Quando utilizamos a palavra \emph{questão}, estamos nos referindo ao título de uma dúvida expressa em linguagem natural em um fórum de perguntas de programação. Neste trabalho, todas as questões utilizadas expressam intenções do desenvolvedor. Portanto, as palavras \emph{questão} e \emph{intenção} poderão ser utilizadas uma no lugar da outra sem prejudicar o entendimento do texto.
 
 
 
 \section{\textit{Joint Embeddings}}
 
-Segundo \cite{Goodfellow-et-al-2016:representation-learning}, um fator importante a ser levado em consideração é a forma como os dados são representados. Uma boa representação consegue identificar as características relevantes e os fatores causadores dos dados observados. Estas características são invariantes em relação aos dados de entrada. Uma boa representação pode ser utilizada em outras tarefas, em diferentes modalidades, i.e., o modelo encontrado que é útil para um cojunto de dados que segue uma distribuição $P1$, pode ser útil para um conjunto de dados que segue uma distribuição $P2$. Desde que os fatores encontrados para $P1$, sejam relevantes ou expliquem parte da variação em $P2$.
+Segundo \cite{Goodfellow-et-al-2016:representation-learning}, um fator importante a ser levado em consideração é a forma como os dados são representados. Uma boa representação consegue identificar as características relevantes e os fatores causadores dos dados observados. Além disso, uma boa representação deve ser capaz de facilitar na aprendizagem de uma tarefa posterior.
 
 No caso do código-fonte, ao tratá-lo como um texto formado por uma sequência de palavras, uma boa representação é um vetor de representação distribuída. As redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída em comparação a um \gls{one-hot-encoding}. Representação distribuída induz a um rico espaço de similaridade, no qual conceitos semanticamente similares (ou dados de entrada) estão próximos, uma propriedade que não está presente em representações puramente simbólicas \citep{Goodfellow-et-al-2016:representation-learning}.
 
+No problema do \textit{code retrieval}, a representação é um fator importante. Pois com uma boa representação, um modelo de redes neurais será capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor mais facilmente. 
 
+Três aspectos devem ser levados em consideração ao fazer a associação entre as intenções e os trechos de código-fonte. O primeiro aspecto é a representação dos \textit{tokens} ou palavras que compõem as intenções e os trechos de códigos-fontes. O segundo é a obtenção de uma representação para as intenções e trechos de códigos. E por último, como fazer a associação entre eles.
 
-\subsection{\textit{Token Embedding}}
+\subsection{\textit{Representação dos \textit{tokens} ou palavras}}
 
-De acordo com \cite{cambronero-deep-learning-code-search:2019}, \textit{embedding} é uma forma de representar um dado de entrada através de um vetor com valores reais ($\mathbb{R}$). \textit{Embedding} pode ser definida como uma função $\mathbb{E}$, tal que:
+As questões e os trechos de códigos-fontes são compostas por um conjunto de palavras ou \textit{tokens}. Uma boa representação para estas palavras é um vetor de representação distribuída, conforme citado anteriormente. 
+
+O vetor de representação distribuída para cada palavra ou \textit{token embedding} é uma forma de representar uma palavra através de um vetor com valores reais ($\mathbb{R}$)  . De uma forma mais geral, podemos definir \textit{embedding} apenas. \textbf{Embedding} pode ser definida como uma função $\mathbb{E}$, tal que \citep{cambronero-deep-learning-code-search:2019}:
 
 \begin{equation}
     \mathbb{E}: \mathbb{X} \rightarrow \mathbb{R}^{d}
 \end{equation}
 
-A função $\mathbb{E}$ mapeia um dado de entrada $x$, $x \in \mathbb{X}$, para um vetor de \gls{representacao-distribuida} correspondente em um espaço vetorial de dimensão $d$. O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras de um mesmo contexto tem significados similares.
+A função $\mathbb{E}$ mapeia um dado de entrada $x$, $x \in \mathbb{X}$, para um vetor de \gls{representacao-distribuida} correspondente em um espaço vetorial de dimensão $d$. O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras de um mesmo contexto tem significados similares \citep{Goodfellow-et-al-2016:representation-learning}.
 
 Uma opção para a função $\mathbb{E}$ é utilizar o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} utiliza o algoritmo \textit{skip-gram} ou \acrshort{cbow}. A diferença basicamente entre eles é que o \acrshort{cbow} prediz uma palavra de acordo com as palavras do contexto e o \textit{skip-gram} faz o inverso, prediz as palavras do contexto dado uma palavra alvo \citep{mikolov2013distributed}.
 
@@ -70,7 +76,12 @@ Neste caso, ao utilizar o \textit{skip-gram} do \textit{wordvec} para a palavra 
   ['with', 'open', 'filename', |\colorbox{green}{mode}|, |\colorbox{green}{as}|, |\colorbox{yellow}{file}|, |\colorbox{green}{file}|, |\colorbox{green}{write}|, 'text']
 \end{mypythonembedding}
 
-\subsection{\textit{Bags and sequence embeddings}}
+Palavras que aparecem próximas uma das outras em outros contextos, serão mapeads para regiões próximas no espaço vetorial $\mathbb{R}^{d}$. E vetores próximos, são considerados similares. 
+
+No caso da aplicação do \textit{word2vec} em trechos de código-fonte em Python, por exemplo, é possível verificar que a palavra \emph{if} tem como palavras similares \emph{elif} e \emph{else}. Ou no caso do exemplo anterior, a palavra \emph{file} terá como palavras similares \emph{mode}, \emph{as}, \emph{write}.
+
+
+\subsection{\textit{Representação das sentenças e código-fonte}}
 
 O vetor de representação distribuída de cada palavra pode ser combinada para gerar um vetor de representação distribuída para a sentença inteira, e.g., podemos ter um vetor de representação distribuída para a questão inteira, combinando os vetores de cada palavra que fazem parte da questão.
 
@@ -82,7 +93,7 @@ Por exemplo, o vetor abaixo:
   ['with', 'open', 'filename', 'mode', 'as', 'file', 'file', 'write', 'text']
 \end{mypythonembedding}
 
-Seria equivalente ao seguinte vetor:
+Seria equivalente a seguinte permutação:
 
 \begin{mypythonembedding}{Vetor de \textit{tokens} embaralhado.}
 ['file', 'as', 'with', 'write', 'file', 'text', 'mode', 'open', 'filename']
@@ -90,13 +101,18 @@ Seria equivalente ao seguinte vetor:
 
 Nesta abordagem, podemos utilizar uma rede neural que agrupa os tokens através de uma função de agrupamento que obtém o valor máximo, \textit{maxpool}, por exemplo.
 
-Na outra abordagem, a ordem é levada em consideração. Podemos utilizar o \acrfull{lstm}, uma variação do \acrfull{rnn}. As palavras serão fornecidas sequencialmente a rede neural.
+Uma outra abordagem é levar a ordem em consideração. Para isto, podemos utilizar o \acrfull{lstm}, uma variação do \acrfull{rnn}, para obter uma representação dos \textit{tokens}. Os vetores de representação de cada palavra serão fornecidas um a um sequencialmente a rede neural. E ao final podemos utilizar E neste caso, a permutação dos vetores não serão consideradas equivalentes.
 
-\subsection{\textit{Joint Embedding}}
+\subsection{Agrupamento de representações distribuídas}
 
-\textit{Joint embedding}, ou agrupamento de representação distribuída, é uma técnica para mapear dados heterogêneos para um mesmo espaço vetorial, de tal forma que os conceitos similares ocupem regiões próximas neste espaço \citep{Gu-deep-code-search:2018}.
+Com os vetores de representação das questões e trechos de código-fonte, o objetivo é encontrar um modelo capaz de recuperar o trecho de código-fonte mais relevante para uma determinada questão. 
 
-Os dados heterogêneos podem ser imagem e texto, por exemplo. E o objetivo é que cada imagem fique próxima de um texto somente quando houver uma correlação entre eles.
+Uma abordagem comumente utilizada é mapear os vetores das questões e trechos de código-fonte para um mesmo espaço vetorial. E apróximá-los através de uma função objetivo, de tal maneira que as questões fiquem próximas dos trechos de código-fonte relevantes. 
+
+Nesta abordagem, o objetivo é encontrar um modelo que seja capaz de correlacionar dados heterogêneos. No livro \cite{Goodfellow-et-al-2016:representation-learning}, a associação entre as representações é referida como agrupamento de distribuições ou \textit{joint distribution}. Já \cite{Sachdev-neural-code-search:2018, Allamanis-bimodal-source-code-natural-language:2015} utilizam o termo \textit{bi-modal embedding}. \cite{Zhang:2019:deep-learning-recommender-survey} utilizam \textit{jointly model}. E \cite{Gu-deep-code-search:2018} utilizam o temo agrupamento de representação distribuída ou \textit{joint embedding}. Neste trabalho, utilizaremos o termo \textit{joint embedding} ou agrupamento de representação distribuída.
+
+
+\textit{Joint embedding}, ou agrupamento de representação distribuída, é uma técnica para mapear dados heterogêneos para um mesmo espaço vetorial, de tal forma que conceitos similares ocupem regiões próximas neste espaço \citep{Gu-deep-code-search:2018}. Esta técnica é comumente utilizada para encontrar modelos que correlacionem imagem e texto, tradução de textos e também é utilizada em problemas de perguntas e respostas e recomendações de conteúdo \citep{lai-etal-2018-review, Zhang:2019:deep-learning-recommender-survey}.
 
 Sejam $\mathbb{Q}$ e $\mathbb{C}$ conjuntos de dados heterogêneos. \textit{Joint embedding} pode ser formulado como:
 
@@ -107,8 +123,8 @@ Sejam $\mathbb{Q}$ e $\mathbb{C}$ conjuntos de dados heterogêneos. \textit{Join
 A função $f$, tal que $f: \mathbb{Q} \rightarrow \mathbb{R}^{d}$, mapeia os dados de $\mathbb{Q}$ para um espaço vetorial $\mathbb{V}$ de dimensão \emph{d}. A função $g$, $g: \mathbb{C} \rightarrow \mathbb{R}^{d}$, mapeia os dados do conjunto $\mathbb{C}$ para o mesmo espaço vetorial $\mathbb{V}$. A função $h_{\theta}$ calcula a similaridade entre dois vetores do mesmo espaço vetorial.
 
 
-O objetivo é aprender as funções $f$ e $g$ tal que para uma função de similaridade $h_{\theta}$, e.g., \textit{cosine}, e vetores $v_{q} \in \mathbb{V_q}$ e $v_{c} \in \mathbb{V}_q$,  $h_{\theta}(v_{q}, v_{c})$ seja maximizada para $v_{q}$ e seu correspondente vetor $v_{c}$.
-Através do \textit{joint embedding}, dados heterogêneos podem ser correlacionados \citep{Gu-deep-code-search:2018, cambronero-deep-learning-code-search:2019}.
+O objetivo é aprender as funções $f$ e $g$ tal que para uma função de similaridade $h_{\theta}$, e.g., \textit{cosine}, e vetores $v_{q} \in \mathbb{V_q}$ e $v_{c} \in \mathbb{V}_q$. A função  $h_{\theta}(v_{q}, v_{c})$ seja maximizada para $v_{q}$ e seu correspondente vetor $v_{c}$.
+Através do \textit{joint embedding}, os vetores $v_{q}$ e $v_{c}$ podem ser correlacionados \citep{Gu-deep-code-search:2018, cambronero-deep-learning-code-search:2019}.
 
     
 
@@ -240,4 +256,4 @@ Para \cite{cambronero-deep-learning-code-search:2019}, o modelo consegue aproxim
 
 Conforme citado anteriormente e até onde o nosso conhecimento alcança, não encontramos trabalhos e artigos que verifiquem o desempenho das redes convolucionais no problema do \textit{code retrieval}. A proposta deste trabalho é verificar o desempenho das redes convolucionais quando adicionada a uma rede neural recorrente e também isoladamente. Além disso, iremos comparar o nosso modelo com o modelo proposto por \cite{cambronero-deep-learning-code-search:2019} que é o estado da arte.
 
-E para treinamento do modelo, utilizaremos os dados coletados por \cite{yao-2018} devido aos resultados promissores apontados no artigo. E conforme \cite{cambronero-deep-learning-code-search:2019}, as questões do \textit{StackOverFlow} aproximam-se mais das intenções do usuário, indo de encontro com a nossa definição.
+E para treinamento do modelo, utilizaremos os dados coletados por \cite{yao-2018} devido aos resultados promissores apontados no artigo. E conforme \cite{cambronero-deep-learning-code-search:2019}, as questões do \textit{StackOverFlow} aproximam-se mais das intenções do usuário, indo de encontro com a nossa definição para o problema.
