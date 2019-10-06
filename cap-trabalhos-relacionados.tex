@@ -101,7 +101,34 @@ Seria equivalente a seguinte permutação:
 
 Nesta abordagem, podemos utilizar uma rede neural que agrupa os tokens através de uma função de agrupamento que obtém o valor máximo, \textit{maxpool}, por exemplo.
 
-Uma outra abordagem é levar a ordem em consideração. Para isto, podemos utilizar o \acrfull{lstm}, uma variação do \acrfull{rnn}, para obter uma representação dos \textit{tokens}. Os vetores de representação de cada palavra serão fornecidas um a um sequencialmente a rede neural. E ao final podemos utilizar E neste caso, a permutação dos vetores não serão consideradas equivalentes.
+Uma outra abordagem é levar a ordem em consideração. Para isto, podemos utilizar o \acrfull{lstm}, uma variação do \acrfull{rnn}, para obter uma representação dos \textit{tokens}. Os vetores de representação de cada palavra serão fornecidas um a um sequencialmente a rede neural. 
+
+
+
+No caso do LSTM, por exemplo, dado uma sequência de vetores de representação de cada palavra, $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, onde $\bm{x}(t)$ é um vetor de representação de dimensão $d$. O valor do vetor de resultado $\bm{h}(t)$ (tamanho $H$) na iteração $t$ é:
+
+\begin{equation}
+    i_{t} = \sigma(\bm{W}_{i}\bm{x}(t) + \bm{U}_{i}\bm{h}(t - 1) + \bm{b}_{i})
+\end{equation}
+\begin{equation}
+    f_{t} = \sigma(\bm{W}_{f}\bm{x}(t) + \bm{U}_{f}\bm{h}(t - 1) + \bm{b}_{f})
+\end{equation}
+\begin{equation}
+    o_{t} = \sigma(\bm{W}_{o}\bm{x}(t) + \bm{U}_{o}\bm{h}(t - 1) + \bm{b}_{o})
+\end{equation}
+\begin{equation}
+    \bar{C}_{t} = tanh(\bm{W}_{c}\bm{x}(t) + \bm{U}_{c}\bm{h}(t - 1) + \bm{b}_{c})
+\end{equation}
+\begin{equation}
+    C_{t} = i_{t} * \bar{C}_t + f_{t} * C_{t - 1}
+\end{equation}
+\begin{equation}
+    \bm{h}_{t} = o_{t} * tanh(C_{t})
+\end{equation}
+
+A arquitetura do LSTM tem três portas (porta de entrada $i$, porta \textit{forget} $f$ e porta \textit{output} $o$), um vetor de célula de memória $C$, $\sigma$ é a função sigmóide. A porta de entrada determina como os vetores $x_{t}$ alteram o estado da célula de memória. A porta \textit{output} permite a célula de memória influenciar os resultados finais. Por fim, a porta \textit{forget} é um mecanismo que permite a célula de memória esquecer ou lembrar os estados anteriores. $\bm{W} \in \mathbb{R}^{H X d}$, $\bm{U} \in \mathbb{R}^{H X H}$ e $\bm{b} \in \mathbb{R}^{H X 1}$ são as matrizes de pesos a serem aprendidos \citep{tan-lstm-qa}.
+
+Para representar uma questão ou trecho de código-fonte, podemos calcular a média dos vetores de resultado $\bm{h} = \{ \bm{h}_{1}, \bm{h}_{2}, . . ., \bm{h}_t \}$ após $t$ iterações, por exemplo.
 
 \subsection{Agrupamento de representações distribuídas}
 
@@ -180,7 +207,7 @@ Conforme \cite{cambronero-deep-learning-code-search:2019}, uma boa parte dos mod
 
 Conforme a tabela~\ref{table:summary-joint-embedding}, a maioria dos trabalhos representaram as palavras através de vetores de representação distribuída. Com exceção do \cite{iyer-etal-2016-summarizing} que optou por representar com \gls{one-hot-encoding}. Tanto o trabalho de \cite{Gu-deep-code-search:2018} quanto o trabalho de \cite{iyer-etal-2016-summarizing} optaram por representar uma sentença através do uso de redes neurais recorrentes, levando em consideração a ordem das palavras. Já \cite{Allamanis-bimodal-source-code-natural-language:2015} optou por representar as questões como um \textit{bag} de palavras, enquanto para os trechos de código-fonte optou-se por representar através de uma árvore sintática obtida através do compilador. Neste caso, a relação hierárquiva entre as palavras foi levada em consideração. Os outros trabalhos \cite{Chen-bi-variational-autoencoder:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019} optaram por uma abordagem mais simples e trataram o vetor de tokens como um \textit{bag}.
 
-É interessante observar que nenhum trabalho verificou o desempenho das redes convolucionais neste problema. Sendo que as redes convolucionais apresentaram um bom desempenho em problemas similares em NLP \todo{citar trabalhos da YAO}.
+É interessante observar que nenhum trabalho verificou o desempenho das redes convolucionais neste problema. Sendo que as redes convolucionais apresentaram um bom desempenho em problemas similares em NLP \citep{lai-etal-2018-review, tan-lstm-qa, feng-2015}.
 
 Para avaliação do modelo, há uma diferença, basicamente, no corpus de busca. Corpus de busca entende-se como um conjunto formado por trechos de código-fonte no qual o modelo ou o sistema irá utilizar para recuperar o trecho de código mais relevante para uma questão. \cite{iyer-etal-2016-summarizing, Chen-bi-variational-autoencoder:2018} utilizaram um corpus de busca composto pelo trecho de código-fonte apontado como correto e outros 49 distratores para avaliação. Já \cite{Gu-deep-code-search:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019} utilizaram repositórios do Github.  
 
@@ -215,7 +242,7 @@ Para avaliação do modelo, há uma diferença, basicamente, no corpus de busca.
 
 De acordo com a tabela~\ref{table:summary-training-data}, com exceção de \cite{Allamanis-bimodal-source-code-natural-language:2015}, todos os outros trabalhos avaliaram o modelo utilizando questões coletadas e anotadas manualmente. Uma análise e verificação manual das respostas feitas pelos modelos foi relizada em todos os trabalhos, com exceção do \cite{Allamanis-bimodal-source-code-natural-language:2015, cambronero-deep-learning-code-search:2019}. No caso do \cite{cambronero-deep-learning-code-search:2019} foi criado um sistema de avalição automática, onde as respostas apontadas pelo modelo são consideradas corretas, quando a diferença entre elas e a resposta anotada como correta estão dentro de um certo intervalo.
 
-Com relação a fonte para coleta de dados para avaliação dos modelos, todos os trabalhos utilizaram o \acrfull{sof-ab} como principal fonte para a coleta das questões. Porém em relação ao corpus de busca, alguns trabalhos \citep{Gu-deep-code-search:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019} utilizaram o \acrfull{github-ab}.
+Todos os trabalhos coletaram questões do \acrfull{sof-ab} para avaliação final do modelo. Porém em relação ao corpus de busca, alguns trabalhos \citep{Gu-deep-code-search:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019} utilizaram o \acrfull{github-ab}.
 
 \begin{table}[h]
 \centering
@@ -246,9 +273,9 @@ Com relação a fonte para coleta de dados para avaliação dos modelos, todos o
 \end{table}
 
 
-A composição dos pares de questões e trechos de código-fonte para obtenção do modelo diferiu de acordo com a fonte utilizada para coleta dos dados. Os trabalhos que utilizaram o \acrfull{github-ab}, utilizaram os métodos como trecho de código-fonte e o \gls{docstring} deste método como descrição. No caso do \acrfull{sof-ab}, os pares foram formados pelo título da questão e pelo trecho de código-fonte da resposta aceita.
+A composição dos pares de questões e trechos de código-fonte para obtenção do modelo diferiu de acordo com a fonte utilizada para coleta dos dados de treinamento. Os trabalhos que utilizaram o \acrfull{github-ab}, utilizaram os métodos como trecho de código-fonte e o \gls{docstring} deste método como descrição. No caso do \acrfull{sof-ab}, os pares foram formados pelo título da questão e pelo trecho de código-fonte da resposta aceita.
 
-De acordo com \cite{cambronero-deep-learning-code-search:2019}, os dados utilizados para compor os pares utilizados no treinamento do modelo, influenciam no desempenho na avaliação final. Em seu trabalho, foram observados um ganho no desempenho das redes neurais quando treinados com os títulos das questões e trechos de código-fonte do \acrfull{sof-ab}, ao invés de \gls{docstring} e métodos do \acrfull{github-ab}. 
+De acordo com \cite{cambronero-deep-learning-code-search:2019}, os dados utilizados para compor os pares utilizados no treinamento do modelo, influenciaram no desempenho na avaliação final. Em seu trabalho, foram observados um ganho no desempenho das redes neurais quando treinados com os títulos das questões e trechos de código-fonte do \acrfull{sof-ab}, ao invés de \gls{docstring} e métodos do \acrfull{github-ab}. 
 
 Além da composição dos pares, a variação das questões e trechos de código-fonte é um fator importante também. Em um trabalho recente, \cite{yao-2018} coletou milhares de pares de perguntas e trechos código-fonte do \textit{StackOverFlow}. Eles treinaram o modelo proposto por \cite{iyer-etal-2016-summarizing} neste conjunto de dados e obtiveram um ganho de mais de 10\% no desempenho final quando comparado com o conjunto de dados original.
 
