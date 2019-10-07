@@ -1,6 +1,105 @@
 %% ------------------------------------------------------------------------- %%
-\chapter{Problema}
-\label{cap:problema}
+\chapter{Abordagem}
+\label{cap:abordagem}
+
+
+Conforme citado no capítulo~\ref{cap:trabalhos-relacionados}, uma técnica muito utilizada para o problema de \textit{code retrieval} é o \textit{joint embedding}. Para utilizar esta técnica de \textit{joint embedding}, três fatores devem ser levados em consideração:
+
+\begin{itemize}
+    \item Representação de cada palavra de uma sentença ou trecho de código-fonte
+    \item Representação da sentença e do trecho de código-fonte
+    \item Função objetivo do modelo
+\end{itemize}
+
+\section{Representação de cada palavra de uma sentença ou trecho de código-fonte}
+\label{sec:abordagem-representacao-token}
+
+As questões e os trechos de código-fonte são compostas por palavras, pontuações, separadores e caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, iremos representá-las como um vetor formado por uma sequência de palavaras removendo os caracteres de acento e pontuação.
+
+No caso do código-fonte, iremos partir da  mesma hipótese que utilizamos em um artigo. Esta hipótese foi levantada por \cite{Allamanis:2018:SML} e diz que software é uma forma de comunicação humana e tem propriedades estatísticas similares a corpora de linguagem natural. A partir disto, iremos aplicar os mesmos procedimentos adotados para as questões aos trechos de código-fonte. Os trechos de código-fonte terão as pontuações e caracteres especiais removidos e serão tratados como uma sequência de palavras.
+
+No nosso caso, tanto as questões e os trechos de código-fonte serão representados por um vetor formado por uma sequência de palavras. E para cada palavra no vetor, devemos definir uma representação.
+
+De acordo com \cite{Goodfellow-et-al-2016:representation-learning}, as redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída. E conforme o próprio \cite{Goodfellow-et-al-2016:representation-learning}, uma boa representação deve auxiliar na aprendizagem de uma tarefa posterior. No nosso caso, as representações devem auxiliar a tarefa de aprender a encontrar uma correlação entre as questões e os trechos de código-fonte mais relevantes.
+
+Neste trabalho, cada palavra será representada através de um vetor de representação distribuída. Para mapear as palavras para vetores de representação distribuída, utilizaremos inicialmente o algoritmo não-supervisionado \textit{word2vec}. Utilizaremos o \textit{word2vec} com \textit{skip-gram}. O \textit{skip-gram} prediz as palavras do contexto a partir de uma palavra alvo. Diferente do CBoW que prediz a palavra alvo a partir das palavras do contexto. A complexidade do algoritmo \textit{skip-gram} é O(n), enquanto CBoW é exponencial \todo{encontrar referencia complexity function}. 
+
+O \textit{word2vec} irá mapear cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{V}_{q}$ o conjunto de palavras das questões, e $\mathbb{V}_{c}$ o conjunto de palavras presentes nos trechos de código-fonte. Para cada palavra $v_{q} \in \mathbb{V}_{q}$ e $v_{c} \in \mathbb{V}_c$, teremos:
+
+\begin{equation}
+    f: v_{q} \rightarrow t_{q}, t_{q} \in \mathbb{R}^{d}
+\end{equation}
+
+\begin{equation}
+    f: v_{c} \rightarrow t_{c}, t_{c} \in \mathbb{R}^{d}
+\end{equation}
+Onde $f$ é o \textit{word2vec} com o algoritmo \textit{skip-gram}. $f$ irá mapear cada palavra pertencente a um vocabulário a uma matriz $\bm{T}$.
+No nosso caso, teremos duas matrizes: $\bm{T}_{q}^{|\mathbb{V}_{q}| X d}$ e outra $\bm{T}_{c}^{|\mathbb{V}_{c}| X d}$, onde $|\mathbb{V}_{q}|$ e $|\mathbb{V}_{c}|$ são o tamanho do vocabulário das questões e trechos de código-fonte, respectivamente. E $d$ é a dimensão do vetor de representação distribuída.
+
+\section{Representação da sentença e do trecho de código-fonte}
+
+Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-los para obter uma representação para a questão e o trecho de código-fonte. A partir de agora, cada questão ou trecho de código-fonte será representada por um vetor $\bm{x}$, onde $x = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, tal que $\bm{x}(w) \in \mathbb{R}^{d}$ e $w$ é uma palavra presente no vocabulário da questão ou trecho de código-fonte. 
+
+Lembrando que neste trabalho, temos duas matrizes de representação distribuída, $\bm{T}_{q}$ e $\bm{T}_{c}$. Para fins de simplificação, quando utilizarmos $\bm{x}$, $\bm{x}$ pode ser $\bm{x} = \{ t_{q}(1), t_{q}(2), . . ., t_{q}(n)\}$, $t_{q}(i) \in \bm{T}_{q}, 1 \leq i \leq n$ ou pode ser $\bm{x} = \{ t_{c}(1), t_{c}(2), . . ., t_{c}(n)\}$, $t_{c}(i) \in \bm{T}_{c}, 1 \leq i \leq n$.
+
+
+Iremos avaliar duas formas de representar as questões e trechos de código-fonte. Uma abordagem é utilizando uma rede neural recorrente bi-LSTM com uma camada CNN posterior. E a outra abordagem é uma rede CNN apenas.
+
+\subsection{Representação através de bi-LSTM com CNN}
+
+Utilizando o LSTM, a partir de um vetor $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, onde $\bm{x}(t)$ é um vetor de representação de dimensão $d$. O valor do vetor de \textit{hidden} $\bm{h}(t)$ (tamanho $H$) na iteração $t$ é:
+
+\begin{equation}
+    i_{t} = \sigma(\bm{W}_{i}\bm{x}(t) + \bm{U}_{i}\bm{h}(t - 1) + \bm{b}_{i})
+\end{equation}
+\begin{equation}
+    f_{t} = \sigma(\bm{W}_{f}\bm{x}(t) + \bm{U}_{f}\bm{h}(t - 1) + \bm{b}_{f})
+\end{equation}
+\begin{equation}
+    o_{t} = \sigma(\bm{W}_{o}\bm{x}(t) + \bm{U}_{o}\bm{h}(t - 1) + \bm{b}_{o})
+\end{equation}
+\begin{equation}
+    \bar{C}_{t} = tanh(\bm{W}_{c}\bm{x}(t) + \bm{U}_{c}\bm{h}(t - 1) + \bm{b}_{c})
+\end{equation}
+\begin{equation}
+    C_{t} = i_{t} * \bar{C}_t + f_{t} * C_{t - 1}
+\end{equation}
+\begin{equation}
+    \bm{h}_{t} = o_{t} * tanh(C_{t})
+\end{equation}
+
+No caso do bi-LSTM, teremos duas redes LSTM, uma rede que lê o vetor $\overrightarrow{\bm{x}}$ na ordem da primeira para a última palavra, $\bm{x}(1), \bm{x}(2), . . ., \bm{x}(n)$. E a outra rede LSTM vai ler na ordem inversa, $\overleftarrow{\bm{x}}$, $\bm{x}(n), \bm{x}(n - 1), . . ., \bm{x}(1)$. Teremos dois vetores \textit{hidden}.
+
+\subsection{CNN}
+
+\begin{equation}
+    o_{F}(t) = tanh \left[\left(\sum_{i=0}^{m - 1} \bm{h}(t-1)^{T}\bm{F}(i)\right) + b\right]
+\end{equation}
+
+$$
+\begin{pmatrix} 
+a & b \\
+c & d 
+\end{pmatrix}
+\odot
+\begin{pmatrix} 
+a & b \\
+c & d 
+\end{pmatrix}
+=
+\begin{pmatrix} 
+a & b \\
+c & d 
+\end{pmatrix}
+$$
+
+Para representar uma questão ou trecho de código-fonte, podemos calcular a média dos vetores de resultado $\bm{h} = \{ \bm{h}_{1}, \bm{h}_{2}, . . ., \bm{h}_t \}$ após $t$ iterações, por exemplo.
+
+
+No nosso trabalho, utilizaremos o mesmo procedimento para representar as questões e os trechos de código-fonte. Se
+
+
+
 
 Conforme o capítulo~\ref{cap:trabalhos-relacionados}, há várias pesquisas sobre o problema de perguntas e respostas no processamento de linguagem natural. Porém, como observado pelo trabalho da \cite{yao-2018} e apontado na seção~\ref{sec:algumas_referencias}, não há muita pesquisa sobre o problema de pares de perguntas e códigos-fontes. A partir de 2014, o StackOverFlow passou a disponibilizar a base de dados livremente. Diversas pesquisas foram feitas utilizando esta base de dados. E uma frente explorada pela \cite{yao-2018} e outros pesquisadores, é tentar resolver o problema de pergunta e resposta utilizando os dados do \textit{StackOverFlow}.
 
@@ -148,4 +247,3 @@ Na figura~\ref{fig:tsne-code-snippet-python} abaixo, podemos visualizar um exemp
 \caption{Representação em 2D do vetor de representação distribuída de trechos de código-fonte. Imagem gerada através da ferramenta t-SNE. E o vetor de representação distribuída foi criado a partir da amostra de trechos de código-fonte em Python disponibilizada por \cite{yao-2018}. Vetor criado utilizando o \textit{word2vec} com o algoritmo \textit{skip-gram} e o parâmetro \textit{window} com o valor $5$.}
 \label{fig:tsne-code-snippet-python}
 \end{figure}
-
