@@ -38,7 +38,7 @@ No nosso caso, teremos duas matrizes: $\bm{T}_{q}^{|\mathbb{V}_{q}| X d}$ e outr
 
 \section{Representação da sentença e do trecho de código-fonte}
 
-Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-los para obter uma representação para a questão e o trecho de código-fonte. A partir de agora, cada questão ou trecho de código-fonte será representada por um vetor $\bm{x}$, onde $x = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, tal que $\bm{x}(w) \in \mathbb{R}^{d}$ e $w$ é uma palavra presente no vocabulário da questão ou trecho de código-fonte. 
+Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-los para obter uma representação para a questão e o trecho de código-fonte. A partir de agora, cada questão ou trecho de código-fonte será representada por um vetor $\bm{x}$, onde $x = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, tal que $\bm{x}(w) \in \mathbb{R}^{d}$ e $w$ é uma palavra presente no vocabulário da questão ou trecho de código-fonte \citep{cambronero-deep-learning-code-search:2019}. 
 
 Lembrando que neste trabalho, temos duas matrizes de representação distribuída, $\bm{T}_{q}$ e $\bm{T}_{c}$. Para fins de simplificação, quando utilizarmos $\bm{x}$, $\bm{x}$ pode ser $\bm{x} = \{ t_{q}(1), t_{q}(2), . . ., t_{q}(n)\}$, $t_{q}(i) \in \bm{T}_{q}, 1 \leq i \leq n$ ou pode ser $\bm{x} = \{ t_{c}(1), t_{c}(2), . . ., t_{c}(n)\}$, $t_{c}(i) \in \bm{T}_{c}, 1 \leq i \leq n$.
 
@@ -46,8 +46,10 @@ Lembrando que neste trabalho, temos duas matrizes de representação distribuíd
 Iremos avaliar duas formas de representar as questões e trechos de código-fonte. Uma abordagem é utilizando uma rede neural recorrente bi-LSTM com uma camada CNN posterior. E a outra abordagem é uma rede CNN apenas.
 
 \subsection{Representação através de bi-LSTM com CNN}
-
-Utilizando o LSTM, a partir de um vetor $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, onde $\bm{x}(t)$ é um vetor de representação de dimensão $d$. O valor do vetor de \textit{hidden} $\bm{h}(t)$ (tamanho $H$) na iteração $t$ é:
+\label{sec:representation-bi-lstm-cnn}
+\subsection{bi-LSTM}
+\label{sec:representation-bi-lstm}
+Utilizando o LSTM, a partir de um vetor $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, onde $\bm{x}(t)$ é um vetor de representação de dimensão $d$. O valor do vetor de \textit{hidden} $\bm{h}(t)$ (tamanho $H$) na iteração $t$ é \citep{tan-lstm-qa}:
 
 \begin{equation}
     i_{t} = \sigma(\bm{W}_{i}\bm{x}(t) + \bm{U}_{i}\bm{h}(t - 1) + \bm{b}_{i})
@@ -68,37 +70,51 @@ Utilizando o LSTM, a partir de um vetor $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . .
     \bm{h}_{t} = o_{t} * tanh(C_{t})
 \end{equation}
 
-No caso do bi-LSTM, teremos duas redes LSTM, uma rede que lê o vetor $\overrightarrow{\bm{x}}$ na ordem da primeira para a última palavra, $\bm{x}(1), \bm{x}(2), . . ., \bm{x}(n)$. E a outra rede LSTM vai ler na ordem inversa, $\overleftarrow{\bm{x}}$, $\bm{x}(n), \bm{x}(n - 1), . . ., \bm{x}(1)$. Teremos dois vetores \textit{hidden}.
+No caso do bi-LSTM, teremos duas redes LSTM, uma rede que lê o vetor $\overrightarrow{\bm{x}}$ na ordem da primeira para a última palavra, $\bm{x}(1), \bm{x}(2), . . ., \bm{x}(n)$. E a outra rede LSTM vai ler na ordem inversa, $\overleftarrow{\bm{x}}$, $\bm{x}(n), \bm{x}(n - 1), . . ., \bm{x}(1)$. Teremos dois vetores \textit{hidden}, $\overrightarrow{\bm{h}_{t}}$ e $\overleftarrow{\bm{h}_{t}}$. Para cada iteração $t$, o vetor de resultado é a concatenação dos dois vetores \textit{hidden}: $\bm{h}_{t} = \overrightarrow{\bm{h}_{t}} || \overleftarrow{\bm{h}_{t}}$.
 
-\subsection{CNN}
+\subsubsection{CNN}
+\label{sec:representation-cnn}
+
+Após obter os vetores \textit{hidden} das questões e trechos de código-fonte, eles são utilizados como entrada para um rede neural convolucional. 
+
+Para cada janela de tamanho $m$ aplicado aos vetores \textit{hidden} da rede bi-LSTM, ie. 
+$\bm{H}_{m}(t) = [\bm{h}(t), \bm{h}(t + 1), · · · , \bm{h}(t + m − 1)]$, onde $t$ é a iteração, o filtro convolucional $\bm{F}  = [\bm{F}(0),· · ·, \bm{F}(m − 1)]$ irá gerar o seguinte valor \citep{tan-lstm-qa}:
 
 \begin{equation}
     o_{F}(t) = tanh \left[\left(\sum_{i=0}^{m - 1} \bm{h}(t-1)^{T}\bm{F}(i)\right) + b\right]
 \end{equation}
 
-$$
-\begin{pmatrix} 
-a & b \\
-c & d 
-\end{pmatrix}
-\odot
-\begin{pmatrix} 
-a & b \\
-c & d 
-\end{pmatrix}
-=
-\begin{pmatrix} 
-a & b \\
-c & d 
-\end{pmatrix}
-$$
+onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro.
 
-Para representar uma questão ou trecho de código-fonte, podemos calcular a média dos vetores de resultado $\bm{h} = \{ \bm{h}_{1}, \bm{h}_{2}, . . ., \bm{h}_t \}$ após $t$ iterações, por exemplo.
+Como as redes CNNs típicas, uma camada \textit{max-k pooling} é aplicada posteriormente a camada convolucional. Intuitivamente, queremos enfatizar os $k$ maiores valores para cada filtro convolucional. Através do \textit{k-max pooling}, os $k$ valores máximos serão mantidos para um filtro, o que indica um alto valor de que o filtro coincidiu com a entrada. \todo{rever esta frase}
+
+A camada convolucional irá gerar vetores de resultado de dimensão $N$, utilizando $N$ filtros paralelos, com diferentes parâmetros de inicialização. Ao final, teremos dois vetores de resultado de dimensão $kN$ para as questões e os trechos de código-fonte respectivamente. Neste trabalho, utilizaremos inicialmente o valor k = 1, seguindo a recomendação de \cite{tan-lstm-qa}. A intuição da combinação dos vetores \textit{hidden} do bi-LSTM através do CNN é, ao invés de considerar a informação léxica de cada \textit{token}, o CNN enfatiza certas partes do trecho de código-fonte, de tal maneira que bi-LSTM com CNN consiga identificar características latentes e relevantes para a representação das questões e dos trechos de código-fonte.
 
 
-No nosso trabalho, utilizaremos o mesmo procedimento para representar as questões e os trechos de código-fonte. Se
+\subsection{Representação através do CNN}
 
+Para verificar o desempenho do CNN isoladamente, iremos criar uma representação para as questões e trechos de código-fonte somente com uma camada CNN.
 
+Diferente da arquitetura anterior, o vetor $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, onde $\bm{x}(t)$ é um vetor de representação de dimensão $d$, servirá de entrada para uma camada \textit{hidden} ao invés de uma camada bi-LSTM. A camada \textit{hidden} é para transformar o vetor de representação distribuída em um vetor de entrada para o CNN \citep{tan-lstm-qa}.
+
+A camada \textit{hidden} contém a seguinte função:
+
+\begin{equation}
+z = tanh(\bm{W}x + b)
+\end{equation}
+
+Onde $\bm{W}$ é a matriz de pesos e $\bm{b}$ é o vetor de \textit{bias}.
+
+Neste caso, $z$ servirá de entrada a rede CNN. A rede convolucional. Os cálculos são efetuados da mesma maneira que na rede bi-LSTM. Ver seção~\ref{sec:representation-cnn}.
+
+\section{Função objetivo}
+
+Tanto o bi-LSTM com CNN e o CNN geram representações para as questões e os trechos de código-fonte. O intuito é encontrar um modelo que correlacione eles em um mesmo espaço vetorial.
+Para isto, treinaremos um modelo da seguinte maneira:
+
+Dado uma tripla $<q, $
+
+E conforme a definição~\ref{sec:code-retrieval-definicao} adotada para este trabalho, o objetivo é um modelo $F_{r}$ aprender a recuperar um trecho de código-fonte $c^{+}$ observado como correto com a maior pontuação, dado uma questõamodelo que consiga recuperar o trecho de código-fonte 
 
 
 Conforme o capítulo~\ref{cap:trabalhos-relacionados}, há várias pesquisas sobre o problema de perguntas e respostas no processamento de linguagem natural. Porém, como observado pelo trabalho da \cite{yao-2018} e apontado na seção~\ref{sec:algumas_referencias}, não há muita pesquisa sobre o problema de pares de perguntas e códigos-fontes. A partir de 2014, o StackOverFlow passou a disponibilizar a base de dados livremente. Diversas pesquisas foram feitas utilizando esta base de dados. E uma frente explorada pela \cite{yao-2018} e outros pesquisadores, é tentar resolver o problema de pergunta e resposta utilizando os dados do \textit{StackOverFlow}.
