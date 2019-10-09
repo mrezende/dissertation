@@ -4,8 +4,12 @@
 
 Este capítulo é parte de um estudo preliminar \citep{marcelo-vem-2019} apresentado no \acrfull{vem} de 2019. Este estudo foi um piloto para avaliar o uso das redes convolucionais no problema de \textit{code retrieval}. Utilizamos as mesmas arquiteturas propostas no capítulo~\ref{cap:abordagem}. E para comparar, utilizamos apenas uma arquitetura de referência \textit{Embedding}.
 
+Os resultados da arquitetura bi-LSTM com CNN e a arquitetura CNN foram promissores. As duas arquiteturas apresentaram um valor da métrica \acrfull{mrr} de $0,60$ e $0,58$ respectivamente. E em $75\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas.
 
+\section{Conjunto de dados para treinamento}
+\label{sec:conjunto-dados-treinamento}
 
+Para este estudo, utilizamos um conjunto de dados disponibilizado por \cite{yao-2018}. Este conjunto de dados é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares de questões e trechos de código-fonte foram coletados do site \Gls{sof}.
 
 
 %% ------------------------------------------------------------------------- %%
