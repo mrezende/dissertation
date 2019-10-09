@@ -3,17 +3,23 @@
 \label{cap:introducao}
 
 
-Problema de recuperação de trecho de código-fonte ou \textit{code retrieval} consiste em recuperar um trecho de código-fonte a partir de um repositório, que atenda as intenções do desenvolvedor, descritas em linguagem natural \citep{cambronero-deep-learning-code-search:2019}. Podemos dizer que \textit{code retrieval} busca associar as intenções do desenvolvedor aos trechos de código-fonte.
+Problema de recuperação de trecho de código-fonte ou \textit{code retrieval} consiste em recuperar um trecho de código-fonte a partir de um repositório, que atenda as intenções do desenvolvedor, descritas em linguagem natural. Atualmente, o site do Github, que hospeda milhares de projetos de código-aberto, por exemplo, não tem um mecanismo de pesquisa que
+seja capaz de recuperar um trecho de código-fonte relevante a partir dos termos utilizados no campo de busca \citep{cambronero-deep-learning-code-search:2019}.
 
-Esta associação pode ser feita através de redes neurais. Uma abordagem é obter uma representação para a intenção e outra para os trechos de código-fonte e agrupá-las em um mesmo espaço vetorial. E o objetivo é fazer com que os vetores de representação das intenções do desenvolvedor aproximem-se dos vetores dos trechos de código-fonte que atendam as suas necessidades. 
+Neste caso, o desenvolvedor acaba recorrendo a sites de dúvidas e perguntas de programação para buscar trechos de código que atenda a suas necessidades. Devido a isso, sites como o
+StackOverFlow tornaram-se muito popular nos últimos anos.
 
-Esta é uma abordagem comumente utilizada quando aplica-se redes neurais para encontrar uma associação em dados de diferentes modalidades e domínios. Esta abordagem é utilizada em traduções, associação de imagem e texto e, até mesmo, no problema de perguntas e respostas e recomendações em \acrshort{nlp} \citep{lai-etal-2018-review, Zhang:2019:deep-learning-recommender-survey}.
 
-Um fator importante para a associação das representações é obter uma boa representação. Uma boa representação deve ser capaz de facilitar a aprendizagem de uma tarefa posterior \citep{Goodfellow-et-al-2016:representation-learning}. No caso de \textit{code retrieval}, uma boa representação deve ajudar na tarefa de aproximar as intenções dos trechos de código-fonte relevantes. 
+Uma abordagem para este problema é encontrar um \gls{modelo} que seja capaz de correlacionar os trechos de código as intenções do usuário. Esta correlação pode ser feita através de redes neurais. 
+
+Uma técnica comumente utilizada é a \textit{joint embedding} ou agrupamento de representações distribuídas. Esta técnica mapeia dados de diferentes distribuições, modalidades para um mesmo espaço vetorial, de tal forma que conceitos similares ocupem regiões próximas neste espaço. Técnica bastante utilizada para associar textos e imagens, traduções e até mesmo problema de perguntas e respostas e recomendações \citep{lai-etal-2018-review, Zhang:2019:deep-learning-recommender-survey}.
+
+A representação dos dados heterogêneos na técnica joint embedding, tem um papel importante. Uma boa representação deve ser capaz de auxiliar na aprendizagem de uma tarefa
+posterior \citep{Goodfellow-et-al-2016:representation-learning}. No nosso caso, uma boa representação das intenções e dos trechos de código-fonte deve ser capaz de ajudar a encontrar um modelo que seja capaz de correcioná-los. 
 
 Além disso, uma boa representação pode ser útil para dados que seguem uma outra distribuição. Uma representação de trechos de código-fonte que foram coletadas de um site de dúvidas de programação podem ser utilizadas para encontrar trechos de código-fonte similares em repositórios de código aberto.
 
-A proposta deste trabalho é verificar o uso das redes convolucionais na aprendizagem de representação. Mais especificamente, queremos avaliar se as redes convolucionais auxiliam na obtenção de um modelo capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor.
+A proposta deste trabalho é verificar o uso das redes convolucionais na aprendizagem de representação. Mais especificamente, queremos avaliar se as redes convolucionais auxiliam na obtenção de um modelo capaz de correlacionar os trechos de código-fonte as intenções do desenvolvedor.
 
 Para isto, avaliaremos o uso das redes convolucionais no problema de \textit{code retrieval}. Avaliaremos duas arquiteturas: Uma composta somente por uma camada de rede convolucional e outra composta por uma camada de rede neural recorrente e outra camada de rede convolucional. Além de propor uma nova arquitetura para este problema, avaliaremos o modelo utilizando os dados de entrada da base StaQC, criada por \cite{yao-2018}. Esta base de dados é composta de milhares de pares de perguntas e trechos de código-fonte do StackOverFlow.
 
@@ -53,5 +59,4 @@ Dentre as contribuições deste trabalho estão:
 \section{Organização do Trabalho}
 \label{sec:organizacao_trabalho}
 
-No Capítulo~\ref{cap:trabalhos-relacionados}, apresentamos os conceitos e trabalhos relacionados ao problema de \textit{code retrieval}. No Capítulo~\ref{cap:problema}, discutimos o problema de pesquisa proposto para o presente trabalho, a arquitetura proposta e mostramos detalhes dos dados utilizados pertinentes a pesquisa. 
-No Capítulo~\ref{cap:resultados-preliminares}, exibimos os resultados preliminares da arquitetura proposta utilizando os dados de \cite{yao-2018}. E também discutimos as principais dificuldades encontradas para adaptar a arquitetura de \cite{tan-lstm-qa} para resolver o problema de \textit{code retrieval}. Já no capítulo~\ref{cap:cronograma}, temos as considerações finais, a proposta do cronograma e os próximos passos da pesquisa.
+No Capítulo~\ref{cap:trabalhos-relacionados}, apresentamos os conceitos e trabalhos relacionados ao problema de \textit{code retrieval}. No Capítulo~\ref{cap:abordagem}, apresentamos a abordagem proposta para o problema de pesquisa proposto. No Capítulo~\ref{cap:resultados-preliminares}, exibimos os resultados preliminares da arquitetura proposta utilizando os dados de \cite{yao-2018}. E também discutimos as principais dificuldades encontradas para adaptar a arquitetura de \cite{tan-lstm-qa} para resolver o problema de \textit{code retrieval}. Já no capítulo~\ref{cap:cronograma}, temos as considerações finais, a proposta do cronograma e os próximos passos da pesquisa.
