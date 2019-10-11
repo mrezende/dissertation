@@ -9,7 +9,100 @@ Os resultados da arquitetura bi-LSTM com CNN e a arquitetura CNN foram promissor
 \section{Conjunto de dados para treinamento}
 \label{sec:conjunto-dados-treinamento}
 
-Para este estudo, utilizamos um conjunto de dados disponibilizado por \cite{yao-2018}. Este conjunto de dados é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares de questões e trechos de código-fonte foram coletados do site \Gls{sof}.
+Para este estudo, utilizamos parte do conjunto de dados disponibilizado por \cite{yao-2018}. Este conjunto de dados é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares de questões e trechos de código-fonte foram coletados do site \Gls{sof}. Uma peculiaridade destes dados em relação aos dados utilizados nos trabalhos de Iyer e Allamanis, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Este tipo de questão normalmente expressa a intenção do desenvolvedor, indo de encontro com a nossa definição\todo{referenciar a seção} adotada para o problema de \textit{code retrieval}.
+
+Os dados disponibilizados por \cite{yao-2018} são divididos em 3 (três) subconjuntos distintos. Um subconjunto é formado apenas por questões coletadas do \Gls{sof} que continham apenas um trecho de código-fonte na descrição da resposta. O outro é formado por questões que apresentavam mais de um trecho de código-fonte na descrição. E o terceiro é formado por pares de questões e trechos de código-fonte anotados manualmente.
+
+Nos casos em que há mais de um trecho de código-fonte na descrição da resposta, um trecho de código não é necessariamente uma solução para a pergunta. No exemplo abaixo, o trecho XXX lembra o desenvolvedor de importar uma biblioteca utilizada na solução.
+
+\todo{achar outro exemplo}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{ |p{14cm}| } 
+ \hline
+\textbf{Pergunta:} Elegant Python function to
+convert CamelCase to snake\_case \\ \hline
+\textbf{S1}: This is pretty thorough:
+
+\begin{lstlisting}[language=python, caption={C1}]
+ def convert(name):
+   s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2',name)
+   return re.sub('([a-z0-9])([A-Z])',r'\1_\2',s1).lower()
+\end{lstlisting}
+
+\textbf{S2}: Works with all these (and doesn't harm already-un-cameled versions):
+
+\begin{lstlisting}[language=python, caption={C2}]
+ >>> convert('CamelCase')
+'camel_case'
+>>> convert('CamelCamelCase')
+'camel_camel_case'
+\end{lstlisting}
+
+\textbf{S3}: Or if you're going to call it a zillion times, you can pre-compile the regexes:
+
+\begin{lstlisting}[language=python, caption={C3}]
+first_cap_re = re.compile('(.)([A-Z][a-z]+)')
+all_cap_re = re.compile('([a-z0-9])([A-Z])')
+def convert(name):
+   s1 = first_cap_re.sub(r'\1_\2', name)
+   return all_cap_re.sub(r'\1_\2', s1).lower()
+\end{lstlisting}
+
+\textbf{S4}: Don't forget to import the regular expression module
+\begin{lstlisting}[language=python, caption={C4}]
+import re
+\end{lstlisting}
+
+ \\ 
+ \hline
+\end{tabular}
+\caption{Exemplo de pergunta \textit{how-to-do-it} no \textit{StackOverFlow} com resposta aceita que contém mais de 1 (um) trecho de código-fonte como solução \cite{yao-2018}. Referência: \url{https://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-snake-case}}
+\label{table:exemplo-pergunta-stack-over-flow-how-to-do-it}
+\end{table}
+
+Para diferenciar este tipo de caso, \cite{yao-2018} anotaram os pares de questão e trecho de código com $\bm{1}$, quando o trecho é solução para a pergunta e $\bm{0}$, em caso contrário. Esta anotação foi feita automaticamente por um framework proposto no artigo.
+
+Ao final, o conjunto de dados é dividido da seguinte maneira:
+
+collected 60,083 and 41,826 question-code
+
+Additionally, there are 85,294 Python and 75,637
+SQL “how-to-do-it” questions
+
+Together with
+2,169 and 2,056 manually annotated QC pairs with label “1”
+
+
+we collected a dataset of 147,546 Python and
+119,519 SQL QC pairs, named as StaQC. Table 4 shows its statistics.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ p{16em} P{10em} P{10em} }
+\hline
+  & \multicolumn{2}{c}{\textbf{Questão}}\\
+\hline
+\textbf{Código-fonte} & \textbf{Python} & \textbf{SQL}  \\
+\hline
+
+Apenas 1 trecho de código na descrição da resposta & $85.294$ & $75.637$ \\
+
+Trechos de código-fonte anotados automaticamente & $60.083$ & $41.826$ \\
+
+Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
+
+ \hline
+ \textbf{Total} & $\bm{147.546}$ & $\bm{119.519}$\\
+ \hline 
+ 
+\end{tabular}
+\caption{Relação da quantidade de dados utilizada para treinamento e avaliação dos modelos. A coluna \textbf{\# questões anotadas} refere-se a quantidade de questões anotadas manualmente para avaliação final do modelo.}
+\label{table:summary-training-data}
+\end{table}
+
+
 
 
 %% ------------------------------------------------------------------------- %%
@@ -102,50 +195,7 @@ Para ter uma base de dados confiável com maior precisão e \textit{recall}, \ci
 
 
 
-\begin{table}[h!]
-\centering
-\begin{tabular}{ |p{14cm}| } 
- \hline
-\textbf{Pergunta:} Elegant Python function to
-convert CamelCase to snake\_case \\ \hline
-\textbf{S1}: This is pretty thorough:
 
-\begin{lstlisting}[language=python, caption={C1}]
- def convert(name):
-   s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2',name)
-   return re.sub('([a-z0-9])([A-Z])',r'\1_\2',s1).lower()
-\end{lstlisting}
-
-\textbf{S2}: Works with all these (and doesn't harm already-un-cameled versions):
-
-\begin{lstlisting}[language=python, caption={C2}]
- >>> convert('CamelCase')
-'camel_case'
->>> convert('CamelCamelCase')
-'camel_camel_case'
-\end{lstlisting}
-
-\textbf{S3}: Or if you're going to call it a zillion times, you can pre-compile the regexes:
-
-\begin{lstlisting}[language=python, caption={C3}]
-first_cap_re = re.compile('(.)([A-Z][a-z]+)')
-all_cap_re = re.compile('([a-z0-9])([A-Z])')
-def convert(name):
-   s1 = first_cap_re.sub(r'\1_\2', name)
-   return all_cap_re.sub(r'\1_\2', s1).lower()
-\end{lstlisting}
-
-\textbf{S4}: Don't forget to import the regular expression module
-\begin{lstlisting}[language=python, caption={C4}]
-import re
-\end{lstlisting}
-
- \\ 
- \hline
-\end{tabular}
-\caption{Exemplo de pergunta \textit{how-to-do-it} no \textit{StackOverFlow} com resposta aceita que contém mais de 1 (um) trecho de código-fonte como solução \cite{yao-2018}. Referência: \url{https://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-snake-case}}
-\label{table:exemplo-pergunta-stack-over-flow-how-to-do-it}
-\end{table}
 
 
 
@@ -181,4 +231,3 @@ Na figura~\ref{fig:tsne-code-snippet-python} abaixo, podemos visualizar um exemp
   
   
 \section{Considerações finais}
-
