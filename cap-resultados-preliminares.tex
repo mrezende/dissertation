@@ -6,10 +6,10 @@ Este capítulo é parte de um estudo preliminar \citep{marcelo-vem-2019} apresen
 
 Os resultados da arquitetura bi-LSTM com CNN e a arquitetura CNN foram promissores. As duas arquiteturas apresentaram um valor da métrica \acrfull{mrr} de $0,60$ e $0,58$ respectivamente. E em $75\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas.
 
-\section{Conjunto de dados para treinamento}
-\label{sec:conjunto-dados-treinamento}
+\section{Conjunto de dados}
+\label{sec:conjunto-dados}
 
-Para este estudo, utilizamos parte do conjunto de dados disponibilizado por \cite{yao-2018}. Este conjunto de dados é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares de questões e trechos de código-fonte foram coletados do site \Gls{sof}. Uma peculiaridade destes dados em relação aos dados utilizados nos trabalhos de Iyer e Allamanis, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Este tipo de questão normalmente expressa a intenção do desenvolvedor, indo de encontro com a nossa definição\todo{referenciar a seção} adotada para o problema de \textit{code retrieval}.
+Para este estudo, utilizamos parte do conjunto de dados disponibilizado por \cite{yao-2018}. Este conjunto é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares foram coletados do site \Gls{sof}. Uma peculiaridade destes dados em relação aos dados utilizados nos trabalhos de Iyer e Allamanis, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Este tipo de questão normalmente expressa a intenção do desenvolvedor, indo de encontro com a nossa definição\todo{referenciar a seção} adotada para o problema de \textit{code retrieval}.
 
 Os dados disponibilizados por \cite{yao-2018} são divididos em 3 (três) subconjuntos distintos. Um subconjunto é formado apenas por questões coletadas do \Gls{sof} que continham apenas um trecho de código-fonte na descrição da resposta. O outro é formado por questões que apresentavam mais de um trecho de código-fonte na descrição. E o terceiro é formado por pares de questões e trechos de código-fonte anotados manualmente.
 
@@ -66,18 +66,6 @@ Para diferenciar este tipo de caso, \cite{yao-2018} anotaram os pares de questã
 
 Ao final, o conjunto de dados é dividido da seguinte maneira:
 
-collected 60,083 and 41,826 question-code
-
-Additionally, there are 85,294 Python and 75,637
-SQL “how-to-do-it” questions
-
-Together with
-2,169 and 2,056 manually annotated QC pairs with label “1”
-
-
-we collected a dataset of 147,546 Python and
-119,519 SQL QC pairs, named as StaQC. Table 4 shows its statistics.
-
 \begin{table}[h]
 \centering
 \begin{tabular}{ p{16em} P{10em} P{10em} }
@@ -98,11 +86,38 @@ Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
  \hline 
  
 \end{tabular}
-\caption{Relação da quantidade de dados utilizada para treinamento e avaliação dos modelos. A coluna \textbf{\# questões anotadas} refere-se a quantidade de questões anotadas manualmente para avaliação final do modelo.}
-\label{table:summary-training-data}
+\caption{Divisão do conjunto de dados disponibilizado por \cite{yao-2018}. O conjunto formado por "Trechos de código-fonte anotados automaticamente" contém questões que tem mais de um trecho de código-fonte por resposta. Quando há mais de um trecho de código-fonte por resposta, nem todo trecho é uma solução. Neste caso, \cite{yao-2018} criaram um framework para anotá-los automaticamente. Eles obtiveram F1 de $0,916$ e acurácia de $0,911$ em seus testes.}
+\label{table:summary-training-data-yao-staqc}
 \end{table}
 
+\section{Treinamento e avaliação}
 
+Para o treinamento do modelo, utilizamos apenas os pares de questões e trechos de código-fonte em Python. Inicialmente, utilizamos apenas os pares anotados automaticamente. Este conjunto de dados apresenta uma variabilidade maior, pois XXX\% das questões contém mais de um trecho de código-fonte anotados como correto.
+
+Adotamos o mesmo procedimento de treinamento e avaliação proposto por Iyer. Para o treinamento, foi utilizado o conjunto com $60.083$ pares. Para escolha do modelo e avaliação final foi utilizado o conjunto de dados anotados manualmente.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ p{3cm} r  }
+ \hline
+ \textbf{Amostras} & \textbf{Quantidade de pares $<q_{i}, c_{i}^{+}>$}\\
+ \hline
+ Treinamento & $60.083$\\
+ 
+ DEV & $1.085$ \\
+ 
+ EVAL & $1.084$\\
+ \hline
+ \textbf{Total} & $\bm{62.252}$\\
+ \hline
+\end{tabular}
+\caption{Divisão das amostras para treinamento e avaliação. O conjunto de dados é formado por pares $<q_{i}, c_{i}^{+}>$, onde $q_{i}$ é uma questão e $c_{i}^{+}$ é um trecho de código-fonte anotado como correto. O conjunto formado por pares anotados manualmente foi dividido em DEV e EVAL conforme o procedimento descrito por \cite{iyer-etal-2016-summarizing}.}
+\label{table:divisao-amostras}
+\end{table}
+
+O modelo foi treinado durante 80 épocas. Caso a função de perda \textit{hinge} fique abaixo de $0,01$ o treinamento é interrompido antes. A cada época, o modelo é avaliado na amostra \emph{DEV}. O intuito desta avaliação é obter o melhor modelo conforme a métrica \acrshort{mrr}. Esta avaliação na amostra DEV é feita da seguinte maneira:
+
+Para cada par $<q_{i}, c_{i}^{+}>$ da amostra \emph{DEV}, onde $q_{i}$ uma questão e $c_{i}^{+}$ uma questão anotada como correta. Outros 49 distratores $c'$ são selecionados aleatoriamente da amostra de treinamento, tal que $c_{i}^{+} \neq c'$. Para cada par, o modelo calcula o \acrshort{mrr} de acordo com a posição de $c_{i}^{+}$ entre as 50 possíveis respostas. 
 
 
 %% ------------------------------------------------------------------------- %%
