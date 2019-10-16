@@ -9,11 +9,33 @@ Os resultados da arquitetura bi-LSTM com CNN e a arquitetura CNN foram promissor
 \section{Conjunto de dados}
 \label{sec:conjunto-dados}
 
-Para este estudo, utilizamos parte do conjunto de dados disponibilizado por \cite{yao-2018}. Este conjunto é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares foram coletados do site \Gls{sof}. Uma peculiaridade destes dados em relação aos dados utilizados nos trabalhos de Iyer e Allamanis, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Este tipo de questão normalmente expressa a intenção do desenvolvedor, indo de encontro com a nossa definição\todo{referenciar a seção} adotada para o problema de \textit{code retrieval}.
+Para este estudo, utilizamos parte do conjunto de dados disponibilizado por \cite{yao-2018}. Este conjunto é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares foram coletados do site \Gls{sof}. Uma peculiaridade destes dados em relação aos dados utilizados nos outros trabalhos \cite{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015}, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Este tipo de questão normalmente expressa a intenção do desenvolvedor, indo de encontro com a nossa definição da seção~\ref{sec:code-retrieval-definicao} adotada para o problema de \textit{code retrieval}.
 
 Os dados disponibilizados por \cite{yao-2018} são divididos em 3 (três) subconjuntos distintos. Um subconjunto é formado apenas por questões coletadas do \Gls{sof} que continham apenas um trecho de código-fonte na descrição da resposta. O outro é formado por questões que apresentavam mais de um trecho de código-fonte na descrição. E o terceiro é formado por pares de questões e trechos de código-fonte anotados manualmente.
 
 Nos casos em que há mais de um trecho de código-fonte na descrição da resposta, um trecho de código não é necessariamente uma solução para a pergunta. No exemplo abaixo, o trecho XXX lembra o desenvolvedor de importar uma biblioteca utilizada na solução.
+
+\begin{tcolorbox}[colframe=orange!75!black,colback=white,fonttitle=\bfseries,adjusted title=\large{ My very long title text}]
+\begin{mypython}{Python: Exemplo de código para escrever em um arquivo}
+with open(filename, mode) as file:
+    file.write(text)
+\end{mypython}
+\begin{mypython}{Python: Exemplo de código para escrever em um arquivo}
+with open(filename, mode) as file:
+    file.write(text)
+\end{mypython}
+\begin{mypython}{Python: Exemplo de código para escrever em um arquivo}
+with open(filename, mode) as file:
+    file.write(text)
+\end{mypython}
+\begin{mypython}{Python: Exemplo de código para escrever em um arquivo}
+with open(filename, mode) as file:
+    file.write(text)
+\end{mypython}
+\end{tcolorbox}
+
+
+
 
 \todo{achar outro exemplo}
 
