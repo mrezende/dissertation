@@ -150,7 +150,23 @@ As matrizes $\bm{T_{q}}$ e $\bm{T_{c}}$ são geradas pelo \textit{word2vec} com 
 \label{fig:tsne-code-snippet-python}
 \end{figure}
 
+\section{Arquiteturas}
 
+Para este estudo, comparamos as arquiteturas bi-LSTM com CNN, CNN com uma arquitetura de referência \textit{Embedding}. A arquitetura \textit{Embedding} combina os vetores de representação distribuída de cada palavra através de uma camada \textit{max pool}. As outras arquiteturas seguem a descrição feita no capítulo abordagem \todo{citar o capítulo}.
+
+Abaixo tem as figuras ilustrativas das arquiteturas utilizadas:
+
+\todo{adicionar as figuras do artigo}
+
+Conforme as figuras, todas as arquiteturas utilizam uma camada \textit{max pool} e ao final, calcula a similaridade atravás da função \textit{cosine}.
+Não realizamos otimização ou tuning dos hiper-parâmetros dos modelos. Utilizamos os mesmos hiper-parâmetros propostos por \cite{tan-lstm-qa}. Com exceção do parâmetro \textit{m} da função de perda \textit{hinge}. O parâmetro \textit{m} é a margem e definimos $0,009$ conforme \cite{feng-2015}. Já \cite{tan-lstm-qa} definiu \textit{m} com o valor $0,2$.
+
+A dimensão do vetor de representação distribuída das palavras (\textit{word embedding}) foi $100$.
+
+
+
+
+Com exceção dos filtros na camada CNN, que reduzimos para o valor 100. O valor utilizado por \cite{tan-lstm-qa} de 1.000, aumentou a capacidade do modelo, causando o \textit{overfitting} \citep{marcelo-vem-2019}.
 
 
 %% ------------------------------------------------------------------------- %%
