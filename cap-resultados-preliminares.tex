@@ -158,131 +158,43 @@ Abaixo tem as figuras ilustrativas das arquiteturas utilizadas:
 
 \todo{adicionar as figuras do artigo}
 
-Conforme as figuras, todas as arquiteturas utilizam uma camada \textit{max pool} e ao final, calcula a similaridade atravás da função \textit{cosine}.
-Não realizamos otimização ou tuning dos hiper-parâmetros dos modelos. Utilizamos os mesmos hiper-parâmetros propostos por \cite{tan-lstm-qa}. Com exceção do parâmetro \textit{m} da função de perda \textit{hinge}. O parâmetro \textit{m} é a margem e definimos $0,009$ conforme \cite{feng-2015}. Já \cite{tan-lstm-qa} definiu \textit{m} com o valor $0,2$.
+Conforme as figuras, todas as arquiteturas utilizam uma camada \textit{max pool} e, ao final, calculam a similaridade atravás da função \textit{cosine}.
+Não realizamos otimização ou tuning dos hiper-parâmetros dos modelos. Utilizamos os mesmos hiper-parâmetros propostos por \cite{tan-lstm-qa}. Exceto o hiper-parâmetro filtro da camada CNN, neste caso utilizamos o valor $100$, pois o valor $1000$ proposto por \cite{tan-lstm-qa} aumentou a capacidade do modelo e estava causando \textit{overfitting}.
 
-A dimensão do vetor de representação distribuída das palavras (\textit{word embedding}) foi $100$.
-
-
-
-
-Com exceção dos filtros na camada CNN, que reduzimos para o valor 100. O valor utilizado por \cite{tan-lstm-qa} de 1.000, aumentou a capacidade do modelo, causando o \textit{overfitting} \citep{marcelo-vem-2019}.
+Para a função de perda \textit{hinge}, utilizamos o valor $0,009$ proposto por \cite{feng-2015} para a margem. Em relação a dimensão do vetor de representação distribuída das palavras (\textit{word embedding}), utilizamos o valor $100$.
 
 
 %% ------------------------------------------------------------------------- %%
-\section{Resultados}
+\section{Resultados preliminares}
 
- - Lidando com overfitting (Uso de regularizacao ou early stopping) - Quantidade de hidden layers vai ser ajustada pela regularização
-         - Ajuste dos parâmetros de acordo com o dataset
-      
-          - Validacao do resultado 
-             - Uso do cross validation - Dado que o dataset é pequeno
-             - Análise dos resultados do cross validation para saber se o modelo aprendeu (É suficiente o resultado do cross validation para saber se o modelo aprendeu?)
-              - Resultados do cross validation:
-                  - Accuracy
-                  - Precision
-                  - Recall
-                  - F1 Score
-                  
-  
-  
-  
+Os resultados preliminares foram coletados a partir da avaliação dos modelos na amostra \emph{EVAL}. O valor final MRR é a média obtida após avaliar o modelo durante 20 iterações. 
 
+\begin{table}[h]
+\centering
+\begin{tabular}{ p{3cm} p{3cm} }
+ \hline
+ \textbf{Modelos} & \textbf{Resultados (MRR)}\\
+ \hline
+ Embedding & $0,52 \pm 0,01$\\
+ 
+ CNN & $0,58 \pm 0,01 $ \\
+ 
+ \textbf{bi-LSTM-CNN} & $\bm{0,60} \pm \bm{0,02}$\\
+ \hline
+\end{tabular}
+\caption{Resultado preliminar do modelo bi-LSTM-CNN proposto em comparação a outros dois modelos (CNN e Embedding). Estes resultados foram obtidos a partir da amostra EVAL.}
+\label{table:resultados-preliminares}
+\end{table}
 
-Conforme o capítulo~\ref{cap:trabalhos-relacionados}, há várias pesquisas sobre o problema de perguntas e respostas no processamento de linguagem natural. Porém, como observado pelo trabalho da \cite{yao-2018} e apontado na seção~\ref{sec:algumas_referencias}, não há muita pesquisa sobre o problema de pares de perguntas e códigos-fontes. A partir de 2014, o StackOverFlow passou a disponibilizar a base de dados livremente. Diversas pesquisas foram feitas utilizando esta base de dados. E uma frente explorada pela \cite{yao-2018} e outros pesquisadores, é tentar resolver o problema de pergunta e resposta utilizando os dados do \textit{StackOverFlow}.
+Conforme a tabela~\ref{table:resultados-preliminares}, tanto o \emph{CNN} quanto o bi-LSTM com CNN obtiveram resultados próximos. O\emph{CNN} obteve um resultado relativamente menor, mas o seu tempo de duração de treinamento é de apenas 6s. Enquanto o treinamento do bi-LSTM durou cerca de 48 minutos. Tanto o treinamento quanto a avaliação foram executadas na plataforma Colab \todo{criar glossário} do Google. No momento de treinamento e coleta dos resultados, a execução foi feita em uma máquina virtual com acesso a uma vGPU \todo{criar acronimo} Tesla K80.
 
-\subsection{Code Embedding}
+Para entender um pouco melhor o resultado da média harmônica MRR, a figura abaixo exibe as posições da primeira ocorrência do trecho de código-fonte encontradas durante a avaliação dos modelos.
 
-Conforme \cite{cambronero-deep-learning-code-search:2019}, a partir dos \textit{token embeddings} podemos gerar uma representação para os trechos de código-fonte.
+\todo{acrescentar a figura do PPT do VEM}
 
-Os trechos de código-fonte podemm ser tratados como uma \textit{bag} de palavras. Quer dizer, a ordem dos termos não é levada em consideração \citep{cambronero-deep-learning-code-search:2019}.
-
-\todo{adicionar mais informações}
-
-\todo{adicionar definição do toke embedding}
-
-Por exemplo:
-
-\todo{adicionar um exemplo}
-
-
-
-Ou a ordem pode ser levada em consideração. E neste caso, pode utilizar uma rede neural recorrente. Por exemplo, uma rede bi-LSTM. 
-
-\todo{adicionar a fóruma do bi-LSTM}
-
-%------------------------------------------------------
-\section{Problema de pares de perguntas e códigos-fontes do \textit{StackOverFlow}}
-
-O problema de pares de perguntas e códigos-fontes já foi discutido na seção~\ref{sec:algumas_referencias}. E um dos obstáculos mencionados, é a obtenção de dados para o treinamento de modelos supervisionados. Desde 2014, o site \textit{StackOverFlow} disponibiliza sua base de perguntas e respostas através do site \cite{sof-2019}. Estes dados também podem ser consultados através do site \textit{BigQuery} do \cite{bigquery-2019} também. Numa consulta rápida, até 20 de março de 2019, havia mais de 17 milhões de perguntas em diversos tópicos de programação. Dúvidas sobre Python e SQL totalizam juntas mais de 2 milhões e meio.
-
-\begin{figure}[h]
-\includegraphics[width=12cm]{figuras/cap-problema/post-questions-python-sql-total.png}
-\caption{Total de perguntas sobre Python e SQL no \textit{StackOverFlow} até 20 de março de 2019. Google and the Google logo are registered trademarks of Google LLC, used with permission.}
-\label{fig:bigquery-total-questions-python-sql-stackoverflow}
-\end{figure}
-
-Somente com estes números, vê-se o potencial do \textit{StackOverFlow} como fonte de perguntas em linguagem natural e a sua solução em código fonte \cite{yao-2018}. Mas antes de utilizá-lo como fonte, é necessário levar em consideração quais assuntos é permitido fazer a pergunta. De acordo com o guia de boas práticas do \cite{stackoverflow-questions-topics-2019}, são permitidas perguntas sobre:
-
-\begin{itemize}
-    \item um problema específico de programação
-    \item um algoritmo de programação
-    \item ferramentas de programação
-    \item problemas referentes a desenvolvimento de software
-\end{itemize}
-
-Analisando estes tipos de perguntas, uma pergunta sobre ferramentas de programação, dificilmente levará a uma resposta cuja solução seja um trecho de código-fonte. E se analisar cada um dos tópicos, verifica-se que nem todas as dúvidas vão levar a uma resposta com trechos de código-fonte. Muitas vezes, a resposta é somente uma orientação.
-
-Levando isso em consideração, \citeauthor{yao-2018} coletou a partir da base aberta de questões e respostas do \cite{stackoverflow-questions-topics-2019}, somente perguntas do tipo \textit{how-to-do-it} referentes as linguagens \textit{SQL} e \textit{Python}. Perguntas do tipo \textit{how-to-do-it}, normalmente tem apenas uma resposta curta e direta cuja solução é um trecho de código-fonte. 
-
-Ao final, foi coletado aproximadamente 148 mil pares de perguntas e trechos de código-fonte em \emph{Python} e em torno de 120 mil em \emph{SQL}. Os trechos de códigos-fontes foram extraídas das respostas aceitas\footnote{Resposta aceita contém um sinal de verificação verde. Esta resposta deve ser marcada como aceita pelo usuário que fez a pergunta.} pelos usuários\footnote{Usuário refere-se ao usuário que fez a pergunta no \textit{StackOverFlow}}. Uma resposta aceita no \textit{StackOverFlow} pode conter múltiplos trechos de códigos-fontes. A tabela~\ref{table:exemplo-pergunta-stack-over-flow-how-to-do-it} tem um exemplo de uma pergunta no qual a resposta aceita pelo usuário contém múltiplos trechos de código-fonte.
-
-Para \cite{yao-2018}, um trecho de código-fonte é solução quando o usuário consegue resolver o problema somente baseado nele.
-De acordo com esta definição, do conjunto \emph{\{C1, C2, C3, C4\}} de trechos do exemplo da tabela~\ref{table:exemplo-pergunta-stack-over-flow-how-to-do-it}, somente os \emph{C1} e \emph{C3} são consideradas soluções. \emph{C2} não é solução pois somente apresenta um exemplo de uso da função. E \emph{C4} é apenas um lembrete adicional ao usuário.
-
-Múltiplos trechos de código-fonte na resposta é comum segundo \cite{yao-2018}. Estes representam mais de 44\% das respostas coletadas em \textit{Python} e mais de 34\% em \textit{SQL}. O usuário ao aceitar uma resposta, ele aceita a resposta como um todo, com todos os trechos de código-fonte como solução para o seu problema. Não há nenhuma indicação explícita apontando qual dos múltiplos trechos de código-fonte serve como solução. 
-
-Para ter uma base de dados mais confiável, no qual questões estejam pareados com trechos de código-fonte que sejam soluções, \cite{yao-2018} empregou 4 estudantes de graduação com conhecimento em \textit{Python} e \textit{SQL} para marcar os trechos de código-fonte de uma resposta aceita. Para cada trecho de uma resposta aceita, o estudante deve marcar com a anotação \emph{1}, se ele acha que somente este trecho soluciona o problema. Caso contrário, ele anota com \emph{0}. Um trecho de código-fonte é considerado solução, caso dois estudantes anotem com \emph{1}.
-
-Ao final, \cite{yao-2018} disponibilizou um conjunto contendo mais de 4800 pares de questões e trechos de códigos-fontes em \textit{Python} e mais de 3600 em \textit{SQL}. A partir destes dados, \cite{yao-2018} treinou um modelo de redes neurais recorrentes para responder a seguinte pergunta:
-
-\emph{Dado um conjunto de trechos de código-fonte de uma resposta aceita no StackOverFlow. Qual destes trechos soluciona a questão em si?}
-
-Este é um típico problema de pergunta e resposta, conforme mencionado na seção~\ref{sec:fundamentos}. 
-
-Para ter uma base de dados confiável com maior precisão e \textit{recall}, \cite{yao-2018} propôs a seguinte tarefa:
-
-\emph{Dado uma questão no \textit{StackOverFlow} e uma resposta aceita com múltiplos trechos de código-fonte, qual dos trechos de código-fonte são soluções?}
+Tanto o bi-LSTM com CNN quanto CNN conseguiram classificar os trechos de código-fonte entre as 3 (três) primeiras posições em 75\% dos casos. O modelo bi-LSTM com CNN obteve uma precisão TOP-1 de 51\%, i.e., em mais da metade das vezes, o trecho de código-fonte relevante ficou na primeira posição. 
 
 
 
 
 
-
-
-
-
-
-
-\subsection{Detalhes do dataset}
-
- - Tamanho do dataset inicial
- - Dados sobre as perguntas, respostas (tamanho, quantidade de palavras etc.)
-
-%------------------------------------------------------
-\section{Arquitetura proposta} 
-
-- Uso da rede LSTM/CNN 
-       - Utilizando cosine similarity
-       - Uso do word2vec para pergunta (linguagem natural) e outro para código (linguagem estruturada) - Verificar também se é viável usar o artigo Deep contextualized word representations ELMo representation (ao invés de word2vec) (According to the article: "We show that
-these representations can be easily added to
-existing models and significantly improve the
-state of the art across six challenging NLP
-problems, including question answering, textual entailment and sentiment analysis." )
-
-
-
-
-  
-  
-\section{Considerações finais}
