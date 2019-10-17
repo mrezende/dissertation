@@ -15,22 +15,34 @@ Os dados disponibilizados por \cite{yao-2018} são divididos em 3 (três) subcon
 
 Nos casos em que há mais de um trecho de código-fonte na descrição da resposta, um trecho de código não é necessariamente uma solução para a pergunta. No exemplo abaixo, o trecho XXX lembra o desenvolvedor de importar uma biblioteca utilizada na solução.
 
-\begin{tcolorbox}[colframe=orange!75!black,colback=white,fonttitle=\bfseries,adjusted title=\large{ My very long title text}]
-\begin{mypython}{Python: Exemplo de código para escrever em um arquivo}
-with open(filename, mode) as file:
-    file.write(text)
+
+https://stackoverflow.com/questions/34349762/convert-2d-numpy-array-to-string
+
+Esta questão tem na verdade 6 trechos. Colocamos apenas 4 exemplos para melhor visualização. Esta alteração não prejudica o propósito da explicação.
+
+\begin{tcolorbox}[colframe=orange!75!black,colback=white,fonttitle=\bfseries,adjusted title=\large{Título da questão: convert 2d numpy array to string}]
+\begin{mypython}{Trecho T1: A one-liner will do:}
+b = '\n'.join('\t'.join('%0.3f' %x for x in y) for y in a)
 \end{mypython}
-\begin{mypython}{Python: Exemplo de código para escrever em um arquivo}
-with open(filename, mode) as file:
-    file.write(text)
+\begin{mypython}{Trecho T2: Using a simpler example:}
+>>> a = np.arange(25, dtype=float).reshape(5, 5)
+>>> a
+array([[  0.,   1.,   2.,   3.,   4.],
+       [  5.,   6.,   7.,   8.,   9.],
+       [ 10.,  11.,  12.,  13.,  14.],
+       [ 15.,  16.,  17.,  18.,  19.],
+       [ 20.,  21.,  22.,  23.,  24.]])
 \end{mypython}
-\begin{mypython}{Python: Exemplo de código para escrever em um arquivo}
-with open(filename, mode) as file:
-    file.write(text)
+\begin{mypython}{Trecho T3: This:}
+b = '\n'.join('\t'.join('%0.3f' %x for x in y) for y in a)
+print(b)
 \end{mypython}
-\begin{mypython}{Python: Exemplo de código para escrever em um arquivo}
-with open(filename, mode) as file:
-    file.write(text)
+\begin{mypython}{Trecho T4: prints this:}
+0.000   1.000   2.000   3.000   4.000
+5.000   6.000   7.000   8.000   9.000
+10.000  11.000  12.000  13.000  14.000
+15.000  16.000  17.000  18.000  19.000
+20.000  21.000  22.000  23.000  24.000
 \end{mypython}
 \end{tcolorbox}
 
@@ -113,6 +125,7 @@ Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
 \end{table}
 
 \section{Treinamento e avaliação}
+\label{sec:treinamento-avaliacao}
 
 Para o treinamento do modelo, utilizamos apenas os pares de questões e trechos de código-fonte em Python. Inicialmente, utilizamos apenas os pares anotados automaticamente. Este conjunto de dados apresenta uma variabilidade maior, pois XXX\% das questões contém mais de um trecho de código-fonte anotados como correto.
 
@@ -216,6 +229,9 @@ Para entender um pouco melhor o resultado da média harmônica MRR, a figura aba
 
 Tanto o bi-LSTM com CNN quanto CNN conseguiram classificar os trechos de código-fonte entre as 3 (três) primeiras posições em 75\% dos casos. O modelo bi-LSTM com CNN obteve uma precisão TOP-1 de 51\%, i.e., em mais da metade das vezes, o trecho de código-fonte relevante ficou na primeira posição. 
 
+\subsection{Ameaças à validade}
+
+Conforme citado anteriormente, \cite{yao-2018} anotou o conjunto de dados utilizando um framework proposto em seu artigo. Para anotá-los, ela treinou uma rede neural no conjunto de dados anotado manualmente. Em nosso trabalho, fizemos o caminho oposto. Treinamos os nossos modelos nos dados anotados automaticamente e avaliamos no conjunto anotado manualmente. Para diminuir o viés, adotamos o procedimento proposto por Iyer descrito na seção~\ref{sec:treinamento-avaliacao}.
 
 
 
