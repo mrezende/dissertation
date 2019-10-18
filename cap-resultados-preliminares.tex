@@ -20,11 +20,13 @@ https://stackoverflow.com/questions/34349762/convert-2d-numpy-array-to-string
 
 Esta questão tem na verdade 6 trechos. Colocamos apenas 4 exemplos para melhor visualização. Esta alteração não prejudica o propósito da explicação.
 
-\begin{tcolorbox}[colframe=orange!75!black,colback=white,fonttitle=\bfseries,adjusted title=\large{Título da questão: convert 2d numpy array to string}]
-\begin{mypython}{Trecho T1: A one-liner will do:}
+\begin{tcolorbox}[colframe=orange!75!black,colback=gray!15!white,fonttitle=\bfseries,adjusted title=\large{Título da questão: convert 2d numpy array to string}]
+
+\begin{mypythongreen}{Trecho T1: A one-liner will do:}
 b = '\n'.join('\t'.join('%0.3f' %x for x in y) for y in a)
-\end{mypython}
-\begin{mypython}{Trecho T2: Using a simpler example:}
+\end{mypythongreen}
+
+\begin{mypythonred}{Trecho T2: Using a simpler example:}
 >>> a = np.arange(25, dtype=float).reshape(5, 5)
 >>> a
 array([[  0.,   1.,   2.,   3.,   4.],
@@ -32,69 +34,26 @@ array([[  0.,   1.,   2.,   3.,   4.],
        [ 10.,  11.,  12.,  13.,  14.],
        [ 15.,  16.,  17.,  18.,  19.],
        [ 20.,  21.,  22.,  23.,  24.]])
-\end{mypython}
-\begin{mypython}{Trecho T3: This:}
-b = '\n'.join('\t'.join('%0.3f' %x for x in y) for y in a)
-print(b)
-\end{mypython}
-\begin{mypython}{Trecho T4: prints this:}
+\end{mypythonred}
+\begin{mypythongreen}{Trecho T3: is equivalent to:}
+res = []
+for y in a:
+    res.append('\t'.join('%0.3f' %x for x in y))
+b = '\n'.join(res)
+\end{mypythongreen}
+\begin{mypythonred}{Trecho T4: prints this:}
 0.000   1.000   2.000   3.000   4.000
 5.000   6.000   7.000   8.000   9.000
 10.000  11.000  12.000  13.000  14.000
 15.000  16.000  17.000  18.000  19.000
 20.000  21.000  22.000  23.000  24.000
-\end{mypython}
+\end{mypythonred}
 \end{tcolorbox}
 
 
 
 
-\todo{achar outro exemplo}
 
-\begin{table}[h!]
-\centering
-\begin{tabular}{ |p{14cm}| } 
- \hline
-\textbf{Pergunta:} Elegant Python function to
-convert CamelCase to snake\_case \\ \hline
-\textbf{S1}: This is pretty thorough:
-
-\begin{lstlisting}[language=python, caption={C1}]
- def convert(name):
-   s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2',name)
-   return re.sub('([a-z0-9])([A-Z])',r'\1_\2',s1).lower()
-\end{lstlisting}
-
-\textbf{S2}: Works with all these (and doesn't harm already-un-cameled versions):
-
-\begin{lstlisting}[language=python, caption={C2}]
- >>> convert('CamelCase')
-'camel_case'
->>> convert('CamelCamelCase')
-'camel_camel_case'
-\end{lstlisting}
-
-\textbf{S3}: Or if you're going to call it a zillion times, you can pre-compile the regexes:
-
-\begin{lstlisting}[language=python, caption={C3}]
-first_cap_re = re.compile('(.)([A-Z][a-z]+)')
-all_cap_re = re.compile('([a-z0-9])([A-Z])')
-def convert(name):
-   s1 = first_cap_re.sub(r'\1_\2', name)
-   return all_cap_re.sub(r'\1_\2', s1).lower()
-\end{lstlisting}
-
-\textbf{S4}: Don't forget to import the regular expression module
-\begin{lstlisting}[language=python, caption={C4}]
-import re
-\end{lstlisting}
-
- \\ 
- \hline
-\end{tabular}
-\caption{Exemplo de pergunta \textit{how-to-do-it} no \textit{StackOverFlow} com resposta aceita que contém mais de 1 (um) trecho de código-fonte como solução \cite{yao-2018}. Referência: \url{https://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-snake-case}}
-\label{table:exemplo-pergunta-stack-over-flow-how-to-do-it}
-\end{table}
 
 Para diferenciar este tipo de caso, \cite{yao-2018} anotaram os pares de questão e trecho de código com $\bm{1}$, quando o trecho é solução para a pergunta e $\bm{0}$, em caso contrário. Esta anotação foi feita automaticamente por um framework proposto no artigo.
 

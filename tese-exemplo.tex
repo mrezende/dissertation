@@ -134,6 +134,7 @@ framexrightmargin=10pt
 \usepackage{minted}
 \usepackage[most, minted]{tcolorbox}
 
+
 \newtcblisting{mypython}[1]{%
 listing engine=minted,
 minted style=colorful,
@@ -155,7 +156,31 @@ enlarge top by=1cm,%     equivalent to mdframed 'skipabove'
 enlarge bottom by=1cm,%  equivalent to mdframed 'skipbelow'
 minted options= {escapeinside=||},
 title={#1}
-  }
+}
+
+\newtcblisting{mypythongreen}[1]{%
+listing engine=minted,
+colback=green!5!white,colframe=green!75!black,
+minted language=python,
+listing only,
+fonttitle=\bfseries,
+%enlarge top by=1cm,%     equivalent to mdframed 'skipabove'
+%enlarge bottom by=1cm,%  equivalent to mdframed 'skipbelow'
+minted options= {escapeinside=||},
+title={#1}
+}
+
+\newtcblisting{mypythonred}[1]{%
+listing engine=minted,
+colback=red!5!white,colframe=red!75!black,
+minted language=python,
+listing only,
+fonttitle=\bfseries,
+%enlarge top by=1cm,%     equivalent to mdframed 'skipabove'
+%enlarge bottom by=1cm,%  equivalent to mdframed 'skipbelow'
+minted options= {escapeinside=||},
+title={#1}
+}
 
 
 % Corpo do texto
