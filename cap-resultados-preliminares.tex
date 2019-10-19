@@ -127,7 +127,7 @@ A avaliação final na amostra \emph{EVAL} utiliza o mesmo procedimento da amost
 
 \section{Pré-processamento}
 
-Diferente do trabalho de \cite{tan-lstm-qa}, nós geramos uma representação distribuída tanto para o conjunto de palavras das questões quanto para o conjunto de \textit{tokens} e palavras dos trechos de código-fonte. Ao final, temos duas matrizes de representação distribuída distintas $\bm{T_{q}}$ e $\bm{T_{c}}$ para o vocabulário das questões e para o vocabulário dos trechos de código-fonte, conforme citado no capítulo~\ref{cap:abordagem}.
+Diferente do trabalho de \cite{tan-lstm-qa}, nós geramos duas matrizes de representação distribuída distintas $\bm{T_{q}}$ e $\bm{T_{c}}$ para o vocabulário das questões e para o vocabulário dos trechos de código-fonte, conforme citado no capítulo~\ref{cap:abordagem}.
 
 Antes de gerar a matriz $\bm{T_{c}}$, utilizamos uma função disponibilizada por \cite{yao-2018} para fazer um pré-processamento dos trechos de código-fonte. Esta função substitui os valores literais numéricos e textos pelas palavras \emph{"NUMBER"} e \emph{"SRING"}. Além disso, os comentários são removidos e as variáveis são substituídas por \emph{"VAR"}. E o caractere de quebra de linha é substituído por \emph{"NEWLINE"}.
 
@@ -143,14 +143,34 @@ De acordo com a figura~\ref{fig:tsne-code-snippet-python}, as palavras \emph{fro
 
 \section{Arquiteturas}
 
-Para este estudo, comparamos as arquiteturas bi-LSTM com CNN, CNN com uma arquitetura de referência \textit{Embedding}. A arquitetura \textit{Embedding} combina os vetores de representação distribuída de cada palavra através de uma camada \textit{max pool}. As outras arquiteturas seguem a descrição feita no capítulo abordagem \todo{citar o capítulo}.
+Para este estudo, comparamos as arquiteturas bi-LSTM com CNN e CNN com uma arquitetura de referência \textit{Embedding}. A arquitetura \textit{Embedding} combina os vetores de representação distribuída de cada palavra através de uma camada \textit{max pool}. As outras arquiteturas seguem a descrição feita no capítulo~\ref{cap:abordagem}.
 
-Abaixo tem as figuras ilustrativas das arquiteturas utilizadas:
+A figura~\ref{fig:arquitetura-bi-lstm-com-cnn}, figura~\ref{fig:arquitetura-cnn} e a figura~\ref{fig:arquitetura-embedding} ilustram as arquiteturas utilizadas:
 
-\todo{adicionar as figuras do artigo}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figuras/cap-resultados-preliminares/ArquiteturaBiLSTM.pdf}
+    \caption{Figura da arquitetura bi-LSTM com CNN proposta para o problema do \textit{code retrieval}. Descrição detalhada da arquitetura na seção~\ref{sec:representation-bi-lstm-cnn}. Figura utilizada no artigo \cite{marcelo-vem-2019}}
+    \label{fig:arquitetura-bi-lstm-com-cnn}
+\end{figure}
 
-Conforme as figuras, todas as arquiteturas utilizam uma camada \textit{max pool} e, ao final, calculam a similaridade atravás da função \textit{cosine}.
-Não realizamos otimização ou tuning dos hiper-parâmetros dos modelos. Utilizamos os mesmos hiper-parâmetros propostos por \cite{tan-lstm-qa}. Exceto o hiper-parâmetro filtro da camada CNN, neste caso utilizamos o valor $100$, pois o valor $1000$ proposto por \cite{tan-lstm-qa} aumentou a capacidade do modelo e estava causando \textit{overfitting}.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figuras/cap-resultados-preliminares/ArquiteturaCNN.pdf}
+    \caption{Figura da arquitetura CNN com a primeira camada de \textit{hidden layer} proposta para o problema do \textit{code retrieval}. Descrição detalhada da arquitetura na seção~\ref{sec:representation-cnn}. Figura utilizada no artigo \cite{marcelo-vem-2019}}
+    \label{fig:arquitetura-cnn}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figuras/cap-resultados-preliminares/ArquiteturaEmbedding.pdf}
+    \caption{Figura da arquitetura de referência \textit{Embedding} para comparação. Figura utilizada no artigo \cite{marcelo-vem-2019}}
+    \label{fig:arquitetura-embedding}
+\end{figure}
+Nas figuras \ref{fig:arquitetura-bi-lstm-com-cnn}, \ref{fig:arquitetura-cnn} e \ref{fig:arquitetura-cnn}, a palavra \textit{Embedding Layer} refere-se ao vetor de representação distribuída das palavras. \emph{OL} é um acrônimo de \textit{Output Layer} ou camada de saída. $O_{q}$ indica a camada de saída da questão. $O_{c}$ indica a camada de saída do trecho de código-fonte.
+
+Todas as arquiteturas utilizam uma camada \textit{max pool} e, ao final, calculam a similaridade atravás da função \textit{cosine}.
+Não realizamos otimização ou ajustes dos hiper-parâmetros dos modelos. Utilizamos os mesmos hiper-parâmetros propostos por \cite{tan-lstm-qa}. Exceto o hiper-parâmetro filtro da camada CNN, neste caso utilizamos o valor $100$, pois o valor $1000$ proposto por \cite{tan-lstm-qa} aumentou a capacidade do modelo e estava causando \textit{overfitting}.
 
 Para a função de perda \textit{hinge}, utilizamos o valor $0,009$ proposto por \cite{feng-2015} para a margem. Em relação a dimensão do vetor de representação distribuída das palavras (\textit{word embedding}), utilizamos o valor $100$.
 
@@ -158,11 +178,11 @@ Para a função de perda \textit{hinge}, utilizamos o valor $0,009$ proposto por
 %% ------------------------------------------------------------------------- %%
 \section{Resultados preliminares}
 
-Os resultados preliminares foram coletados a partir da avaliação dos modelos na amostra \emph{EVAL}. O valor final MRR é a média obtida após avaliar o modelo durante 20 iterações. 
+Os resultados preliminares foram coletados a partir da avaliação dos modelos na amostra \emph{EVAL}. O valor final MRR é a média obtida após 20 iterações. 
 
 \begin{table}[h]
 \centering
-\begin{tabular}{ p{3cm} p{3cm} }
+\begin{tabular}{ p{3cm} P{5cm} }
  \hline
  \textbf{Modelos} & \textbf{Resultados (MRR)}\\
  \hline
@@ -177,18 +197,77 @@ Os resultados preliminares foram coletados a partir da avaliação dos modelos n
 \label{table:resultados-preliminares}
 \end{table}
 
-Conforme a tabela~\ref{table:resultados-preliminares}, tanto o \emph{CNN} quanto o bi-LSTM com CNN obtiveram resultados próximos. O\emph{CNN} obteve um resultado relativamente menor, mas o seu tempo de duração de treinamento é de apenas 6s. Enquanto o treinamento do bi-LSTM durou cerca de 48 minutos. Tanto o treinamento quanto a avaliação foram executadas na plataforma Colab \todo{criar glossário} do Google. No momento de treinamento e coleta dos resultados, a execução foi feita em uma máquina virtual com acesso a uma vGPU \todo{criar acronimo} Tesla K80.
+Conforme a tabela~\ref{table:resultados-preliminares}, tanto o \emph{CNN} quanto o bi-LSTM com CNN obtiveram resultados próximos. O\emph{CNN} obteve um resultado relativamente menor, mas o seu tempo de duração de treinamento é de apenas 6s. Enquanto o treinamento do bi-LSTM durou cerca de 48 minutos. Tanto o treinamento quanto a avaliação foram executadas na plataforma \Gls{colab} do Google. No momento de treinamento e coleta dos resultados, a execução foi feita em uma máquina virtual com acesso a uma \acrshort{vgpu} Tesla K80.
 
 Para entender um pouco melhor o resultado da média harmônica MRR, a figura abaixo exibe as posições da primeira ocorrência do trecho de código-fonte encontradas durante a avaliação dos modelos.
 
-\todo{acrescentar a figura do PPT do VEM}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/histogram_results.png}
+    \caption{Figura das primeiras posições observadas para o trecho de código-fonte anotado como correto.}
+    \label{fig:histogram-mrr}
+\end{figure}
+
 
 Tanto o bi-LSTM com CNN quanto CNN conseguiram classificar os trechos de código-fonte entre as 3 (três) primeiras posições em 75\% dos casos. O modelo bi-LSTM com CNN obteve uma precisão TOP-1 de 51\%, i.e., em mais da metade das vezes, o trecho de código-fonte relevante ficou na primeira posição. 
+
+No exemplo abaixo\footnote{Este exemplo refere-se a questão \url{https://stackoverflow.com/questions/24593478/python-and-appending-items-to-text-and-excel-file}\label{foot:exemplo-resultados-preliminares}}, a rede bi-LSTM com CNN conseguiu mostrar o trecho de código-fonte anotado como correto na primeira posição.
+No caso do CNN, apesar de não apresentar o trecho propriamente anotado, ele apresentou outro trecho que também serve como resposta. Neste caso, apesar de ter sido penalizado, ele conseguiu responder a questão. 
+
+\begin{tcolorbox}[colframe=orange!75!black,colback=gray!15!white,fonttitle=\bfseries,adjusted title=\large{Python and appending items to text and \colorbox{green}{excel} \colorbox{green}{file}}~\ref{foot:exemplo-resultados-preliminares},
+enlarge top by=1cm%equivalent to mdframed 'skipabove'
+]
+\begin{mypython-without-margin}{bi-LSTM com CNN}
+Yvalues = [1, 2, 3, 4, 5]
+file_out = |\colorbox{green}{open}|('file.csv','wb')
+mywriter=|\colorbox{green}{csv}|.|\colorbox{green}{writer}|(file_out, delimiter = '\n')
+mywriter.|\colorbox{green}{writerow}|(Yvalues)
+file_out.close()
+\end{mypython-without-margin}
+
+\begin{mypython-without-margin}{CNN}
+import csv
+
+with |\colorbox{green}{open}|("output.csv", "wb") as f:
+    writer = |\colorbox{green}{cwv}|.|\colorbox{green}{writer}|(f)
+    writer.|\colorbox{green}{writerows}|(a)
+\end{mypython-without-margin}
+
+\end{tcolorbox}
+
+
 
 \subsection{Ameaças à validade}
 
 Conforme citado anteriormente, \cite{yao-2018} anotou o conjunto de dados utilizando um framework proposto em seu artigo. Para anotá-los, ela treinou uma rede neural no conjunto de dados anotado manualmente. Em nosso trabalho, fizemos o caminho oposto. Treinamos os nossos modelos nos dados anotados automaticamente e avaliamos no conjunto anotado manualmente. Para diminuir o viés, adotamos o procedimento proposto por Iyer descrito na seção~\ref{sec:treinamento-avaliacao}.
 
+\subsection{Considerações}
 
+Os resultados apresentados pelo modelo bi-LSTM com CNN e CNN parecem bastante promissores, a nosso ver. O próximo passo é comparar os nossos modelos com o modelo proposto por \cite{Sachdev-neural-code-search:2018} que é o estado da arte. 
+
+Tanto o bi-LSTM com CNN e CNN tem uma margem a melhorar. Não fizemos ajustes dos hiper-parâmetros e nem uso de regularização durante o treinamento.
+
+Nas figuras abaixo, podemos ver que tanto bi-LSTM com CNN quanto o CNN apresentam uma diferença grande entre o erro de validação e o erro de treinamento. Um indicativo de \textit{overfitting}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/569229_ConvolutionalLSTM_plot.png}
+    \caption{Figura da arquitetura CNN com a primeira camada de \textit{hidden layer} proposta para o problema do \textit{code retrieval}. Descrição detalhada da arquitetura na seção~\ref{sec:representation-cnn}. Figura utilizada no artigo \cite{marcelo-vem-2019}}
+    \label{fig:arquitetura-cnn}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/569229_ConvolutionModel_plot.png}
+    \caption{Figura da arquitetura CNN com a primeira camada de \textit{hidden layer} proposta para o problema do \textit{code retrieval}. Descrição detalhada da arquitetura na seção~\ref{sec:representation-cnn}. Figura utilizada no artigo \cite{marcelo-vem-2019}}
+    \label{fig:arquitetura-cnn}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/569229_EmbeddingModel_plot.png}
+    \caption{Figura da arquitetura CNN com a primeira camada de \textit{hidden layer} proposta para o problema do \textit{code retrieval}. Descrição detalhada da arquitetura na seção~\ref{sec:representation-cnn}. Figura utilizada no artigo \cite{marcelo-vem-2019}}
+    \label{fig:arquitetura-cnn}
+\end{figure}
 
 

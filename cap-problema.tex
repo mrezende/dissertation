@@ -73,7 +73,7 @@ Utilizando o LSTM, a partir de um vetor $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . .
 No caso do bi-LSTM, teremos duas redes LSTM, uma rede que lê o vetor $\overrightarrow{\bm{x}}$ na ordem da primeira para a última palavra, $\bm{x}(1), \bm{x}(2), . . ., \bm{x}(n)$. E a outra rede LSTM vai ler na ordem inversa, $\overleftarrow{\bm{x}}$, $\bm{x}(n), \bm{x}(n - 1), . . ., \bm{x}(1)$. Teremos dois vetores \textit{hidden}, $\overrightarrow{\bm{h}_{t}}$ e $\overleftarrow{\bm{h}_{t}}$. Para cada iteração $t$, o vetor de resultado é a concatenação dos dois vetores \textit{hidden}: $\bm{h}_{t} = \overrightarrow{\bm{h}_{t}} || \overleftarrow{\bm{h}_{t}}$.
 
 \subsubsection{CNN}
-\label{sec:representation-cnn}
+\label{sec:cnn}
 
 Após obter os vetores \textit{hidden} das questões e trechos de código-fonte, eles são utilizados como entrada para um rede neural convolucional. 
 
@@ -92,6 +92,7 @@ A camada convolucional irá gerar vetores de resultado de dimensão $N$, utiliza
 
 
 \subsection{Representação através do CNN}
+\label{sec:representation-cnn}
 
 Para verificar o desempenho do CNN isoladamente, iremos criar uma representação para as questões e trechos de código-fonte somente com uma camada CNN.
 
@@ -105,7 +106,7 @@ z = tanh(\bm{W}x + b)
 
 Onde $\bm{W}$ é a matriz de pesos e $\bm{b}$ é o vetor de \textit{bias}.
 
-Neste caso, $z$ servirá de entrada a rede CNN. A rede convolucional. Os cálculos são efetuados da mesma maneira que na rede bi-LSTM. Ver seção~\ref{sec:representation-cnn}.
+Neste caso, $z$ servirá de entrada a rede CNN. Mais detalhes sobre os cálculos, ver a subseção anterior CNN~\ref{sec:cnn}.
 
 \section{Função objetivo}
 
