@@ -9,19 +9,15 @@ Os resultados da arquitetura bi-LSTM com CNN e a arquitetura CNN foram promissor
 \section{Conjunto de dados}
 \label{sec:conjunto-dados}
 
-Para este estudo, utilizamos parte do conjunto de dados disponibilizado por \cite{yao-2018}. Este conjunto é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares foram coletados do site \Gls{sof}. Uma peculiaridade destes dados em relação aos dados utilizados nos outros trabalhos \cite{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015}, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Este tipo de questão normalmente expressa a intenção do desenvolvedor, indo de encontro com a nossa definição da seção~\ref{sec:code-retrieval-definicao} adotada para o problema de \textit{code retrieval}.
+Para este estudo, utilizamos parte do conjunto de dados disponibilizado por \cite{yao-2018}. Este conjunto é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares foram coletados do site \Gls{sof}. Uma peculiaridade destes dados em relação aos dados utilizados nos outros trabalhos \cite{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015}, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Estas questões normalmente expressam as intenções do desenvolvedor, indo de encontro com a nossa definição da seção~\ref{sec:code-retrieval-definicao} adotada para o problema de \textit{code retrieval}.
 
 Os dados disponibilizados por \cite{yao-2018} são divididos em 3 (três) subconjuntos distintos. Um subconjunto é formado apenas por questões coletadas do \Gls{sof} que continham apenas um trecho de código-fonte na descrição da resposta. O outro é formado por questões que apresentavam mais de um trecho de código-fonte na descrição. E o terceiro é formado por pares de questões e trechos de código-fonte anotados manualmente.
 
-Nos casos em que há mais de um trecho de código-fonte na descrição da resposta, um trecho de código não é necessariamente uma solução para a pergunta. No exemplo abaixo, o trecho XXX lembra o desenvolvedor de importar uma biblioteca utilizada na solução.
+Nos casos em que há mais de um trecho de código-fonte na descrição da resposta, um trecho de código não é necessariamente uma solução para a pergunta. No exemplo abaixo, os trechos \emph{T2} e \emph{T4} não são soluções para a questão. O trecho \emph{T2} apenas inicializa um array e o trecho \emph{T4} mostra a saída do comando \textit{print} para o vetor já convertido\footnote{Site: \url{https://stackoverflow.com/questions/34349762/convert-2d-numpy-array-to-string} Esta questão apresenta 6 trechos de código-fonte, mas para melhor visualização, optamos por colocar apenas 4 trechos em nosso exemplo\label{foot:exemplo-stackoverflow-mais-de-um-trecho}}.
 
 
-https://stackoverflow.com/questions/34349762/convert-2d-numpy-array-to-string
 
-Esta questão tem na verdade 6 trechos. Colocamos apenas 4 exemplos para melhor visualização. Esta alteração não prejudica o propósito da explicação.
-
-\begin{tcolorbox}[colframe=orange!75!black,colback=gray!15!white,fonttitle=\bfseries,adjusted title=\large{Título da questão: convert 2d numpy array to string}]
-
+\begin{tcolorbox}[colframe=orange!75!black,colback=gray!15!white,fonttitle=\bfseries,adjusted title=\large{Título da questão: convert 2d numpy array to string}~\ref{foot:exemplo-stackoverflow-mais-de-um-trecho}]
 \begin{mypythongreen}{Trecho T1: A one-liner will do:}
 b = '\n'.join('\t'.join('%0.3f' %x for x in y) for y in a)
 \end{mypythongreen}
@@ -55,7 +51,7 @@ b = '\n'.join(res)
 
 
 
-Para diferenciar este tipo de caso, \cite{yao-2018} anotaram os pares de questão e trecho de código com $\bm{1}$, quando o trecho é solução para a pergunta e $\bm{0}$, em caso contrário. Esta anotação foi feita automaticamente por um framework proposto no artigo.
+Para diferenciar estes casos, \cite{yao-2018} anotaram os pares com $\bm{1}$, quando o trecho é solução para a pergunta e $\bm{0}$, em caso contrário. Esta anotação foi feita automaticamente por um framework proposto no artigo.
 
 Ao final, o conjunto de dados é dividido da seguinte maneira:
 
@@ -86,9 +82,9 @@ Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
 \section{Treinamento e avaliação}
 \label{sec:treinamento-avaliacao}
 
-Para o treinamento do modelo, utilizamos apenas os pares de questões e trechos de código-fonte em Python. Inicialmente, utilizamos apenas os pares anotados automaticamente. Este conjunto de dados apresenta uma variabilidade maior, pois XXX\% das questões contém mais de um trecho de código-fonte anotados como correto.
+Para o treinamento do modelo, utilizamos apenas os pares de questões e trechos de código-fonte em Python. Inicialmente, utilizamos apenas os pares anotados automaticamente. Este conjunto de dados apresenta uma variabilidade maior, em torno de 27\% das questões contém mais de um trecho de código-fonte anotados como correto.
 
-Adotamos o mesmo procedimento de treinamento e avaliação proposto por Iyer. Para o treinamento, foi utilizado o conjunto com $60.083$ pares. Para escolha do modelo e avaliação final foi utilizado o conjunto de dados anotados manualmente.
+Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iyer-etal-2016-summarizing}. Para o treinamento, foi utilizado o conjunto com $60.083$ pares. Para escolha do modelo e avaliação final foi utilizado o conjunto de dados anotados manualmente.
 
 \begin{table}[h]
 \centering
@@ -113,11 +109,13 @@ O modelo foi treinado durante 80 épocas. Caso a função de perda \textit{hinge
 
 Para cada par $<q_{i}, c_{i}^{+}>$ da amostra \emph{DEV}, onde $q_{i}$ uma questão e $c_{i}^{+}$ uma questão anotada como correta. Outros 49 distratores $c'$ são selecionados aleatoriamente da amostra de treinamento, tal que $c_{i}^{+} \neq c'$. Para cada questão, o modelo calcula a similaridade entre a questão e os trechos de código-fonte. O cálculo de similaridade é feito através da função $h_{\theta}$, onde $h_{\theta}$ é a função \textit{cosine}. 
 
-Posteriormente, os trechos de código-fonte são ordenados de forma decrescente, do mais similar (maior pontuação) ao menos similar (menor pontuação). Com os trechos ordenados, obtém-se a posição do trecho $c_{i}^{+}$ para cálculo do \textit{reciprocal rank}. \textit{Reciprocal rank} é o inverso da posição da primeira ocorrência de $c_{i}^{+}$ encontrada no resultado. Com o \textit{reciprocal rank}, calcula-se o \acrshort{mrr} para a amostra. \acrshort{mrr} pode ser definido como \todo{citar gu}:
+Posteriormente, os trechos de código-fonte são ordenados de forma decrescente, do mais similar (maior pontuação) ao menos similar (menor pontuação). Com os trechos ordenados, obtém-se a posição do trecho $c_{i}^{+}$ para cálculo do \textit{reciprocal rank}. \textit{Reciprocal rank} é o inverso da posição da primeira ocorrência de $c_{i}^{+}$ encontrada no resultado. Com o \textit{reciprocal rank}, calcula-se o \acrshort{mrr} para a amostra. \acrshort{mrr} pode ser definido como \citep{Gu-deep-code-search:2018}:
 
 \begin{equation}
-MRR = 1/n * \sum{i = 1}{n}{1 / p_{i}^{+}}
+MRR = \frac{1}{n} * \sum_{i = 1}^{n}\frac{1}{p_{i}^{+}}    
 \end{equation}
+
+
 
 Onde $n$ é a quantidade de questões presentes na amostra, $p_{i}^{+}$ é a posição da primeira ocorrência do trecho $c_{i}^{+}$ entre os trechos ordenados.
 
@@ -129,17 +127,16 @@ A avaliação final na amostra \emph{EVAL} utiliza o mesmo procedimento da amost
 
 \section{Pré-processamento}
 
-Diferente do trabalho de \cite{tan-lstm-qa}, nós geramos uma representação distribuída tanto para o conjunto de palavras das questões quanto para o conjunto de \textit{tokens} e palavras dos trechos de código-fonte. Ao final, temos duas matrizes de representação distribuída distintas $\bm{T_{q}}$ e $\bm{T_{c}}$ para o vocabulário das questões e para o vocabulário dos trechos de código-fonte, conforme citado no capítulo de abordagem \todo{referenciar o capitulo}.
+Diferente do trabalho de \cite{tan-lstm-qa}, nós geramos uma representação distribuída tanto para o conjunto de palavras das questões quanto para o conjunto de \textit{tokens} e palavras dos trechos de código-fonte. Ao final, temos duas matrizes de representação distribuída distintas $\bm{T_{q}}$ e $\bm{T_{c}}$ para o vocabulário das questões e para o vocabulário dos trechos de código-fonte, conforme citado no capítulo~\ref{cap:abordagem}.
 
 Antes de gerar a matriz $\bm{T_{c}}$, utilizamos uma função disponibilizada por \cite{yao-2018} para fazer um pré-processamento dos trechos de código-fonte. Esta função substitui os valores literais numéricos e textos pelas palavras \emph{"NUMBER"} e \emph{"SRING"}. Além disso, os comentários são removidos e as variáveis são substituídas por \emph{"VAR"}. E o caractere de quebra de linha é substituído por \emph{"NEWLINE"}.
 
-As matrizes $\bm{T_{q}}$ e $\bm{T_{c}}$ são geradas pelo \textit{word2vec} com \textit{skip-gram}. Na figura~\ref{fig:tsne-code-snippet-python} abaixo, podemos visualizar um exemplo da representação do vetor de representação distribuída gerada pelo \textit{word2vec}. Esta imagem foi criada com o auxílio da ferramenta \textit{t-SNE}. Ela auxilia na visualização de dados de dimensão elevada. Ela converte similaridades entre os dados para probabilidade conjunta e tenta minimizar a divergência \emph{Kullback-Leibler} entre as probabilidades conjuntas do vetor de dimensão menor e do vetor de dimensão mais alta. Em outras palavras, ela converte o vetor de dimensão elevada para um vetor de dimensão menor, enquanto tenta preservar a relativa similaridade entre os dados o mais próximo possível do original \citep{scikit-learn-tsne-2019, quora-tsne-2019}.
+As matrizes $\bm{T_{q}}$ e $\bm{T_{c}}$ são geradas pelo \textit{word2vec} com \textit{skip-gram}. Na figura~\ref{fig:tsne-code-snippet-python} abaixo, podemos visualizar um exemplo da representação do vetor de representação distribuída gerada pelo \textit{word2vec}. Esta imagem foi criada com o auxílio da ferramenta \textit{t-SNE}. Ela auxilia na visualização de dados de dimensão elevada \citep{scikit-learn-tsne-2019, quora-tsne-2019}.
 
-
-\todo{trocar a imagem, fazer comentários sobre ela}
+De acordo com a figura~\ref{fig:tsne-code-snippet-python}, as palavras \emph{from} e \emph{import} são similares. Assim como \emph{if} e \emph{else}, e também \emph{list}, \emph{dict} e \emph{set}, por exemplo.
 
 \begin{figure}[h]
-\includegraphics[width=1\textwidth]{figuras/cap-trabalhos-relacionados/code-tsne-output.png}
+\includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/code-tsne-output.png}
 \caption{Representação em 2D do vetor de representação distribuída de trechos de código-fonte. Imagem gerada através da ferramenta t-SNE. E o vetor de representação distribuída foi criado a partir da amostra de trechos de código-fonte em Python disponibilizada por \cite{yao-2018}. Vetor criado utilizando o \textit{word2vec} com o algoritmo \textit{skip-gram} e o parâmetro \textit{window} com o valor $5$.}
 \label{fig:tsne-code-snippet-python}
 \end{figure}
