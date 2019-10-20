@@ -270,4 +270,4 @@ Nas figuras \ref{fig:grafico-erro-bi-lstm-cnn}, \ref{fig:grafico-erro-cnn} e \re
 
 Além da margem de melhora no treinamento, uma análise mais detalhada do resultado é necessário. Conforme o exemplo citado na seção anterior, o modelo CNN apresentou uma resposta correta para a pergunta, porém foi penalizada pois não era exatamente o trecho anotado como correto. 
 
-Caso haja mais casos deste tipo, podemos adotar o mesmo procedimento proposto por \cite{Sachdev-neural-code-search:2018} de avaliação automática. Um trecho será considerado correto quando a diferença entre ele e o trecho anotado como correto for menor que um certo valor.
+Caso haja mais casos deste tipo, podemos adotar o mesmo procedimento proposto por \cite{Sachdev-neural-code-search:2018} de avaliação automática. Um trecho será considerado correto quando o resultado da função $h_{\theta}$ de similaridade entre ele e o trecho anotado como correto estiver dentro de um certo valor.
