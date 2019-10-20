@@ -241,7 +241,7 @@ Conforme citado anteriormente, \cite{yao-2018} anotou o conjunto de dados utiliz
 
 \subsection{Considerações}
 
-Os resultados apresentados pelo modelo bi-LSTM com CNN e CNN parecem bastante promissores, a nosso ver. O próximo passo é comparar os nossos modelos com o modelo proposto por \cite{Sachdev-neural-code-search:2018} que é o estado da arte. 
+Os resultados apresentados pelo modelo bi-LSTM com CNN e CNN parecem bastante promissores, a nosso ver. O próximo passo é comparar os nossos modelos com o modelo proposto por \cite{cambronero-deep-learning-code-search:2019} que é o estado da arte. 
 
 Tanto o bi-LSTM com CNN e CNN tem uma margem a melhorar. Não fizemos ajustes dos hiper-parâmetros e nem uso de regularização durante o treinamento.
 
@@ -270,4 +270,4 @@ Nas figuras \ref{fig:grafico-erro-bi-lstm-cnn}, \ref{fig:grafico-erro-cnn} e \re
 
 Além da margem de melhora no treinamento, uma análise mais detalhada do resultado é necessário. Conforme o exemplo citado na seção anterior, o modelo CNN apresentou uma resposta correta para a pergunta, porém foi penalizada pois não era exatamente o trecho anotado como correto. 
 
-Caso haja mais casos deste tipo, podemos adotar o mesmo procedimento proposto por \cite{Sachdev-neural-code-search:2018} de avaliação automática. Um trecho será considerado correto quando o resultado da função $h_{\theta}$ de similaridade entre ele e o trecho anotado como correto estiver dentro de um certo valor.
+Caso haja mais casos deste tipo, podemos adotar o mesmo procedimento proposto por \cite{cambronero-deep-learning-code-search:2019} de avaliação automática. Um trecho será considerado correto quando o resultado da função $h_{\theta}$ de similaridade entre ele e o trecho anotado estiver dentro de um certo valor.
