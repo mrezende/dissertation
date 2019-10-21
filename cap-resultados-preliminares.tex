@@ -237,7 +237,7 @@ with |\colorbox{green}{open}|("output.csv", "wb") as f:
 
 \subsection{Ameaças à validade}
 
-Conforme citado anteriormente, \cite{yao-2018} anotou o conjunto de dados utilizando um framework proposto em seu artigo. Para anotá-los, ela treinou uma rede neural no conjunto de dados anotado manualmente. Em nosso trabalho, fizemos o caminho oposto. Treinamos os nossos modelos nos dados anotados automaticamente e avaliamos no conjunto anotado manualmente. Para diminuir o viés, adotamos o procedimento proposto por Iyer descrito na seção~\ref{sec:treinamento-avaliacao}.
+Conforme citado anteriormente, \cite{yao-2018} anotou o conjunto de dados utilizando um framework proposto em seu artigo. Para anotá-los, ela treinou uma rede neural no conjunto de dados anotado manualmente. Em nosso trabalho, fizemos o caminho oposto. Treinamos os nossos modelos nos dados anotados automaticamente e avaliamos no conjunto anotado manualmente. Para diminuir o viés, adotamos o procedimento proposto por \cite{iyer-etal-2016-summarizing} descrito na seção~\ref{sec:treinamento-avaliacao}.
 
 \subsection{Considerações}
 
@@ -245,29 +245,29 @@ Os resultados apresentados pelo modelo bi-LSTM com CNN e CNN parecem bastante pr
 
 Tanto o bi-LSTM com CNN e CNN tem uma margem a melhorar. Não fizemos ajustes dos hiper-parâmetros e nem uso de regularização durante o treinamento.
 
-Nas figuras \ref{fig:grafico-erro-bi-lstm-cnn}, \ref{fig:grafico-erro-cnn} e \ref{fig:grafico-embedding} abaixo, podemos ver que tanto bi-LSTM com CNN quanto o CNN apresentam uma diferença grande entre o erro na amostra de validação e o erro na amostra de treinamento. Um indicativo de \textit{overfitting}. Já a arquitetura \textit{Embedding} apresentou um erro de generalização próxima a do treinamento. 
+Nas figuras \ref{fig:grafico-erro-bi-lstm-cnn} e \ref{fig:grafico-erro-cnn} abaixo, podemos ver que tanto bi-LSTM com CNN quanto o CNN apresentaram uma diferença grande entre a curva de erro na amostra de validação e da amostra de treinamento, principalmente a partir da época $5$ (eixo $X$), próximo da interrupção do treinamento. Um indicativo de \textit{overfitting}. Já no caso da arquitetura \textit{Embedding}, figura \ref{fig:grafico-embedding}, as duas curvas de erro estão próximas até a interrupção. 
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/569229_ConvolutionalLSTM_plot.png}
-    \caption{Gráfico do treinamento do modelo bi-LSTM com CNN. Gráfico do erro de generalização (\emph{val\_loss}) e erro na amostra de treinamento (\emph{loss}) por época (\emph{eixo X}). O melhor modelo em relação a métrica MRR foi obtido na época $9$.}
+    \caption{Gráfico do treinamento do modelo bi-LSTM com CNN. Gráfico do erro de validação (\emph{val\_loss}) e erro na amostra de treinamento (\emph{loss}) por época (\emph{eixo X}). O melhor modelo em relação a métrica MRR foi obtido na época $9$.}
     \label{fig:grafico-erro-bi-lstm-cnn}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/569229_ConvolutionModel_plot.png}
-    \caption{Gráfico do treinamento do CNN. Gráfico do erro de generalização (\emph{val\_loss}) e erro na amostra de treinamento (\emph{loss}) por época (\emph{eixo X}). O melhor modelo em relação a métrica MRR foi obtido na época $9$.}
+    \caption{Gráfico do treinamento do CNN. Gráfico do erro de validação (\emph{val\_loss}) e erro na amostra de treinamento (\emph{loss}) por época (\emph{eixo X}). O melhor modelo em relação a métrica MRR foi obtido na época $9$.}
     \label{fig:grafico-erro-cnn}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/569229_EmbeddingModel_plot.png}
-    \caption{Gráfico do treinamento do modelo \textit{Embedding}. Gráfico do erro de generalização (\emph{val\_loss}) e erro na amostra de treinamento (\emph{loss}) por época (\emph{eixo X}). O melhor modelo em relação a métrica MRR foi obtido na época $39$.}
+    \caption{Gráfico do treinamento do modelo \textit{Embedding}. Gráfico do erro de validação (\emph{val\_loss}) e erro na amostra de treinamento (\emph{loss}) por época (\emph{eixo X}). O melhor modelo em relação a métrica MRR foi obtido na época $39$.}
     \label{fig:grafico-embedding}
 \end{figure}
 
 Além da margem de melhora no treinamento, uma análise mais detalhada do resultado é necessário. Conforme o exemplo citado na seção anterior, o modelo CNN apresentou uma resposta correta para a pergunta, porém foi penalizada pois não era exatamente o trecho anotado como correto. 
 
-Caso haja mais casos deste tipo, podemos adotar o mesmo procedimento proposto por \cite{cambronero-deep-learning-code-search:2019} de avaliação automática. Um trecho será considerado correto quando o resultado da função $h_{\theta}$ de similaridade entre ele e o trecho anotado estiver dentro de um certo valor.
+Caso haja mais casos deste tipo, podemos adotar o mesmo procedimento proposto por \cite{cambronero-deep-learning-code-search:2019} de avaliação automática. Um trecho será considerado correto quando o resultado da função $h_{\theta}$ de similaridade entre ele e o trecho anotado estiver dentro de um certo intervalo.
