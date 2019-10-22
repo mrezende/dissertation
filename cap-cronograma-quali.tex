@@ -54,40 +54,47 @@ Treinamento & Regularização & Utilizar técnica de regularização \textit{dro
 Treinamento & Função objetivo & Função de perda \textit{hinge} &  & Concluído  \\
 \hline
 
-Treinamento & Batch & Função de perda \textit{hinge} &  & Concluído  \\
+Treinamento & Critério de parada & Adotamos os mesmos critérios de treinamento proposto por \cite{iyer-etal-2016-summarizing}. O treinamento é feito durantes 80 épocas ou enquanto o erro for maior que um certo valor. No caso, estamos utilizando o valor $0,001$ & & Concluído  \\
 \hline
 
+Análise do desempenho da rede neural & \textit{Overfitting} e extrapolação & Diminuir a diferença entre o erro de validação e o erro de treinamento dos modelos CNN & Análise através das curvas de erro de validação e treinamento vs época e capacidade do modelo & Em andamento \\
+\hline
 
+Análise do desempenho da rede neural & Visualização do pior caso & Analisar as classificações feita pelo modelo através dos piores casos. No nosso caso, os piores casos são os trechos com os menores valores de MRR. Conforme \cite{Goodfellow-et-al-2016:pratical-methodology}, esta análise permite identificar possíveis problemas no conjunto de dados. & Verificação manual & Em andamento \\
+\hline
+
+Análise do desempenho da rede neural & Avaliação manual & Avaliar manualmente uma amostra de questões e trechos de código-fonte classificados pelos modelos & Verificação manual & Em andamento \\
+\hline
+
+Uso do modelo & Busca & Coletar ou propor novas questões ao modelo e avaliar as respostas. Uma outra proposta é verificar o desempenho do modelo na busca por trechos similares em um corpus de busca diferente, e.g., Github & Verificação manual & Não iniciado \\
+\hline
 
  
 %\end{tabular}
-\caption{Relação da quantidade de dados utilizada para treinamento e avaliação dos modelos. A coluna \textbf{\# questões anotadas} refere-se a quantidade de questões anotadas manualmente para avaliação final do modelo.}
+\caption{Relação das atividades realizadas e a serem cumpridas neste trabalho.}
 \label{table:etapas-processo-treinamento}
 \end{longtable}}
 
 
+\section{Cronograma}
 
+De acordo com a tabela~\ref{table:etapas-processo-treinamento}, boa parte das tarefas estão em andamento ou parcialmente concluídas. O processo de treinamento de um modelo é um ciclo, conforme a figura~\ref{fig:neural-network-process-training}.
 
-Coleta dos dados -> pré processamento -> treinamento -> avaliação 
+Vamos definir alguns marcos:
 
+Implementação do modelo proposto por \cite{cambronero-deep-learning-code-search:2019}
 
+Adição de regularização aos modelos
 
-Definir metrica de desempenho
+Avaliação dos piores casos
 
-Default baseline model
+Avaliação manual
 
-Selecionando hiper parâmetros
+Compilação dos resultados
 
-Estratégias de debug
+Submissão de um artigo com os resultados em um congresso internacional
 
-Visualizar a pior predição (worst mistake)
-
-
-teste
-atatata
-
-
-
+Término de escrita da dissertação
 
 
 
