@@ -6,13 +6,13 @@
 
 A proposta deste trabalho é avaliar o uso das redes convolucionais no problema de \textit{code retrieval}. Conforme \cite{Goodfellow-et-al-2016:pratical-methodology}, o primeiro passo é definir um objetivo, um valor alvo para o modelo. No nosso caso, o objetivo é obter um resultado comparável ao modelo proposto por \cite{cambronero-deep-learning-code-search:2019}, que é o estado da arte atualmente.
 
-O processo de treinamento de uma rede neural envolve algumas etapas. Desde o processo de tomada de decisão para uso de deep learning, coleta dos dados, seleção da arquitetura, treinamento e avaliação do modelo. Algumas etapas foram parcialmente concluídas durante o estudo preliminar. A figura~\ref{fig:neural-network-process-training} abaixo ilustra as etapas do processo de treinamento e o andamento através de um mapa de calor.
+O processo de treinamento de uma rede neural envolve algumas etapas. Desde o processo de tomada de decisão para uso de deep learning, coleta dos dados, seleção da arquitetura, treinamento e avaliação do modelo. Algumas etapas foram parcialmente concluídas durante o estudo preliminar. A figura~\ref{fig:neural-network-process-training} abaixo ilustra as etapas do processo de treinamento e o andamento através de um mapa de calor. A tabela~\ref{table:etapas-processo-treinamento} lista as principais atividades em andamento e/ou concluídas.
 
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-cronograma/training_process.pdf}
-    \caption{Etapas do processo de treinamento de uma rede neural. As etapas de \emph{Análise do desempenho da rede neural} e \emph{Seleção dos hiper-parâmetros \& Treinamento} estão no início. Enquanto a \emph{Coleta/Pré-processamento dos dados} e \emph{Definição do tipo de rede neural/arquitetura} estão parcialmente concluídas. Figura adaptada do livro \cite{nndesign:2014:pratical-training-issues}}
+    \caption{Etapas do processo de treinamento de uma rede neural. As etapas de \emph{Análise do desempenho da rede neural} e \emph{Treinamento} estão no início. Enquanto a \emph{Coleta/Pré-processamento dos dados} e \emph{Definição do tipo de rede neural/arquitetura} estão parcialmente concluídas. Figura adaptada do livro \cite{nndesign:2014:pratical-training-issues}}
     \label{fig:neural-network-process-training}
 \end{figure}
 
@@ -71,37 +71,38 @@ Uso do modelo & Busca & Coletar ou propor novas questões ao modelo e avaliar as
 
  
 %\end{tabular}
-\caption{Relação das atividades realizadas e a serem cumpridas neste trabalho.}
+\caption{Relação das principais atividades realizadas e a serem cumpridas neste trabalho.}
 \label{table:etapas-processo-treinamento}
 \end{longtable}}
 
 
 \section{Cronograma}
 
-De acordo com a tabela~\ref{table:etapas-processo-treinamento}, boa parte das tarefas estão em andamento ou parcialmente concluídas. O processo de treinamento de um modelo é um ciclo, conforme a figura~\ref{fig:neural-network-process-training}.
+O processo de treinamento de um modelo é um ciclo, conforme a figura~\ref{fig:neural-network-process-training}. Para facilitar o acompanhamento do progresso do trabalho, preferimos definir alguns marcos a serem alcançados até a entrega. Os marcos que julgamos importantes são:
 
-Vamos definir alguns marcos:
+\begin{enumerate}
+\item Implementação do modelo proposto por \cite{cambronero-deep-learning-code-search:2019}
 
-Implementação do modelo proposto por \cite{cambronero-deep-learning-code-search:2019}
+\item Adição de regularização aos modelos
 
-Adição de regularização aos modelos
+\item Avaliação dos piores casos
 
-Avaliação dos piores casos
+\item Avaliação manual
 
-Avaliação manual
+\item Compilação dos resultados
 
-Compilação dos resultados
+\item Submissão de um artigo com os resultados em um congresso internacional
 
-Submissão de um artigo com os resultados em um congresso internacional
+\end{enumerate}
 
-Término de escrita da dissertação
+O cronograma dos próximos passos pode ser visualizado através da figura~\ref{fig:cronograma-proximos-passos-gantt-chart}.
 
-
-
-
-
-
-
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figuras/cap-cronograma/cronograma_trabalho.pdf}
+    \caption{Cronograma dos próximos passos até a entrega do trabalho}
+    \label{fig:cronograma-proximos-passos-gantt-chart}
+\end{figure}
 
 
 
