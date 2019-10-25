@@ -14,7 +14,7 @@ Uma abordagem para este problema é encontrar um \gls{modelo} que seja capaz de 
 
 Uma técnica comumente utilizada é a \textit{joint embedding} ou agrupamento de representações distribuídas. Esta técnica mapeia dados de diferentes distribuições, modalidades para um mesmo espaço vetorial, de tal forma que conceitos similares ocupem regiões próximas neste espaço. Técnica bastante utilizada para associar textos e imagens, traduções e até mesmo problema de perguntas e respostas e recomendações \citep{lai-etal-2018-review, Zhang:2019:deep-learning-recommender-survey}.
 
-A representação dos dados heterogêneos na técnica joint embedding, tem um papel importante. Uma boa representação deve ser capaz de auxiliar na aprendizagem de uma tarefa
+A representação dos dados heterogêneos na técnica joint embedding tem um papel importante. Uma boa representação deve ser capaz de auxiliar na aprendizagem de uma tarefa
 posterior \citep{Goodfellow-et-al-2016:representation-learning}. No nosso caso, uma boa representação das intenções e dos trechos de código-fonte deve ser capaz de ajudar a encontrar um modelo que seja capaz de correcioná-los. 
 
 Além disso, uma boa representação pode ser útil para dados que seguem uma outra distribuição. Uma representação de trechos de código-fonte que foram coletadas de um site de dúvidas de programação podem ser utilizadas para encontrar trechos de código-fonte similares em repositórios de código aberto.
@@ -31,7 +31,7 @@ Para isto, avaliaremos o uso das redes convolucionais no problema de \textit{cod
 
 O foco deste trabalho é o problema do \textit{code retrieval}. Diferentemente dos trabalhos de \cite{iyer-etal-2016-summarizing} e \cite{Allamanis-bimodal-source-code-natural-language:2015} que abordaram também o problema de sumarização de código-fonte ou \textit{code summarization}. 
 
-Avaliaremos duas arquiteturas: Uma arquitetura bi-\acrshort{lstm} com \acrshort{cnn} proposta por \cite{tan-lstm-qa} e outra somente com camada \acrshort{cnn}. Iremos compará-las com outras outras arquiteturas de referência e com a arquitetura proposta por \cite{cambronero-deep-learning-code-search:2019} que é o estado da arte para este problema.
+Avaliaremos duas arquiteturas: Uma arquitetura bi-\acrshort{lstm} com \acrshort{cnn} proposta por \cite{tan-lstm-qa} e outra somente com camada \acrshort{cnn}. Iremos compará-las com outras outras arquiteturas de referência. A principal arquitetura de referência é a arquitetura proposta por \cite{cambronero-deep-learning-code-search:2019}, que é o estado da arte para este problema.
 
 A base de dados disponibilizada por \cite{yao-2018} contém pares de questões e trechos de código-fonte em Python e SQL. A princípio utilizaremos apenas os pares de perguntas e código-fonte em Python.
 
@@ -53,10 +53,11 @@ Dentre as contribuições deste trabalho estão:
 \item Avaliação de uma nova arquitetura para o problema;
 \item Avaliação do modelo utilizando uma nova base de dados disponibilizada por \cite{yao-2018};
 \item Disponibilização do código-fonte, desde o pré-processamento até a avaliação final, em um repositório público;
+\item Publicação dos resultados através de um artigo científico
 \end{itemize}
 
 %% ------------------------------------------------------------------------- %%
 \section{Organização do Trabalho}
 \label{sec:organizacao_trabalho}
 
-No Capítulo~\ref{cap:trabalhos-relacionados}, apresentamos os conceitos e trabalhos relacionados ao problema de \textit{code retrieval}. No Capítulo~\ref{cap:abordagem}, apresentamos a abordagem proposta para o problema de pesquisa proposto. No Capítulo~\ref{cap:resultados-preliminares}, exibimos os resultados preliminares da arquitetura proposta utilizando os dados de \cite{yao-2018}. E também discutimos as principais dificuldades encontradas para adaptar a arquitetura de \cite{tan-lstm-qa} para resolver o problema de \textit{code retrieval}. Já no capítulo~\ref{cap:cronograma}, temos as considerações finais, a proposta do cronograma e os próximos passos da pesquisa.
+No Capítulo~\ref{cap:trabalhos-relacionados}, apresentamos os conceitos e trabalhos relacionados ao problema de \textit{code retrieval}. No Capítulo~\ref{cap:abordagem}, apresentamos a nossa abordagem para o problema de pesquisa proposto. No Capítulo~\ref{cap:resultados-preliminares}, exibimos os resultados preliminares da arquitetura proposta utilizando os dados de \cite{yao-2018}. Já no capítulo~\ref{cap:cronograma} temos os próximos passos e o cronograma até a entrega do trabalho.
