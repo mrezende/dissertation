@@ -24,17 +24,17 @@ De acordo com \cite{Goodfellow-et-al-2016:representation-learning}, as redes neu
 
 Neste trabalho, cada palavra será representada através de um vetor de representação distribuída. Para mapear as palavras para vetores de representação distribuída, utilizaremos inicialmente o algoritmo não-supervisionado \textit{word2vec}. Utilizaremos o \textit{word2vec} com \textit{skip-gram}. O \textit{skip-gram} prediz as palavras do contexto a partir de uma palavra alvo. Diferente do CBoW que prediz a palavra alvo a partir das palavras do contexto. A complexidade do algoritmo \textit{skip-gram} é O(n), enquanto CBoW é exponencial \todo{encontrar referencia complexity function}. 
 
-O \textit{word2vec} irá mapear cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{V}_{q}$ o conjunto de palavras das questões, e $\mathbb{V}_{c}$ o conjunto de palavras presentes nos trechos de código-fonte. Para cada palavra $v_{q} \in \mathbb{V}_{q}$ e $v_{c} \in \mathbb{V}_c$, teremos:
+O \textit{word2vec} irá mapear cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{Q}$ o conjunto de palavras das questões, e $\mathbb{C}$ o conjunto de palavras presentes nos trechos de código-fonte. Para cada palavra ${q} \in \mathbb{Q}$ e ${c} \in \mathbb{C}$, teremos:
 
 \begin{equation}
-    f: v_{q} \rightarrow t_{q}, t_{q} \in \mathbb{R}^{d}
+    f: {q} \rightarrow t_{q}, t_{q} \in \mathbb{R}^{d}
 \end{equation}
 
 \begin{equation}
-    f: v_{c} \rightarrow t_{c}, t_{c} \in \mathbb{R}^{d}
+    g: {c} \rightarrow t_{c}, t_{c} \in \mathbb{R}^{d}
 \end{equation}
-Onde $f$ é o \textit{word2vec} com o algoritmo \textit{skip-gram}. $f$ irá mapear cada palavra pertencente a um vocabulário a uma matriz $\bm{T}$.
-No nosso caso, teremos duas matrizes: $\bm{T}_{q}^{|\mathbb{V}_{q}| X d}$ e outra $\bm{T}_{c}^{|\mathbb{V}_{c}| X d}$, onde $|\mathbb{V}_{q}|$ e $|\mathbb{V}_{c}|$ são o tamanho do vocabulário das questões e trechos de código-fonte, respectivamente. E $d$ é a dimensão do vetor de representação distribuída.
+Onde $f$ e $g$ são o \textit{word2vec} com o algoritmo \textit{skip-gram}. $f$ e $g$ irão mapear cada palavra pertencente a um vocabulário a uma matriz distinta $\bm{T_{q}}$ e $\bm{T_{c}}$.
+Teremos duas matrizes: $\bm{T}_{q}^{|\mathbb{Q}| X d}$ e outra $\bm{T}_{c}^{|\mathbb{C}| X d}$, onde $|\mathbb{Q}|$ e $|\mathbb{C}|$ são o tamanho do vocabulário das questões e trechos de código-fonte, respectivamente. E $d$ é a dimensão do vetor de representação distribuída.
 
 \section{Representação da sentença e do trecho de código-fonte}
 
