@@ -3,7 +3,7 @@
 \label{cap:abordagem}
 
 
-Conforme citado no capítulo~\ref{cap:trabalhos-relacionados}, uma técnica muito utilizada para o problema de \textit{code retrieval} é o \textit{joint embedding}. Para utilizar esta técnica de \textit{joint embedding}, três fatores devem ser levados em consideração:
+Conforme citado no capítulo~\ref{cap:trabalhos-relacionados}, uma técnica muito utilizada para o problema de \textit{code retrieval} é o \textit{joint embedding}. Para utilizar esta técnica, três fatores devem ser levados em consideração:
 
 \begin{itemize}
     \item Representação de cada palavra de uma sentença ou trecho de código-fonte
@@ -22,7 +22,9 @@ No nosso caso, tanto as questões e os trechos de código-fonte serão represent
 
 De acordo com \cite{Goodfellow-et-al-2016:representation-learning}, as redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída. E conforme o próprio \cite{Goodfellow-et-al-2016:representation-learning}, uma boa representação deve auxiliar na aprendizagem de uma tarefa posterior. No nosso caso, as representações devem auxiliar a tarefa de aprender a encontrar uma correlação entre as questões e os trechos de código-fonte mais relevantes.
 
-Neste trabalho, cada palavra será representada através de um vetor de representação distribuída. Para mapear as palavras para vetores de representação distribuída, utilizaremos inicialmente o algoritmo não-supervisionado \textit{word2vec}. Utilizaremos o \textit{word2vec} com \textit{skip-gram}. O \textit{skip-gram} prediz as palavras do contexto a partir de uma palavra alvo. Diferente do CBoW que prediz a palavra alvo a partir das palavras do contexto. A complexidade do algoritmo \textit{skip-gram} é O(n), enquanto CBoW é exponencial \todo{encontrar referencia complexity function}. 
+Neste trabalho, cada palavra será representada através de um vetor de representação distribuída. Para mapear as palavras para vetores de representação distribuída, utilizaremos inicialmente o algoritmo não-supervisionado \textit{word2vec}. Utilizaremos o \textit{word2vec} com \textit{skip-gram}. O \textit{skip-gram} prediz as palavras do contexto a partir de uma palavra alvo. Diferente do CBoW que prediz a palavra alvo a partir das palavras do contexto. 
+
+Segundo \cite{mikolov2013distributed}, \textit{skip-gram} obteve um desempenho melhor em problemas semânticos, e.g., relacionar uma palavra masculina com a equivalente feminina, relacionar o nome de uma capital a um país ou cidade a um estado. No caso do código-fonte, isto é uma característica importante, pois pode ajudar a agrupar os \textit{tokens} de acordo com o tipo. Por exemplo, agrupar a instrução de decisão \textit{while} próxima da instrução \textit{for}. E relacionar a instrução de decisão \textit{if} próxima da \textit{else}.
 
 O \textit{word2vec} irá mapear cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{Q}$ o conjunto de palavras das questões, e $\mathbb{C}$ o conjunto de palavras presentes nos trechos de código-fonte. Para cada palavra ${q} \in \mathbb{Q}$ e ${c} \in \mathbb{C}$, teremos:
 
@@ -38,7 +40,7 @@ Teremos duas matrizes: $\bm{T}_{q}^{|\mathbb{Q}| X d}$ e outra $\bm{T}_{c}^{|\ma
 
 \section{Representação da sentença e do trecho de código-fonte}
 
-Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-los para obter uma representação para a questão e o trecho de código-fonte. A partir de agora, cada questão ou trecho de código-fonte será representada por um vetor $\bm{x}$, onde $x = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, tal que $\bm{x}(w) \in \mathbb{R}^{d}$ e $w$ é uma palavra presente no vocabulário da questão ou trecho de código-fonte \citep{cambronero-deep-learning-code-search:2019}. 
+Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-las para obter uma representação para a questão e o trecho de código-fonte. A partir de agora, cada questão ou trecho de código-fonte será representada por um vetor $\bm{x}$, onde $x = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, tal que $\bm{x}(w) \in \mathbb{R}^{d}$ e $w$ é uma palavra presente no vocabulário da questão ou trecho de código-fonte \citep{cambronero-deep-learning-code-search:2019}. 
 
 Lembrando que neste trabalho, temos duas matrizes de representação distribuída, $\bm{T}_{q}$ e $\bm{T}_{c}$. Para fins de simplificação, quando utilizarmos $\bm{x}$, $\bm{x}$ pode ser $\bm{x} = \{ t_{q}(1), t_{q}(2), . . ., t_{q}(n)\}$, $t_{q}(i) \in \bm{T}_{q}, 1 \leq i \leq n$ ou pode ser $\bm{x} = \{ t_{c}(1), t_{c}(2), . . ., t_{c}(n)\}$, $t_{c}(i) \in \bm{T}_{c}, 1 \leq i \leq n$.
 
@@ -88,7 +90,9 @@ onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro.
 
 Como as redes CNNs típicas, uma camada \textit{max-k pooling} é aplicada posteriormente a camada convolucional. Intuitivamente, queremos enfatizar os $k$ maiores valores para cada filtro convolucional. Através do \textit{k-max pooling}, os $k$ valores máximos serão mantidos para um filtro, o que indica um alto valor de que o filtro coincidiu com a entrada. \todo{rever esta frase}
 
-A camada convolucional irá gerar vetores de resultado de dimensão $N$, utilizando $N$ filtros paralelos, com diferentes parâmetros de inicialização. Ao final, teremos dois vetores de resultado de dimensão $kN$ para as questões e os trechos de código-fonte respectivamente. Neste trabalho, utilizaremos inicialmente o valor k = 1, seguindo a recomendação de \cite{tan-lstm-qa}. De acordo com \cite{tan-lstm-qa}, a intuição da combinação dos vetores \textit{hidden} do bi-LSTM através do CNN é, ao invés de considerar a informação léxica de cada \textit{token}, o CNN enfatiza certas partes do trecho de código-fonte, de forma que o bi-LSTM com CNN seja mais efetivo na diferenciação das respostas observadas como corretas das incorretas.
+A camada convolucional irá gerar vetores de resultado de dimensão $N$, utilizando $N$ filtros paralelos, com diferentes parâmetros de inicialização. Ao final, teremos dois vetores de resultado de dimensão $kN$ para as questões e os trechos de código-fonte respectivamente. 
+
+Neste trabalho, utilizaremos inicialmente o valor k = 1, seguindo a recomendação de \cite{tan-lstm-qa}. De acordo com \cite{tan-lstm-qa}, a intuição da combinação dos vetores \textit{hidden} do bi-LSTM através do CNN é, ao invés de considerar a informação léxica de cada \textit{token}, o CNN enfatiza certas partes do trecho de código-fonte, de forma que o bi-LSTM com CNN seja mais efetivo na diferenciação das respostas observadas como corretas das incorretas.
 
 
 \subsection{Representação através do CNN}

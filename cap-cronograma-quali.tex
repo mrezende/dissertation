@@ -45,7 +45,7 @@ Definição do tipo de rede neural/arquitetura & Definição do objetivo: Result
 Definição do tipo de rede neural/arquitetura & Seleção dos hiper-parâmetros do modelo & Esta tarefa será feita em conjunto com o treinamento. Conforme o desempenho do modelo, ajustes nos hiper-parâmetros devem ser feitos para aumentar ou diminuir a capacidade do modelo & Análise da curva de erro de validação e treinamento vs capacidade do modelo & Em andamento  \\
 \hline
 
-Seleção do algoritmo de treinamento & Algoritmo de otimização para o modelo & Inicialmente estamos o algoritmo de otimização Adam para o modelo. Uma alternativa é verificar o desempenho para outros algoritmos como SGD e RMSprop & Análise da curva de erro de validação e treinamento vs época & Parcialmente Concluído  \\
+Seleção do algoritmo de treinamento & Algoritmo de otimização para o modelo & Inicialmente, utilizamos o algoritmo de otimização Adam para o modelo. Uma alternativa é verificar o desempenho para outros algoritmos como SGD e RMSprop & Análise da curva de erro de validação e treinamento vs época & Parcialmente Concluído  \\
 \hline
 
 Treinamento & Regularização & Utilizar técnica de regularização \textit{dropout} ou \textit{batch normalization} & Análise da curva de erro de validação e treinamento vs época & Não iniciado  \\
@@ -57,7 +57,7 @@ Treinamento & Função objetivo & Função de perda \textit{hinge} &  & Concluí
 Treinamento & Critério de parada & Adotamos os mesmos critérios de treinamento proposto por \cite{iyer-etal-2016-summarizing}. O treinamento é feito durantes 80 épocas ou enquanto o erro for maior que um certo valor. No caso, estamos utilizando o valor $0,001$ & & Concluído  \\
 \hline
 
-Análise do desempenho da rede neural & \textit{Overfitting} e extrapolação & Diminuir a diferença entre o erro de validação e o erro de treinamento dos modelos CNN & Análise através das curvas de erro de validação e treinamento vs época e capacidade do modelo & Em andamento \\
+Análise do desempenho da rede neural & \textit{Overfitting} e extrapolação & Diminuir a diferença entre o erro de validação e o erro de treinamento dos modelos CNN. Inicialmente, utilizaremos técnicas de regularização e algortimos de otimização.  & Análise através das curvas de erro de validação e treinamento vs época e capacidade do modelo & Em andamento \\
 \hline
 
 Análise do desempenho da rede neural & Visualização do pior caso & Analisar as classificações feita pelo modelo através dos piores casos. No nosso caso, os piores casos são os trechos com os menores valores de MRR. Conforme \cite{Goodfellow-et-al-2016:pratical-methodology}, esta análise permite identificar possíveis problemas no conjunto de dados. & Verificação manual & Em andamento \\
@@ -66,7 +66,7 @@ Análise do desempenho da rede neural & Visualização do pior caso & Analisar a
 Análise do desempenho da rede neural & Avaliação manual & Avaliar manualmente uma amostra de questões e trechos de código-fonte classificados pelos modelos & Verificação manual & Em andamento \\
 \hline
 
-Uso do modelo & Busca & Coletar ou propor novas questões ao modelo e avaliar as respostas. Uma outra proposta é verificar o desempenho do modelo na busca por trechos similares em um corpus de busca diferente, e.g., Github & Verificação manual & Não iniciado \\
+Uso do modelo & Busca & Coletar ou propor novas questões ao modelo e avaliar as respostas. Verificar também o desempenho do modelo na busca por trechos similares em um corpus de busca diferente, e.g., Github & Verificação manual & Não iniciado \\
 \hline
 
  
