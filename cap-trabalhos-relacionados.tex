@@ -128,7 +128,7 @@ No caso do LSTM, por exemplo, dado uma sequência de vetores de representação 
 
 A arquitetura do LSTM tem três portas (porta de entrada $i$, porta \textit{forget} $f$ e porta \textit{output} $o$), um vetor de célula de memória $C$, $\sigma$ é a função sigmóide. A porta de entrada determina como os vetores $x_{t}$ alteram o estado da célula de memória. A porta \textit{output} permite a célula de memória influenciar os resultados finais. Por fim, a porta \textit{forget} é um mecanismo que permite a célula de memória esquecer ou lembrar os estados anteriores. $\bm{W} \in \mathbb{R}^{H X d}$, $\bm{U} \in \mathbb{R}^{H X H}$ e $\bm{b} \in \mathbb{R}^{H X 1}$ são as matrizes de pesos a serem aprendidos \citep{tan-lstm-qa}.
 
-O vetor \textit{hidden} $\bm{h}$ é a parte mais importante do \acrshort{lstm}. Ele engloba através da célula de mémoria $C$ os resultados e cálculos prévios. Normalmente, ele é utilizado para representar os dados \citep{tom-young:trends-deep-learning-nlp}.
+O vetor \textit{hidden} $\bm{h}$ é apontado comumemente como a parte mais importante do \acrshort{lstm}. Pois ele engloba através da célula de mémoria $C$ os resultados e cálculos prévios. Normalmente, ele é utilizado para representar os dados \citep{tom-young:trends-deep-learning-nlp}.
 No nosso caso, para representar uma questão ou trecho de código-fonte, podemos calcular a média dos vetores de resultado $\bm{h} = \{ \bm{h}_{1}, \bm{h}_{2}, . . ., \bm{h}_t \}$ após $t$ iterações, por exemplo.
 
 \subsection{Agrupamento de representações distribuídas}
