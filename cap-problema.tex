@@ -88,12 +88,7 @@ $\bm{H}_{m}(t) = [\bm{h}(t), \bm{h}(t + 1), · · · , \bm{h}(t + m − 1)]$, on
 
 onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro.
 
-Como as redes CNNs típicas, uma camada \textit{max-k pooling} é aplicada posteriormente a camada convolucional. Intuitivamente, queremos enfatizar os $k$ maiores valores para cada filtro convolucional. Através do \textit{k-max pooling}, os $k$ valores máximos serão mantidos para um filtro, o que indica um alto valor de que o filtro coincidiu com a entrada. \todo{rever esta frase}
-
-A camada convolucional irá gerar vetores de resultado de dimensão $N$, utilizando $N$ filtros paralelos, com diferentes parâmetros de inicialização. Ao final, teremos dois vetores de resultado de dimensão $kN$ para as questões e os trechos de código-fonte respectivamente. 
-
-Neste trabalho, utilizaremos inicialmente o valor k = 1, seguindo a recomendação de \cite{tan-lstm-qa}. De acordo com \cite{tan-lstm-qa}, a intuição da combinação dos vetores \textit{hidden} do bi-LSTM através do CNN é, ao invés de considerar a informação léxica de cada \textit{token}, o CNN enfatiza certas partes do trecho de código-fonte, de forma que o bi-LSTM com CNN seja mais efetivo na diferenciação das respostas observadas como corretas das incorretas.
-
+Normalmente, utiliza-se uma camada \textit{maxpool} após a camada convolucional. A camada \textit{maxpool} reduz a dimensionalidade da camada de saída, sendo um fator importante para problemas de classificação, por exemplo. Independente do tamanho da entrada e do filtro, a dimensão da camada de saída vai ser mantida. Além disso, a camada \textit{maxpool} auxilia na obtenção de pequenos trechos \textit{invariantes}. Isto permite extrair características relevantes (e.g. palavras referindo-se a leitura de arquivo: \emph{file} e \emph{open}) de uma sentença independente da sua localização e adiciona-las na representação final \citep{tom-young:trends-deep-learning-nlp}.
 
 \subsection{Representação através do CNN}
 \label{sec:representation-cnn}
@@ -112,6 +107,10 @@ Onde $\bm{W}$ é a matriz de pesos e $\bm{b}$ é o vetor de \textit{bias}.
 
 Neste caso, $z$ servirá de entrada a rede CNN. Mais detalhes sobre os cálculos, ver a subseção anterior CNN~\ref{sec:cnn}.
 
+\subsection{Considerações}
+
+A arquitetura CNN apresentou um bom desempenho em diversos problemas NLP. CNN tem a característica de local conectivity, weight sharing e pooling. Isto ajuda a obter um modelo robusto e invariante. 
+
 \section{Função objetivo}
 
 Tanto o bi-LSTM com CNN e o CNN geram representações para as questões e os trechos de código-fonte. O intuito é encontrar um modelo que correlacione as questões as respostas em um mesmo espaço vetorial. Neste trabalho adotaremos a mesma abordagem utilizada por \cite{feng-2015}, o método \textit{pairwise}. O método \textit{pairwise} consiste em treinar o modelo para classificar as respostas corretas com uma pontuação maior do que as incorretas. Formalmente, o modelo será treinado do seguinte modo:
@@ -125,4 +124,3 @@ J = max(0, m - h_{\theta}(q, c^{+}) + h_{\theta}(q, c^{-}))
 \end{equation}
 
 Onde $m$ é uma margem e $h_{\theta}$ é uma função de similaridade, e.g., \textit{cosine}. O objetivo é minimizar a função $J$. Para isto, o modelo vai ser incentivado a satisfazer a seguinte condição: $h_{\theta}(q, c^{+}) - h_{\theta}(q, c^{-}) \geq m$. Quer dizer, a função \textit{hinge} induz o modelo a classificar as respostas corretas com uma pontuação maior do que as incorretas por uma certa margem $m$.
-
