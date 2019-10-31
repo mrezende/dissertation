@@ -88,7 +88,7 @@ $\bm{H}_{m}(t) = [\bm{h}(t), \bm{h}(t + 1), · · · , \bm{h}(t + m − 1)]$, on
 
 onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro.
 
-Normalmente, utiliza-se uma camada \textit{maxpool} após a camada convolucional. A camada \textit{maxpool} reduz a dimensionalidade da camada de saída, sendo um fator importante para problemas de classificação, por exemplo. Independente do tamanho da entrada e do filtro, a dimensão da camada de saída vai ser mantida. Além disso, a camada \textit{maxpool} auxilia na obtenção de pequenos trechos \textit{invariantes}. Isto permite extrair características relevantes (e.g. palavras referindo-se a leitura de arquivo: \emph{file} e \emph{open}) de uma sentença independente da sua localização e adiciona-las na representação final \citep{tom-young:trends-deep-learning-nlp}.
+Normalmente, utiliza-se uma camada \textit{maxpool} após a camada convolucional. A camada \textit{maxpool} reduz a dimensionalidade da camada de saída, sendo um fator importante para problemas de classificação, por exemplo. Independente do tamanho da entrada e do filtro, a dimensão da camada de saída vai ser mantida. Além disso, a camada \textit{maxpool} é invariante a pequenas translações. Isto permite extrair características relevantes (e.g. palavras referindo-se a leitura de arquivo: \emph{file} e \emph{open}) de uma sentença independente da sua localização e adiciona-las na representação final \citep{tom-young:trends-deep-learning-nlp}.
 
 \subsection{Representação através do CNN}
 \label{sec:representation-cnn}
@@ -110,6 +110,18 @@ Neste caso, $z$ servirá de entrada a rede CNN. Mais detalhes sobre os cálculos
 \subsection{Considerações}
 
 A arquitetura CNN apresentou um bom desempenho em diversos problemas NLP. CNN tem a característica de local conectivity, weight sharing e pooling. Isto ajuda a obter um modelo robusto e invariante. 
+
+As redes convolucionais partem da hipótese de que a função que a camada deve aprender contém apenas interações locais e são invariantes a pequenas translações.
+
+CNN tem dependência local, curta.
+
+Já RNN tem dependência longa.
+
+Mas ambas são sensíveis a permutação.
+
+CNN vai aprender a extrair transformações locais do RNN.
+
+
 
 \section{Função objetivo}
 
