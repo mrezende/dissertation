@@ -107,21 +107,6 @@ Onde $\bm{W}$ é a matriz de pesos e $\bm{b}$ é o vetor de \textit{bias}.
 
 Neste caso, $z$ servirá de entrada a rede CNN. Mais detalhes sobre os cálculos, ver a subseção anterior CNN~\ref{sec:cnn}.
 
-\subsection{Considerações}
-
-A arquitetura CNN apresentou um bom desempenho em diversos problemas NLP. CNN tem a característica de local conectivity, weight sharing e pooling. Isto ajuda a obter um modelo robusto e invariante. 
-
-As redes convolucionais partem da hipótese de que a função que a camada deve aprender contém apenas interações locais e são invariantes a pequenas translações.
-
-CNN tem dependência local, curta.
-
-Já RNN tem dependência longa.
-
-Mas ambas são sensíveis a permutação.
-
-CNN vai aprender a extrair transformações locais do RNN.
-
-
 
 \section{Função objetivo}
 
@@ -136,3 +121,31 @@ J = max(0, m - h_{\theta}(q, c^{+}) + h_{\theta}(q, c^{-}))
 \end{equation}
 
 Onde $m$ é uma margem e $h_{\theta}$ é uma função de similaridade, e.g., \textit{cosine}. O objetivo é minimizar a função $J$. Para isto, o modelo vai ser incentivado a satisfazer a seguinte condição: $h_{\theta}(q, c^{+}) - h_{\theta}(q, c^{-}) \geq m$. Quer dizer, a função \textit{hinge} induz o modelo a classificar as respostas corretas com uma pontuação maior do que as incorretas por uma certa margem $m$.
+
+
+\section{Considerações}
+
+As redes convolucionais partem da hipótese de que a função que a camada deve aprender contém apenas interações locais e são invariantes a pequenas translações. Esta invariância é também uma característica da camada \textit{maxpool}. Para problemas NLP, o CNN vai tentar extrair as características mais importantes de uma sentença. No caso do trecho de código-fonte, a interação local pode auxiliar na obtenção de uma representação contextualizada. No exemplo a seguir, a interação local entre as palavras \emph{csv} e \emph{writer} poderiam auxiliar o CNN a inferir o contexto do trecho de código abaixo. Que no caso refere-se a escrita de um vetor em um arquivo CSV.
+
+\begin{mypython-linenumber}{CNN}
+import csv
+
+with |\colorbox{green}{open}|("output.csv", "wb") as f:
+    writer = |\colorbox{green}{csv}|.|\colorbox{green}{writer}|(f)
+    writer.|\colorbox{green}{writerows}|(a)
+\end{mypython-linenumber}
+
+De acordo com \cite{tom-young:trends-deep-learning-nlp}, normalmente o CNN não consegue inferir o contexto em sentenças curtas. Isto é um problema em nosso conforme a tabela XXX, pois a média de palavras para questões é ZZZ e trechos de codigo eh YYY. Uma forma de mitigar este problema é o uso de um vetor de representação distribuída. No nosso caso, os vetores de entrada serão compostos por vetores de representação distribuída obtidos através do algoritmo não-supervisionado \textit{word2vec}.
+
+
+
+
+CNN tem dependência local, curta.
+
+Já RNN tem dependência longa.
+
+Mas ambas são sensíveis a permutação.
+
+CNN vai aprender a extrair transformações locais do RNN.
+
+

@@ -148,6 +148,17 @@ enlarge top by=1cm,%     equivalent to mdframed 'skipabove'
 enlarge bottom by=1cm,%  equivalent to mdframed 'skipbelow'
   }
   
+\newtcblisting{mypython-linenumber}[1]{%
+listing engine=minted,
+minted style=colorful,
+minted language=python,
+minted options= {xleftmargin=10pt, escapeinside=||, linenos},
+listing only,
+title={#1}, fonttitle=\bfseries,
+enlarge top by=1cm,%     equivalent to mdframed 'skipabove'
+enlarge bottom by=1cm,%  equivalent to mdframed 'skipbelow'
+  }
+  
 \newtcblisting{mypythonembedding}[1]{%
 listing engine=minted,
 colback=green!5!white,colframe=green!75!black,
