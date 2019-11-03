@@ -109,6 +109,7 @@ Neste caso, $z$ servirá de entrada a rede CNN. Mais detalhes sobre os cálculos
 
 
 \section{Função objetivo}
+\label{sec:funcao-objetivo}
 
 Tanto o bi-LSTM com CNN e o CNN geram representações para as questões e os trechos de código-fonte. O intuito é encontrar um modelo que correlacione as questões as respostas em um mesmo espaço vetorial. Neste trabalho adotaremos a mesma abordagem utilizada por \cite{feng-2015}, o método \textit{pairwise}. O método \textit{pairwise} consiste em treinar o modelo para classificar as respostas corretas com uma pontuação maior do que as incorretas. Formalmente, o modelo será treinado do seguinte modo:
 
@@ -139,18 +140,24 @@ with |\colorbox{green}{open}|("output.csv", "wb") as f:
 
 De acordo com \cite{tom-young:trends-deep-learning-nlp}, normalmente o CNN não consegue inferir o contexto em sentenças curtas. Para o nosso conjunto de dados, isto é um problema, pois as questões são compostas em média por 9 palavras e no máximo 32. Já os trechos de código tem em média 50 palavras e no máximo 300. Uma forma de mitigar este problema é através do uso de um vetor de representação distribuída. No nosso caso, os vetores de entrada serão compostos por vetores de representação distribuída obtidos através do algoritmo não-supervisionado \textit{word2vec}.
 
-Além disso, segundo \cite{Goodfellow-et-al-2016:convolutional-networks}, CNN não consegue fazer associações entre palavras muito distantes em uma sentença. No exemplo anterior, o CNN teria dificuldade para associar a declaração da biblioteca \emph{csv} na linha 1 com a função \emph{writerows} na linha 5. A nossa hipótese é que uma associação muito distante entre as palavras de uma sentença não seja crucial para a recuperação de trecho de código-fonte no nosso conjunto de dados. O nosso conjunto de dados é formado por questões do tipo \textit{how-to-do-it} coletadas a partir do site \gls{sof}. Este tipo de questão normalmente contém respostas curtas e diretas. Uma dependência distante entre as palavras seria apropriado, provavelmente, para questões e trechos de código que envolvam regras de negócio, por exemplo.
+Além disso, segundo \cite{Goodfellow-et-al-2016:convolutional-networks}, CNN não consegue fazer associações entre palavras muito distantes em uma sentença. No exemplo anterior, o CNN teria dificuldade para associar a declaração da biblioteca \emph{csv} na linha 1 com a função \emph{writerows} na linha 5. A nossa hipótese é que uma associação muito distante entre as palavras de uma sentença não seja tão importante para a recuperação de trecho de código-fonte no nosso conjunto de dados. O nosso conjunto de dados é formado por questões do tipo \textit{how-to-do-it} coletadas a partir do site \gls{sof}. Este tipo de questão normalmente contém respostas curtas e diretas  \citep{yao-2018}. Uma dependência distante entre as palavras seria apropriado, provavelmente, para questões e trechos de código que envolvam regras de negócio, por exemplo.
 
 
 Ao optar por uma arquitetura, temos que levar em consideração as suas características inerentes e suas limitações. No caso do CNN, ele prioriza as interações locais ao invés de associações de palavras muito distantes. A nossa hipótese inicial é que esta característica seja mais importante para a recuperação de trecho de código-fonte no conjunto de dados que estamos utilizando. Dado estas características, reiteramos a nossa pergunta de pesquisa que pretendemos responder ao longo deste trabalho:
 
 \begin{itemize}
-    \item Ao utilizar a arquitetura CNN durante a aprendizagem de representação para recuperação de trecho de código-fonte, ele é capaz de auxiliar na extração das características latentes e mais importantes para inferir o contexto do trecho de código?
-    \begin{itemize}
-        \item Dado que o CNN prioriza interações locais, 
-    \end{itemize}
+    \item Ao utilizar a arquitetura CNN durante a aprendizagem de representação para recuperação de trecho de código-fonte, será que ele é capaz de extrair as características latentes e mais importantes para aproximar o trecho de código observado como correto a questão?
 \end{itemize}
 
-O que entedemos por características latentes e importantes são palavras ou variáveis latentes que permitam inferir o contexto de um trecho de código. No exemplo a seguir, as palavras \emph{enumerate}, \emph{dict} e \emph{sort} permitem deduzir o contexto do trecho de código. No caso, refere-se a ordenação de um dicionário por palavra-chave. Nem sempre estas características estão explicitas e observáveis diretamente nos dados. Nestes casos, as redes deep learning capturam estas características através de variáveis latentes ou \textit{hidden}, $\bm{h}$. Através da variável \textit{hidden} $\bm{h}$, ela consegue identificar uma dependência indireta entre duas variáveis quaisquer $v_{i}$ e $v_{j}$ através da dependência direta entre $v_{i}$ e $\bm{h}$ e $\bm{h}$ e $v_{j}$.
+Indiretamente, dado que o CNN prioriza interações locais, estaremos respondendo as seguintes perguntas:
+\begin{itemize}
+    
+        \item As interações locais auxiliam na aproximação das questões aos trechos de código-fonte?
+        \item A partir das interações locais, é possível inferir o contexto do trecho de código?
+\end{itemize}
 
-E para inferir o contexto, não iremo
+
+
+O que entedemos por características latentes e importantes são palavras ou variáveis latentes que permitam inferir o contexto de um trecho de código. No exemplo anterior, as palavras \emph{csv}, \emph{writer} e \emph{writerows} permitem deduzir o contexto do trecho de código. Que no caso, refere-se a escrita dos valores de cada elemento de um vetor em um arquivo CSV. Nem sempre estas características são observáveis diretamente nos dados. Nestes casos, as redes deep learning capturam estas características através de variáveis latentes ou \textit{hidden}, $\bm{h}$. Através da variável \textit{hidden} $\bm{h}$, ela consegue identificar uma dependência indireta entre duas variáveis quaisquer $v_{i}$ e $v_{j}$ através da dependência direta entre $v_{i}$ e $\bm{h}$ e $\bm{h}$ e $v_{j}$ \citep{Goodfellow-et-al-2016:structured-probabilistic-models-for-deep-learning}.
+
+Para avaliar se o modelo está inferindo o contexto do trecho de código corretamente, verificaremos se o modelo está aproximando as questões aos trechos de código que são respostas. Conforme descrito na seção~\ref{sec:funcao-objetivo}, o modelo será induzido a fazer esta aproximação durante o treinamento através da função \textit{hinge}. Mas para saber se o modelo aprendeu, avaliaremos esta aproximação em outro conjunto de dados. No nosso caso, avaliaremos em um conjunto de dados anotados manualmente. O desempenho do modelo será medido através da métrica \acrshort{mrr} descrita no capítulo~\ref{cap:resultados-preliminares}. Um valor alto do MRR indica que o modelo está aproximando corretamente as questões aos trechos de código-fonte anotados como respostas. Para nós, isto é um indicativo de que o modelo está inferindo o contexto do trecho de código corretamente.
