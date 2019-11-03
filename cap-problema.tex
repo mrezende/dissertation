@@ -125,7 +125,7 @@ Onde $m$ é uma margem e $h_{\theta}$ é uma função de similaridade, e.g., \te
 
 \section{Considerações}
 
-As redes convolucionais partem da hipótese de que a função que a camada deve aprender contém apenas interações locais e são invariantes a pequenas translações. Esta invariância é também uma característica da camada \textit{maxpool}. Para problemas NLP, o CNN vai tentar extrair as características mais importantes de uma sentença. No caso do trecho de código-fonte, a interação local pode auxiliar na obtenção de uma representação contextualizada. No exemplo a seguir, a interação local entre as palavras \emph{csv} e \emph{writer} poderiam auxiliar o CNN a inferir o contexto do trecho de código abaixo. Que no caso refere-se a escrita de um vetor em um arquivo CSV.
+As redes convolucionais partem da hipótese de que a função que a camada deve aprender contém apenas interações locais e são invariantes a pequenas translações. Esta invariância é também uma característica da camada \textit{maxpool}. Para problemas NLP, o CNN tenta extrair as características mais importantes de uma sentença. No caso do trecho de código-fonte, a identificação da interação local entre as palavras pode auxiliar na obtenção de uma representação contextualizada. Para inferir o contexto do trecho de código a seguir, o CNN deveria ser capaz de identificar a interação entre as palavras \emph{csv} e \emph{writer} na linha 4, por exemplo. 
 
 \begin{mypython-linenumber}{CNN}
 import csv
@@ -134,18 +134,14 @@ with |\colorbox{green}{open}|("output.csv", "wb") as f:
     writer = |\colorbox{green}{csv}|.|\colorbox{green}{writer}|(f)
     writer.|\colorbox{green}{writerows}|(a)
 \end{mypython-linenumber}
-
-De acordo com \cite{tom-young:trends-deep-learning-nlp}, normalmente o CNN não consegue inferir o contexto em sentenças curtas. Isto é um problema em nosso conforme a tabela XXX, pois a média de palavras para questões é ZZZ e trechos de codigo eh YYY. Uma forma de mitigar este problema é o uso de um vetor de representação distribuída. No nosso caso, os vetores de entrada serão compostos por vetores de representação distribuída obtidos através do algoritmo não-supervisionado \textit{word2vec}.
-
+\todo{colocar um caption explicando o contexto do código}
 
 
+De acordo com \cite{tom-young:trends-deep-learning-nlp}, normalmente o CNN não consegue inferir o contexto em sentenças curtas. Para o nosso conjunto de dados, isto é um problema, pois as questões são compostas em média por 9 palavras e no máximo 32. Já os trechos de código tem em média 50 palavras e no máximo 300. Uma forma de mitigar este problema é através do uso de um vetor de representação distribuída. No nosso caso, os vetores de entrada serão compostos por vetores de representação distribuída obtidos através do algoritmo não-supervisionado \textit{word2vec}.
 
-CNN tem dependência local, curta.
+Além disso, segundo \cite{Goodfellow-et-al-2016:convolutional-networks}, CNN não consegue fazer associações entre palavras muito distantes em uma sentença. No exemplo anterior, o CNN teria dificuldade para associar a declaração da biblioteca \emph{csv} na linha 1 com a função \emph{writerows} na linha 5. A nossa hipótese é que uma associação muito distante entre as palavras de uma sentença não seja crucial para a recuperação de trecho de código-fonte no nosso conjunto de dados. O nosso conjunto de dados é formado por questões do tipo \textit{how-to-do-it} coletadas a partir do site \gls{sof}. Este tipo de questão normalmente contém respostas curtas e diretas. Uma dependência distante entre as palavras seria apropriado, provavelmente, para questões e trechos de código que envolvam regras de negócio, por exemplo.
 
-Já RNN tem dependência longa.
 
-Mas ambas são sensíveis a permutação.
-
-CNN vai aprender a extrair transformações locais do RNN.
+Ao optar por uma arquitetura, temos que levar em consideração as suas características inerentes e suas limitações. No caso do CNN, conforme citado anteriormente....
 
 
