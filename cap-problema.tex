@@ -142,6 +142,15 @@ De acordo com \cite{tom-young:trends-deep-learning-nlp}, normalmente o CNN não 
 Além disso, segundo \cite{Goodfellow-et-al-2016:convolutional-networks}, CNN não consegue fazer associações entre palavras muito distantes em uma sentença. No exemplo anterior, o CNN teria dificuldade para associar a declaração da biblioteca \emph{csv} na linha 1 com a função \emph{writerows} na linha 5. A nossa hipótese é que uma associação muito distante entre as palavras de uma sentença não seja crucial para a recuperação de trecho de código-fonte no nosso conjunto de dados. O nosso conjunto de dados é formado por questões do tipo \textit{how-to-do-it} coletadas a partir do site \gls{sof}. Este tipo de questão normalmente contém respostas curtas e diretas. Uma dependência distante entre as palavras seria apropriado, provavelmente, para questões e trechos de código que envolvam regras de negócio, por exemplo.
 
 
-Ao optar por uma arquitetura, temos que levar em consideração as suas características inerentes e suas limitações. No caso do CNN, conforme citado anteriormente....
+Ao optar por uma arquitetura, temos que levar em consideração as suas características inerentes e suas limitações. No caso do CNN, ele prioriza as interações locais ao invés de associações de palavras muito distantes. A nossa hipótese inicial é que esta característica seja mais importante para a recuperação de trecho de código-fonte no conjunto de dados que estamos utilizando. Dado estas características, reiteramos a nossa pergunta de pesquisa que pretendemos responder ao longo deste trabalho:
 
+\begin{itemize}
+    \item Ao utilizar a arquitetura CNN durante a aprendizagem de representação para recuperação de trecho de código-fonte, ele é capaz de auxiliar na extração das características latentes e mais importantes para inferir o contexto do trecho de código?
+    \begin{itemize}
+        \item Dado que o CNN prioriza interações locais, 
+    \end{itemize}
+\end{itemize}
 
+O que entedemos por características latentes e importantes são palavras ou variáveis latentes que permitam inferir o contexto de um trecho de código. No exemplo a seguir, as palavras \emph{enumerate}, \emph{dict} e \emph{sort} permitem deduzir o contexto do trecho de código. No caso, refere-se a ordenação de um dicionário por palavra-chave. Nem sempre estas características estão explicitas e observáveis diretamente nos dados. Nestes casos, as redes deep learning capturam estas características através de variáveis latentes ou \textit{hidden}, $\bm{h}$. Através da variável \textit{hidden} $\bm{h}$, ela consegue identificar uma dependência indireta entre duas variáveis quaisquer $v_{i}$ e $v_{j}$ através da dependência direta entre $v_{i}$ e $\bm{h}$ e $\bm{h}$ e $v_{j}$.
+
+E para inferir o contexto, não iremo
