@@ -40,55 +40,32 @@ Teremos duas matrizes: $\bm{T}_{q}^{|\mathbb{Q}| X d}$ e outra $\bm{T}_{c}^{|\ma
 
 \section{Representação da sentença e do trecho de código-fonte}
 
-Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-las para obter uma representação para a questão e o trecho de código-fonte. A partir de agora, cada questão ou trecho de código-fonte será representada por um vetor $\bm{x}$, onde $x = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, tal que $\bm{x}(w) \in \mathbb{R}^{d}$ e $w$ é uma palavra presente no vocabulário da questão ou trecho de código-fonte \citep{cambronero-deep-learning-code-search:2019}. 
+Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-las para obter uma representação para a questão e o trecho de código-fonte. Para isto, a nossa proposta é utilizar a arquitetura CNN a seguir. 
+
+Para cada sentença (e.g. questão ou trecho de código-fonte), seja $\bm{x}(i) \in \mathbb{R}^{d}$ um vetor de representação distribuída para $i^{th}$ palavra da sentença, onde $d$ é a dimensão do vetor. Dado que uma sentença tem $n$ palavras, temos que $\bm{x}$ pode ser escrito da seguinte maneira: $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$.
+
+Seja $\bm{x}(i, i + j)$ referência a concatenação dos vetores $\bm{x}(i), \bm{x}(i + 1), . . ., \bm{x}(i + j)$. A operação de convolução é aplicada a este vetor. Isto envolve um filtro convolucional $\bm{F}  = [\bm{F}(1),· · ·, \bm{F}(m)]$, tal que $\bm{F} \in \mathbb{R}^{m X d}$. Este filtro é aplicado a uma janela de $m$ palavaras para produzir um novo vetor. Por exemplo, um novo vetor $\bm{c}(i)$, utilizando a seguinte janela de palavras $\bm{x}(i, i + m - 1)$, é calculado da seguinte maneira:
+
+\begin{equation}
+    \bm{c}(i) = tanh \left[\left(\sum_{j=i}^{i + m - 1} \bm{x}(j)^{T}\bm{F}(j)\right) + b\right]
+\end{equation}
+
+onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro. O filtro $\bm{F}$ é aplicado a todas possíveis janelas de palavras utilizando os mesmos pesos para produzir um mapa das características (\textit{feature map}).
+
+\begin{equation}
+    \bm{c} = \{ \bm{c}(1), \bm{c}(2), . . ., \bm{c}(n - m + 1) \} 
+\end{equation}
+
+Em uma arquitetura CNN, existem centenas de filtros convolucionais $\bm{F}$, também chamados de \textit{kernel}, de diferentes tamanhos $m$ que percorrem toda uma sentença $\bm{x}$. Cada \textit{kernel} extrai um padrão específico de n-gram. Após a camada convolucional, 
+
+Seja $\bm{F} \in \mathbb{R}^{h X d}$ um filtro 
+
+A partir de agora, cada questão ou trecho de código-fonte será representada por um vetor $\bm{x}$, onde $x = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, tal que $\bm{x}(w) \in \mathbb{R}^{d}$ e $w$ é uma palavra presente no vocabulário da questão ou trecho de código-fonte \citep{cambronero-deep-learning-code-search:2019}. 
 
 Lembrando que neste trabalho, temos duas matrizes de representação distribuída, $\bm{T}_{q}$ e $\bm{T}_{c}$. Para fins de simplificação, quando utilizarmos $\bm{x}$, $\bm{x}$ pode ser $\bm{x} = \{ t_{q}(1), t_{q}(2), . . ., t_{q}(n)\}$, $t_{q}(i) \in \bm{T}_{q}, 1 \leq i \leq n$ ou pode ser $\bm{x} = \{ t_{c}(1), t_{c}(2), . . ., t_{c}(n)\}$, $t_{c}(i) \in \bm{T}_{c}, 1 \leq i \leq n$.
 
 
-Iremos avaliar duas formas de representar as questões e trechos de código-fonte. Uma abordagem é utilizando uma rede neural recorrente bi-LSTM com uma camada CNN posterior. E a outra abordagem é uma rede CNN apenas.
-
-\subsection{Representação através de bi-LSTM com CNN}
-\label{sec:representation-bi-lstm-cnn}
-\subsection{bi-LSTM}
-\label{sec:representation-bi-lstm}
-Utilizando o LSTM, a partir de um vetor $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, onde $\bm{x}(t)$ é um vetor de representação de dimensão $d$. O valor do vetor de \textit{hidden} $\bm{h}(t)$ (tamanho $H$) na iteração $t$ é \citep{tan-lstm-qa}:
-
-\begin{equation}
-    i_{t} = \sigma(\bm{W}_{i}\bm{x}(t) + \bm{U}_{i}\bm{h}(t - 1) + \bm{b}_{i})
-\end{equation}
-\begin{equation}
-    f_{t} = \sigma(\bm{W}_{f}\bm{x}(t) + \bm{U}_{f}\bm{h}(t - 1) + \bm{b}_{f})
-\end{equation}
-\begin{equation}
-    o_{t} = \sigma(\bm{W}_{o}\bm{x}(t) + \bm{U}_{o}\bm{h}(t - 1) + \bm{b}_{o})
-\end{equation}
-\begin{equation}
-    \bar{C}_{t} = tanh(\bm{W}_{c}\bm{x}(t) + \bm{U}_{c}\bm{h}(t - 1) + \bm{b}_{c})
-\end{equation}
-\begin{equation}
-    C_{t} = i_{t} * \bar{C}_t + f_{t} * C_{t - 1}
-\end{equation}
-\begin{equation}
-    \bm{h}_{t} = o_{t} * tanh(C_{t})
-\end{equation}
-
-No caso do bi-LSTM, teremos duas redes LSTM, uma rede que lê o vetor $\overrightarrow{\bm{x}}$ na ordem da primeira para a última palavra, $\bm{x}(1), \bm{x}(2), . . ., \bm{x}(n)$. E a outra rede LSTM vai ler na ordem inversa, $\overleftarrow{\bm{x}}$, $\bm{x}(n), \bm{x}(n - 1), . . ., \bm{x}(1)$. Teremos dois vetores \textit{hidden}, $\overrightarrow{\bm{h}_{t}}$ e $\overleftarrow{\bm{h}_{t}}$. Para cada iteração $t$, o vetor de resultado é a concatenação dos dois vetores \textit{hidden}: $\bm{h}_{t} = \overrightarrow{\bm{h}_{t}} || \overleftarrow{\bm{h}_{t}}$.
-
-\subsubsection{CNN}
-\label{sec:cnn}
-
-Após obter os vetores \textit{hidden} das questões e trechos de código-fonte, eles são utilizados como entrada para um rede neural convolucional. 
-
-Para cada janela de tamanho $m$ aplicado aos vetores \textit{hidden} da rede bi-LSTM, ie. 
-$\bm{H}_{m}(t) = [\bm{h}(t), \bm{h}(t + 1), · · · , \bm{h}(t + m − 1)]$, onde $t$ é a iteração, o filtro convolucional $\bm{F}  = [\bm{F}(0),· · ·, \bm{F}(m − 1)]$ irá gerar o seguinte valor \citep{tan-lstm-qa}:
-
-\begin{equation}
-    o_{F}(t) = tanh \left[\left(\sum_{i=0}^{m - 1} \bm{h}(t-1)^{T}\bm{F}(i)\right) + b\right]
-\end{equation}
-
-onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro.
-
-Normalmente, utiliza-se uma camada \textit{maxpool} após a camada convolucional. A camada \textit{maxpool} reduz a dimensionalidade da camada de saída, sendo um fator importante para problemas de classificação, por exemplo. Independente do tamanho da entrada e do filtro, a dimensão da camada de saída vai ser mantida. Além disso, a camada \textit{maxpool} é invariante a pequenas translações. Isto permite extrair características relevantes (e.g. palavras referindo-se a leitura de arquivo: \emph{file} e \emph{open}) de uma sentença independente da sua localização e adiciona-las na representação final \citep{tom-young:trends-deep-learning-nlp}.
+Iremos avaliar a representação das questões e trechos de código-fon
 
 \subsection{Representação através do CNN}
 \label{sec:representation-cnn}
@@ -106,6 +83,29 @@ z = tanh(\bm{W}x + b)
 Onde $\bm{W}$ é a matriz de pesos e $\bm{b}$ é o vetor de \textit{bias}.
 
 Neste caso, $z$ servirá de entrada a rede CNN. Mais detalhes sobre os cálculos, ver a subseção anterior CNN~\ref{sec:cnn}.
+
+\subsection{CNN}
+\label{sec:cnn}
+
+Após obter os vetores \textit{hidden} das questões e trechos de código-fonte, eles são utilizados como entrada para um rede neural convolucional. 
+
+Para cada janela de tamanho $m$ aplicado aos vetores \textit{hidden} da rede bi-LSTM, ie. 
+$\bm{H}_{m}(t) = [\bm{h}(t), \bm{h}(t + 1), · · · , \bm{h}(t + m − 1)]$, onde $t$ é a iteração, o filtro convolucional $\bm{F}  = [\bm{F}(0),· · ·, \bm{F}(m − 1)]$ irá gerar o seguinte valor \citep{tan-lstm-qa}:
+
+\begin{equation}
+    o_{F}(t) = tanh \left[\left(\sum_{i=0}^{m - 1} \bm{h}(t-1)^{T}\bm{F}(i)\right) + b\right]
+\end{equation}
+
+onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro.
+
+Normalmente, utiliza-se uma camada \textit{maxpool} após a camada convolucional. A camada \textit{maxpool} reduz a dimensionalidade da camada de saída, sendo um fator importante para problemas de classificação, por exemplo. Independente do tamanho da entrada e do filtro, a dimensão da camada de saída vai ser mantida. Além disso, a camada \textit{maxpool} é invariante a pequenas translações. Isto permite extrair características relevantes (e.g. palavras referindo-se a leitura de arquivo: \emph{file} e \emph{open}) de uma sentença independente da sua localização e adiciona-las na representação final \citep{tom-young:trends-deep-learning-nlp}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figuras/cap-problema/cnn-architecture.pdf}
+    \caption{Ilustração da arquitetura proposta para este trabalho.}
+    \label{fig:arquitetura-cnn-sem-hidden-layer}
+\end{figure}
 
 
 \section{Função objetivo}
