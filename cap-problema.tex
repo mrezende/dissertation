@@ -40,7 +40,7 @@ Teremos duas matrizes: $\bm{T}_{q}^{|\mathbb{Q}| X d}$ e outra $\bm{T}_{c}^{|\ma
 
 \section{Representação da sentença e do trecho de código-fonte}
 
-Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-las para obter uma representação para a questão e o trecho de código-fonte. Para isto, a nossa proposta é utilizar a arquitetura CNN a seguir. 
+Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-las para obter uma representação para a questão e o trecho de código-fonte. Para isto, a nossa proposta é utilizar uma arquitetura CNN. 
 
 Para cada sentença (e.g. questão ou trecho de código-fonte), seja $\bm{x}(i) \in \mathbb{R}^{d}$ um vetor de representação distribuída para $i^{th}$ palavra da sentença, onde $d$ é a dimensão do vetor. Dado que uma sentença tem $n$ palavras, temos que $\bm{x}$ pode ser escrito da seguinte maneira: $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$.
 
@@ -50,62 +50,69 @@ Seja $\bm{x}(i, i + j)$ referência a concatenação dos vetores $\bm{x}(i), \bm
     \bm{c}(i) = tanh \left[\left(\sum_{j=i}^{i + m - 1} \bm{x}(j)^{T}\bm{F}(j)\right) + b\right]
 \end{equation}
 
-onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro. O filtro $\bm{F}$ é aplicado a todas possíveis janelas de palavras utilizando os mesmos pesos para produzir um mapa das características (\textit{feature map}).
+onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro. As figuras~\ref{fig:first-step-convolutional}, \ref{fig:second-step-convolutional} abaixo ilustram um exemplo dos dois primeiros passos da aplicação de um filtro convolucional $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$. Este filtro é aplicado a uma sentença formado por 6 palavras, que é representado pelo vetor de representação distribuída $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Pelas figuras, podemos perceber que o parâmetro $m$ do filtro $\bm{F}$ define como as palavras são combinadas. Neste caso, foram combinadas de duas em duas, um bi-gram.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figuras/cap-problema/first-step-convolution.pdf}
+    \caption{Primeiro passo de um filtro convolucional F.}
+    \label{fig:first-step-convolutional}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figuras/cap-problema/second-step-convolution.pdf}
+    \caption{Segundo passo de um filtro convolucional F.}
+    \label{fig:second-step-convolutional}
+\end{figure}
+
+
+O filtro $\bm{F}$ é aplicado a todas possíveis janelas de palavras utilizando os mesmos pesos para produzir um mapa das características (\textit{feature map}).
 
 \begin{equation}
     \bm{c} = \{ \bm{c}(1), \bm{c}(2), . . ., \bm{c}(n - m + 1) \} 
 \end{equation}
 
-Em uma arquitetura CNN, existem centenas de filtros convolucionais $\bm{F}$, também chamados de \textit{kernel}, de diferentes tamanhos $m$ que percorrem toda uma sentença $\bm{x}$. Cada \textit{kernel} extrai um padrão específico de n-gram. Após a camada convolucional, 
-
-Seja $\bm{F} \in \mathbb{R}^{h X d}$ um filtro 
-
-A partir de agora, cada questão ou trecho de código-fonte será representada por um vetor $\bm{x}$, onde $x = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, tal que $\bm{x}(w) \in \mathbb{R}^{d}$ e $w$ é uma palavra presente no vocabulário da questão ou trecho de código-fonte \citep{cambronero-deep-learning-code-search:2019}. 
-
-Lembrando que neste trabalho, temos duas matrizes de representação distribuída, $\bm{T}_{q}$ e $\bm{T}_{c}$. Para fins de simplificação, quando utilizarmos $\bm{x}$, $\bm{x}$ pode ser $\bm{x} = \{ t_{q}(1), t_{q}(2), . . ., t_{q}(n)\}$, $t_{q}(i) \in \bm{T}_{q}, 1 \leq i \leq n$ ou pode ser $\bm{x} = \{ t_{c}(1), t_{c}(2), . . ., t_{c}(n)\}$, $t_{c}(i) \in \bm{T}_{c}, 1 \leq i \leq n$.
 
 
-Iremos avaliar a representação das questões e trechos de código-fon
 
-\subsection{Representação através do CNN}
-\label{sec:representation-cnn}
-
-Para verificar o desempenho do CNN isoladamente, iremos criar uma representação para as questões e trechos de código-fonte somente com uma camada CNN.
-
-Diferente da arquitetura anterior, o vetor $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, onde $\bm{x}(t)$ é um vetor de representação de dimensão $d$, servirá de entrada para uma camada \textit{hidden} ao invés de uma camada bi-LSTM. A camada \textit{hidden} é para transformar o vetor de representação distribuída em um vetor de entrada para o CNN \citep{tan-lstm-qa}.
-
-A camada \textit{hidden} contém a seguinte função:
+Em uma arquitetura CNN, existem centenas de filtros convolucionais $\bm{F}$, também chamados de \textit{kernel}, de diferentes tamanhos $m$ que percorrem toda uma sentença $\bm{x}$. Cada \textit{kernel} extrai características específicas de n-gram. Após a camada convolucional, i.e., após o cálculo do vetor $\bm{c}$, normalmente uma camada de maxpool é aplicada. Esta camada reduz a dimensionalidade do vetor de entrada aplicando uma operação \textit{max}, que extrai o maior elemento de cada vetor.
 
 \begin{equation}
-z = tanh(\bm{W}x + b)
+    \bm{c'} = max\{\bm{c}\}
 \end{equation}
 
-Onde $\bm{W}$ é a matriz de pesos e $\bm{b}$ é o vetor de \textit{bias}.
 
-Neste caso, $z$ servirá de entrada a rede CNN. Mais detalhes sobre os cálculos, ver a subseção anterior CNN~\ref{sec:cnn}.
+Esta redução da dimensionalidade é um fator importante para problemas de classificação, por exemplo. Independente do tamanho da entrada e do filtro, a dimensão da camada de saída vai ser mantida. Além disso, a camada \textit{maxpool} é invariante a pequenas translações. Isto permite extrair características relevantes (e.g. palavras referindo-se a leitura de arquivo: \emph{file} e \emph{open}) de uma sentença independente da sua localização e adiciona-las na representação final \citep{tom-young:trends-deep-learning-nlp}.
 
-\subsection{CNN}
-\label{sec:cnn}
-
-Após obter os vetores \textit{hidden} das questões e trechos de código-fonte, eles são utilizados como entrada para um rede neural convolucional. 
-
-Para cada janela de tamanho $m$ aplicado aos vetores \textit{hidden} da rede bi-LSTM, ie. 
-$\bm{H}_{m}(t) = [\bm{h}(t), \bm{h}(t + 1), · · · , \bm{h}(t + m − 1)]$, onde $t$ é a iteração, o filtro convolucional $\bm{F}  = [\bm{F}(0),· · ·, \bm{F}(m − 1)]$ irá gerar o seguinte valor \citep{tan-lstm-qa}:
-
-\begin{equation}
-    o_{F}(t) = tanh \left[\left(\sum_{i=0}^{m - 1} \bm{h}(t-1)^{T}\bm{F}(i)\right) + b\right]
-\end{equation}
-
-onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro.
-
-Normalmente, utiliza-se uma camada \textit{maxpool} após a camada convolucional. A camada \textit{maxpool} reduz a dimensionalidade da camada de saída, sendo um fator importante para problemas de classificação, por exemplo. Independente do tamanho da entrada e do filtro, a dimensão da camada de saída vai ser mantida. Além disso, a camada \textit{maxpool} é invariante a pequenas translações. Isto permite extrair características relevantes (e.g. palavras referindo-se a leitura de arquivo: \emph{file} e \emph{open}) de uma sentença independente da sua localização e adiciona-las na representação final \citep{tom-young:trends-deep-learning-nlp}.
+A figura abaixo ilustra um exemplo da aplicação de diferentes filtros convolucionais com diferentes tamanhos de janela $m$ em uma sentença de 6 palavras. A sentença é representada através de um vetor $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Para um vetor $\bm{x} = \{\bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, $\bm{x}(i) \in \mathbb{R}^{d}, 1 \leq i \leq n$ é um vetor de representação distribuída e representa a $i^{th}$ palavra da sentença. Neste exemplo, temos 3 filtros $\bm{F} \in \mathbb{R}^{m x d}$, onde $d = 5$ e $m$ varia para cada um. Neste caso, os valores de $m$ são $2$, $3$ e $4$. Cada filtro tem tamanho $f = 2$, totalizando 6 filtros que são aplicados ao vetor $\bm{x}$, ao final.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-problema/cnn-architecture.pdf}
-    \caption{Ilustração da arquitetura proposta para este trabalho.}
-    \label{fig:arquitetura-cnn-sem-hidden-layer}
+    \caption{Arquitetura proposta.}
+    \label{fig:cnn-architecture-proposal}
 \end{figure}
+
+Conforme a figura, após a operação de convolução, i.e., o cálculo de $\bm{c}$, realizamos a concatenação dos vetores de saída de diferentes tamanhos de janela $m$. Pois cada filtro gera um vetor $\bm{c}$ diferente. O filtro $\bm{F}_{1}$ de tamanho de janela $m_1$ gera um vetor $\bm{c}_{m_1}$. O filtro $\bm{F_2}$ de janela $m_2$ gera um vetor $\bm{c}_{m_2}$. E assim por diante.
+
+\begin{equation}
+    \bm{c}_{\bm{m}} = \left[\bm{c}_{m_1}, \bm{c}_{m_2}, . . ., \bm{c}_{m_{k}}\right]
+\end{equation}
+
+Onde $\bm{c}_{\bm{m}}$ é o resultado da concatenação dos diferentes vetores $\bm{c}$, $\bm{m}$ é um vetor com os diferentes tamanhos de janela, $\bm{m} = \{m_1, m_2, . . ., m_{k}\}$, e $k$ é a quantidade de elementos. No nosso exemplo, $\bm{m} = \{2, 3, 4\}$ e $k = 3$. Somente ao final que aplicamos a camada \textit{maxpool}. A camada \textit{maxpool} aplica a operação \textit{max}, obtendo o vetor de representação final da sentença $\bm{c'}_{\bm{m}}$. Conforme a ilustração, a operação \textit{max} é aplicada no eixo $0$, portanto o vetor final $\bm{c'}_{\bm{m}}$ é obtido da seguinte maneira:
+
+\begin{equation}
+    \bm{c'}_{\bm{m}} = max\left(\left[\bm{c}_{m_1}, \bm{c}_{m_2}, . . ., \bm{c}_{m_k}\right], axis = 0\right)
+\end{equation}
+
+Onde $axis$ define ao longo de qual eixo a função será aplicada. De forma equivalente, $\bm{c'}_{\bm{m}}$ poderia ser calculado do seguinte modo:
+
+\begin{equation}
+    \bm{c'}_{\bm{m}} = \left[max(\bm{c}_{m_1}), max(\bm{c}_{m_2}), . . ., max(\bm{c}_{m_k})\right]
+\end{equation}
+
+Neste caso, $\bm{c'}_{\bm{m}}$ será o vetor de representação final da nossa sentença. No nosso trabalho, a sentença pode ser tanto uma questão quanto um trecho de código-fonte. O próximo passo é definir uma função objetivo que induza o nosso modelo a mapear estes vetores em um espaço vetorial, de tal forma que os vetores de representação de uma questão fiquem próximos dos vetores de trechos de código anotados como solução.
 
 
 \section{Função objetivo}
