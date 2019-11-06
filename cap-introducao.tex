@@ -39,14 +39,14 @@ Para respondê-las, avaliaremos um modelo que busca aproximar as intenções aos
 \section{Considerações Preliminares}
 \label{sec:consideracoes_preliminares}
 
-O foco deste trabalho é o \textit{code retrieval}. Diferentemente dos trabalhos de \cite{iyer-etal-2016-summarizing} e \cite{Allamanis-bimodal-source-code-natural-language:2015} que abordaram também o problema de sumarização de código-fonte ou \textit{code summarization}. Para podermos avaliar a nossa arquitetura proposta, iremos compará-la com outras arquiteturas de referência e com a arquitetura proposta por \cite{cambronero-deep-learning-code-search:2019} que é o estado da arte atualmente. Em relação aos dados, a base de dados disponibilizada por \cite{yao-2018} contém pares de questões e trechos de código-fonte em Python e SQL. A princípio utilizaremos apenas os pares de perguntas e código-fonte em Python.
+O foco deste trabalho é a recuperação de trecho de código-fonte. Diferentemente dos trabalhos de \cite{iyer-etal-2016-summarizing} e \cite{Allamanis-bimodal-source-code-natural-language:2015} que abordaram também o problema de sumarização de código-fonte ou \textit{code summarization}. Para podermos avaliar a nossa arquitetura proposta, iremos compará-la com outras arquiteturas de referência e com a arquitetura proposta por \cite{cambronero-deep-learning-code-search:2019} que é o estado da arte atualmente. Em relação aos dados, a base de dados disponibilizada por \cite{yao-2018} contém pares de questões e trechos de código-fonte em Python e SQL. A princípio utilizaremos apenas os pares de perguntas e código-fonte em Python.
 
 
 %% ------------------------------------------------------------------------- %%
 \section{Objetivos}
 \label{sec:objetivo}
 
-O objetivo principal deste trabalho é propor uma nova abordagem para o \textit{code retrieval}. Queremos avaliar se o uso de redes convolucionais auxiliam na obtenção de um modelo que seja capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor.
+O objetivo principal deste trabalho é propor uma nova abordagem para a recuperação de trecho de código-fonte. Queremos avaliar se o uso de redes convolucionais auxiliam na obtenção de um modelo que seja capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor.
 
 %% ------------------------------------------------------------------------- %%
 \section{Contribuições}
@@ -55,7 +55,7 @@ O objetivo principal deste trabalho é propor uma nova abordagem para o \textit{
 Dentre as contribuições deste trabalho estão:
 
 \begin{itemize}
-\item Proposta de uma nova abordagem para o \textit{code retrieval};
+\item Proposta de uma nova abordagem para a recuperação de trecho de código-fonte;
 \item Avaliação de uma nova arquitetura;
 \item Avaliação do modelo utilizando uma nova base de dados disponibilizada por \cite{yao-2018};
 \item Disponibilização do código-fonte, desde o pré-processamento até a avaliação final, em um repositório público;
@@ -66,4 +66,4 @@ Dentre as contribuições deste trabalho estão:
 \section{Organização do Trabalho}
 \label{sec:organizacao_trabalho}
 
-No Capítulo~\ref{cap:fundamentacao-teorica}, apresentamos os conceitos e trabalhos relacionados ao \textit{code retrieval}. No Capítulo~\ref{cap:abordagem}, apresentamos a nossa abordagem para o item de pesquisa proposto. No Capítulo~\ref{cap:resultados-preliminares}, exibimos os resultados preliminares da arquitetura proposta utilizando os dados de \cite{yao-2018}. Já no Capítulo~\ref{cap:cronograma} temos os próximos passos e o cronograma até a entrega do trabalho.
+No Capítulo~\ref{cap:fundamentacao-teorica}, apresentamos os conceitos e trabalhos relacionados a recuperação de trecho de código-fonte. No Capítulo~\ref{cap:abordagem}, apresentamos a nossa abordagem para o item de pesquisa proposto. No Capítulo~\ref{cap:resultados-preliminares}, exibimos os resultados preliminares da arquitetura proposta utilizando os dados de \cite{yao-2018}. Já no Capítulo~\ref{cap:cronograma} temos os próximos passos e o cronograma até a entrega do trabalho.
