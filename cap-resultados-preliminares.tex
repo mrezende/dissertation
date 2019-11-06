@@ -2,18 +2,16 @@
 \chapter{Resultados preliminares}
 \label{cap:resultados-preliminares}
 
-Este capítulo é parte de um estudo preliminar \citep{marcelo-vem-2019} apresentado no \acrfull{vem} de 2019. Este estudo foi um piloto para avaliar o uso das redes convolucionais no problema de \textit{code retrieval}. Utilizamos as mesmas arquiteturas propostas no capítulo~\ref{cap:abordagem}. E para comparar, utilizamos apenas uma arquitetura de referência \textit{Embedding}.
-
-Os resultados da arquitetura bi-LSTM com CNN e a arquitetura CNN foram promissores. As duas arquiteturas apresentaram um valor da métrica \acrfull{mrr} de $0,60$ e $0,58$ respectivamente. E em $75\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas.
+Este capítulo é parte de um estudo preliminar \citep{marcelo-vem-2019} apresentado no \acrfull{vem} de 2019. Este estudo foi um piloto para avaliar o uso das redes convolucionais no problema de \textit{code retrieval}. Utilizamos uma arquitetura com uma pequena variação em relação a nossa arquitetura proposta no capítulo~\ref{cap:abordagem}. E para comparar, utilizamos duas arquiteturas: uma arquitetura bi-LSTM com CNN e outra arquitetura de referência \textit{Embedding}. Os resultados da arquitetura CNN foram promissores. A arquitetura apresentou um valor de métrica \acrfull{mrr} de $0,58$. E em $75\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas.
 
 \section{Conjunto de dados}
 \label{sec:conjunto-dados}
 
-Para este estudo, utilizamos parte do conjunto de dados disponibilizado por \cite{yao-2018}. Este conjunto é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares foram coletados do site \Gls{sof}. Uma peculiaridade destes dados em relação aos dados utilizados nos outros trabalhos \cite{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015}, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Estas questões normalmente expressam as intenções do desenvolvedor, indo de encontro com a nossa definição da seção~\ref{sec:code-retrieval-definicao} adotada para o problema de \textit{code retrieval}.
+Para este estudo, utilizamos parte do conjunto de dados disponibilizado por \cite{yao-2018}. Este conjunto é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares foram coletados do site \Gls{sof}. Uma peculiaridade destes dados em relação aos dados utilizados nos outros trabalhos \cite{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015}, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Estas questões normalmente expressam as intenções do desenvolvedor, indo ao encontro com a nossa definição da seção~\ref{sec:code-retrieval-definicao} adotada para o problema de \textit{code retrieval}.
 
 Os dados disponibilizados por \cite{yao-2018} são divididos em 3 (três) subconjuntos distintos. Um subconjunto é formado apenas por questões coletadas do \Gls{sof} que continham apenas um trecho de código-fonte na descrição da resposta. O outro é formado por questões que apresentavam mais de um trecho de código-fonte na descrição. E o terceiro é formado por pares de questões e trechos de código-fonte anotados manualmente.
 
-Nos casos em que há mais de um trecho de código-fonte na descrição da resposta, um trecho de código não é necessariamente uma solução para a pergunta. No exemplo abaixo, os trechos \emph{T2} e \emph{T4} não são soluções para a questão. O trecho \emph{T2} apenas inicializa um array e o trecho \emph{T4} mostra a saída do comando \textit{print} para o vetor já convertido\footnote{Site: \url{https://stackoverflow.com/questions/34349762/convert-2d-numpy-array-to-string} Esta questão apresenta 6 trechos de código-fonte, mas para melhor visualização, optamos por colocar apenas 4 trechos em nosso exemplo\label{foot:exemplo-stackoverflow-mais-de-um-trecho}}.
+Nos casos em que há mais de um trecho de código-fonte na descrição da resposta, um trecho de código não é necessariamente uma solução para a pergunta. No exemplo abaixo, os trechos \emph{T2} e \emph{T4} não são soluções para a questão. Já o trecho \emph{T2} apenas inicializa um array e o trecho \emph{T4} mostra a saída do comando \textit{print} para o vetor já convertido\footnote{Site: \url{https://stackoverflow.com/questions/34349762/convert-2d-numpy-array-to-string} Esta questão apresenta 6 trechos de código-fonte, mas para melhor visualização, optamos por colocar apenas 4 trechos em nosso exemplo\label{foot:exemplo-stackoverflow-mais-de-um-trecho}}.
 
 
 
@@ -51,9 +49,7 @@ b = '\n'.join(res)
 
 
 
-Para diferenciar estes casos, \cite{yao-2018} anotaram os pares com $\bm{1}$, quando o trecho é solução para a pergunta e $\bm{0}$, em caso contrário. Esta anotação foi feita automaticamente por um framework proposto no artigo.
-
-Ao final, o conjunto de dados é dividido da seguinte maneira:
+Para diferenciar estes casos, \cite{yao-2018} anotaram os pares com $\bm{1}$, quando o trecho é solução para a pergunta e $\bm{0}$, em caso contrário. Esta anotação foi feita automaticamente por um framework proposto no artigo. Ao final, o conjunto de dados é dividido da seguinte maneira:
 
 \begin{table}[h]
 \centering
@@ -84,7 +80,7 @@ Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
 
 Para o treinamento do modelo, utilizamos apenas os pares de questões e trechos de código-fonte em Python. Inicialmente, utilizamos apenas os pares anotados automaticamente. Este conjunto de dados apresenta uma variabilidade maior, em torno de 27\% das questões contém mais de um trecho de código-fonte anotados como correto, i.e., 27\% das perguntas tem mais de uma opção de solução.
 
-Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iyer-etal-2016-summarizing}. Para o treinamento, foi utilizado o conjunto com $60.083$ pares. Para escolha do modelo e avaliação final foi utilizado o conjunto de dados anotados manualmente.
+Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iyer-etal-2016-summarizing}. Para o treinamento, foi utilizado o conjunto com $60.083$ pares. Para escolha do modelo e avaliação final foi utilizado o conjunto de dados anotados manualmente. A divisão das amostras para treinamento e avaliação podem ser visualizadas na Tabela~\ref{table:divisao-amostras}. 
 
 \begin{table}[h]
 \centering
@@ -105,7 +101,7 @@ Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iy
 \label{table:divisao-amostras}
 \end{table}
 
-O modelo foi treinado durante 80 épocas. Caso a função de perda \textit{hinge} fique abaixo de $0,001$ o treinamento é interrompido. A cada época, o modelo é avaliado na amostra \emph{DEV}. O intuito desta avaliação é obter o melhor modelo conforme a métrica \acrshort{mrr}. Esta avaliação na amostra DEV é feita da seguinte maneira:
+O modelo foi treinado durante 80 épocas. Caso a função de perda \textit{hinge} fique abaixo de $0,001$, o treinamento é interrompido. A cada época, o modelo é avaliado na amostra \emph{DEV}. O intuito desta avaliação é obter o melhor modelo conforme a métrica \acrshort{mrr}. Esta avaliação na amostra DEV é feita da seguinte maneira:
 
 Para cada par $<q_{i}, c_{i}^{+}>$ da amostra \emph{DEV}, onde $q_{i}$ uma questão e $c_{i}^{+}$ uma questão anotada como correta. Outros 49 distratores $c'$ são selecionados aleatoriamente da amostra de treinamento, tal que $c_{i}^{+} \neq c'$. Para cada questão, o modelo calcula a similaridade entre a questão e os trechos de código-fonte. O cálculo de similaridade é feito através da função $h_{\theta}$, onde $h_{\theta}$ é a função \textit{cosine}. 
 
@@ -115,25 +111,15 @@ Posteriormente, os trechos de código-fonte são ordenados de forma decrescente,
 MRR = \frac{1}{n} * \sum_{i = 1}^{n}\frac{1}{p_{i}^{+}}    
 \end{equation}
 
-
-
 Onde $n$ é a quantidade de questões presentes na amostra, $p_{i}^{+}$ é a posição da primeira ocorrência do trecho $c_{i}^{+}$ entre os trechos ordenados.
 
-Este procedimento é repetido durante 20 vezes. A cada iteração, outros 49 distratores são selecionados. Ao final, obtém-se a média \emph{MRR} do modelo.
-
-O modelo que obtiver a maior média \emph{MRR} ao final do treinamento é escolhido.
-
-A avaliação final na amostra \emph{EVAL} utiliza o mesmo procedimento da amostra \emph{DEV} descrito acima.
+Este procedimento é repetido durante 20 vezes. A cada iteração, outros 49 distratores são selecionados. Ao final, obtém-se a média \emph{MRR} do modelo. O modelo que obtiver a maior média \emph{MRR} ao final do treinamento é escolhido. A avaliação final na amostra \emph{EVAL} utiliza o mesmo procedimento da amostra \emph{DEV} descrito acima.
 
 \section{Pré-processamento}
 
-Diferente do trabalho de \cite{tan-lstm-qa}, nós geramos duas matrizes de representação distribuída distintas $\bm{T_{q}}$ e $\bm{T_{c}}$ para o vocabulário das questões e para o vocabulário dos trechos de código-fonte, conforme citado no capítulo~\ref{cap:abordagem}.
+Diferente do trabalho de \cite{tan-lstm-qa}, nós geramos duas matrizes de representação distribuída distintas $\bm{T_{q}}$ e $\bm{T_{c}}$ para o vocabulário das questões e para o vocabulário dos trechos de código-fonte, conforme citado no capítulo~\ref{cap:abordagem}. Antes de gerar a matriz $\bm{T_{c}}$, utilizamos uma função disponibilizada por \cite{yao-2018} para fazer um pré-processamento dos trechos de código-fonte. Esta função substitui os valores literais numéricos e textos pelas palavras \emph{"NUMBER"} e \emph{"STRING"}. Além disso, os comentários são removidos e as variáveis são substituídas por \emph{"VAR"}. E o caractere de quebra de linha é substituído por \emph{"NEWLINE"}.
 
-Antes de gerar a matriz $\bm{T_{c}}$, utilizamos uma função disponibilizada por \cite{yao-2018} para fazer um pré-processamento dos trechos de código-fonte. Esta função substitui os valores literais numéricos e textos pelas palavras \emph{"NUMBER"} e \emph{"STRING"}. Além disso, os comentários são removidos e as variáveis são substituídas por \emph{"VAR"}. E o caractere de quebra de linha é substituído por \emph{"NEWLINE"}.
-
-As matrizes $\bm{T_{q}}$ e $\bm{T_{c}}$ são geradas pelo \textit{word2vec} com \textit{skip-gram}. Na figura~\ref{fig:tsne-code-snippet-python} abaixo, podemos visualizar um exemplo da representação do vetor de representação distribuída gerada pelo \textit{word2vec}. Esta imagem foi criada com o auxílio da ferramenta \textit{t-SNE}. Ela auxilia na visualização de dados de dimensão elevada \citep{scikit-learn-tsne-2019, quora-tsne-2019}.
-
-De acordo com a figura~\ref{fig:tsne-code-snippet-python}, as palavras \emph{from} e \emph{import} são similares. Assim como \emph{if} e \emph{else}, e também \emph{list}, \emph{dict} e \emph{set}, por exemplo.
+As matrizes $\bm{T_{q}}$ e $\bm{T_{c}}$ são geradas pelo \textit{word2vec} com \textit{skip-gram}. Na figura~\ref{fig:tsne-code-snippet-python} abaixo, podemos visualizar um exemplo da representação do vetor de representação distribuída gerada pelo \textit{word2vec}. Esta imagem foi criada com o auxílio da ferramenta \textit{t-SNE}. Ela auxilia na visualização de dados de dimensão elevada \citep{scikit-learn-tsne-2019, quora-tsne-2019}. De acordo com a figura~\ref{fig:tsne-code-snippet-python}, as palavras \emph{from} e \emph{import} são similares. Assim como \emph{if} e \emph{else}, e também \emph{list}, \emph{dict} e \emph{set}, por exemplo.
 
 \begin{figure}[h]
 \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/code-tsne-output.png}
@@ -143,21 +129,26 @@ De acordo com a figura~\ref{fig:tsne-code-snippet-python}, as palavras \emph{fro
 
 \section{Arquiteturas}
 
-Para este estudo, comparamos as arquiteturas bi-LSTM com CNN e CNN com uma arquitetura de referência \textit{Embedding}. A arquitetura \textit{Embedding} combina os vetores de representação distribuída de cada palavra através de uma camada \textit{max pool}. As outras arquiteturas seguem a descrição feita no capítulo~\ref{cap:abordagem}.
+Para este estudo, comparamos a arquitetura CNN com outras duas arquiteturas: bi-LSTM com CNN e \textit{Embedding}. A arquitetura \textit{Embedding} combina os vetores de representação distribuída de cada palavra através de uma camada \textit{max pool}. A arquitetura CNN utilizada neste estudo, utiliza uma camada inicial \textit{hidden}.
+Esta camada obtém um vetor $\bm{z}$ a partir das questões e trechos de código-fonte. Este vetor $\bm{z}$ servirá como entrada para a nossa arquitetura CNN que foi descrita na seção~\ref{sec:representacao-sentenca}.
 
-A figura~\ref{fig:arquitetura-bi-lstm-com-cnn}, figura~\ref{fig:arquitetura-cnn} e a figura~\ref{fig:arquitetura-embedding} ilustram as arquiteturas utilizadas:
+\begin{equation}
+    \bm{z} = tanh(\bm{W} * \bm{x} + \bm{b})
+\end{equation}
+
+Onde $\bm{W}$ é a matriz de pesos, $\bm{x}$ é vetor que contém os vetores de representação distribuída das palavras e $\bm{b}$ é o vetor \textit{bias}. As figuras~\ref{fig:arquitetura-bi-lstm-com-cnn}, \ref{fig:arquitetura-cnn} e \ref{fig:arquitetura-embedding} ilustram as arquiteturas utilizadas:
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.6\textwidth]{figuras/cap-resultados-preliminares/ArquiteturaBiLSTM.pdf}
-    \caption{Figura da arquitetura bi-LSTM com CNN proposta para o problema do \textit{code retrieval}. Descrição detalhada da arquitetura na seção~\ref{sec:representation-bi-lstm-cnn}. Figura utilizada no artigo \cite{marcelo-vem-2019}}
+    \caption{Figura da arquitetura bi-LSTM com CNN. Figura utilizada no artigo \cite{marcelo-vem-2019}}
     \label{fig:arquitetura-bi-lstm-com-cnn}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.6\textwidth]{figuras/cap-resultados-preliminares/ArquiteturaCNN.pdf}
-    \caption{Figura da arquitetura CNN com a primeira camada de \textit{hidden layer} proposta para o problema do \textit{code retrieval}. Descrição detalhada da arquitetura na seção~\ref{sec:representation-cnn}. Figura utilizada no artigo \cite{marcelo-vem-2019}}
+    \caption{Figura da arquitetura CNN com a primeira camada de \textit{hidden layer} proposta para o artigo \cite{marcelo-vem-2019}.}
     \label{fig:arquitetura-cnn}
 \end{figure}
 
@@ -170,15 +161,13 @@ A figura~\ref{fig:arquitetura-bi-lstm-com-cnn}, figura~\ref{fig:arquitetura-cnn}
 Nas figuras \ref{fig:arquitetura-bi-lstm-com-cnn}, \ref{fig:arquitetura-cnn} e \ref{fig:arquitetura-cnn}, a palavra \textit{Embedding Layer} refere-se ao vetor de representação distribuída das palavras. \emph{OL} é um acrônimo de \textit{Output Layer} ou camada de saída. $O_{q}$ indica a camada de saída da questão. $O_{c}$ indica a camada de saída do trecho de código-fonte.
 
 Todas as arquiteturas utilizam uma camada \textit{max pool} e, ao final, calculam a similaridade atravás da função \textit{cosine}.
-Não realizamos otimização ou ajustes dos hiper-parâmetros dos modelos. Utilizamos os mesmos hiper-parâmetros propostos por \cite{tan-lstm-qa}. Exceto o hiper-parâmetro filtro da camada CNN, neste caso utilizamos o valor $100$, pois o valor $1000$ proposto por \cite{tan-lstm-qa} aumentou a capacidade do modelo e estava causando \textit{overfitting}.
-
-Para a função de perda \textit{hinge}, utilizamos o valor $0,009$ proposto por \cite{feng-2015} para a margem. Em relação a dimensão do vetor de representação distribuída das palavras (\textit{word embedding}), utilizamos o valor $100$.
+Não realizamos otimização ou ajustes dos hiper-parâmetros dos modelos. Utilizamos os mesmos hiper-parâmetros propostos por \cite{tan-lstm-qa}. Exceto o hiper-parâmetro filtro da camada CNN, neste caso utilizamos o valor $100$, pois o valor $1000$ proposto por \cite{tan-lstm-qa} aumentou a capacidade do modelo e estava causando \textit{overfitting}. Para a função de perda \textit{hinge}, utilizamos o valor $0,009$ proposto por \cite{feng-2015} para a margem. Em relação a dimensão do vetor de representação distribuída das palavras (\textit{word embedding}), utilizamos o valor $100$.
 
 
 %% ------------------------------------------------------------------------- %%
 \section{Resultados preliminares}
 
-Os resultados preliminares foram coletados a partir da avaliação dos modelos na amostra \emph{EVAL}. O valor final MRR é a média obtida após 20 iterações. 
+Os resultados preliminares foram coletados a partir da avaliação dos modelos na amostra \emph{EVAL}. O valor final MRR é a média obtida após 20 iterações. Conforme a tabela~\ref{table:resultados-preliminares},  a arquitetura CNN obteve um resultado próximo da arquitetura bi-LSTM com CNN. Apesar do resultado ser relativamente menor, o seu tempo de duração de treinamento é de apenas 6s. Enquanto o treinamento do bi-LSTM durou cerca de 48 minutos. Tanto o treinamento quanto a avaliação foram executadas na plataforma \Gls{colab} do Google. No momento de treinamento e coleta dos resultados, a execução foi feita em uma máquina virtual com acesso a uma \acrshort{vgpu} Tesla K80.
 
 \begin{table}[h]
 \centering
@@ -188,16 +177,14 @@ Os resultados preliminares foram coletados a partir da avaliação dos modelos n
  \hline
  Embedding & $0,52 \pm 0,01$\\
  
- CNN & $0,58 \pm 0,01 $ \\
+ \textcolor{blue}{\textbf{CNN}} & \textcolor{blue}{$\bm{0,58} \pm \bm{0,01}$} \\
  
  \textbf{bi-LSTM-CNN} & $\bm{0,60} \pm \bm{0,02}$\\
  \hline
 \end{tabular}
-\caption{Resultado preliminar do modelo bi-LSTM-CNN proposto em comparação a outros dois modelos (CNN e Embedding). Estes resultados foram obtidos a partir da amostra EVAL.}
+\caption{Resultado preliminar do modelo CNN proposto para o artigo \cite{marcelo-vem-2019} em comparação com outras duas arquiteturas (bi-LSTM com CNN e Embedding). Estes resultados foram obtidos a partir da amostra EVAL.}
 \label{table:resultados-preliminares}
 \end{table}
-
-Conforme a tabela~\ref{table:resultados-preliminares}, tanto o \emph{CNN} quanto o bi-LSTM com CNN obtiveram resultados próximos. O\emph{CNN} obteve um resultado relativamente menor, mas o seu tempo de duração de treinamento é de apenas 6s. Enquanto o treinamento do bi-LSTM durou cerca de 48 minutos. Tanto o treinamento quanto a avaliação foram executadas na plataforma \Gls{colab} do Google. No momento de treinamento e coleta dos resultados, a execução foi feita em uma máquina virtual com acesso a uma \acrshort{vgpu} Tesla K80.
 
 Para entender um pouco melhor o resultado da média harmônica MRR, a figura abaixo exibe as posições da primeira ocorrência do trecho de código-fonte encontradas durante a avaliação dos modelos.
 
@@ -209,10 +196,10 @@ Para entender um pouco melhor o resultado da média harmônica MRR, a figura aba
 \end{figure}
 
 
-Tanto o bi-LSTM com CNN quanto CNN conseguiram classificar os trechos de código-fonte entre as 3 (três) primeiras posições em 75\% dos casos. O modelo bi-LSTM com CNN obteve uma precisão TOP-1 de 51\%, i.e., em mais da metade das vezes, o trecho de código-fonte relevante ficou na primeira posição. 
+Tanto o CNN quanto o bi-LSTM com CNN conseguiram classificar os trechos de código-fonte entre as 3 (três) primeiras posições em 75\% dos casos. O modelo bi-LSTM com CNN obteve uma precisão TOP-1 de 51\%, i.e., em mais da metade das vezes, o trecho de código-fonte relevante ficou na primeira posição. Já a nossa arquitetura proposta obteve um TOP-1 de aproximadamente 41\%. Um ponto a ser levantado é que a nossa métrica MRR só leva em consideração a posição apontada pelo modelo para o trecho de código-fonte anotado como correto. Mesmo que o modelo apresente um outro trecho de código-fonte que também é solução, o nosso método de avaliação não leva em consideração. Neste caso, o modelo é penalizado.
 
-No exemplo abaixo\footnote{Este exemplo refere-se a questão \url{https://stackoverflow.com/questions/24593478/python-and-appending-items-to-text-and-excel-file}\label{foot:exemplo-resultados-preliminares}}, a rede bi-LSTM com CNN conseguiu mostrar o trecho de código-fonte anotado como correto na primeira posição.
-No caso do CNN, apesar de não apresentar o trecho propriamente anotado, ele apresentou outro trecho que também serve como resposta. Neste caso, apesar de ter sido penalizado, ele conseguiu responder a questão. 
+No exemplo a seguir\footnote{Este exemplo refere-se a questão \url{https://stackoverflow.com/questions/24593478/python-and-appending-items-to-text-and-excel-file}\label{foot:exemplo-resultados-preliminares}}, a rede bi-LSTM com CNN conseguiu apontar corretamente o trecho de código-fonte anotado como correto na primeira posição.
+A nossa arquitetura CNN, apesar de não apresentar o trecho propriamente anotado, ele apresentou outro trecho que também serve como solução. Neste caso, apesar de ter sido penalizado, ele conseguiu responder a questão. Este é um ponto importante que teremos que analisar com cautela ao longo deste trabalho. 
 
 \begin{tcolorbox}[colframe=orange!75!black,colback=gray!15!white,fonttitle=\bfseries,adjusted title=\large{Python and appending items to text and \colorbox{green}{excel} \colorbox{green}{file}}~\ref{foot:exemplo-resultados-preliminares},
 enlarge top by=1cm%equivalent to mdframed 'skipabove'
@@ -241,11 +228,9 @@ Conforme citado anteriormente, \cite{yao-2018} anotou o conjunto de dados utiliz
 
 \subsection{Considerações}
 
-Os resultados apresentados pelo modelo bi-LSTM com CNN e CNN parecem bastante promissores, a nosso ver. O próximo passo é comparar os nossos modelos com o modelo proposto por \cite{cambronero-deep-learning-code-search:2019} que é o estado da arte. 
+Os resultados apresentados pelo nosso modelo CNN parecem bastante promissores, a nosso ver. O próximo passo é comparar o nosso modelo com o modelo proposto por \cite{cambronero-deep-learning-code-search:2019} que é o estado da arte. 
 
-Tanto o bi-LSTM com CNN e CNN tem uma margem a melhorar. Não fizemos ajustes dos hiper-parâmetros e nem uso de regularização durante o treinamento.
-
-Nas figuras \ref{fig:grafico-erro-bi-lstm-cnn} e \ref{fig:grafico-erro-cnn} abaixo, podemos ver que tanto bi-LSTM com CNN quanto o CNN apresentaram uma diferença grande entre a curva de erro na amostra de validação e da amostra de treinamento, principalmente a partir da época $5$ (eixo $X$), próximo da interrupção do treinamento. Um indicativo de \textit{overfitting}. Já no caso da arquitetura \textit{Embedding}, figura \ref{fig:grafico-embedding}, as duas curvas de erro estão próximas até a interrupção. 
+Não fizemos ajustes dos hiper-parâmetros e nem uso de regularização durante o treinamento. Na Figura \ref{fig:grafico-erro-cnn} abaixo, podemos ver que o CNN apresenta uma diferença grande entre a curva de erro na amostra de validação e da amostra de treinamento, principalmente a partir da época $5$ (eixo $X$), próximo da interrupção do treinamento. Isto é um indicativo de \textit{overfitting}. A arquitetura bi-LSTM com CNN apresenta o mesmo problema (ver Figura~\ref{fig:grafico-erro-bi-lstm-cnn}). Já no caso da arquitetura \textit{Embedding}, figura \ref{fig:grafico-embedding}, as duas curvas de erro estão próximas até a interrupção. 
 
 \begin{figure}[h]
     \centering
@@ -268,6 +253,6 @@ Nas figuras \ref{fig:grafico-erro-bi-lstm-cnn} e \ref{fig:grafico-erro-cnn} abai
     \label{fig:grafico-embedding}
 \end{figure}
 
-Além da margem de melhora no treinamento, uma análise mais detalhada do resultado é necessário. Conforme o exemplo citado na seção anterior, o modelo CNN apresentou uma resposta correta para a pergunta, porém foi penalizada pois não era exatamente o trecho anotado como correto. 
+Podemos perceber que de acordo com as figuras~\ref{fig:grafico-erro-cnn} e \ref{fig:grafico-erro-bi-lstm-cnn}, tanto o CNN quanto o bi-LSTM com CNN tem uma margem a melhorar. Além da margem de melhora no treinamento, uma análise mais detalhada do resultado é necessário. Conforme o exemplo citado na seção anterior, o modelo CNN apresentou uma resposta correta para a pergunta, porém foi penalizada pois não era exatamente o trecho anotado como correto. 
 
 Caso haja mais casos deste tipo, podemos adotar o mesmo procedimento proposto por \cite{cambronero-deep-learning-code-search:2019} de avaliação automática. Um trecho será considerado correto quando a diferença do resultado da função $h_{\theta}$ de similaridade entre ele e o trecho anotado como correto estiver dentro de um certo intervalo.

@@ -33,7 +33,7 @@ Coleta/Pré-processamento dos dados & Pré-processamento dos dados & Verificar a
 Coleta/Pré-processamento dos dados & Treinamento não-supervisionado: \textit{word2vec} & Análise do vetor de representação distribuída e se há necessidade de ajustes nos parâmetros de treinamento e dimensão do vetor & Visualização do t-SNE para as 50 palavras mais frequentes das questões e trechos de código-fonte e suas relações. & Parcialmente concluído  \\
 \hline
 
-Definição do tipo de rede neural/arquitetura & Dois modelos propostos: bi-LSTM com CNN e CNN & & & Concluído  \\
+Definição do tipo de rede neural/arquitetura & Modelo proposto: CNN & & & Concluído  \\
 \hline
 
 Definição do tipo de rede neural/arquitetura & Modelos para comparação: \textit{Embedding} e o \textit{bi-modal embedding} com o mecanismo de atenção proposto por \cite{cambronero-deep-learning-code-search:2019} & Implementar o modelo proposto por \cite{cambronero-deep-learning-code-search:2019} & & Em andamento  \\
@@ -57,7 +57,7 @@ Treinamento & Função objetivo & Função de perda \textit{hinge} &  & Concluí
 Treinamento & Critério de parada & Adotamos os mesmos critérios de treinamento proposto por \cite{iyer-etal-2016-summarizing}. O treinamento é feito durantes 80 épocas ou enquanto o erro for maior que um certo valor. No caso, estamos utilizando o valor $0,001$ & & Concluído  \\
 \hline
 
-Análise do desempenho da rede neural & \textit{Overfitting} e extrapolação & Diminuir a diferença entre o erro de validação e o erro de treinamento dos modelos CNN. Inicialmente, utilizaremos técnicas de regularização e algortimos de otimização.  & Análise através das curvas de erro de validação e treinamento vs época e capacidade do modelo & Em andamento \\
+Análise do desempenho da rede neural & \textit{Overfitting} e extrapolação & Diminuir a diferença entre o erro de validação e o erro de treinamento do modelo CNN. Inicialmente, utilizaremos técnicas de regularização e algortimos de otimização.  & Análise através das curvas de erro de validação e treinamento vs época e capacidade do modelo & Em andamento \\
 \hline
 
 Análise do desempenho da rede neural & Visualização do pior caso & Analisar as classificações feita pelo modelo através dos piores casos. No nosso caso, os piores casos são os trechos com os menores valores de MRR. Conforme \cite{Goodfellow-et-al-2016:pratical-methodology}, esta análise permite identificar possíveis problemas no conjunto de dados. & Verificação manual & Em andamento \\
