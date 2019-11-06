@@ -2,7 +2,7 @@
 \chapter{Abordagem}
 \label{cap:abordagem}
 
-Conforme citado no capítulo~\ref{cap:fundamentacao-teorica}, uma técnica muito utilizada para \textit{code retrieval} é a \textit{joint embedding}. Para utilizar esta técnica, três fatores devem ser levados em consideração:
+Conforme citado no Capítulo~\ref{cap:fundamentacao-teorica}, uma técnica muito utilizada para \textit{code retrieval} é a \textit{joint embedding}. Para utilizar esta técnica, três fatores devem ser levados em consideração:
 
 \begin{itemize}
     \item Representação de cada palavra de uma sentença ou trecho de código-fonte
@@ -15,15 +15,13 @@ A nossa proposta é criar um modelo que faz uso das redes convolucionais na apre
 \section{Representação de cada palavra de uma sentença ou trecho de código-fonte}
 \label{sec:abordagem-representacao-token}
 
-As questões e os trechos de código-fonte são compostas por palavras, pontuações, separadores e caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, iremos representá-las como um vetor formado por uma sequência de palavaras, apenas removendo os caracteres de acento e pontuação.
+As questões e os trechos de código-fonte são compostos por palavras, pontuações, separadores e caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, iremos representá-las como um vetor formado por uma sequência de palavaras, apenas removendo os caracteres de acento e pontuação.
 
-No caso do código-fonte, iremos partir da  mesma hipótese que utilizamos no artigo \cite{marcelo-vem-2019} apresentado no \acrfull{vem}. Esta hipótese foi levantada por \cite{Allamanis:2018:SML} e diz que software é uma forma de comunicação humana e tem propriedades estatísticas similares a corpora de linguagem natural. A partir disto, iremos aplicar os mesmos procedimentos adotados para as questões aos trechos de código-fonte. Quer dizer, os trechos de código-fonte serão tratados como uma sequência de palavras e terão os acentos e caracteres especiais removidos.
+No caso do código-fonte, iremos partir da  mesma hipótese que utilizamos no artigo \cite{marcelo-vem-2019}, apresentado no \acrfull{vem}. Essa hipótese foi levantada por \cite{Allamanis:2018:SML} e diz que software é uma forma de comunicação humana e tem propriedades estatísticas similares a corpora de linguagem natural. A partir disto, iremos aplicar os mesmos procedimentos adotados para as questões aos trechos de código-fonte. Quer dizer, os trechos de código-fonte serão tratados como uma sequência de palavras e terão os acentos e caracteres especiais removidos.
 
-Para cada palavra devemos definir uma representação. Uma boa representação para as palavras são os vetores de representação distribuída. Pois, segundo \cite{Goodfellow-et-al-2016:representation-learning}, as redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída. E conforme o próprio \citeauthor{Goodfellow-et-al-2016:representation-learning}, uma boa representação deve auxiliar na aprendizagem de uma tarefa posterior. No nosso caso, as representações devem auxiliar a tarefa de aprender a encontrar uma correlação entre as questões e os trechos de código-fonte mais relevantes.
+Para cada palavra devemos definir uma representação. Uma boa representação para as palavras são os vetores de representação distribuída. Pois, segundo \cite{Goodfellow-et-al-2016:representation-learning}, as redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída. E conforme os próprios autores, uma boa representação deve auxiliar na aprendizagem de uma tarefa posterior. No nosso caso, as representações devem auxiliar a tarefa de aprender a encontrar uma correlação entre as questões e os trechos de código-fonte mais relevantes.
 
-Portanto, neste trabalho, cada palavra será representada através de um vetor de representação distribuída. Para mapeá-las utilizaremos inicialmente o algoritmo \textit{word2vec}. Utilizaremos o \textit{word2vec} com \textit{skip-gram}. O \textit{skip-gram} prediz as palavras do contexto a partir de uma palavra alvo. Diferente do CBoW que prediz a palavra alvo a partir das palavras do contexto. 
-
-Segundo \cite{mikolov2013distributed}, \textit{skip-gram} obteve um desempenho melhor em problemas semânticos, e.g., relacionar uma palavra masculina com a equivalente feminina, relacionar o nome de uma capital a um país ou cidade a um estado. No caso do código-fonte, isto é uma característica importante, pois pode ajudar a agrupar os \textit{tokens} de acordo com o tipo. Por exemplo, agrupar a instrução de decisão \textit{while} próxima da instrução \textit{for}. E relacionar a instrução de decisão \textit{if} próxima da \textit{else}.
+Portanto, neste trabalho, cada palavra será representada através de um vetor de representação distribuída. Para mapeá-las utilizaremos inicialmente o algoritmo \textit{word2vec}. Utilizaremos o \textit{word2vec} com \textit{skip-gram}, que prediz as palavras do contexto a partir de uma palavra alvo. Segundo \cite{mikolov2013distributed}, \textit{skip-gram} obteve um desempenho melhor em problemas semânticos, e.g., relacionar uma palavra masculina com a equivalente feminina, relacionar o nome de uma capital a um país ou cidade a um estado. No caso do código-fonte, isto é uma característica importante, pois pode ajudar a agrupar os \textit{tokens} de acordo com o tipo. Por exemplo, agrupar a instrução de decisão \textit{while} próxima da instrução \textit{for}. E relacionar a instrução de decisão \textit{if} próxima da \textit{else}.
 
 No nosso caso, o \textit{word2vec} irá mapear cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{Q}$ o conjunto formado pelas palavras das questões e $\mathbb{C}$ o conjunto constituído pelas palavras presentes nos trechos de código-fonte. Para cada palavra ${q} \in \mathbb{Q}$ e palavra ${c} \in \mathbb{C}$ teremos:
 
@@ -57,7 +55,7 @@ Com cada palavra representada por um vetor de representação distribuída, o pr
 A operação de convolução utiliza um filtro convolucional $\bm{F}  = [\bm{F}(1),· · ·, \bm{F}(m)]$, tal que $\bm{F} \in \mathbb{R}^{m X d}$. Este filtro é aplicado em uma janela de $m$ palavras para produzir um novo vetor.
 Seja $\bm{x}(i, i + j)$ referência a concatenação dos vetores $\bm{x}(i), \bm{x}(i + 1), . . ., \bm{x}(i + j)$. . Ao aplicar $\bm{F}$ na seguinte janela de palavras $\bm{x}(i, i + m - 1)$, um novo vetor $\bm{c}(i)$ é calculado da seguinte maneira:
 
-\begin{equation}
+\begin{equation}\label{eq:calc_convolution_ci}
     \bm{c}(i) = tanh \left[\left(\sum_{j=i}^{i + m - 1} \bm{x}(j)^{T}\bm{F}(j)\right) + b\right]
 \end{equation}
 
@@ -66,14 +64,14 @@ onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro. Para ex
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-problema/first-step-convolution.pdf}
-    \caption{Primeiro passo de um filtro convolucional F.}
+    \caption{Primeiro passo da operação de convolução. Aplica-se um filtro convolucional $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$, em uma sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Este primeiro passo é equivalente a seguinte operação: $\bm{c}(1) = tanh \left[\left(\sum_{j=1}^{2} \bm{x}(j)^{T}\bm{F}(j)\right) + b\right]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.} 
     \label{fig:first-step-convolutional}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-problema/second-step-convolution.pdf}
-    \caption{Segundo passo de um filtro convolucional F.}
+    \caption{Segundo passo da operação de convolução. Aplica-se o mesmo filtro convolucional $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$, em uma sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Neste segundo passo, deslocamos uma posição no eixo $0$. Este segundo passo é equivalente a: $\bm{c}(2) = tanh [(\sum_{j=2}^{3} \bm{x}(j)^{T}\bm{F}(j)) + b]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.}
     \label{fig:second-step-convolutional}
 \end{figure}
 
@@ -91,11 +89,11 @@ Em uma arquitetura CNN, existem centenas de filtros convolucionais $\bm{F}$, tam
 Esta operação de concatenação é realizada apenas entre os filtros que tem diferentes tamanhos de janela, conforme ilustra a Figura~\ref{fig:cnn-architecture-proposal}.
 Então para $k$ tamanhos de janelas diferentes, a operação de concatenação irá gerar um vetor $\bm{c}_{\bm{m}}$ através da junção dos $k$ vetores de saída diferentes.
 
-\begin{equation}
+\begin{equation}\label{eq:concatenacao-cnn-cm}
     \bm{c}_{\bm{m}} = \left[\bm{c}_{m_1}, \bm{c}_{m_2}, . . ., \bm{c}_{m_{k}}\right]
 \end{equation}
 
-Onde $\bm{c}_{\bm{m}}$ é o resultado da concatenação dos diferentes vetores $\bm{c}$, $\bm{m}$ é um vetor com os diferentes tamanhos de janela, $\bm{m} = \{m_1, m_2, . . ., m_{k}\}$, e $k$ é a quantidade de elementos. Somente ao final que aplicamos a camada \textit{maxpool}. A camada \textit{maxpool} aplica a operação \textit{max}, obtendo o vetor de representação final da sentença $\bm{c'}_{\bm{m}}$. A operação \textit{max} é aplicada no eixo $0$, conforme ilustra a figura~\ref{fig:cnn-architecture-proposal}. Portanto o vetor final $\bm{c'}_{\bm{m}}$ é obtido da seguinte maneira:
+Onde $\bm{c}_{\bm{m}}$ é o resultado da concatenação dos diferentes vetores $\bm{c}$, $\bm{m}$ é um vetor com os diferentes tamanhos de janela, $\bm{m} = \{m_1, m_2, . . ., m_{k}\}$, e $k$ é a quantidade de elementos. Somente ao final que aplicamos a camada \textit{maxpool}. A camada \textit{maxpool} aplica a operação \textit{max}, obtendo o vetor de representação final da sentença $\bm{c'}_{\bm{m}}$. A operação \textit{max} é aplicada no eixo $0$, conforme ilustra a Figura~\ref{fig:cnn-architecture-proposal}. Portanto o vetor final $\bm{c'}_{\bm{m}}$ é obtido da seguinte maneira:
 
 \begin{equation}
     \bm{c'}_{\bm{m}} = max\left(\left[\bm{c}_{m_1}, \bm{c}_{m_2}, . . ., \bm{c}_{m_k}\right], axis = 0\right)
@@ -116,7 +114,7 @@ No nosso trabalho, utilizaremos $\bm{c'}_{\bm{m}}$ obtida através da operação
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-problema/cnn-architecture.pdf}
-    \caption{Arquitetura proposta.}
+    \caption{Ilustração das 3 operações realizadas pela nossa arquitetura CNN para obter o vetor de representação final $\bm{c'}_{\bm{m}}$. Neste exemplo, utilizamos 3 filtros $\bm{F} \in \mathbb{R}^{n X d X f}$ com diferentes janelas $m$, onde $m = \{2, 3, 4\}$. Cada filtro tem tamanho $f = 2$. Temos um total de 6 filtros ao final. Cada filtro é aplicado a sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. O primeiro passo é a obtenção do vetor $\bm{c}$ de características. Posteriormente, é realização a operação de concatenação, no qual é obtido o vetor $\bm{c}_{\bm{m}}$, conforme descrito na operação~\ref{eq:concatenacao-cnn-cm}. Ao final, a operação \textit{max} é aplicada no eixo $0$, obtendo o vetor de representação final $\bm{c'}_{m}$. Este vetor $\bm{c'}_{m}$ será o nosso vetor de representação das nossas sentenças, i.e., o vetor de representação das questões e trechos de código-fonte. Figura adaptada do artigo de \cite{zhang-guide-convolutional-cnn-embedding-ilustration:2015}}
     \label{fig:cnn-architecture-proposal}
 \end{figure}
 
@@ -141,7 +139,7 @@ Dado que estamos utilizando a função \textit{cosine} de similaridade, $h_{\the
 
 \section{Considerações}
 
-A nossa proposta apresentada neste capítulo foi a utilização de redes convolucionais na representação de questões e trechos de código-fonte. Conforme apresentado na seção~\ref{sec:representacao-sentenca}, a nossa arquitetura utiliza as operações de convolução e \textit{maxpool}. Estas operações partem da hipótese de que função que deve ser aprendida contém apenas interações locais e são invariantes a pequenas translações. Para a tarefa de \textit{code retrieval}, a nossa hipótese, é que a identificação das interações locais entre as palavras pode auxiliar na obtenção de uma representação contextualizada. Por exemplo, para inferir o contexto do trecho de código a seguir, o CNN deveria ser capaz de identificar a interação entre as palavras \emph{csv} e \emph{writer} na linha 4, por exemplo. 
+A nossa proposta apresentada neste capítulo foi a utilização de redes convolucionais na representação de questões e trechos de código-fonte. Conforme apresentado na Seção~\ref{sec:representacao-sentenca}, a nossa arquitetura utiliza as operações de convolução e \textit{maxpool}. Estas operações partem da hipótese de que função que deve ser aprendida contém apenas interações locais e são invariantes a pequenas translações. Para a tarefa de \textit{code retrieval}, a nossa hipótese, é que a identificação das interações locais entre as palavras pode auxiliar na obtenção de uma representação contextualizada. Por exemplo, para inferir o contexto do trecho de código a seguir, o CNN deveria ser capaz de identificar a interação entre as palavras \emph{csv} e \emph{writer} na linha 4, por exemplo. 
 
 \begin{mypython-linenumber}{CNN}
 import csv
@@ -173,4 +171,4 @@ Indiretamente, dado que o CNN prioriza interações locais, estaremos respondend
 
 O que entedemos por características latentes e importantes são palavras ou variáveis latentes que permitam inferir o contexto de um trecho de código. No exemplo anterior, as palavras \emph{csv}, \emph{writer} e \emph{writerows} permitem deduzir o contexto do trecho de código. Que no caso, refere-se a escrita dos valores de cada elemento de um vetor em um arquivo CSV. Nem sempre estas características são observáveis diretamente nos dados. Nestes casos, as redes deep learning capturam estas características através de variáveis latentes ou \textit{hidden}, $\bm{h}$. Através da variável \textit{hidden} $\bm{h}$, ela consegue identificar uma dependência indireta entre duas variáveis quaisquer $v_{i}$ e $v_{j}$ através da dependência direta entre $v_{i}$ e $\bm{h}$ e $\bm{h}$ e $v_{j}$ \citep{Goodfellow-et-al-2016:structured-probabilistic-models-for-deep-learning}.
 
-Para avaliar se o modelo está inferindo o contexto do trecho de código corretamente, verificaremos se o modelo está aproximando as questões aos trechos de código que são respostas. Conforme descrito na seção~\ref{sec:funcao-objetivo}, o modelo será induzido a fazer esta aproximação durante o treinamento através da função \textit{hinge}. Mas para saber se o modelo aprendeu, avaliaremos esta aproximação em outro conjunto de dados. No nosso caso, avaliaremos em um conjunto de dados anotados manualmente. O desempenho do modelo será medido através da métrica \acrshort{mrr} descrita no capítulo~\ref{cap:resultados-preliminares}. Um valor alto do MRR indica que o modelo está aproximando corretamente as questões aos trechos de código-fonte anotados como respostas. Para nós, isto é um indicativo de que o modelo está inferindo o contexto do trecho de código corretamente.
+Para avaliar se o modelo está inferindo o contexto do trecho de código corretamente, verificaremos se o modelo está aproximando as questões aos trechos de código que são respostas. Conforme descrito na Seção~\ref{sec:funcao-objetivo}, o modelo será induzido a fazer esta aproximação durante o treinamento através da função \textit{hinge}. Mas para saber se o modelo aprendeu, avaliaremos esta aproximação em outro conjunto de dados. No nosso caso, avaliaremos em um conjunto de dados anotados manualmente. O desempenho do modelo será medido através da métrica \acrshort{mrr} descrita no Capítulo~\ref{cap:resultados-preliminares}. Um valor alto do MRR indica que o modelo está aproximando corretamente as questões aos trechos de código-fonte anotados como respostas. Para nós, isto é um indicativo de que o modelo está inferindo o contexto do trecho de código corretamente.
