@@ -6,20 +6,20 @@ De acordo com \cite{Chen-bi-variational-autoencoder:2018}, a tarefa do \textit{c
 
 \emph{Dado uma descrição em linguagem natural, recuperar o trecho de código-fonte mais relevante, tal que os desenvolvedores possam encontrar rapidamente os trechos de código que atendam as suas necessidades.}
 
-Já \cite{cambronero-deep-learning-code-search:2019} utiliza um outro termo para referir-se a \textit{code retrieval}, é o termo \textit{code search}. Para ele, o objetivo do \textit{code search} é recuperar um trecho de código-fonte a partir de um enorme repositório de código-fonte, que mais se aproxima da intenção do desenvolvedor, expressa em linguagem natural. Neste trabalho, optamos por utilizar o termo \textit{code retrieval} cunhado por \cite{Chen-bi-variational-autoencoder:2018}. Porém, a nosso entendimento, tanto \textit{code search} quanto \textit{code retrieval} referem-se a mesma tarefa.
+Já \cite{cambronero-deep-learning-code-search:2019} utiliza um outro termo para referir-se a \textit{code retrieval}, é o termo \textit{code search}. Para ele, o objetivo do \textit{code search} é recuperar um trecho de código-fonte a partir de um enorme repositório de código-fonte, que mais se aproxima da intenção do desenvolvedor, expressa em linguagem natural. Ambos os termos, a nosso entendimento, referem-se a mesma tarefa. Neste trabalho, utilizaremos o termo \textit{code retrieval} cunhado por \cite{Chen-bi-variational-autoencoder:2018} para referir-se a recuperação de trecho de código-fonte. 
 
-Conforme \cite{cambronero-deep-learning-code-search:2019}, recuperação de trecho de código-fonte consiste em recuperar o trecho de código que mais se aproxima da intenção do usuário expressa em linguagem natural. No nosso caso, as intenções expressas em linguagem natural serão títulos de questões coletadas do site Stack Overflow. E estas questões coletadas tem uma característica importante, elas são do tipo \textit{how-to-do-it}. Estes tipos de questões expressam a intenção do usuário. Além disso, as respostas para este tipo de questão, normalmente, são curtas e diretas \citep{yao-2018}. A partir disso, quando fizermos referência a palavra \emph{questão}, estamos nos referindo a intenção do desenvolvedor expressa em linguagem natural.
+Conforme \cite{cambronero-deep-learning-code-search:2019}, recuperação de trecho de código-fonte consiste em recuperar o trecho de código que mais se aproxima da intenção do usuário expressa em linguagem natural. No nosso caso, as intenções expressas em linguagem natural serão títulos de questões coletadas do site Stack Overflow. Estas questões coletadas tem uma característica importante, elas são do tipo \textit{how-to-do-it}. Estes tipos de questões expressam a intenção do usuário. A partir disso, quando fizermos referência a palavra \emph{questão}, estaremos nos referindo a intenção do desenvolvedor expressa em linguagem natural.
 
 
 
 \section{Definição}\label{sec:code-retrieval-definicao}
 
 
-Para formalizar, adotaremos a mesma definição proposta por \cite{iyer-etal-2016-summarizing, Yao-coacor:2019} para \textit{code retrieval}:
+Para formalizarmos a tarefa de \textit{code retrieval}, adotaremos a mesma definição proposta por \cite{iyer-etal-2016-summarizing} e \cite{Yao-coacor:2019}:
 
-Seja $\mathbb{Q}$ um conjunto formado por questões e/ou intenções descritas em linguagem natural. Seja $\mathbb{C}$ um conjunto de trechos de códigos-fontes. Dado uma questão em linguagem natural $q \in \mathbb{Q}$ e um conjunto com os trechos de código-fonte candidatos $\mathbb{C}_{a} \subset \mathbb{C}$, \textit{code retrieval} recupera o trecho de código $c^{+} \in \mathbb{C}_{a}$ que é a resposta correta observada a dada questão. Formalmente, para um conjunto de treinamento com pares de questões e trechos de código-fonte (<$q$, $c^{+}$>), \textit{code retrieval} é definido como:
+Seja $\mathbb{Q}$ um conjunto formado por questões e/ou intenções descritas em linguagem natural. Seja $\mathbb{C}$ um conjunto de trechos de códigos-fontes. Dado uma questão em linguagem natural $q \in \mathbb{Q}$ e um conjunto com os trechos de código-fonte candidatos $\mathbb{C}_{a} \subset \mathbb{C}$. O objetivo do \textit{code retrieval} é recuperar o trecho de código $c^{+} \in \mathbb{C}_{a}$, onde $c^{+}$ é a resposta anotada como correta a dada questão. Formalmente, para um corpus de treinamento composto por pares de questões e trechos de código-fonte, \textit{code retrieval} é definido como:
 
-\textbf{Code Retrieval}: Dada uma questão em linguagem natural $q \in \mathbb{Q}$, um modelo $F_{r}$ irá aprender a recuperar o trecho de código-fonte $c^{+} \in \mathbb{C}_{a}$ com a maior pontuação:
+\textbf{Code Retrieval}: Dada uma questão em linguagem natural $q \in \mathbb{Q}$, um modelo $F_{r}$ será treinado a recuperar $c^{+} \in \mathbb{C}_{a}$ com a maior pontuação:
 
 \begin{equation}\label{eq:code-retrieval}
 c^{+} = \underset{c \in \mathbb{C}_{a}}{argmax}\text{ } F_{r}(q , c)
@@ -36,7 +36,7 @@ A representação é um fator importante para a tarefa de \textit{code retrieval
 
 \subsection{\textit{Representação dos \textit{tokens} ou palavras}}
 
-As questões e os trechos de códigos-fontes são compostas por um conjunto de palavras ou \textit{tokens}. E conforme citado anteriormente, uma boa representação para as palavras é um vetor de representação distribuída. No caso, o vetor de representação distribuída ou \textit{embedding} permite representar uma palavra através de um vetor com valores reais ($\mathbb{R}$). De tal maneira, que podemos definir \textbf{embedding} como uma função $\mathbb{E}$, tal que \citep{cambronero-deep-learning-code-search:2019}:
+As questões e os trechos de códigos-fontes são compostas por um conjunto de palavras ou \textit{tokens}. E conforme citado anteriormente, uma boa representação para as palavras é um vetor de representação distribuída. No caso, o vetor de representação distribuída ou \textit{embedding} permite representar uma palavra através de um vetor com valores reais ($\mathbb{R}$). Podemos definir \textbf{embedding} como uma função $\mathbb{E}$ \citep{cambronero-deep-learning-code-search:2019}:
 
 \begin{equation}
     \mathbb{E}: \mathbb{X} \rightarrow \mathbb{R}^{d}
@@ -68,7 +68,7 @@ O algoritmo \textit{skip-gram} mapeia as palavras que estão perto uma das outra
 
 \subsection{\textit{Representação das sentenças e código-fonte}}
 
-O vetor de representação distribuída de cada palavra pode ser combinada para gerar um vetor de representação distribuída para a sentença inteira, e.g., podemos ter um vetor de representação distribuída para a questão inteira, combinando os vetores de cada palavra que fazem parte da questão. De acordo com \cite{cambronero-deep-learning-code-search:2019}, duas possíveis abordagens podem ser utilizadas para combinar as palavras. A primeira abordagem, podemos tratar o vetor de palavras como um \textit{bag}. Neste caso, a ordem das palavras não importa. Por exemplo, o vetor abaixo:
+O vetor de representação distribuída de cada palavra pode ser combinada para gerar um vetor de representação distribuída para a sentença inteira, e.g., podemos ter um vetor de representação distribuída para a questão inteira, combinando os vetores de cada palavra que fazem parte da questão. De acordo com \cite{cambronero-deep-learning-code-search:2019}, duas possíveis abordagens podem ser utilizadas para combinar as palavras. Na primeira abordagem, podemos tratar o vetor de palavras como um \textit{bag}. Neste caso, a ordem das palavras não importa. Por exemplo, o vetor abaixo:
 
 \begin{mypythonembedding}{Vetor de \textit{tokens}.}
   ['with', 'open', 'filename', 'mode', 'as', 'file', 'file', 'write', 'text']
@@ -114,14 +114,14 @@ No nosso caso, para representar uma questão ou trecho de código-fonte, podemos
 
 \subsection{Agrupamento de representações distribuídas}
 
-Com os vetores de representação das questões e trechos de código-fonte, o objetivo é encontrar um modelo capaz de recuperar o trecho de código-fonte mais relevante para uma determinada questão. Uma abordagem comumente utilizada é mapear os vetores das questões e trechos de código-fonte para um mesmo espaço vetorial. E apróximá-los através de uma função objetivo, de tal maneira que as questões fiquem próximas dos trechos de código-fonte relevantes. 
+Com os vetores de representação das questões e trechos de código-fonte, o objetivo é encontrar um modelo que seja capaz de recuperar o trecho de código-fonte mais relevante para uma determinada questão. Uma abordagem comumente utilizada é mapear os vetores das questões e trechos de código-fonte para um mesmo espaço vetorial. E apróximá-los através de uma função objetivo, de tal maneira que as questões fiquem próximas dos trechos de código-fonte relevantes. 
 
-Nesta abordagem, o objetivo é encontrar um modelo que seja capaz de correlacionar dados heterogêneos. No livro \cite{Goodfellow-et-al-2016:representation-learning}, a associação entre as representações é referida como agrupamento de distribuições ou \textit{joint distribution}. Já \cite{cambronero-deep-learning-code-search:2019, Allamanis-bimodal-source-code-natural-language:2015} utilizam o termo \textit{bi-modal embedding}. \cite{Zhang:2019:deep-learning-recommender-survey} utilizam \textit{jointly model}. E \cite{Gu-deep-code-search:2018} utilizam o temo agrupamento de representação distribuída ou \textit{joint embedding}. Neste trabalho, utilizaremos o termo \textit{joint embedding} ou agrupamento de representação distribuída.
+Nesta abordagem, o objetivo é encontrar um modelo que consiga correlacionar dados heterogêneos. No livro \cite{Goodfellow-et-al-2016:representation-learning}, a associação entre as representações é referida como agrupamento de distribuições ou \textit{joint distribution}. Já \cite{cambronero-deep-learning-code-search:2019} e \cite{Allamanis-bimodal-source-code-natural-language:2015} utilizam o termo \textit{bi-modal embedding}. \cite{Zhang:2019:deep-learning-recommender-survey} utilizam \textit{jointly model}. E \cite{Gu-deep-code-search:2018} utilizam o temo agrupamento de representação distribuída ou \textit{joint embedding}. Neste trabalho, utilizaremos o termo \textit{joint embedding} ou agrupamento de representação distribuída.
 
 
 \textit{Joint embedding}, ou agrupamento de representação distribuída, é uma técnica para mapear dados heterogêneos para um mesmo espaço vetorial, de tal forma que conceitos similares ocupem regiões próximas neste espaço \citep{Gu-deep-code-search:2018}. Esta técnica é comumente utilizada para encontrar modelos que correlacionem imagem e texto, tradução de textos e também é utilizada em problemas de perguntas e respostas e recomendações de conteúdo \citep{lai-etal-2018-review, Zhang:2019:deep-learning-recommender-survey}.
 
-Sejam $\mathbb{Q}$ e $\mathbb{C}$ conjuntos de dados heterogêneos. \textit{Joint embedding} pode ser formulado como:
+Por exemplo, sejam $\mathbb{Q}$ e $\mathbb{C}$ conjuntos de dados heterogêneos. \textit{Joint embedding} pode ser formulado como:
 
 \begin{equation}
         f: q \rightarrow t_{q} \rightarrow h_{\theta}(t_{q}, t_{c}) \leftarrow t_{c} \leftarrow c :g
