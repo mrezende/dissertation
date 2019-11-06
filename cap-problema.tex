@@ -2,8 +2,7 @@
 \chapter{Abordagem}
 \label{cap:abordagem}
 
-
-Conforme citado no capítulo~\ref{cap:trabalhos-relacionados}, uma técnica muito utilizada para o problema de \textit{code retrieval} é o \textit{joint embedding}. Para utilizar esta técnica, três fatores devem ser levados em consideração:
+Conforme citado no capítulo~\ref{cap:fundamentacao-teorica}, uma técnica muito utilizada para \textit{code retrieval} é a \textit{joint embedding}. Para utilizar esta técnica, três fatores devem ser levados em consideração:
 
 \begin{itemize}
     \item Representação de cada palavra de uma sentença ou trecho de código-fonte
@@ -11,22 +10,22 @@ Conforme citado no capítulo~\ref{cap:trabalhos-relacionados}, uma técnica muit
     \item Função objetivo do modelo
 \end{itemize}
 
+A nossa proposta é criar um modelo que faz uso das redes convolucionais na aprendizagem de representação das questões e trechos de código-fonte. Porém, conforme levantado anteriormente, outros aspectos também devem ser levados em consideração. Como as palavras serão representadas e qual função objetivo utilizaremos para que o modelo induza a aproximação das questões aos trechos de código-fonte que são solução. Então, neste capítulo, apresentamos a nossa abordagem para cada um destes itens.
+
 \section{Representação de cada palavra de uma sentença ou trecho de código-fonte}
 \label{sec:abordagem-representacao-token}
 
-As questões e os trechos de código-fonte são compostas por palavras, pontuações, separadores e caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, iremos representá-las como um vetor formado por uma sequência de palavaras removendo os caracteres de acento e pontuação.
+As questões e os trechos de código-fonte são compostas por palavras, pontuações, separadores e caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, iremos representá-las como um vetor formado por uma sequência de palavaras, apenas removendo os caracteres de acento e pontuação.
 
-No caso do código-fonte, iremos partir da  mesma hipótese que utilizamos no artigo \cite{marcelo-vem-2019} apresentado no \acrfull{vem}. Esta hipótese foi levantada por \cite{Allamanis:2018:SML} e diz que software é uma forma de comunicação humana e tem propriedades estatísticas similares a corpora de linguagem natural. A partir disto, iremos aplicar os mesmos procedimentos adotados para as questões aos trechos de código-fonte. Os trechos de código-fonte terão as pontuações e caracteres especiais removidos e serão tratados como uma sequência de palavras.
+No caso do código-fonte, iremos partir da  mesma hipótese que utilizamos no artigo \cite{marcelo-vem-2019} apresentado no \acrfull{vem}. Esta hipótese foi levantada por \cite{Allamanis:2018:SML} e diz que software é uma forma de comunicação humana e tem propriedades estatísticas similares a corpora de linguagem natural. A partir disto, iremos aplicar os mesmos procedimentos adotados para as questões aos trechos de código-fonte. Quer dizer, os trechos de código-fonte serão tratados como uma sequência de palavras e terão os acentos e caracteres especiais removidos.
 
-No nosso caso, tanto as questões e os trechos de código-fonte serão representados por um vetor formado por uma sequência de palavras. E para cada palavra no vetor, devemos definir uma representação.
+Para cada palavra devemos definir uma representação. Uma boa representação para as palavras são os vetores de representação distribuída. Pois, segundo \cite{Goodfellow-et-al-2016:representation-learning}, as redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída. E conforme o próprio \citeauthor{Goodfellow-et-al-2016:representation-learning}, uma boa representação deve auxiliar na aprendizagem de uma tarefa posterior. No nosso caso, as representações devem auxiliar a tarefa de aprender a encontrar uma correlação entre as questões e os trechos de código-fonte mais relevantes.
 
-De acordo com \cite{Goodfellow-et-al-2016:representation-learning}, as redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída. E conforme o próprio \cite{Goodfellow-et-al-2016:representation-learning}, uma boa representação deve auxiliar na aprendizagem de uma tarefa posterior. No nosso caso, as representações devem auxiliar a tarefa de aprender a encontrar uma correlação entre as questões e os trechos de código-fonte mais relevantes.
-
-Neste trabalho, cada palavra será representada através de um vetor de representação distribuída. Para mapear as palavras para vetores de representação distribuída, utilizaremos inicialmente o algoritmo não-supervisionado \textit{word2vec}. Utilizaremos o \textit{word2vec} com \textit{skip-gram}. O \textit{skip-gram} prediz as palavras do contexto a partir de uma palavra alvo. Diferente do CBoW que prediz a palavra alvo a partir das palavras do contexto. 
+Portanto, neste trabalho, cada palavra será representada através de um vetor de representação distribuída. Para mapeá-las utilizaremos inicialmente o algoritmo \textit{word2vec}. Utilizaremos o \textit{word2vec} com \textit{skip-gram}. O \textit{skip-gram} prediz as palavras do contexto a partir de uma palavra alvo. Diferente do CBoW que prediz a palavra alvo a partir das palavras do contexto. 
 
 Segundo \cite{mikolov2013distributed}, \textit{skip-gram} obteve um desempenho melhor em problemas semânticos, e.g., relacionar uma palavra masculina com a equivalente feminina, relacionar o nome de uma capital a um país ou cidade a um estado. No caso do código-fonte, isto é uma característica importante, pois pode ajudar a agrupar os \textit{tokens} de acordo com o tipo. Por exemplo, agrupar a instrução de decisão \textit{while} próxima da instrução \textit{for}. E relacionar a instrução de decisão \textit{if} próxima da \textit{else}.
 
-O \textit{word2vec} irá mapear cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{Q}$ o conjunto de palavras das questões, e $\mathbb{C}$ o conjunto de palavras presentes nos trechos de código-fonte. Para cada palavra ${q} \in \mathbb{Q}$ e ${c} \in \mathbb{C}$, teremos:
+No nosso caso, o \textit{word2vec} irá mapear cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{Q}$ o conjunto formado pelas palavras das questões e $\mathbb{C}$ o conjunto constituído pelas palavras presentes nos trechos de código-fonte. Para cada palavra ${q} \in \mathbb{Q}$ e palavra ${c} \in \mathbb{C}$ teremos:
 
 \begin{equation}
     f: {q} \rightarrow t_{q}, t_{q} \in \mathbb{R}^{d}
@@ -153,7 +152,7 @@ Além disso, segundo \cite{Goodfellow-et-al-2016:convolutional-networks}, CNN n�
 Ao optar por uma arquitetura, temos que levar em consideração as suas características inerentes e suas limitações. No caso do CNN, ele prioriza as interações locais ao invés de associações de palavras muito distantes. A nossa hipótese inicial é que esta característica seja mais importante para a recuperação de trecho de código-fonte no conjunto de dados que estamos utilizando. Dado estas características, reiteramos a nossa pergunta de pesquisa que pretendemos responder ao longo deste trabalho:
 
 \begin{itemize}
-    \item Ao utilizar a arquitetura CNN durante a aprendizagem de representação para recuperação de trecho de código-fonte, será que ele é capaz de extrair as características latentes e mais importantes para aproximar o trecho de código observado como correto a questão?
+    \item Será que o CNN é capaz de extrair as características latentes e mais importantes de modo a facilitar o modelo a encontrar uma correlação entre os trechos de código-fonte e as questões?
 \end{itemize}
 
 Indiretamente, dado que o CNN prioriza interações locais, estaremos respondendo as seguintes perguntas:

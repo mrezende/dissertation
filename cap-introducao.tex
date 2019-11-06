@@ -17,32 +17,36 @@ posterior \citep{Goodfellow-et-al-2016:representation-learning}. No nosso caso, 
 
 A proposta deste trabalho é verificar o uso das redes convolucionais na aprendizagem de representação. Dado que as redes convolucionais apresentaram um bom desempenho em diversos problema NLP, atingindo resultados competitivos em relação a outras arquiteturas como RNN \citep{tom-young:trends-deep-learning-nlp}, queremos avaliar o desempenho na recuperação de trecho de código-fonte. Mais especificamente, pretendemos avaliar se as redes convolucionais auxiliam na obtenção de um modelo capaz de correlacionar os trechos de código-fonte as intenções do desenvolvedor. 
 
-Um ponto importante a ressaltar é que ao optarmos por uma arquitetura CNN, estamos levando em consideração as suas características e limitações inerentes. Enquanto o RNN é capaz de fazer associações entre palavras muito distantes em um texto, o CNN prioriza interações locais. O CNN tem dificuldades para extrair dependências de palavras muito distantes de um texto. E outro ponto é que o CNN é sensível a permutação, ele não é capaz de memorizar o ponto exato de uma palavra em um texto \cite{Goodfellow-et-al-2016:convolutional-networks, tom-young:trends-deep-learning-nlp}.
+Um ponto importante a ressaltar é que ao optarmos por uma arquitetura CNN, estamos levando em consideração as suas características e limitações inerentes. Enquanto o RNN é capaz de fazer associações entre palavras muito distantes em um texto, o CNN prioriza interações locais. O CNN tem dificuldades para extrair dependências de palavras muito distantes. E outro ponto é que o CNN é sensível a permutação, ele não é capaz de memorizar a localização exata de uma palavra em um texto \citep{Goodfellow-et-al-2016:convolutional-networks, tom-young:trends-deep-learning-nlp}.
 
 A partir destas considerações, as perguntas que este trabalho pretende responder são:
 
+\begin{itemize}
+    \item Aprendizagem de representação através de uma arquitetura CNN auxilia na recuperação de trecho de código-fonte?
+    
+    \item Será que o CNN é capaz de extrair as características latentes e mais importantes de modo a facilitar o modelo a encontrar uma correlação entre os trechos de código-fonte e as intenções expressas em linguagem natural?
+\end{itemize}
 
+Indiretamente, dado que o CNN prioriza interações locais, estaremos respondendo também a seguinte pergunta:
+\begin{itemize}
+        \item As interações locais auxiliam na aproximação das intenções aos trechos de código-fonte?
+\end{itemize}
 
-Para isto, avaliaremos o uso das redes convolucionais no problema de \textit{code retrieval}. Avaliaremos duas arquiteturas: Uma composta somente por uma camada de rede convolucional e outra composta por uma camada de rede neural recorrente e outra camada de rede convolucional. Além de propor uma nova arquitetura para este problema, avaliaremos o modelo utilizando os dados de entrada da base StaQC, criada por \cite{yao-2018}. Esta base de dados é composta de milhares de pares de perguntas e trechos de código-fonte do StackOverFlow.
-
+Para respondê-las, avaliaremos um modelo que busca aproximar as intenções aos trechos de código-fonte. Para isto, o modelo vai aproximar as suas representações. Estas representações serão aprendidas através de uma arquitetura CNN. Para avaliar, utilizaremos um conjunto de dados composto por pares de questões e trechos de código-fonte coletados do site Stack Overflow disponibilizada por \cite{yao-2018}. 
 
 
 %% ------------------------------------------------------------------------- %%
 \section{Considerações Preliminares}
 \label{sec:consideracoes_preliminares}
 
-O foco deste trabalho é o problema do \textit{code retrieval}. Diferentemente dos trabalhos de \cite{iyer-etal-2016-summarizing} e \cite{Allamanis-bimodal-source-code-natural-language:2015} que abordaram também o problema de sumarização de código-fonte ou \textit{code summarization}. 
-
-Avaliaremos duas arquiteturas: Uma arquitetura bi-\acrshort{lstm} com \acrshort{cnn} proposta por \cite{tan-lstm-qa} e outra somente com camada \acrshort{cnn}. Iremos compará-las com outras outras arquiteturas de referência. A principal arquitetura de referência é a arquitetura proposta por \cite{cambronero-deep-learning-code-search:2019}, que é o estado da arte para este problema.
-
-A base de dados disponibilizada por \cite{yao-2018} contém pares de questões e trechos de código-fonte em Python e SQL. A princípio utilizaremos apenas os pares de perguntas e código-fonte em Python.
+O foco deste trabalho é o \textit{code retrieval}. Diferentemente dos trabalhos de \cite{iyer-etal-2016-summarizing} e \cite{Allamanis-bimodal-source-code-natural-language:2015} que abordaram também o problema de sumarização de código-fonte ou \textit{code summarization}. Para podermos avaliar a nossa arquitetura proposta, iremos compará-la com outras arquiteturas de referência e com a arquitetura proposta por \cite{cambronero-deep-learning-code-search:2019} que é o estado da arte atualmente. Em relação aos dados, a base de dados disponibilizada por \cite{yao-2018} contém pares de questões e trechos de código-fonte em Python e SQL. A princípio utilizaremos apenas os pares de perguntas e código-fonte em Python.
 
 
 %% ------------------------------------------------------------------------- %%
 \section{Objetivos}
 \label{sec:objetivo}
 
-O objetivo principal deste trabalho é propor uma nova abordagem para o problema do \textit{code retrieval}. Queremos avaliar se o uso de redes convolucionais auxiliam na obtenção de um modelo que seja capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor.
+O objetivo principal deste trabalho é propor uma nova abordagem para o \textit{code retrieval}. Queremos avaliar se o uso de redes convolucionais auxiliam na obtenção de um modelo que seja capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor.
 
 %% ------------------------------------------------------------------------- %%
 \section{Contribuições}
@@ -51,8 +55,8 @@ O objetivo principal deste trabalho é propor uma nova abordagem para o problema
 Dentre as contribuições deste trabalho estão:
 
 \begin{itemize}
-\item Proposta de uma nova abordagem para o problema de \textit{code retrieval};
-\item Avaliação de uma nova arquitetura para o problema;
+\item Proposta de uma nova abordagem para o \textit{code retrieval};
+\item Avaliação de uma nova arquitetura;
 \item Avaliação do modelo utilizando uma nova base de dados disponibilizada por \cite{yao-2018};
 \item Disponibilização do código-fonte, desde o pré-processamento até a avaliação final, em um repositório público;
 \item Publicação dos resultados através de um artigo científico
@@ -62,4 +66,4 @@ Dentre as contribuições deste trabalho estão:
 \section{Organização do Trabalho}
 \label{sec:organizacao_trabalho}
 
-No Capítulo~\ref{cap:trabalhos-relacionados}, apresentamos os conceitos e trabalhos relacionados ao problema de \textit{code retrieval}. No Capítulo~\ref{cap:abordagem}, apresentamos a nossa abordagem para o problema de pesquisa proposto. No Capítulo~\ref{cap:resultados-preliminares}, exibimos os resultados preliminares da arquitetura proposta utilizando os dados de \cite{yao-2018}. Já no capítulo~\ref{cap:cronograma} temos os próximos passos e o cronograma até a entrega do trabalho.
+No Capítulo~\ref{cap:fundamentacao-teorica}, apresentamos os conceitos e trabalhos relacionados ao \textit{code retrieval}. No Capítulo~\ref{cap:abordagem}, apresentamos a nossa abordagem para o item de pesquisa proposto. No Capítulo~\ref{cap:resultados-preliminares}, exibimos os resultados preliminares da arquitetura proposta utilizando os dados de \cite{yao-2018}. Já no Capítulo~\ref{cap:cronograma} temos os próximos passos e o cronograma até a entrega do trabalho.
