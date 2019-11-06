@@ -37,19 +37,31 @@ No nosso caso, o \textit{word2vec} irá mapear cada palavra para um espaço veto
 Onde $f$ e $g$ são o \textit{word2vec} com o algoritmo \textit{skip-gram}. $f$ e $g$ irão mapear cada palavra pertencente a um vocabulário a uma matriz distinta $\bm{T_{q}}$ e $\bm{T_{c}}$.
 Teremos duas matrizes: $\bm{T}_{q}^{|\mathbb{Q}| X d}$ e outra $\bm{T}_{c}^{|\mathbb{C}| X d}$, onde $|\mathbb{Q}|$ e $|\mathbb{C}|$ são o tamanho do vocabulário das questões e trechos de código-fonte, respectivamente. E $d$ é a dimensão do vetor de representação distribuída.
 
+Com estas duas matrizes $\bm{T}_{q}$ e $\bm{T}_{c}$, que contém as palavras dos vocabulários das questões e dos trechos de código-fonte mapeadas, podemos representar uma sentença através de vetores de representação distribuída. Por exemplo, dado uma questão $\bm{s} = \{ w_{1}, w_{2}, . . ., w_{n}\}$, onde $w_{i}, 1 \leq i \leq n$ é uma palavra. Podemos representar $\bm{s}$ através de um outro vetor $\bm{x}$, onde para cada palavra presente em $\bm{s}$, elas serão representadas através de um vetor de representação distribuída em $\bm{x}$. Para isto, basta recuperar o vetor $t_{q} \in \bm{T}_{q}$ correspondente a cada palavra presente em nossa questão. Logo, temos $\bm{x} = \{ x(w_{1}), x(w_{2}), . . ., x(w_{n})\}$, tal que $x(w_{i}) \in \bm{T}_{q}$ e $\bm{x}(w_{i}) \in \mathbb{R}^{d}$ é um vetor de representação distribuída. O próximo passo é combinar os elementos do vetor $\bm{x}$ para obter uma representação da sentença.
+
+
+
+
+
 \section{Representação da sentença e do trecho de código-fonte}
+\label{sec:representacao-sentenca}
 
-Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-las para obter uma representação para a questão e o trecho de código-fonte. Para isto, a nossa proposta é utilizar uma arquitetura CNN. 
+Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-las para obter uma representação para a questão e o trecho de código-fonte. Por exemplo, dado uma sentença $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, onde $\bm{x}(i) \in \mathbb{R}^{d}$ um vetor de representação distribuída da $i^{th}$ palavra da sentença, $d$ é a dimensão do vetor. Iremos combinar os elementos de $\bm{x}$ através das operações presentes em nossa arquitetura CNN. Basicamente são 3 operações:
 
-Para cada sentença (e.g. questão ou trecho de código-fonte), seja $\bm{x}(i) \in \mathbb{R}^{d}$ um vetor de representação distribuída para $i^{th}$ palavra da sentença, onde $d$ é a dimensão do vetor. Dado que uma sentença tem $n$ palavras, temos que $\bm{x}$ pode ser escrito da seguinte maneira: $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$.
+\begin{itemize}
+    \item Operação de convolução
+    \item Concatenação
+    \item \textit{Maxpool}
+\end{itemize}
 
-Seja $\bm{x}(i, i + j)$ referência a concatenação dos vetores $\bm{x}(i), \bm{x}(i + 1), . . ., \bm{x}(i + j)$. A operação de convolução é aplicada a este vetor. Isto envolve um filtro convolucional $\bm{F}  = [\bm{F}(1),· · ·, \bm{F}(m)]$, tal que $\bm{F} \in \mathbb{R}^{m X d}$. Este filtro é aplicado a uma janela de $m$ palavaras para produzir um novo vetor. Por exemplo, um novo vetor $\bm{c}(i)$, utilizando a seguinte janela de palavras $\bm{x}(i, i + m - 1)$, é calculado da seguinte maneira:
+A operação de convolução utiliza um filtro convolucional $\bm{F}  = [\bm{F}(1),· · ·, \bm{F}(m)]$, tal que $\bm{F} \in \mathbb{R}^{m X d}$. Este filtro é aplicado em uma janela de $m$ palavras para produzir um novo vetor.
+Seja $\bm{x}(i, i + j)$ referência a concatenação dos vetores $\bm{x}(i), \bm{x}(i + 1), . . ., \bm{x}(i + j)$. . Ao aplicar $\bm{F}$ na seguinte janela de palavras $\bm{x}(i, i + m - 1)$, um novo vetor $\bm{c}(i)$ é calculado da seguinte maneira:
 
 \begin{equation}
     \bm{c}(i) = tanh \left[\left(\sum_{j=i}^{i + m - 1} \bm{x}(j)^{T}\bm{F}(j)\right) + b\right]
 \end{equation}
 
-onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro. As figuras~\ref{fig:first-step-convolutional}, \ref{fig:second-step-convolutional} abaixo ilustram um exemplo dos dois primeiros passos da aplicação de um filtro convolucional $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$. Este filtro é aplicado a uma sentença formado por 6 palavras, que é representado pelo vetor de representação distribuída $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Pelas figuras, podemos perceber que o parâmetro $m$ do filtro $\bm{F}$ define como as palavras são combinadas. Neste caso, foram combinadas de duas em duas, um bi-gram.
+onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro. Para exemplificar esta operação, as figuras~\ref{fig:first-step-convolutional}, \ref{fig:second-step-convolutional} abaixo ilustram um exemplo dos dois primeiros passos da aplicação de um filtro convolucional $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$. Este filtro é aplicado a uma sentença formado por 6 palavras, que é representado pelo vetor de representação distribuída $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Pelas figuras, podemos perceber que o parâmetro $m$ do filtro $\bm{F}$ define como as palavras são combinadas. Neste caso, foram combinadas de duas em duas, um bi-gram.
 
 \begin{figure}[h]
     \centering
@@ -66,7 +78,7 @@ onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro. As figu
 \end{figure}
 
 
-O filtro $\bm{F}$ é aplicado a todas possíveis janelas de palavras utilizando os mesmos pesos para produzir um mapa das características (\textit{feature map}).
+Durante a operação de convolução, o filtro $\bm{F}$ é aplicado a todas possíveis janelas de palavras utilizando os mesmos pesos para produzir um mapa das características (\textit{feature map}).
 
 \begin{equation}
     \bm{c} = \{ \bm{c}(1), \bm{c}(2), . . ., \bm{c}(n - m + 1) \} 
@@ -75,16 +87,31 @@ O filtro $\bm{F}$ é aplicado a todas possíveis janelas de palavras utilizando 
 
 
 
-Em uma arquitetura CNN, existem centenas de filtros convolucionais $\bm{F}$, também chamados de \textit{kernel}, de diferentes tamanhos $m$ que percorrem toda uma sentença $\bm{x}$. Cada \textit{kernel} extrai características específicas de n-gram. Após a camada convolucional, i.e., após o cálculo do vetor $\bm{c}$, normalmente uma camada de maxpool é aplicada. Esta camada reduz a dimensionalidade do vetor de entrada aplicando uma operação \textit{max}, que extrai o maior elemento de cada vetor.
+Em uma arquitetura CNN, existem centenas de filtros convolucionais $\bm{F}$, também chamados de \textit{kernel}, de diferentes tamanhos $m$ que percorrem toda uma sentença $\bm{x}$. Cada \textit{kernel} extrai características específicas de n-gram. Após a operação de convolução, i.e., o cálculo de $\bm{c}$, realizamos a concatenação dos vetores de saída dos diferentes filtros.
+Esta operação de concatenação é realizada apenas entre os filtros que tem diferentes tamanhos de janela, conforme ilustra a Figura~\ref{fig:cnn-architecture-proposal}.
+Então para $k$ tamanhos de janelas diferentes, a operação de concatenação irá gerar um vetor $\bm{c}_{\bm{m}}$ através da junção dos $k$ vetores de saída diferentes.
 
 \begin{equation}
-    \bm{c'} = max\{\bm{c}\}
+    \bm{c}_{\bm{m}} = \left[\bm{c}_{m_1}, \bm{c}_{m_2}, . . ., \bm{c}_{m_{k}}\right]
 \end{equation}
 
+Onde $\bm{c}_{\bm{m}}$ é o resultado da concatenação dos diferentes vetores $\bm{c}$, $\bm{m}$ é um vetor com os diferentes tamanhos de janela, $\bm{m} = \{m_1, m_2, . . ., m_{k}\}$, e $k$ é a quantidade de elementos. Somente ao final que aplicamos a camada \textit{maxpool}. A camada \textit{maxpool} aplica a operação \textit{max}, obtendo o vetor de representação final da sentença $\bm{c'}_{\bm{m}}$. A operação \textit{max} é aplicada no eixo $0$, conforme ilustra a figura~\ref{fig:cnn-architecture-proposal}. Portanto o vetor final $\bm{c'}_{\bm{m}}$ é obtido da seguinte maneira:
 
-Esta redução da dimensionalidade é um fator importante para problemas de classificação, por exemplo. Independente do tamanho da entrada e do filtro, a dimensão da camada de saída vai ser mantida. Além disso, a camada \textit{maxpool} é invariante a pequenas translações. Isto permite extrair características relevantes (e.g. palavras referindo-se a leitura de arquivo: \emph{file} e \emph{open}) de uma sentença independente da sua localização e adiciona-las na representação final \citep{tom-young:trends-deep-learning-nlp}.
+\begin{equation}
+    \bm{c'}_{\bm{m}} = max\left(\left[\bm{c}_{m_1}, \bm{c}_{m_2}, . . ., \bm{c}_{m_k}\right], axis = 0\right)
+\end{equation}
 
-A figura abaixo ilustra um exemplo da aplicação de diferentes filtros convolucionais com diferentes tamanhos de janela $m$ em uma sentença de 6 palavras. A sentença é representada através de um vetor $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Para um vetor $\bm{x} = \{\bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, $\bm{x}(i) \in \mathbb{R}^{d}, 1 \leq i \leq n$ é um vetor de representação distribuída e representa a $i^{th}$ palavra da sentença. Neste exemplo, temos 3 filtros $\bm{F} \in \mathbb{R}^{m x d}$, onde $d = 5$ e $m$ varia para cada um. Neste caso, os valores de $m$ são $2$, $3$ e $4$. Cada filtro tem tamanho $f = 2$, totalizando 6 filtros que são aplicados ao vetor $\bm{x}$, ao final.
+Onde $axis$ define ao longo de qual eixo a função será aplicada. De forma equivalente, $\bm{c'}_{\bm{m}}$ poderia ser calculado do seguinte modo:
+
+\begin{equation}\label{eq:final_representation_cnn}
+    \bm{c'}_{\bm{m}} = \left[max(\bm{c}_{m_1}), max(\bm{c}_{m_2}), . . ., max(\bm{c}_{m_k})\right]
+\end{equation}
+
+A operação \textit{max} reduz a dimensionalidade extraindo o maior elemento de cada vetor. Esta redução da dimensionalidade é um fator importante para problemas de classificação, por exemplo. Independente do tamanho da entrada e do filtro, a dimensão da camada de saída vai ser mantida. Além disso, a camada \textit{maxpool} é invariante a pequenas translações. Isto permite extrair características relevantes (e.g. palavras referindo-se a leitura de arquivo: \emph{file} e \emph{open}) de uma sentença independente da sua localização e adiciona-las na representação final \citep{tom-young:trends-deep-learning-nlp}.
+
+Para exemplificar a operação completa, a Figura~\ref{fig:cnn-architecture-proposal} abaixo ilustra um exemplo da aplicação de diferentes filtros convolucionais com diferentes tamanhos de janela $m$ em uma sentença de 6 palavras. A sentença é representada através de um vetor $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Para um vetor $\bm{x} = \{\bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, $\bm{x}(i) \in \mathbb{R}^{d}, 1 \leq i \leq n$ é um vetor de representação distribuída e representa a $i^{th}$ palavra da sentença. Neste exemplo, temos 3 filtros $\bm{F} \in \mathbb{R}^{m x d}$, onde $d = 5$ e $m$ varia para cada um. Neste caso, os valores de $m$ são $2$, $3$ e $4$. Cada filtro tem tamanho $f = 2$, totalizando 6 filtros que são aplicados ao vetor $\bm{x}$, ao final.
+
+No nosso trabalho, utilizaremos $\bm{c'}_{\bm{m}}$ obtida através da operação~\ref{eq:final_representation_cnn} como o vetor de representação final da nossa sentença. No nosso trabalho, a sentença pode ser tanto uma questão quanto um trecho de código-fonte. O próximo passo é definir uma função objetivo que induza o nosso modelo a mapear estes vetores em um espaço vetorial, de tal forma que os vetores de representação de uma questão fiquem próximos dos vetores de trechos de código anotados como solução.
 
 \begin{figure}[h]
     \centering
@@ -93,46 +120,28 @@ A figura abaixo ilustra um exemplo da aplicação de diferentes filtros convoluc
     \label{fig:cnn-architecture-proposal}
 \end{figure}
 
-Conforme a figura, após a operação de convolução, i.e., o cálculo de $\bm{c}$, realizamos a concatenação dos vetores de saída de diferentes tamanhos de janela $m$. Pois cada filtro gera um vetor $\bm{c}$ diferente. O filtro $\bm{F}_{1}$ de tamanho de janela $m_1$ gera um vetor $\bm{c}_{m_1}$. O filtro $\bm{F_2}$ de janela $m_2$ gera um vetor $\bm{c}_{m_2}$. E assim por diante.
 
-\begin{equation}
-    \bm{c}_{\bm{m}} = \left[\bm{c}_{m_1}, \bm{c}_{m_2}, . . ., \bm{c}_{m_{k}}\right]
-\end{equation}
-
-Onde $\bm{c}_{\bm{m}}$ é o resultado da concatenação dos diferentes vetores $\bm{c}$, $\bm{m}$ é um vetor com os diferentes tamanhos de janela, $\bm{m} = \{m_1, m_2, . . ., m_{k}\}$, e $k$ é a quantidade de elementos. No nosso exemplo, $\bm{m} = \{2, 3, 4\}$ e $k = 3$. Somente ao final que aplicamos a camada \textit{maxpool}. A camada \textit{maxpool} aplica a operação \textit{max}, obtendo o vetor de representação final da sentença $\bm{c'}_{\bm{m}}$. Conforme a ilustração, a operação \textit{max} é aplicada no eixo $0$, portanto o vetor final $\bm{c'}_{\bm{m}}$ é obtido da seguinte maneira:
-
-\begin{equation}
-    \bm{c'}_{\bm{m}} = max\left(\left[\bm{c}_{m_1}, \bm{c}_{m_2}, . . ., \bm{c}_{m_k}\right], axis = 0\right)
-\end{equation}
-
-Onde $axis$ define ao longo de qual eixo a função será aplicada. De forma equivalente, $\bm{c'}_{\bm{m}}$ poderia ser calculado do seguinte modo:
-
-\begin{equation}
-    \bm{c'}_{\bm{m}} = \left[max(\bm{c}_{m_1}), max(\bm{c}_{m_2}), . . ., max(\bm{c}_{m_k})\right]
-\end{equation}
-
-Neste caso, $\bm{c'}_{\bm{m}}$ será o vetor de representação final da nossa sentença. No nosso trabalho, a sentença pode ser tanto uma questão quanto um trecho de código-fonte. O próximo passo é definir uma função objetivo que induza o nosso modelo a mapear estes vetores em um espaço vetorial, de tal forma que os vetores de representação de uma questão fiquem próximos dos vetores de trechos de código anotados como solução.
 
 
 \section{Função objetivo}
 \label{sec:funcao-objetivo}
 
-Tanto o bi-LSTM com CNN e o CNN geram representações para as questões e os trechos de código-fonte. O intuito é encontrar um modelo que correlacione as questões as respostas em um mesmo espaço vetorial. Neste trabalho adotaremos a mesma abordagem utilizada por \cite{feng-2015}, o método \textit{pairwise}. O método \textit{pairwise} consiste em treinar o modelo para classificar as respostas corretas com uma pontuação maior do que as incorretas. Formalmente, o modelo será treinado do seguinte modo:
+O nosso objetivo é encontrar um modelo que correlacione as questões as respostas em um mesmo espaço vetorial. Lembrando que as questões e os trechos de código serão representados por um vetor calculado a partir da nossa arquitetura CNN. Para encontrar este modelo, adotaremos a mesma abordagem utilizada por \cite{feng-2015}, o método \textit{pairwise}. O método \textit{pairwise} consiste em treinar o modelo para classificar as respostas corretas com uma pontuação maior do que as incorretas. Formalmente, o modelo será treinado do seguinte modo:
 
-Seja $\mathbb{Q}$ um conjunto de questões e $\mathbb{C}$ um conjunto dos trechos de código-fonte. $\mathbb{Q}$ e $\mathbb{C}$ compõem o conjunto de dados de treinamento.
-
-Dado uma tripla $<q, c^{+}, c^{-}>$, onde $c^{+}$ é uma resposta correta observada para a questão $q \in \mathbb{Q}$. E $c^{-}$ é uma resposta incorreta. A função de custo \textit{hinge} é definida como:
+Seja $\mathbb{Q}$ um conjunto de questões e $\mathbb{C}$ um conjunto dos trechos de código-fonte. $\mathbb{Q}$ e $\mathbb{C}$ compõem o conjunto de dados de treinamento. O dado de entrada fornecido para o nosso modelo será uma tripla $<\bm{q}, \bm{c^{+}}, \bm{c^{-}}>$, onde $\bm{c^{+}} \in \mathbb{C}$ é uma resposta anotada como correta para a questão $\bm{q} \in \mathbb{Q}$ e $\bm{c^{-}} \in \mathbb{C}$ é uma resposta incorreta. O objetivo é induzir o nosso modelo a classificar $\bm{c^{+}}$ com uma pontuação maior que $\bm{c^{-}}$. Para isto, utilizaremos a seguinte função de custo \textit{hinge}:
 
 \begin{equation}
-J = max(0, m - h_{\theta}(q, c^{+}) + h_{\theta}(q, c^{-}))
+J = max(0, m - h_{\theta}(\bm{q}, \bm{c^{+}}) + h_{\theta}(\bm{q}, \bm{c^{-}}))
 \end{equation}
 
-Onde $m$ é uma margem e $h_{\theta}$ é uma função de similaridade, e.g., \textit{cosine}. O objetivo é minimizar a função $J$. Para isto, o modelo vai ser incentivado a satisfazer a seguinte condição: $h_{\theta}(q, c^{+}) - h_{\theta}(q, c^{-}) \geq m$. Quer dizer, a função \textit{hinge} induz o modelo a classificar as respostas corretas com uma pontuação maior do que as incorretas por uma certa margem $m$.
+Onde $m$ é uma margem e $h_{\theta}$ é uma função de similaridade, e.g., \textit{cosine}. Lembrando que o objetivo em uma rede neural é minimizar a função custo $J$. Desta maneira, o modelo vai ser incentivado a satisfazer a seguinte condição: $h_{\theta}(\bm{q}, \bm{c^{+}}) - h_{\theta}(\bm{q}, \bm{c^{-}}) \geq m$. Quer dizer, a função \textit{hinge} induz o modelo a classificar as respostas corretas com uma pontuação maior do que as incorretas por uma certa margem $m$. 
+
+Dado que estamos utilizando a função \textit{cosine} de similaridade, $h_{\theta}(\bm{q}, \bm{c})$ pode ser definido como $\{h_{\theta}(\bm{q}, \bm{c}) \in \mathbb{R} | -1 \leq h_{\theta}(\bm{q}, \bm{c}) \leq 1$\}, onde $\bm{q} \in \mathbb{Q}$, $\bm{c} \in \mathbb{C}$ e $-1$ indica vetores exatamente opostos e 1 vetores exatamente iguais. E conforme citado anteriormente, a nossa função $\mathbb{J}$ incentiva a seguinte condição: $h_{\theta}(\bm{q}, \bm{c^{+}}) \geq h_{\theta}(\bm{q}, \bm{c^{-}}) + m$. Desta forma, estamos estimulando os vetores $\bm{c^{+}}$ a ocuparem regiões próximas de $\bm{q}$, enquanto os vetores $\bm{c^{-}}$ serão estimulados a ocuparem regiões mais distantes. Este estímulo está de acordo com o nosso objetivo, que é encontrar um modelo que correlacione as questões as suas respostas.
 
 
 \section{Considerações}
 
-As redes convolucionais partem da hipótese de que a função que a camada deve aprender contém apenas interações locais e são invariantes a pequenas translações. Esta invariância é também uma característica da camada \textit{maxpool}. Para problemas NLP, o CNN tenta extrair as características mais importantes de uma sentença. No caso do trecho de código-fonte, a identificação da interação local entre as palavras pode auxiliar na obtenção de uma representação contextualizada. Para inferir o contexto do trecho de código a seguir, o CNN deveria ser capaz de identificar a interação entre as palavras \emph{csv} e \emph{writer} na linha 4, por exemplo. 
+A nossa proposta apresentada neste capítulo foi a utilização de redes convolucionais na representação de questões e trechos de código-fonte. Conforme apresentado na seção~\ref{sec:representacao-sentenca}, a nossa arquitetura utiliza as operações de convolução e \textit{maxpool}. Estas operações partem da hipótese de que função que deve ser aprendida contém apenas interações locais e são invariantes a pequenas translações. Para a tarefa de \textit{code retrieval}, a nossa hipótese, é que a identificação das interações locais entre as palavras pode auxiliar na obtenção de uma representação contextualizada. Por exemplo, para inferir o contexto do trecho de código a seguir, o CNN deveria ser capaz de identificar a interação entre as palavras \emph{csv} e \emph{writer} na linha 4, por exemplo. 
 
 \begin{mypython-linenumber}{CNN}
 import csv
@@ -141,10 +150,8 @@ with |\colorbox{green}{open}|("output.csv", "wb") as f:
     writer = |\colorbox{green}{csv}|.|\colorbox{green}{writer}|(f)
     writer.|\colorbox{green}{writerows}|(a)
 \end{mypython-linenumber}
-\todo{colocar um caption explicando o contexto do código}
 
-
-De acordo com \cite{tom-young:trends-deep-learning-nlp}, normalmente o CNN não consegue inferir o contexto em sentenças curtas. Para o nosso conjunto de dados, isto é um problema, pois as questões são compostas em média por 9 palavras e no máximo 32. Já os trechos de código tem em média 50 palavras e no máximo 300. Uma forma de mitigar este problema é através do uso de um vetor de representação distribuída. No nosso caso, os vetores de entrada serão compostos por vetores de representação distribuída obtidos através do algoritmo não-supervisionado \textit{word2vec}.
+Um ponto observado por \cite{tom-young:trends-deep-learning-nlp} em outros trabalhos, é que o CNN, normalmente, não consegue inferir o contexto em sentenças curtas. Para o nosso conjunto de dados, isto é um problema, pois as questões são compostas em média por 9 palavras e no máximo 32. Já os trechos de código tem em média 50 palavras e no máximo 300. Uma forma de mitigar este problema é através do uso de um vetor de representação distribuída. No nosso caso, os vetores de entrada serão compostos por vetores de representação distribuída obtidos através do algoritmo não-supervisionado \textit{word2vec}.
 
 Além disso, segundo \cite{Goodfellow-et-al-2016:convolutional-networks}, CNN não consegue fazer associações entre palavras muito distantes em uma sentença. No exemplo anterior, o CNN teria dificuldade para associar a declaração da biblioteca \emph{csv} na linha 1 com a função \emph{writerows} na linha 5. A nossa hipótese é que uma associação muito distante entre as palavras de uma sentença não seja tão importante para a recuperação de trecho de código-fonte no nosso conjunto de dados. O nosso conjunto de dados é formado por questões do tipo \textit{how-to-do-it} coletadas a partir do site \gls{sof}. Este tipo de questão normalmente contém respostas curtas e diretas  \citep{yao-2018}. Uma dependência distante entre as palavras seria apropriado, provavelmente, para questões e trechos de código que envolvam regras de negócio, por exemplo.
 
