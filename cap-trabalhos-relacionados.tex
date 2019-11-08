@@ -15,14 +15,14 @@ Conforme \cite{cambronero-deep-learning-code-search:2019}, recuperação de trec
 \section{Definição}\label{sec:code-retrieval-definicao}
 
 
-Para formalizarmos a tarefa de \textit{code retrieval}, adotaremos a mesma definição proposta por \cite{iyer-etal-2016-summarizing} e \cite{Yao-coacor:2019}:
+Para formalizarmos a tarefa de \textit{code retrieval}, adotaremos a mesma definição proposta por \cite{Allamanis-bimodal-source-code-natural-language:2015} e \cite{Yao-coacor:2019}:
 
-Seja $\mathbb{Q}$ um conjunto formado por questões e/ou intenções descritas em linguagem natural. Seja $\mathbb{C}$ um conjunto de trechos de códigos-fontes. Dado uma questão em linguagem natural $q \in \mathbb{Q}$ e um conjunto com os trechos de código-fonte candidatos $\mathbb{C}_{a} \subset \mathbb{C}$. O objetivo do \textit{code retrieval} é recuperar o trecho de código $c^{+} \in \mathbb{C}_{a}$, onde $c^{+}$ é a resposta anotada como correta a dada questão. Formalmente, para um corpus de treinamento composto por pares de questões e trechos de código-fonte, \textit{code retrieval} é definido como:
+Seja $\mathbb{Q}$ um conjunto formado por questões e/ou intenções descritas em linguagem natural. Seja $\mathbb{C}_{a}$ um conjunto de trechos de códigos-fontes candidatos. Dado uma questão em linguagem natural $q \in \mathbb{Q}$, o objetivo do \textit{code retrieval} é recuperar os trechos de códigos $\mathbb{C}^{+} \subset \mathbb{C}_{a}$, onde $\mathbb{C}^{+}$ são as respostas relevantes a dada questão. Entendemos como relevantes as respostas que atendam as intenções dos usuários. Formalmente, para um corpus de treinamento composto por pares de questões e trechos de código-fonte, \textit{code retrieval} é definido como:
 
-\textbf{Code Retrieval}: Dada uma questão em linguagem natural $q \in \mathbb{Q}$, um modelo $F_{r}$ será treinado a recuperar $c^{+} \in \mathbb{C}_{a}$ com a maior pontuação:
+\textbf{Code Retrieval}: Dada uma questão em linguagem natural $q \in \mathbb{Q}$, um modelo $F_{r}$ será treinado a recuperar os trechos $\mathbb{C}^{+} \subset \mathbb{C}_{a}$ com a maior pontuação:
 
 \begin{equation}\label{eq:code-retrieval}
-c^{+} = \underset{c \in \mathbb{C}_{a}}{argmax}\text{ } F_{r}(q , c)
+\mathbb{C}^{+} = \underset{c \in \mathbb{C}_{a}}{argmax}\text{ } F_{r}(q , c)
 \end{equation}
 
 \section{\textit{Joint Embeddings}}
