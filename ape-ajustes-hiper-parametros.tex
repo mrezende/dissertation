@@ -1,0 +1,21 @@
+%% ------------------------------------------------------------------------- %%
+\chapter{Ajuste dos hiper-parâmetros e normalização em lote}
+\label{cap:ajuste-hiper-parametros-cnn}
+
+Neste capítulo apresentamos os resultados dos ajustes dos hiper-parâmetros e da normalização em lote feita nas arquiteturas convolucional e \textbf{Unif}. O intuito destes ajustes é obter um modelo mais robusto e evitar o \textit{overfitting}.
+
+\section{Ajuste dos hiper-parâmetros da rede convolucional}
+\label{sec:ajuste-hiper-parametros-cnn}
+
+A rede convolucional exige alguns hiper-parâmetros que devem ser informados durante o treinamento. O tamanho da entrada, conforme citado no capítulo~\ref{cap:experimento}, foi fixado em 150. Caso as palavras tenham tamanho menor, o vetor é preenchido com valores $0$ ao final. Outros três parâmetros exigidos pela rede convolucional são: filtros, kernel e stride.
+
+O parâmetro kernel define o tamanho da janela de operação de convolução. No nosso caso, que estamos utilizando a operação de convolução de 1 dimensão, Conv1D \todo{adicionar na explicação}, o kernel define os n-grams a ser extraídos do vetor de entrada. 
+O parâmetro filtros define a dimensão de saída da operação de convolução. Este parâmetro indica a quantidade de filtros no resultado da operação de convolução. Cada filtro tenta extrair uma característica diferente do vetor de entrada.
+
+O parâmetro stride define a quantidade de posições de deslocamento do filtro. O parâmetro stride foi fixado em 1. Neste caso, o filtro desloca-se por todas as posições do vetor de entrada de uma em uma posição.
+
+Com relação a quantidade de filtros e o tamanho do kernel, fizemos alguns testes utilizando como base os experimentos feitos por \cite{feng-2015} e \cite{tan-lstm-qa}. Tanto \cite{feng-2015} quanto \cite{tan-lstm-qa} utilizaram o parâmetro filtros com o valor entre 1000 e 4000. Conforme citado no capítulo~\ref{cap:experimento}, a média de palavras na base disponibilizada por \cite{feng-2015} é XXX \todo{coletar a quantidade palavras do insurance}, enquanto nos dados que estamos utilizando é YYYY. 
+
+Inicialmente, para avaliar 
+
+
