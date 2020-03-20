@@ -101,6 +101,8 @@ Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iy
 \label{table:divisao-amostras}
 \end{table}
 
+Durante o treinamento, do total de $60.083$ amostras, $42058$ foram utilizadas para o conjunto de treinamento e $18025$ para o conjunto de validação.
+
 O procedimento de treinamento utilizado foi: O modelo é treinado durante 80 épocas. Caso a função de perda \textit{hinge} fique abaixo de $0,001$, o treinamento é interrompido. A cada época, o modelo é avaliado na amostra \emph{DEV}. O intuito desta avaliação é obter o melhor modelo conforme a métrica \acrshort{mrr}. Esta avaliação na amostra DEV é feita da seguinte maneira:
 
 Para cada par $<q_{i}, c_{i}^{+}>$ da amostra \emph{DEV}, onde $q_{i}$ uma questão e $c_{i}^{+}$ uma questão anotada como correta. Outros 49 distratores $c'$ são selecionados aleatoriamente da amostra de treinamento, tal que $c_{i}^{+} \neq c'$. Para cada questão, o modelo calcula a similaridade entre a questão e os trechos de código-fonte. O cálculo de similaridade é feito através da função $h_{\theta}$, onde $h_{\theta}$ é a função \textit{cosine}. 

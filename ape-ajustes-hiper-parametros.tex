@@ -10,21 +10,48 @@ Neste capítulo apresentamos os resultados dos ajustes dos hiper-parâmetros e d
 A rede convolucional exige alguns hiper-parâmetros que devem ser informados durante o treinamento. O tamanho da entrada, conforme citado no capítulo~\ref{cap:experimento}, foi fixado em 150. Caso as palavras tenham tamanho menor, o vetor é preenchido com valores $0$ ao final. Outros três parâmetros exigidos pela rede convolucional são: filtros, kernel e stride.
 
 O parâmetro kernel define o tamanho da janela de operação de convolução. No nosso caso, que estamos utilizando a operação de convolução de 1 dimensão, Conv1D \todo{adicionar na explicação}, o kernel define os n-grams a ser extraídos do vetor de entrada. 
-O parâmetro filtros define a dimensão de saída da operação de convolução. Este parâmetro indica a quantidade de filtros no resultado da operação de convolução. Cada filtro tenta extrair uma característica diferente do vetor de entrada.
+O parâmetro filtros define a dimensão de saída da operação de convolução. Este parâmetro indica a quantidade de filtros no resultado da operação de convolução. Cada filtro tenta extrair uma característica diferente do vetor de entrada. E o parâmetro stride define a quantidade de posições de deslocamento do filtro. O parâmetro stride foi fixado em 1. Neste caso, o filtro desloca-se por todas as posições do vetor de entrada de uma em uma posição.
 
-O parâmetro stride define a quantidade de posições de deslocamento do filtro. O parâmetro stride foi fixado em 1. Neste caso, o filtro desloca-se por todas as posições do vetor de entrada de uma em uma posição.
-
-Com relação a quantidade de filtros e o tamanho do kernel, fizemos alguns testes utilizando como base os experimentos feitos por \cite{feng-2015} e \cite{tan-lstm-qa}. Tanto \cite{feng-2015} quanto \cite{tan-lstm-qa} utilizaram o parâmetro filtros com o valor entre 1000 e 4000. Conforme citado no capítulo~\ref{cap:experimento}, a média de palavras na base disponibilizada por \cite{feng-2015} é XXX \todo{coletar a quantidade palavras do insurance}, enquanto nos dados que estamos utilizando é YYYY. 
+Fizemos alguns testes com relação a quantidade de filtros e o tamanho do kernel utilizando como base os experimentos feitos por \cite{feng-2015} e \cite{tan-lstm-qa}. Tanto \cite{feng-2015} quanto \cite{tan-lstm-qa} utilizaram o parâmetro filtros com o valor entre 1000 e 4000. Em nossos testes, além destes valores, analisamos também os filtros para valores menores como 50, 100, 200 e 500. Já o tamanho do kernel, \cite{tan-lstm-qa} utilizou o valor 2. Em nossos testes, variamos o valor entre 2 e 4, além de concatenar kernels de diferentes valores, combinando kernels de tamanhos 2, 3, 5 e 7.
 
 \subsection{Filtros}
 
-Inicialmente, analisamos o comportamento da rede convolucional utilizando diferentes quantidades de filtros. Nas figuras a seguir, exibimos um gráfico de comparação do valor do erro durante o treinamento em comparação com o erro durante a validação. Foram analisadas as seguintes quantidades de filtros: 50, 100, 200, 500, 1000, 2000, 4000. Inicialmente, utilizamos o kernel com o valor 2, valor recomendado por \cite{tan-lstm-qa}.
+Inicialmente, analisamos o comportamento da rede convolucional proposta no caítulo~\ref{cap:experimento} (ver figura XXXX\todo{adicionar figura da rede convolucional separada}) utilizando diferentes quantidades de filtros. Nas figuras a seguir, exibimos um gráfico de comparação do valor do erro no conjunto de treinamento em comparação com o erro no conjunto de validação. Conforme citado no capítulo~\ref{cap:experimento}, foram utilizadas $60.083$ amostras, sendo que $42058$ foram utilizadas para o conjunto de treinamento e $18025$ para o conjunto de validação. Neste experimento, analisamos as seguintes quantidades de filtros: 50, 100, 200, 500, 1000, 2000, 4000. Inicialmente, utilizamos o kernel com o valor 2, valor recomendado por \cite{tan-lstm-qa}.
 
 
 \begin{figure}[h]
 \includegraphics[width=8cm]{figuras/ape-ajustes-hiper-parametros/training-cnn-1000-k-2.png}
-\caption{Gráfico do treinamento da rede convolucional na recuperação de trecho de código-fonte. Este gráfico apresenta um comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento. O treinamento é interrompido quando o erro no conjunto de treinamento for ´menor que $1x10^(-4)$ ou ultrapassar 500 épocas.}
+\caption{Gráfico do treinamento da rede convolucional na recuperação de trecho de código-fonte. Este gráfico apresenta um comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento. O treinamento é interrompido após 500 épocas ou caso o erro no conjunto de treinamento for menor que $1\mathbf{x}10^{-4}$. Arquitetura de rede convolucional proposta na figura XXXX do capítulo~\ref{cap:experimento}. Hiper-parâmetros: $m = 0.009$, $k = 2$}
 \label{fig:ape-cnn-1000-k-2}
+\end{figure}
+
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/training-cnn-1000-k-2.png}
+  \caption{1a}
+  \label{fig:sfig1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/training-cnn-1000-k-2.png}
+  \caption{1b}
+  \label{fig:sfig2}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/training-cnn-1000-k-2.png}
+  \caption{1c}
+  \label{fig:sfig3}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/training-cnn-1000-k-2.png}
+  \caption{1c}
+  \label{fig:sfig4}
+\end{subfigure}
+\caption{plots of....}
+\label{fig:fig}
 \end{figure}
 
 
