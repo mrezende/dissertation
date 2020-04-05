@@ -35,7 +35,7 @@ No nosso caso, o \textit{word2vec} irá mapear cada palavra para um espaço veto
 Onde $f$ e $g$ são o \textit{word2vec} com o algoritmo \textit{skip-gram}. $f$ e $g$ irão mapear cada palavra pertencente a um vocabulário a uma matriz distinta $\bm{T_{q}}$ e $\bm{T_{c}}$.
 Teremos duas matrizes: $\bm{T}_{q}^{|\mathbb{Q}| X d}$ e outra $\bm{T}_{c}^{|\mathbb{C}| X d}$, onde $|\mathbb{Q}|$ e $|\mathbb{C}|$ são o tamanho do vocabulário das questões e trechos de código-fonte, respectivamente. E $d$ é a dimensão do vetor de representação distribuída.
 
-Com estas duas matrizes $\bm{T}_{q}$ e $\bm{T}_{c}$, que contém as palavras dos vocabulários das questões e dos trechos de código-fonte mapeadas, podemos representar uma sentença através de vetores de representação distribuída. Por exemplo, dado uma questão $\bm{s} = \{ w_{1}, w_{2}, . . ., w_{n}\}$, onde $w_{i}, 1 \leq i \leq n$ é uma palavra. Podemos representar $\bm{s}$ através de um outro vetor $\bm{x}$, onde para cada palavra presente em $\bm{s}$, elas serão representadas através de um vetor de representação distribuída em $\bm{x}$. Para isto, basta recuperar o vetor $t_{q} \in \bm{T}_{q}$ correspondente a cada palavra presente em nossa questão. Logo, temos $\bm{x} = \{ x(w_{1}), x(w_{2}), . . ., x(w_{n})\}$, tal que $x(w_{i}) \in \bm{T}_{q}$ e $\bm{x}(w_{i}) \in \mathbb{R}^{d}$ é um vetor de representação distribuída. Com o vetor $\bm{x}$, o próximo passo é combinar os seus elementos para obter uma representação da sentença.
+Com estas duas matrizes $\bm{T}_{q}$ e $\bm{T}_{c}$, que contém as palavras dos vocabulários das questões e dos trechos de código-fonte mapeadas, podemos representar uma sentença através de vetores de representação distribuída. Por exemplo, dado uma questão $\bm{s} = \{ w_{0}, w_{1}, . . ., w_{n - 1}\}$, onde $w_{i}, 0 \leq i < n$ é uma palavra. Podemos representar $\bm{s}$ através de um outro vetor $\bm{x}$, onde para cada palavra presente em $\bm{s}$, elas serão representadas através de um vetor de representação distribuída em $\bm{x}$. Para isto, basta recuperar o vetor $t_{q} \in \bm{T}_{q}$ correspondente a cada palavra presente em nossa questão. Logo, temos $\bm{x} = \{ x(w_{0}), x(w_{1}), . . ., x(w_{n - 1})\}$, tal que $x(w_{i}) \in \bm{T}_{q}$ e $\bm{x}(w_{i}) \in \mathbb{R}^{d}$ é um vetor de representação distribuída. Com o vetor $\bm{x}$, o próximo passo é combinar os seus elementos para obter uma representação da sentença.
 
 
 
@@ -44,7 +44,7 @@ Com estas duas matrizes $\bm{T}_{q}$ e $\bm{T}_{c}$, que contém as palavras dos
 \section{Representação da sentença e do trecho de código-fonte}
 \label{sec:representacao-sentenca}
 
-Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-las para obter uma representação para a questão e o trecho de código-fonte. Por exemplo, dado uma sentença $\bm{x} = \{ \bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, onde $\bm{x}(i) \in \mathbb{R}^{d}$ um vetor de representação distribuída da $i^{th}$ palavra da sentença, $d$ é a dimensão do vetor. Iremos combinar os elementos de $\bm{x}$ através das operações presentes em nossa arquitetura CNN. Basicamente são 3 operações:
+Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-las para obter uma representação para a questão e o trecho de código-fonte. Por exemplo, dado uma sentença $\bm{x} = \{ \bm{x}(0), \bm{x}(1), . . ., \bm{x}(n - 1) \}$, onde $\bm{x}(i) \in \mathbb{R}^{d}$ um vetor de representação distribuída da $i^{th}$ palavra da sentença, $d$ é a dimensão do vetor. Iremos combinar os elementos de $\bm{x}$ através das operações presentes em nossa arquitetura CNN. Basicamente são 3 operações:
 
 \begin{itemize}
     \item Operação de convolução
@@ -52,11 +52,11 @@ Com cada palavra representada por um vetor de representação distribuída, o pr
     \item \textit{Maxpool}
 \end{itemize}
 
-A operação de convolução utiliza um filtro convolucional $\bm{F}  = [\bm{F}(1),· · ·, \bm{F}(m)]$, tal que $\bm{F} \in \mathbb{R}^{m X d}$. Este filtro é aplicado em uma janela de $m$ palavras para produzir um novo vetor.
+A operação de convolução utiliza um filtro convolucional $\bm{F}  = [\bm{F}(0),· · ·, \bm{F}(m - 1)]$, tal que $\bm{F} \in \mathbb{R}^{m X d}$. Este filtro é aplicado em uma janela de $m$ palavras para produzir um novo vetor.
 Seja $\bm{x}(i, i + j)$ referência a concatenação dos vetores $\bm{x}(i), \bm{x}(i + 1), . . ., \bm{x}(i + j)$. . Ao aplicar $\bm{F}$ na seguinte janela de palavras $\bm{x}(i, i + m - 1)$, um novo vetor $\bm{c}(i)$ é calculado da seguinte maneira:
 
 \begin{equation}\label{eq:calc_convolution_ci}
-    \bm{c}(i) = tanh \left[\left(\sum_{j=i}^{i + m - 1} \bm{x}(j)^{T}\bm{F}(j)\right) + b\right]
+    \bm{c}(i) = tanh \left[\left(\sum_{j=0}^{m - 1} \bm{x}(i + j)^{T}\bm{F}(j)\right) + b\right]
 \end{equation}
 
 onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro. Para exemplificar esta operação, as figuras~\ref{fig:first-step-convolutional} e \ref{fig:second-step-convolutional} abaixo ilustram um exemplo dos dois primeiros passos da aplicação de um filtro convolucional $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$. Este filtro é aplicado a uma sentença formado por 6 palavras, que é representado pelo vetor de representação distribuída $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Pelas figuras, podemos perceber que o parâmetro $m$ do filtro $\bm{F}$ define como as palavras são combinadas. Neste caso, foram combinadas de duas em duas, um bi-gram.
@@ -64,14 +64,14 @@ onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro. Para ex
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-problema/first-step-convolution.pdf}
-    \caption{Primeiro passo da operação de convolução. Aplica-se um filtro convolucional $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$, em uma sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Este primeiro passo é equivalente a seguinte operação: $\bm{c}(1) = tanh \left[\left(\sum_{j=1}^{2} \bm{x}(j)^{T}\bm{F}(j)\right) + b\right]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.} 
+    \caption{Primeiro passo da operação de convolução. Aplica-se um filtro convolucional $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$, em uma sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Este primeiro passo é equivalente a seguinte operação: $\bm{c}(\bm{0}) = tanh \left[\left(\sum_{j=0}^{m - 1} \bm{x}(\bm{0} + j)^{T}\bm{F}(j)\right) + b\right]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.} 
     \label{fig:first-step-convolutional}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-problema/second-step-convolution.pdf}
-    \caption{Segundo passo da operação de convolução. Aplica-se o mesmo filtro convolucional $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$, em uma sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Neste segundo passo, deslocamos uma posição no eixo $0$. Este segundo passo é equivalente a: $\bm{c}(2) = tanh [(\sum_{j=2}^{3} \bm{x}(j)^{T}\bm{F}(j)) + b]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.}
+    \caption{Segundo passo da operação de convolução. Aplica-se o mesmo filtro convolucional $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$, em uma sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Neste segundo passo, deslocamos uma posição no eixo $0$. Este segundo passo é equivalente a: $\bm{c}(\bm{1}) = tanh [(\sum_{j=0}^{m - 1} \bm{x}(\bm{1} + j)^{T}\bm{F}(j)) + b]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.}
     \label{fig:second-step-convolutional}
 \end{figure}
 
@@ -79,7 +79,7 @@ onde $b$ é o \textit{bias} e $\bm{F}$ e $b$ são parâmetros do filtro. Para ex
 Durante a operação de convolução, o filtro $\bm{F}$ é aplicado a todas possíveis janelas de palavras utilizando os mesmos pesos para produzir um mapa das características (\textit{feature map}).
 
 \begin{equation}
-    \bm{c} = \{ \bm{c}(1), \bm{c}(2), . . ., \bm{c}(n - m + 1) \} 
+    \bm{c} = \{ \bm{c}(0), \bm{c}(1), . . ., \bm{c}(n - m) \} 
 \end{equation}
 
 
@@ -107,14 +107,14 @@ Onde $axis$ define ao longo de qual eixo a função será aplicada. De forma equ
 
 A operação \textit{max} reduz a dimensionalidade extraindo o maior elemento de cada vetor. Esta redução da dimensionalidade é um fator importante para problemas de classificação, por exemplo. Independente do tamanho da entrada e do filtro, a dimensão da camada de saída vai ser mantida. Além disso, a camada \textit{maxpool} é invariante a pequenas translações. Isto permite extrair características relevantes (e.g. palavras referindo-se a leitura de arquivo: \emph{file} e \emph{open}) de uma sentença independente da sua localização e adiciona-las na representação final \citep{tom-young:trends-deep-learning-nlp}.
 
-Para exemplificar a operação completa, a Figura~\ref{fig:cnn-architecture-proposal} a seguir ilustra um exemplo da aplicação de diferentes filtros convolucionais com diferentes tamanhos de janela $m$ em uma sentença de 6 palavras. A sentença é representada através de um vetor $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Para um vetor $\bm{x} = \{\bm{x}(1), \bm{x}(2), . . ., \bm{x}(n) \}$, $\bm{x}(i) \in \mathbb{R}^{d}, 1 \leq i \leq n$ é um vetor de representação distribuída e representa a $i^{th}$ palavra da sentença. Neste exemplo, temos 3 filtros $\bm{F} \in \mathbb{R}^{m x d}$, onde $d = 5$ e $m$ varia para cada um. Neste caso, os valores de $m$ são $2$, $3$ e $4$. Cada filtro tem tamanho $f = 2$, totalizando 6 filtros que são aplicados ao vetor $\bm{x}$, ao final.
+Para exemplificar a operação completa, a Figura~\ref{fig:cnn-architecture-proposal} a seguir ilustra um exemplo da aplicação de diferentes filtros convolucionais com diferentes tamanhos de janela $m$ em uma sentença de 6 palavras. A sentença é representada através de um vetor $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Para um vetor $\bm{x} = \{\bm{x}(0), \bm{x}(1), . . ., \bm{x}(n - 1) \}$, $\bm{x}(i) \in \mathbb{R}^{d}, 0 \leq i < n$ é um vetor de representação distribuída e representa a $i^{th}$ palavra da sentença. Neste exemplo, temos 3 filtros $\bm{F} \in \mathbb{R}^{m x d}$, onde $d = 5$ e $m$ varia para cada um. Neste caso, os valores de $m$ são $2$, $3$ e $4$. Cada filtro tem tamanho $f = 2$, totalizando 6 filtros que são aplicados ao vetor $\bm{x}$, ao final.
 
 No nosso trabalho, utilizaremos $\bm{c'}_{\bm{m}}$ obtida através da operação~\ref{eq:final_representation_cnn} como o vetor de representação final da nossa sentença. No nosso caso, a sentença pode ser tanto uma questão quanto um trecho de código-fonte. O próximo passo é definir uma função objetivo que induza o nosso modelo a mapear estes vetores em um espaço vetorial, de tal forma que os vetores de representação de uma questão fiquem próximos dos vetores de trechos de código anotados como solução.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-problema/cnn-architecture.pdf}
-    \caption{Ilustração das 3 operações realizadas pela nossa arquitetura CNN para obter o vetor de representação final $\bm{c'}_{\bm{m}}$. Neste exemplo, utilizamos 3 filtros $\bm{F} \in \mathbb{R}^{n X d X f}$ com diferentes janelas $m$, onde $m = \{2, 3, 4\}$. Cada filtro tem tamanho $f = 2$. Temos um total de 6 filtros ao final. Cada filtro é aplicado a sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. O primeiro passo é a obtenção do vetor $\bm{c}$ de características. Posteriormente, é realização a operação de concatenação, no qual é obtido o vetor $\bm{c}_{\bm{m}}$, conforme descrito na operação~\ref{eq:concatenacao-cnn-cm}. Ao final, a operação \textit{max} é aplicada no eixo $0$, obtendo o vetor de representação final $\bm{c'}_{m}$. Este vetor $\bm{c'}_{m}$ será o nosso vetor de representação das nossas sentenças, i.e., o vetor de representação das questões e trechos de código-fonte. Figura adaptada do artigo de \cite{zhang-guide-convolutional-cnn-embedding-ilustration:2015}}
+    \caption{Ilustração das 3 operações realizadas pela nossa arquitetura CNN para obter o vetor de representação final $\bm{c'}_{\bm{m}}$. Neste exemplo, utilizamos 3 filtros $\bm{F} \in \mathbb{R}^{m X d X f}$ com diferentes janelas $m$, onde $m = \{2, 3, 4\}$. Cada filtro tem tamanho $f = 2$. Temos um total de 6 filtros ao final. Cada filtro é aplicado a sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. O primeiro passo é a obtenção do vetor $\bm{c}$ de características. Posteriormente, é realização a operação de concatenação, no qual é obtido o vetor $\bm{c}_{\bm{m}}$, conforme descrito na operação~\ref{eq:concatenacao-cnn-cm}. Ao final, a operação \textit{max} é aplicada no eixo $0$, obtendo o vetor de representação final $\bm{c'}_{m}$. Este vetor $\bm{c'}_{m}$ será o nosso vetor de representação das nossas sentenças, i.e., o vetor de representação das questões e trechos de código-fonte. Figura adaptada do artigo de \cite{zhang-guide-convolutional-cnn-embedding-ilustration:2015}}
     \label{fig:cnn-architecture-proposal}
 \end{figure}
 
