@@ -6,7 +6,12 @@
 Recuperação de trecho de código-fonte ou \textit{code retrieval} consiste em recuperar um trecho de código-fonte a partir de um repositório, de modo a atender as intenções do desenvolvedor, descritas em linguagem natural. A capacidade de recuperar trechos de código relevantes é uma importante ferramenta de produtividade. Sites como o Stack Overflow tornaram-se muito populares nos últimos anos devido a facilidade em buscar trechos de código-fonte a partir das questões expressas pelos usuários em linguagem natural \citep{cambronero-deep-learning-code-search:2019}. 
 
 A busca por trecho de código em repositórios públicos tem sido um desafio. Atualmente, o site do Github, que hospeda milhares de projetos de código-aberto, não possui um mecanismo de pesquisa que
-seja capaz de recuperar um trecho de código-fonte relevante a partir dos termos utilizados no campo de busca \citep{cambronero-deep-learning-code-search:2019}. Isto não é somente um desafio para repositórios públicos, mas para repositórios privados também. Os repositórios privados adicionam um desafio a mais, já que os desenvolvedores, muitas vezes, não podem se basear em trechos de código encontrados no Google ou Stack Overflow, pois eles podem não atender aos requisitos específicos da organização de API e uso de bibliotecas \citep{cambronero-deep-learning-code-search:2019}.
+seja capaz de recuperar um trecho de código-fonte relevante a partir dos termos utilizados no campo de busca \citep{cambronero-deep-learning-code-search:2019}. 
+
+Segundo o artigo XXX, a maioria dos desenvolvedores recorrem ao Google para fazer busca de trechos de código-fonte. Porém o Google não provê uma busca especializada para código-fonte e trata o código-fonte como um texto de linguagem natural. Neste caso, ele não consegue extrair a semântica do código-fonte a menos que tenha comentá
+E de acordo com XXX, os desenvolvedores acessam o triplo de páginas e gastam o triplo do tempo ao fazerem buscas relacionadas a trechos de código-fonte quando comparados com buscas não-relacionadas a código-fonte. Segundo o artigo, a maioria dos desenvolvedores ao deparar com um problema recorrem ao Google para fazer uma busca de trechos de código-fonte. Porém o Google trata código-fonte como um texto natural e não consegue extrair a semântica do código. 
+
+Isto não é somente um desafio para repositórios públicos, mas para repositórios privados também. Os repositórios privados adicionam um desafio a mais, já que os desenvolvedores, muitas vezes, não podem se basear em trechos de código encontrados no Google ou Stack Overflow, pois eles podem não atender aos requisitos específicos da organização de API e uso de bibliotecas \citep{cambronero-deep-learning-code-search:2019}.
 
 Conforme \cite{cambronero-deep-learning-code-search:2019}, muitos trabalhos tem sido feitos na academia e indústria em direção a uma busca mais avançada de código-fonte \citep{Gu-deep-code-search:2018, yao-2018, iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015, Chen-bi-variational-autoencoder:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019}. E um ponto em comum nestes trabalhos é o uso de \textit{deep learning}. Tanto que \cite{cambronero-deep-learning-code-search:2019} cunharam o termo \textit{neural code search}, i.e., busca de código-fonte através do uso de redes neurais. 
 
@@ -59,7 +64,6 @@ Dentre as contribuições deste trabalho estão:
 \item Avaliação de uma nova arquitetura;
 \item Avaliação do modelo utilizando uma nova base de dados disponibilizada por \cite{yao-2018};
 \item Disponibilização do código-fonte, desde o pré-processamento até a avaliação final, em um repositório público;
-\item Publicação dos resultados através de um artigo científico
 \end{itemize}
 
 %% ------------------------------------------------------------------------- %%

@@ -16,8 +16,9 @@
 % Pacotes 
 \usepackage{fontspec}
 \setmainfont{Arial} % funciona com windows/mac
-\usepackage{polyglossia}
-\setdefaultlanguage{brazil}
+%\usepackage{polyglossia}
+%\setdefaultlanguage{brazil}
+\usepackage[brazil]{babel}
 %\usepackage[bf,small,compact]{titlesec} % cabe?lhos dos t?ulos: menores e compactos
 %\usepackage[fixlanguage]{babelbib}
 
@@ -34,6 +35,7 @@
 \usepackage[usenames,svgnames,dvipsnames]{xcolor}
 \usepackage[a4paper,top=2.54cm,bottom=2.0cm,left=2.0cm,right=2.54cm]{geometry} % margens
 %\usepackage[pdftex,plainpages=false,pdfpagelabels,pagebackref,colorlinks=true,citecolor=black,linkcolor=black,urlcolor=black,filecolor=black,bookmarksopen=true]{hyperref} % links em preto
+
 
 
 \usepackage[breaklinks,plainpages=false,pdfpagelabels,pagebackref,colorlinks=true,citecolor=DarkGreen,linkcolor=NavyBlue,urlcolor=DarkRed,filecolor=green,bookmarksopen=true]{hyperref} % links coloridos
@@ -56,6 +58,9 @@
 \usepackage{bm}
 
 \usepackage{longtable}
+\usepackage[useregional]{datetime2}
+
+
 
 \usepackage{array}
 \newcolumntype{P}[1]{>{\raggedleft\arraybackslash}p{#1}}
@@ -239,14 +244,14 @@ title={#1}, fonttitle=\bfseries
     
     \vspace*{6cm}
     
-    \textbf{\large{Aprendizagem de representação através do uso de redes neurais convolucionais na recuperação de trecho de código-fonte}}\\
+    \textbf{\large{Uso de redes neurais convolucionais na recuperação de trecho de código-fonte}}\\
     
     
     
    \vspace*{10cm}
    
     \large{\textbf{São Paulo}} \\
-    \large{\textbf{2019}}
+    \large{\textbf{\the\year}}
 \end{center}
 
 % ---------------------------------------------------------------------------- %
@@ -264,7 +269,7 @@ title={#1}, fonttitle=\bfseries
     \begin{center}
         Marcelo de Rezende Martins\\
         \vspace*{2.3 cm}
-        Aprendizagem de representação através do uso de redes neurais convolucionais na recuperação de trecho de código-fonte\\
+        Uso de redes neurais convolucionais na recuperação de trecho de código-fonte\\
         \vspace*{2 cm}
     \end{center}
 
@@ -327,7 +332,7 @@ Mestrado Engenharia de Computação\\
     \begin{center}
         Marcelo de Rezende Martins\\
         \vspace*{2.3 cm}
-        Aprendizagem de representação através do uso de redes neurais convolucionais na recuperação de trecho de código-fonte\\
+        Uso de redes neurais convolucionais na recuperação de trecho de código-fonte\\
         \vspace*{2 cm}
     \end{center}
 
@@ -358,7 +363,8 @@ Mestrado Engenharia de Computação\\
     
     \begin{center}
         São Paulo\\
-        Março / 2020
+        
+        Maio / \the\year
     \end{center}
 
 \pagebreak
