@@ -3,13 +3,18 @@
 \label{cap:introducao}
 
 
-Recuperação de trecho de código-fonte ou \textit{code retrieval} consiste em recuperar um trecho de código-fonte a partir de um repositório, de modo a atender as intenções do desenvolvedor, descritas em linguagem natural. A capacidade de recuperar trechos de código relevantes é uma importante ferramenta de produtividade. Sites como o Stack Overflow tornaram-se muito populares nos últimos anos devido a facilidade em buscar trechos de código-fonte a partir das questões expressas pelos usuários em linguagem natural \citep{cambronero-deep-learning-code-search:2019}. 
+Recuperação de trecho de código-fonte ou \textit{code retrieval} consiste em recuperar um trecho de código-fonte a partir de um repositório, de modo a atender as intenções do desenvolvedor, descritas em linguagem natural. A capacidade de recuperar trechos de código relevantes é uma importante ferramenta de produtividade. Atualmente, a maioria dos desenvolvedores recorrem a ferramentas de busca como o Google para encontrar trechos de código-fonte, relembrar a sintaxe de alguma linguagem de programação ou conferir exemplos de uso de bibliotecas de programação \citep{masudur-developers-use-google-code-retrieval:2018}.
 
-A busca por trecho de código em repositórios públicos tem sido um desafio. Atualmente, o site do Github, que hospeda milhares de projetos de código-aberto, não possui um mecanismo de pesquisa que
-seja capaz de recuperar um trecho de código-fonte relevante a partir dos termos utilizados no campo de busca \citep{cambronero-deep-learning-code-search:2019}. 
+As ferramentas de busca, como o Google, utilizam estratégias de indexação e ranqueamento de páginas que são otimizadas para informações não relacionadas a código-fonte. Neste caso, os buscadores não conseguem extrair a semântica por trás do código-fonte, a não ser que o código esteja acompanhado de um texto com palavras similares. E esta dificuldade é refletida na tarefa de busca feito pelo desenvolvedor. Segundo \cite{masudur-developers-use-google-code-retrieval:2018}, os desenvolvedores levam mais tempo, visitam mais páginas web e alteram com mais frequência uma consulta a fim de encontrar um resultado relevante para sua pesquisa relacionada a código-fonte quando comparada a uma busca não relacionada a código-fonte.
 
-Segundo o artigo XXX, a maioria dos desenvolvedores recorrem ao Google para fazer busca de trechos de código-fonte. Porém o Google não provê uma busca especializada para código-fonte e trata o código-fonte como um texto de linguagem natural. Neste caso, ele não consegue extrair a semântica do código-fonte a menos que tenha comentá
-E de acordo com XXX, os desenvolvedores acessam o triplo de páginas e gastam o triplo do tempo ao fazerem buscas relacionadas a trechos de código-fonte quando comparados com buscas não-relacionadas a código-fonte. Segundo o artigo, a maioria dos desenvolvedores ao deparar com um problema recorrem ao Google para fazer uma busca de trechos de código-fonte. Porém o Google trata código-fonte como um texto natural e não consegue extrair a semântica do código. 
+
+A busca semântica por trecho de código tem sido um desafio. Atualmente, o site do Github, que hospeda milhares de projetos de código-aberto, não possui um mecanismo de pesquisa que
+seja capaz de recuperar um trecho de código-fonte relevante a partir dos termos utilizados no campo de busca \citep{cambronero-deep-learning-code-search:2019}. Eles fizeram alguns experimentos, porém dado o resultado inferior, o projeto nao foi pra frente. Eles associaram codigo fonte com comentários docstring. Neste caso, o resultado da busca é boa quando utiliza os mesmos termos utilizados na documentação do código-fonte.
+
+
+Sites como o Stack Overflow tornaram-se muito populares nos últimos anos devido a facilidade em buscar trechos de código-fonte a partir das questões expressas pelos usuários em linguagem natural \citep{cambronero-deep-learning-code-search:2019}. 
+
+
 
 Isto não é somente um desafio para repositórios públicos, mas para repositórios privados também. Os repositórios privados adicionam um desafio a mais, já que os desenvolvedores, muitas vezes, não podem se basear em trechos de código encontrados no Google ou Stack Overflow, pois eles podem não atender aos requisitos específicos da organização de API e uso de bibliotecas \citep{cambronero-deep-learning-code-search:2019}.
 
