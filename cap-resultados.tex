@@ -2,14 +2,20 @@
 \chapter{Experimento}
 \label{cap:experimento}
 
-Neste capítulo apresentamos os resultados da avaliação do uso das redes convolucionais no problema de \textit{code retrieval}. Utilizamos uma arquitetura com uma pequena variação em relação a nossa arquitetura proposta no Capítulo~\ref{cap:abordagem}. E para comparar, utilizamos duas arquiteturas: uma arquitetura bi-LSTM com CNN e outra arquitetura de referência \textit{Embedding}. Os resultados da arquitetura CNN foram promissores. A arquitetura apresentou um valor de métrica \acrfull{mrr} de $0,58$. Em $75\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas.
+Neste capítulo apresentamos os resultados da avaliação do uso das redes convolucionais no problema de \textit{code retrieval}. Utilizamos a nossa arquitetura proposta no Capítulo~\ref{cap:abordagem}. E para comparar, utilizamos duas arquiteturas: uma arquitetura de referência \textit{Embedding} e outra arquitetura que é o estado da arte em recuperação de trecho de código-fonte proposta por \cite{cambronero-deep-learning-code-search:2019}. Os resultados da arquitetura CNN foram promissores. A arquitetura apresentou um valor de métrica \acrfull{mrr} de $0,58$. \todo{atualizar o valor} Em $75\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas. \todo{atualizar o valor}
 
 \section{Conjunto de dados}
 \label{sec:conjunto-dados}
 
-Para este estudo, utilizamos parte do conjunto de dados disponibilizado por \cite{yao-2018}. Esse conjunto é formado por $\bm{147.546}$ pares de questões e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares foram coletados do site \Gls{sof}. Uma peculiaridade desses dados em relação aos dados utilizados nos outros trabalhos \cite{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015}, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Essas questões normalmente expressam as intenções do desenvolvedor, indo ao encontro com a nossa definição da Seção~\ref{sec:code-retrieval-definicao} adotada para o problema de \textit{code retrieval}.
+Para este estudo, utilizamos parte do conjunto de dados disponibilizados por \cite{yao-2018}. Esse conjunto é formado por $\bm{147.546}$ pares de questões em inglês e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares foram coletados do site \Gls{sof} e disponibilizados publicamente através de um repositório no \Gls{github} pelos pesquisadores\footnote{\url{https://github.com/LittleYUYU/StackOverflow-Question-Code-Dataset}}. Uma peculiaridade desses dados em relação aos dados utilizados nos outros trabalhos \cite{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015}, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Essas questões normalmente expressam as intenções do desenvolvedor, indo ao encontro com a nossa definição da Seção~\ref{sec:code-retrieval-definicao} adotada para o problema de \textit{code retrieval}.
 
-Os dados disponibilizados por \cite{yao-2018} são divididos em 3 (três) subconjuntos distintos. Um subconjunto é formado apenas por questões coletadas do \Gls{sof} que continham apenas um trecho de código-fonte na descrição da resposta. O outro é formado por questões que apresentavam mais de um trecho de código-fonte na descrição. O terceiro é formado por pares de questões e trechos de código-fonte anotados manualmente.
+Os dados disponibilizados por \cite{yao-2018} são divididos em 3 (três) subconjuntos distintos. Um subconjunto é formado apenas por questões coletadas do \Gls{sof} que continham apenas um trecho de código-fonte na descrição da resposta. O outro é formado por questões que apresentavam mais de um trecho de código-fonte na descrição. O terceiro é formado por pares de questões e trechos de código-fonte anotados manualmente. A divisão dos subconjuntos de amostras de pares de questões e trechos de código podem ser visualizados na Figura~\ref{fig:distinct-subset-python-pair-question-code}.
+
+\begin{figure}[h]
+\includegraphics[width=0.6\textwidth]{figuras/cap-experimento/distinct-subsets-yao-sample.pdf}
+\caption{Divisão das amostras de pares de questões e trechos de código disponibilizados por \cite{yao-2018}: $N_{1} = \{(q_{i}, c_{i}^{+})\;,\; \forall\; q_{i},\;\nexists\; c_{j}^{+}\; |\; c_{j}^{+} \neq c_{i}^{+}\; \text{para}\; i \neq j,\; 1 \leq i,j \leq |N_{1}| \}$, $N_{2} = \{(q_{i}, c_{i}^{+})\;,\; \exists\; q_{i}\; | \;\exists\; c_{j}^{+} \neq c_{i}^{+}\; \text{para} \; i \neq j,\; 1 \leq i,j \leq |N_{2}| \}$, $N_{3} = \{(q_{i}, c_{i}^{+}),\; \forall\; c_{i}^{+} \text{foi anotado manualmente}, 1 \leq i \leq |N_{3}| \}$. Onde $N_{1} \cap N_{2} \cap N_{3} = \varnothing$, $q_{i} \in \mathbb{Q}$ e $c_{i}^{+},  c_{j}^{+} \in \mathbb{C}$. E $c_{i}^{+}, c_{j}^{+}$ são respostas anotadas como corretas. $\mathbb{Q}$ e $\mathbb{C}$ representam o conjunto de questões e trechos de código respectivamente.} 
+\label{fig:distinct-subset-python-pair-question-code}
+\end{figure}
 
 Nos casos em que há mais de um trecho de código-fonte na descrição da resposta, um trecho de código não é necessariamente uma solução para a pergunta. No exemplo a seguir, os trechos \emph{T2} e \emph{T4} não são soluções para a questão. Já o trecho \emph{T2} apenas inicializa um array e o trecho \emph{T4} mostra a saída do comando \textit{print} para o vetor já convertido\footnote{Site: \url{https://stackoverflow.com/questions/34349762/convert-2d-numpy-array-to-string} Esta questão apresenta 6 trechos de código-fonte, mas para melhor visualização, optamos por colocar apenas 4 trechos em nosso exemplo\label{foot:exemplo-stackoverflow-mais-de-um-trecho}}.
 
@@ -60,25 +66,62 @@ Para diferenciar estes casos, \cite{yao-2018} anotaram os pares com $\bm{1}$, qu
 \textbf{Código-fonte} & \textbf{Python} & \textbf{SQL}  \\
 \hline
 
-Apenas 1 trecho de código na descrição da resposta & $85.294$ & $75.637$ \\
+$N_{1}$: Apenas 1 trecho de código na descrição da resposta & $85.294$ & $75.637$ \\
 
-Trechos de código-fonte anotados automaticamente & $60.083$ & $41.826$ \\
+$N_{2}$: Trechos de código-fonte anotados automaticamente & $60.083$ & $41.826$ \\
 
-Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
+$N_{3}$: Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
 
  \hline
  \textbf{Total} & $\bm{147.546}$ & $\bm{119.519}$\\
  \hline 
  
 \end{tabular}
-\caption{Divisão do conjunto de dados disponibilizado por \cite{yao-2018}. O conjunto formado por "Trechos de código-fonte anotados automaticamente" contém questões que tem mais de um trecho de código-fonte por resposta. Quando há mais de um trecho de código-fonte por resposta, nem todo trecho é uma solução. Neste caso, \cite{yao-2018} criaram um framework para anotá-los automaticamente. Eles obtiveram F1 de $0,916$ e acurácia de $0,911$ em seus testes.}
+\caption{Divisão do conjunto de dados disponibilizado por \cite{yao-2018}. O conjunto formado por "Trechos de código-fonte anotados automaticamente" contém questões que tem mais de um trecho de código-fonte por resposta. Quando há mais de um trecho de código-fonte por resposta, nem todo trecho é uma solução. Neste caso, \cite{yao-2018} criaram um framework para anotá-los automaticamente. Eles obtiveram F1 de $0,916$ e acurácia de $0,911$ em seus testes de classificação das respostas corretas.}
 \label{table:summary-training-data-yao-staqc}
 \end{table}
 
 \section{Treinamento e avaliação}
 \label{sec:treinamento-avaliacao}
 
-Para o treinamento do modelo, utilizamos apenas os pares de questões e trechos de código-fonte em Python. Inicialmente, utilizamos apenas os pares anotados automaticamente. Esse conjunto de dados apresenta uma variabilidade maior, em torno de 27\% das questões contém mais de um trecho de código-fonte anotados como correto, i.e., 27\% das perguntas tem mais de uma opção de solução.
+Para o treinamento do modelo, utilizamos apenas os pares de questões e trechos de código-fonte em Python. Utilizamos os conjuntos $N_{1}$ e $N_{2}$ para treinamento e avaliação conforme a Figura~\ref{fig:distinct-subset-python-pair-question-code}. O conjunto de amostras $N_{1}$ apresenta uma variabilidade maior, em torno de 27\% das questões contém mais de um trecho de código-fonte anotados como correto, i.e., 27\% das perguntas tem mais de uma opção de solução.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ p{8em} P{10em} P{10em} }
+\hline
+  & \multicolumn{2}{c}{\textbf{Quantidade de palavras}}\\
+\hline
+ & \textbf{Questão} & \textbf{Trecho de código}  \\
+\hline
+
+Média &	 $8.93$ & $66.82$ \\
+
+Desvio padrão & $3.64$ & $113.71$ \\
+
+Mínimo & $2$ & $1$ \\ 
+
+25\% & $6$ & $19$ \\
+
+50\% & $8$ & $39$ \\
+
+75\% & $11$ & $78$ \\
+
+Máximo & $32$ & $14413$ \\
+ 
+ 
+ \hline 
+ 
+\end{tabular}
+\caption{Estatística descritiva da amostra de questões e trechos de código em Python utilizados no treinamento e avaliação dos modelos. Esta tabela inclui a média, desvio padrão e os percentis 25\%, 50\% e 75\%.}
+\label{table:statistical-descriptive-of-pythons-sample}
+\end{table}
+
+\begin{figure}[h]
+\includegraphics[width=1\textwidth]{figuras/cap-experimento/boxplot_number_of_words.png}
+\caption{Boxplot.} 
+\label{fig:boxplot-number-of-words}
+\end{figure}
 
 Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iyer-etal-2016-summarizing}. Para o treinamento, foi utilizado o conjunto com $60.083$ pares. Para escolha do modelo e avaliação final, foi utilizado o conjunto de dados anotados manualmente. A divisão das amostras para treinamento e avaliação podem ser visualizadas na Tabela~\ref{table:divisao-amostras}. 
 

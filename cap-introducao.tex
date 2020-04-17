@@ -3,20 +3,19 @@
 \label{cap:introducao}
 
 
-Recuperação de trecho de código-fonte ou \textit{code retrieval} consiste em recuperar um trecho de código-fonte a partir de um repositório, de modo a atender as intenções do desenvolvedor, descritas em linguagem natural. A capacidade de recuperar trechos de código relevantes é uma importante ferramenta de produtividade. Atualmente, a maioria dos desenvolvedores recorrem a ferramentas de busca como o Google para encontrar trechos de código-fonte, relembrar a sintaxe de alguma linguagem de programação ou conferir exemplos de uso de bibliotecas de programação \citep{masudur-developers-use-google-code-retrieval:2018}.
+Recuperação de trecho de código-fonte ou \textit{code retrieval} consiste em recuperar um trecho de código a partir de um repositório, de modo a atender as intenções do desenvolvedor, descritas em linguagem natural. A capacidade de recuperar trechos de códigos relevantes é uma importante ferramenta de produtividade. Atualmente, a maioria dos desenvolvedores recorrem a ferramentas de busca como o Google para encontrar trechos de código-fonte, relembrar a sintaxe de alguma linguagem de programação ou conferir exemplos de uso de bibliotecas de programação \citep{masudur-developers-use-google-code-retrieval:2018}.
 
-As ferramentas de busca, como o Google, utilizam estratégias de indexação e ranqueamento de páginas que são otimizadas para informações não relacionadas a código-fonte. Neste caso, os buscadores não conseguem extrair a semântica por trás do código-fonte, a não ser que o código esteja acompanhado de um texto com palavras similares. E esta dificuldade é refletida na tarefa de busca feito pelo desenvolvedor. Segundo \cite{masudur-developers-use-google-code-retrieval:2018}, os desenvolvedores levam mais tempo, visitam mais páginas web e alteram com mais frequência uma consulta a fim de encontrar um resultado relevante para sua pesquisa relacionada a código-fonte quando comparada a uma busca não relacionada a código-fonte.
+As ferramentas de busca, como o Google, utilizam estratégias de indexação e ranqueamento de páginas que são otimizadas para informações não relacionadas a código-fonte. Neste caso, os buscadores não conseguem extrair a semântica por trás do código-fonte, a não ser que o código esteja acompanhado de um texto com palavras similares. E esta dificuldade é refletida na tarefa de busca feito pelo desenvolvedor. Segundo \cite{masudur-developers-use-google-code-retrieval:2018}, os desenvolvedores levam mais tempo, visitam mais páginas web e alteram com mais frequência uma consulta a fim de encontrar um resultado relevante para sua pesquisa relacionada a código-fonte quando comparada a uma busca não relacionada a código.
 
 
 A busca semântica por trecho de código tem sido um desafio. Atualmente, o site do Github, que hospeda milhares de projetos de código-aberto, não possui um mecanismo de pesquisa que
-seja capaz de recuperar um trecho de código-fonte relevante a partir dos termos utilizados no campo de busca \citep{cambronero-deep-learning-code-search:2019}. Eles fizeram alguns experimentos, porém dado o resultado inferior, o projeto nao foi pra frente. Eles associaram codigo fonte com comentários docstring. Neste caso, o resultado da busca é boa quando utiliza os mesmos termos utilizados na documentação do código-fonte.
+seja capaz de recuperar um trecho de código-fonte relevante a partir dos termos utilizados no campo de busca. \cite{husain-github-semantic-search-code-2019} fizeram alguns experimentos, extrairam milhares de trechos de código de repositórios do \Gls{github} e associaram a textos \gls{docstring} para criar uma busca semântica. Porém os resultados não foram satisfatórios, pois a busca somente retornava resultados relevantes caso o usuário utilizasse termos similares aos utilizados nos comentários \gls{docstring}. 
 
+Os pesquisadores do Facebook \citep{cambronero-deep-learning-code-search:2019} também verificaram este problema e constataram que comentários \gls{docstring} não conseguem extrair a semântica do código-fonte de forma que consiga atender as intenções do usuário em uma busca. Eles verificaram que as intenções dos usuários foram melhor expressas através de questões extraídas de comunidades abertas de perguntas e respostas, como o \gls{sof}. Nestas comunidades abertas de perguntas e respostas, o conhecimento é construído coletivamente pelos usuários, que organizam e curam as informações. E elas acabam tornando-se um valioso repositório de informações \citep{Wang-quora:2013}. 
 
-Sites como o Stack Overflow tornaram-se muito populares nos últimos anos devido a facilidade em buscar trechos de código-fonte a partir das questões expressas pelos usuários em linguagem natural \citep{cambronero-deep-learning-code-search:2019}. 
+No caso do \Gls{sof}, os usuários expressam suas perguntas em linguagem natural e outros usuários podem responder com trechos de código-fonte. Além disso, o próprio usuário que fez a pergunta, pode apontar qual é a resposta correta. E outros usuários podem votar na resposta que eles acharam mais relevante ou indicar se uma resposta está incorreta, pontuando negativamente a mesma. Estas ações coletivas feitas pelos usuários ajudam na curadoria e organização da informação, facilitando a busca por informações relevantes \citep{Wang-quora:2013, cambronero-deep-learning-code-search:2019}. 
 
-
-
-Isto não é somente um desafio para repositórios públicos, mas para repositórios privados também. Os repositórios privados adicionam um desafio a mais, já que os desenvolvedores, muitas vezes, não podem se basear em trechos de código encontrados no Google ou Stack Overflow, pois eles podem não atender aos requisitos específicos da organização de API e uso de bibliotecas \citep{cambronero-deep-learning-code-search:2019}.
+O desafio de recuperar trechos de código-fonte não está restrito a apenas repositórios públicos, mas a repositórios privados também. Os repositórios privados adicionam um desafio a mais, já que os desenvolvedores, muitas vezes, não podem se basear em trechos de código encontrados em fóruns de programação ou Stack Overflow, pois eles podem não atender aos requisitos específicos de API ou uso de bibliotecas pela organização \citep{cambronero-deep-learning-code-search:2019}.
 
 Conforme \cite{cambronero-deep-learning-code-search:2019}, muitos trabalhos tem sido feitos na academia e indústria em direção a uma busca mais avançada de código-fonte \citep{Gu-deep-code-search:2018, yao-2018, iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015, Chen-bi-variational-autoencoder:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019}. E um ponto em comum nestes trabalhos é o uso de \textit{deep learning}. Tanto que \cite{cambronero-deep-learning-code-search:2019} cunharam o termo \textit{neural code search}, i.e., busca de código-fonte através do uso de redes neurais. 
 
@@ -56,7 +55,7 @@ O foco deste trabalho é a recuperação de trecho de código-fonte. Diferenteme
 \section{Objetivos}
 \label{sec:objetivo}
 
-O objetivo principal deste trabalho é propor uma nova abordagem para a recuperação de trecho de código-fonte. Queremos avaliar se o uso de redes convolucionais auxiliam na obtenção de um modelo que seja capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor.
+O objetivo principal deste trabalho é propor uma nova abordagem para a recuperação de trecho de código-fonte. Queremos avaliar se o uso de redes convolucionais auxiliam na obtenção de um modelo que seja capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor. 
 
 %% ------------------------------------------------------------------------- %%
 \section{Contribuições}
@@ -65,7 +64,7 @@ O objetivo principal deste trabalho é propor uma nova abordagem para a recupera
 Dentre as contribuições deste trabalho estão:
 
 \begin{itemize}
-\item Proposta de uma nova abordagem para a recuperação de trecho de código-fonte;
+\item Proposta de uma nova abordagem para uma busca semântica de código-fonte;
 \item Avaliação de uma nova arquitetura;
 \item Avaliação do modelo utilizando uma nova base de dados disponibilizada por \cite{yao-2018};
 \item Disponibilização do código-fonte, desde o pré-processamento até a avaliação final, em um repositório público;
@@ -75,4 +74,4 @@ Dentre as contribuições deste trabalho estão:
 \section{Organização do Trabalho}
 \label{sec:organizacao_trabalho}
 
-No Capítulo~\ref{cap:fundamentacao-teorica}, apresentamos os conceitos e trabalhos relacionados a recuperação de trecho de código-fonte. No Capítulo~\ref{cap:abordagem}, apresentamos a nossa abordagem para o item de pesquisa proposto. No Capítulo~\ref{cap:resultados-preliminares}, exibimos os resultados preliminares da arquitetura proposta utilizando os dados de \cite{yao-2018}. Já no Capítulo~\ref{cap:cronograma} temos os próximos passos e o cronograma até a entrega do trabalho.
+No Capítulo~\ref{cap:fundamentacao-teorica}, apresentamos os conceitos e trabalhos relacionados a recuperação de trecho de código-fonte. No Capítulo~\ref{cap:abordagem}, apresentamos a nossa abordagem para o item de pesquisa proposto. No Capítulo~\ref{cap:experimento}, exibimos os resultados da arquitetura proposta utilizando os dados de \cite{yao-2018}. Já no Capítulo~\ref{cap:conclusoes}, apresentamos as nossas conclusões e os próximos passos para trabalhos futuros.
