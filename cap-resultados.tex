@@ -77,7 +77,7 @@ $N_{3}$: Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
  \hline 
  
 \end{tabular}
-\caption{Divisão do conjunto de dados disponibilizado por \cite{yao-2018}. O conjunto formado por "Trechos de código-fonte anotados automaticamente" contém questões que tem mais de um trecho de código-fonte por resposta. Quando há mais de um trecho de código-fonte por resposta, nem todo trecho é uma solução. Neste caso, \cite{yao-2018} criaram um framework para anotá-los automaticamente. Eles obtiveram F1 de $0,916$ e acurácia de $0,911$ em seus testes de classificação das respostas corretas.}
+\caption{Divisão do conjunto de dados disponibilizado por \cite{yao-2018}. O conjunto formado por "Trechos de código-fonte anotados automaticamente" contém questões que tem mais de um trecho de código-fonte por resposta. Quando há mais de um trecho de código-fonte por resposta, nem todo trecho é uma solução. Neste caso, \cite{yao-2018} criaram um framework para anotá-los automaticamente. Eles obtiveram F1 de $0,916$ e acurácia de $0,911$ em seus testes de classificação automática das respostas corretas.}
 \label{table:summary-training-data-yao-staqc}
 \end{table}
 
@@ -85,43 +85,6 @@ $N_{3}$: Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
 \label{sec:treinamento-avaliacao}
 
 Para o treinamento do modelo, utilizamos apenas os pares de questões e trechos de código-fonte em Python. Utilizamos os conjuntos $N_{1}$ e $N_{2}$ para treinamento e avaliação conforme a Figura~\ref{fig:distinct-subset-python-pair-question-code}. O conjunto de amostras $N_{1}$ apresenta uma variabilidade maior, em torno de 27\% das questões contém mais de um trecho de código-fonte anotados como correto, i.e., 27\% das perguntas tem mais de uma opção de solução.
-
-\begin{table}[h]
-\centering
-\begin{tabular}{ p{8em} P{10em} P{10em} }
-\hline
-  & \multicolumn{2}{c}{\textbf{Quantidade de palavras}}\\
-\hline
- & \textbf{Questão} & \textbf{Trecho de código}  \\
-\hline
-
-Média &	 $8.93$ & $66.82$ \\
-
-Desvio padrão & $3.64$ & $113.71$ \\
-
-Mínimo & $2$ & $1$ \\ 
-
-25\% & $6$ & $19$ \\
-
-50\% & $8$ & $39$ \\
-
-75\% & $11$ & $78$ \\
-
-Máximo & $32$ & $14413$ \\
- 
- 
- \hline 
- 
-\end{tabular}
-\caption{Estatística descritiva da amostra de questões e trechos de código em Python utilizados no treinamento e avaliação dos modelos. Esta tabela inclui a média, desvio padrão e os percentis 25\%, 50\% e 75\%.}
-\label{table:statistical-descriptive-of-pythons-sample}
-\end{table}
-
-\begin{figure}[h]
-\includegraphics[width=1\textwidth]{figuras/cap-experimento/boxplot_number_of_words.png}
-\caption{Boxplot.} 
-\label{fig:boxplot-number-of-words}
-\end{figure}
 
 Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iyer-etal-2016-summarizing}. Para o treinamento, foi utilizado o conjunto com $60.083$ pares. Para escolha do modelo e avaliação final, foi utilizado o conjunto de dados anotados manualmente. A divisão das amostras para treinamento e avaliação podem ser visualizadas na Tabela~\ref{table:divisao-amostras}. 
 
@@ -140,9 +103,48 @@ Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iy
  \textbf{Total} & $\bm{62.252}$\\
  \hline
 \end{tabular}
-\caption{Divisão das amostras para treinamento e avaliação. O conjunto de dados é formado por pares $<q_{i}, c_{i}^{+}>$, onde $q_{i}$ é uma questão e $c_{i}^{+}$ é um trecho de código-fonte anotado como correto. O conjunto formado por pares anotados manualmente foi dividido em DEV e EVAL conforme o procedimento descrito por \cite{iyer-etal-2016-summarizing}.}
+\caption{Divisão das amostras para treinamento e avaliação. O conjunto de dados é formado por pares $<q_{i}, c_{i}^{+}>$, onde $q_{i}$ é uma questão e $c_{i}^{+}$ é um trecho de código-fonte anotado como correto. O conjunto formado por pares anotados manualmente foi dividido em DEV e EVAL conforme o procedimento descrito na figura XXX de treinamento por \cite{iyer-etal-2016-summarizing}.}
 \label{table:divisao-amostras}
 \end{table}
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ p{5em} P{4em} P{4em} P{4em} P{4em} P{4em} P{4em} }
+\hline
+  & \multicolumn{5}{c}{\textbf{Quantidade de palavras}}\\
+\hline
+ & \textbf{$\mathbf{N_{2}}$\_Q} & \textbf{$\mathbf{N_{2}}$\_C} & \textbf{Dev\_Q} & \textbf{Dev\_C} & \textbf{Eval\_Q} & \textbf{Eval\_C}  \\
+\hline
+
+Média &	 $8.89$ & $44.41$ &	 $9.15$ & $44.31$ &	 $9.35$ & $42.78$ \\
+
+Desvio padrão & $3.65$ & $55.19$ &	 $3.64$ & $51.87$ &	 $3.85$ & $43.82$ \\
+
+Mínimo & $2$ & $1$ &	 $3$ & $1$ &	 $3$ & $2$ \\ 
+
+25\% & $6$ & $16$ &	 $7$ & $15$ &	 $6$ & $15$ \\
+
+50\% & $8$ & $30$ &	 $9$ & $29$ &	 $9$ & $29$ \\
+
+75\% & $11$ & $54$ &	 $11$ & $52$ &	 $11$ & $55$ \\
+
+Máximo & $32$ & $3566$ &	 $25$ & $708$ &	 $27$ & $439$ \\
+ 
+ 
+ \hline 
+ 
+\end{tabular}
+\caption{Estatística descritiva da amostra de questões e trechos de código em Python utilizados no treinamento e avaliação dos modelos. Esta tabela inclui a média, desvio padrão e os percentis 25\%, 50\% e 75\% após o pré-processamento. Os detalhes sobre o pré-processamento estão presentes na Seção~\ref{sec:pre-processamento}.}
+\label{table:statistical-descriptive-of-pythons-sample}
+\end{table}
+
+\begin{figure}[h]
+\includegraphics[width=1\textwidth]{figuras/cap-experimento/boxplot_number_of_words.png}
+\caption{Boxplot.} 
+\label{fig:boxplot-number-of-words}
+\end{figure}
+
 
 Durante o treinamento, do total de $60.083$ amostras, $42058$ foram utilizadas para o conjunto de treinamento e $18025$ para o conjunto de validação.
 
@@ -161,6 +163,7 @@ Onde $n$ é a quantidade de questões presentes na amostra, $p_{i}^{+}$ é a pos
 Este procedimento é repetido durante 20 vezes. A cada iteração, outros 49 distratores são selecionados. Ao final, obtém-se a média \emph{MRR} do modelo. O modelo que obtiver a maior média \emph{MRR} ao final do treinamento é escolhido. A avaliação final na amostra \emph{EVAL} utiliza o mesmo procedimento da amostra \emph{DEV} descrito acima.
 
 \section{Pré-processamento}
+\label{sec:pre-processamento}
 
 Diferente do trabalho de \cite{tan-lstm-qa}, nós geramos duas matrizes de representação distribuída distintas $\bm{T_{q}}$ e $\bm{T_{c}}$ para o vocabulário das questões e para o vocabulário dos trechos de código-fonte, conforme citado no Capítulo~\ref{cap:abordagem}. Antes de gerar a matriz $\bm{T_{c}}$, utilizamos uma função disponibilizada por \cite{yao-2018} para fazer um pré-processamento dos trechos de código-fonte. Essa função substitui os valores literais numéricos e textos pelas palavras \emph{"NUMBER"} e \emph{"STRING"}. Além disso, os comentários são removidos e as variáveis são substituídas por \emph{"VAR"}. O caractere de quebra de linha é substituído por \emph{"NEWLINE"}.
 
