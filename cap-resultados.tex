@@ -85,13 +85,9 @@ $N_{3}$: Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
 \section{Treinamento e avaliação}
 \label{sec:treinamento-avaliacao}
 
-Para o treinamento do modelo, utilizamos apenas os pares de questões e trechos de código-fonte em Python. Utilizamos os conjuntos $N_{2}$ e $N_{3}$ para treinamento e avaliação conforme a Figura~\ref{fig:distinct-subset-python-pair-question-code}. O conjunto de amostras $N_{2}$ apresenta uma variabilidade maior, em torno de 27\% das questões contém mais de um trecho de código-fonte anotados como correto, i.e., 27\% das perguntas tem mais de uma opção de solução.
+Para o treinamento e avaliação do modelo, utilizamos apenas os pares de questões e trechos de código-fonte em Python. Utilizamos os conjuntos $N_{2}$ e $N_{3}$ conforme a Figura~\ref{fig:distinct-subset-python-pair-question-code}. O conjunto de amostras $N_{2}$ apresenta uma variabilidade maior, em torno de 27\% das questões contém mais de um trecho de código-fonte anotados como correto, i.e., 27\% das perguntas tem mais de uma opção de solução.
 
-De acordo com a Tabela~\ref{table:statistical-descriptive-of-pythons-sample}, as questões tem aproximadamente em média $9$ palavras com um desvio padrão de $\pm 3.71$. Já os trechos de código apresentam aproximadamente uma média de $44$ e um desvio padrão de $\pm 49$. O valor alto do desvio padrão para os trechos de código é um indicativo de maior variabilidade da quantidade de palavras. Este valor da média e desvio padrão são influenciados também por pontos fora da curva, i.e., trechos de código com uma enorme quantidade de palavras. Então, para entender melhor como está distribuída esta quantidade, apresentamos os percentis na Tabela~\ref{table:statistical-descriptive-of-pythons-sample} e o diagrama de caixa com os respectivos quartis na Figura~\ref{fig:boxplot-number-of-words}.
-
-Tanto pela Tabela~\ref{table:statistical-descriptive-of-pythons-sample} quanto pela Figura~\ref{fig:boxplot-number-of-words}, podemos verificar que as questões apresentam um variabilidade e quantidade menor de palavras. Aproximadamente 50\% das questões tem em torno de $6$ a $11$ palavras. Enquanto os trechos de código apresentam 50\% das vezes a quantidade aproximada de $15$ a $54$ palavras. A partir destas informações, podemos dizer que a recuperação de trecho de código-fonte, no nosso caso, é constituída por questões relativamente curtas e trechos de código 1 a 3 sentenças em linguagem natural. 
-
-Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iyer-etal-2016-summarizing}. Para o treinamento, foi utilizado o conjunto com $60.083$ pares. Para escolha do modelo e avaliação final, foi utilizado o conjunto de dados anotados manualmente. A divisão das amostras para treinamento e avaliação podem ser visualizadas na Tabela~\ref{table:divisao-amostras}. 
+Quanto ao ... Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iyer-etal-2016-summarizing}. Para o treinamento, foi utilizado o conjunto com $60.083$ pares. E durante o treinamento de 6000 .... 18000 foram para.... Para escolha do modelo e avaliação final, foi utilizado o conjunto de dados anotados manualmente. A divisão das amostras para treinamento e avaliação podem ser visualizadas na Tabela~\ref{table:divisao-amostras}. 
 
 \begin{table}[h]
 \centering
@@ -111,6 +107,12 @@ Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iy
 \caption{Divisão das amostras para treinamento e avaliação. O conjunto de dados é formado por pares $<q_{i}, c_{i}^{+}>$, onde $q_{i}$ é uma questão e $c_{i}^{+}$ é um trecho de código-fonte anotado como correto. O conjunto formado por pares anotados manualmente foi dividido em DEV e EVAL conforme o procedimento descrito por \cite{iyer-etal-2016-summarizing}. É possível visualizar uma ilustração deste procedimento nas Figuras \ref{fig:evaluation-process} e \ref{fig:final-evaluation-process}.}
 \label{table:divisao-amostras}
 \end{table}
+
+De acordo com a Tabela~\ref{table:statistical-descriptive-of-pythons-sample}, as questões tem aproximadamente em média $9$ palavras com um desvio padrão de $\pm 3.71$. Já os trechos de código apresentam aproximadamente uma média de $44$ e um desvio padrão de $\pm 49$. O valor alto do desvio padrão para os trechos de código é um indicativo de maior variabilidade da quantidade de palavras. Este valor da média e desvio padrão são influenciados também por pontos fora da curva, i.e., trechos de código com uma enorme quantidade de palavras. Então, para entender melhor como está distribuída esta quantidade, apresentamos os percentis na Tabela~\ref{table:statistical-descriptive-of-pythons-sample} e o diagrama de caixa com os respectivos quartis na Figura~\ref{fig:boxplot-number-of-words}.
+
+Tanto pela Tabela~\ref{table:statistical-descriptive-of-pythons-sample} quanto pela Figura~\ref{fig:boxplot-number-of-words}, podemos verificar que as questões apresentam um variabilidade e quantidade menor de palavras. Aproximadamente 50\% das questões tem em torno de $6$ a $11$ palavras. Enquanto os trechos de código apresentam 50\% das vezes a quantidade aproximada de $15$ a $54$ palavras. A partir destas informações, podemos dizer que a recuperação de trecho de código-fonte, no nosso caso, é constituída por questões relativamente curtas e trechos de código que variam de 1 (uma) a 3 (três) sentenças de tamanho em linguagem natural \citep{casi-newell-sentence-length-2018}. 
+
+
 
 
 \begin{table}[h]
