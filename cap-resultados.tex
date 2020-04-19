@@ -12,6 +12,7 @@ Para este estudo, utilizamos parte do conjunto de dados disponibilizados por \ci
 Os dados disponibilizados por \cite{yao-2018} são divididos em 3 (três) subconjuntos distintos. Um subconjunto é formado apenas por questões coletadas do \Gls{sof} que continham apenas um trecho de código-fonte na descrição da resposta. O outro é formado por questões que apresentavam mais de um trecho de código-fonte na descrição. O terceiro é formado por pares de questões e trechos de código-fonte anotados manualmente. A divisão dos subconjuntos de amostras de pares de questões e trechos de código podem ser visualizados na Figura~\ref{fig:distinct-subset-python-pair-question-code}.
 
 \begin{figure}[h]
+\centering
 \includegraphics[width=0.6\textwidth]{figuras/cap-experimento/distinct-subsets-yao-sample.pdf}
 \caption{Divisão das amostras de pares de questões e trechos de código disponibilizados por \cite{yao-2018}: $N_{1} = \{(q_{i}, c_{i}^{+})\;,\; \forall\; q_{i},\;\nexists\; c_{j}^{+}\; |\; c_{j}^{+} \neq c_{i}^{+}\; \text{para}\; i \neq j,\; 1 \leq i,j \leq |N_{1}| \}$, $N_{2} = \{(q_{i}, c_{i}^{+})\;,\; \exists\; q_{i}\; | \;\exists\; c_{j}^{+} \neq c_{i}^{+}\; \text{para} \; i \neq j,\; 1 \leq i,j \leq |N_{2}| \}$, $N_{3} = \{(q_{i}, c_{i}^{+}),\; \forall\; c_{i}^{+} \text{foi anotado manualmente}, 1 \leq i \leq |N_{3}| \}$. Onde $N_{1} \cap N_{2} \cap N_{3} = \varnothing$, $q_{i} \in \mathbb{Q}$ e $c_{i}^{+},  c_{j}^{+} \in \mathbb{C}$. E $c_{i}^{+}, c_{j}^{+}$ são respostas anotadas como corretas. $\mathbb{Q}$ e $\mathbb{C}$ representam o conjunto de questões e trechos de código respectivamente.} 
 \label{fig:distinct-subset-python-pair-question-code}
@@ -103,7 +104,7 @@ Adotamos o mesmo procedimento de treinamento e avaliação proposto por \cite{iy
  \textbf{Total} & $\bm{62.252}$\\
  \hline
 \end{tabular}
-\caption{Divisão das amostras para treinamento e avaliação. O conjunto de dados é formado por pares $<q_{i}, c_{i}^{+}>$, onde $q_{i}$ é uma questão e $c_{i}^{+}$ é um trecho de código-fonte anotado como correto. O conjunto formado por pares anotados manualmente foi dividido em DEV e EVAL conforme o procedimento descrito na figura XXX de treinamento por \cite{iyer-etal-2016-summarizing}.}
+\caption{Divisão das amostras para treinamento e avaliação. O conjunto de dados é formado por pares $<q_{i}, c_{i}^{+}>$, onde $q_{i}$ é uma questão e $c_{i}^{+}$ é um trecho de código-fonte anotado como correto. O conjunto formado por pares anotados manualmente foi dividido em DEV e EVAL conforme o procedimento descrito por \cite{iyer-etal-2016-summarizing}. É possível visualizar uma ilustração deste procedimento nas Figuras \ref{fig:evaluation-process} e \ref{fig:final-evaluation-process}.}
 \label{table:divisao-amostras}
 \end{table}
 
@@ -135,14 +136,30 @@ Máximo & $32$ & $3566$ &	 $25$ & $708$ &	 $27$ & $439$ \\
  \hline 
  
 \end{tabular}
-\caption{Estatística descritiva da amostra de questões e trechos de código em Python utilizados no treinamento e avaliação dos modelos. Esta tabela inclui a média, desvio padrão e os percentis 25\%, 50\% e 75\% após o pré-processamento. Os detalhes sobre o pré-processamento estão presentes na Seção~\ref{sec:pre-processamento}.}
+\caption{Estatística descritiva da amostra de questões e trechos de código em Python utilizados no treinamento e avaliação dos modelos. O prefixo $\mathbf{N_{2}}$ refere-se a amostra de treinamento, conforme a Figura~\ref{fig:distinct-subset-python-pair-question-code}. Os prefixos \textbf{Dev} e \textbf{Eval} referem-se a amostra para escolha do modelo e a amostra para avaliação final conforme procedimento ilustrado nas Figuras \ref{fig:evaluation-process} e \ref{fig:final-evaluation-process}. Os sufixos \textbf{Q} e \textbf{C} referem-se ao conjunto de palavras das questões e trechos de código-fonte respectivamente. Esta tabela inclui a média, desvio padrão e os percentis 25\%, 50\% e 75\% após o pré-processamento. Os detalhes sobre o pré-processamento estão presentes na Seção~\ref{sec:pre-processamento}.}
 \label{table:statistical-descriptive-of-pythons-sample}
 \end{table}
 
 \begin{figure}[h]
+\centering
 \includegraphics[width=1\textwidth]{figuras/cap-experimento/boxplot_number_of_words.png}
-\caption{Boxplot.} 
+\caption{Diagrama de caixa para visualizar graficamente a distribuição da quantidade de palavras das questões e trechos de código-fonte por meio de quartis. Este diagrama de caixa exibe o Q1 (primeiro quartil), Q2 (segundo quartil) e Q3 (terceiro quartil). Eles referem-se aos percentis 25\%, 50\% e 75\% da Tabela~\ref{table:statistical-descriptive-of-pythons-sample}.}. 
 \label{fig:boxplot-number-of-words}
+\end{figure}
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[height=1.5\textwidth]{figuras/cap-experimento/evaluation_process.pdf}
+\caption{Boxplot.} 
+\label{fig:evaluation-process}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[height=1\textwidth]{figuras/cap-experimento/final_evaluation_process.pdf}
+\caption{Boxplot.} 
+\label{fig:final-evaluation-process}
 \end{figure}
 
 
