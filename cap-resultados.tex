@@ -168,24 +168,21 @@ Posteriormente, os trechos de código-fonte são ordenados de forma decrescente,
 MRR = \frac{1}{n} * \sum_{i = 1}^{n}\frac{1}{p_{i}^{+}}    
 \end{equation}
 
-Onde $n$ é a quantidade de questões presentes na amostra, $p_{i}^{+}$ é a posição da primeira ocorrência do trecho $c_{i}^{+}$ entre os trechos ordenados.
+Onde $n$ é a quantidade de questões presentes na amostra, $p_{i}^{+}$ é a posição da primeira ocorrência do trecho $c_{i}^{+}$ entre os trechos ordenados. 
 
 Este procedimento é repetido durante 20 iterações. A cada iteração, outros 49 distratores são selecionados e, ao final, obtém-se a média \emph{MRR} do modelo. Basicamente, a cada época verificamos o resultado MRR do modelo comparando a resposta anotada como correta com outros 49 distratores. E selecionamos o modelo que obtiver a melhor média MRR. Este modelo escolhido será utilizado na avaliação final.
 
 \section{Avaliação}
 \label{sec:avaliacao}
 
-A avaliação final na amostra \emph{EVAL} utiliza o mesmo procedimento da amostra \emph{DEV} descrito acima.
-
-
+A avaliação final na amostra \emph{EVAL} utiliza o mesmo procedimento da amostra \emph{DEV} descrito anteriormente. Quer dizer, calculamos o MRR para cada par $<q_{i}, c_{i}^{+}>$ da amostra \emph{EVAL} juntamente com outros 49 distratores $c'$ que são selecionados aleatoriamente da amostra de treinamento, tal que $c_{i}^{+} \neq c'$. Este procedimento de cálculo do MRR é repetido durante 20 iterações. Após as 20 iterações, obtemos a média final do nosso modelo. A ilustração deste procedimento pode ser visualizada na Figura~\ref{fig:final-evaluation-process}.
 
 \begin{figure}[h]
 \centering
 \includegraphics[height=1\textwidth]{figuras/cap-experimento/final_evaluation_process.pdf}
-\caption{Boxplot.} 
+\caption{Boxplot.}
 \label{fig:final-evaluation-process}
 \end{figure}
-
 
 \section{Pré-processamento}
 \label{sec:pre-processamento}
