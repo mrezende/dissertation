@@ -149,9 +149,7 @@ Tanto pela Tabela~\ref{table:statistical-descriptive-of-pythons-sample} quanto p
 \section{Treinamento}
 \label{sec:treinamento}
 
-
-
-Adotamos o mesmo procedimento de treinamento proposto por \cite{iyer-etal-2016-summarizing}. Para o treinamento, foi utilizado o conjunto com $60.083$ pares. Durante o treinamento, do total de $60.083$ amostras, $42058$ foram utilizadas para o conjunto de treinamento e $18025$ para o conjunto de validação. Para escolha do modelo e avaliação final, foi utilizado o conjunto de dados anotados manualmente. A divisão das amostras para treinamento e avaliação podem ser visualizadas na Tabela~\ref{table:divisao-amostras}. 
+Adotamos o mesmo procedimento de treinamento proposto por \cite{iyer-etal-2016-summarizing}. Utilizamos o conjunto $N_{2}$ composto por $60.083$ pares de questões e trechos de código-fonte. Durante o treinamento, do total de $60.083$ amostras, $42.058$ foram utilizadas para o conjunto de treinamento e $18.025$ para o conjunto de validação. Para escolha do modelo e avaliação final, foi utilizado o conjunto $N_{3}$ de dados anotados manualmente. A divisão das amostras para treinamento e avaliação podem ser visualizadas na Tabela~\ref{table:divisao-amostras}. 
 
 O procedimento de treinamento utilizado foi: O modelo é treinado durante 500 épocas. Caso o valor da função de perda \textit{hinge} na amostra de treinamento fique abaixo de $0,0001$ ou o valor da função de perda na amostra de validação não diminua após 25 épocas, o treinamento é interrompido. A cada época, o modelo é avaliado na amostra \emph{DEV}. O intuito desta avaliação é obter o melhor modelo conforme a métrica \acrshort{mrr}. A ilustração deste procedimento pode ser visualizado na Figura~\ref{fig:evaluation-process}.
 
@@ -172,7 +170,7 @@ MRR = \frac{1}{n} * \sum_{i = 1}^{n}\frac{1}{p_{i}^{+}}
 
 Onde $n$ é a quantidade de questões presentes na amostra, $p_{i}^{+}$ é a posição da primeira ocorrência do trecho $c_{i}^{+}$ entre os trechos ordenados.
 
-Este procedimento é repetido durante 20 vezes. A cada iteração, outros 49 distratores são selecionados. Ao final, obtém-se a média \emph{MRR} do modelo. O modelo que obtiver a maior média \emph{MRR} ao final do treinamento é escolhido. 
+Este procedimento é repetido durante 20 iterações. A cada iteração, outros 49 distratores são selecionados e, ao final, obtém-se a média \emph{MRR} do modelo. Basicamente, a cada época verificamos o resultado MRR do modelo comparando a resposta anotada como correta com outros 49 distratores. E selecionamos o modelo que obtiver a melhor média MRR. Este modelo escolhido será utilizado na avaliação final.
 
 \section{Avaliação}
 \label{sec:avaliacao}
