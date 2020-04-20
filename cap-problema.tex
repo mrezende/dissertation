@@ -23,19 +23,16 @@ Para cada palavra devemos definir uma representação. Uma boa representação p
 
 Portanto, neste trabalho, cada palavra será representada através de um vetor de representação distribuída. Para mapeá-las, utilizaremos, inicialmente, o algoritmo \textit{word2vec}. Ele será utilizado com \textit{skip-gram}, que prediz as palavras do contexto a partir de uma palavra alvo. Segundo \cite{mikolov2013distributed}, \textit{skip-gram} obteve um desempenho melhor em problemas semânticos, e.g., relacionar uma palavra masculina com a equivalente feminina, relacionar o nome de uma capital a um país ou cidade a um estado. No caso do código-fonte, isto é uma característica importante, pois pode ajudar a agrupar os \textit{tokens} de acordo com o tipo. Por exemplo, agrupar a instrução de decisão \textit{while} próxima da instrução \textit{for}. E relacionar a instrução de decisão \textit{if} próxima da \textit{else}.
 
-No nosso caso, o \textit{word2vec} irá mapear cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{Q}$ o conjunto formado pelas palavras das questões e $\mathbb{C}$ o conjunto constituído pelas palavras presentes nos trechos de código-fonte. Para cada palavra ${q} \in \mathbb{Q}$ e palavra ${c} \in \mathbb{C}$ teremos:
+No nosso caso, o \textit{word2vec} irá mapear cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{V}$ o conjunto formado pelas palavras das questões e pelas palavras presentes nos trechos de código-fonte. Para cada palavra ${p} \in \mathbb{V}$ teremos:
 
 \begin{equation}
-    f: {q} \rightarrow t_{q}, t_{q} \in \mathbb{R}^{d}
+    f: {p} \mapsto t_{p},\; t_{p} \in \mathbb{R}^{d}
 \end{equation}
 
-\begin{equation}
-    g: {c} \rightarrow t_{c}, t_{c} \in \mathbb{R}^{d}
-\end{equation}
-Onde $f$ e $g$ são o \textit{word2vec} com o algoritmo \textit{skip-gram}. $f$ e $g$ irão mapear cada palavra pertencente a um vocabulário a uma matriz distinta $\bm{T_{q}}$ e $\bm{T_{c}}$.
-Teremos duas matrizes: $\bm{T}_{q}^{|\mathbb{Q}| X d}$ e outra $\bm{T}_{c}^{|\mathbb{C}| X d}$, onde $|\mathbb{Q}|$ e $|\mathbb{C}|$ são o tamanho do vocabulário das questões e trechos de código-fonte, respectivamente. E $d$ é a dimensão do vetor de representação distribuída.
+Onde $f$ é o \textit{word2vec} com o algoritmo \textit{skip-gram}. A função $f$ irá mapear cada palavra pertencente ao vocabulário a uma matriz $\bm{T_{v}}$.
+Teremos uma matriz: $\bm{T}_{v}^{|\mathbb{V}| X d}$ onde $|\mathbb{V}|$ é o tamanho do vocabulário das questões e trechos de código-fonte. E $d$ é a dimensão do vetor de representação distribuída.
 
-Com estas duas matrizes $\bm{T}_{q}$ e $\bm{T}_{c}$, que contém as palavras dos vocabulários das questões e dos trechos de código-fonte mapeadas, podemos representar uma sentença através de vetores de representação distribuída. Por exemplo, dado uma questão $\bm{s} = \{ w_{0}, w_{1}, . . ., w_{n - 1}\}$, onde $w_{i}, 0 \leq i < n$ é uma palavra. Podemos representar $\bm{s}$ através de um outro vetor $\bm{x}$, onde para cada palavra presente em $\bm{s}$, elas serão representadas através de um vetor de representação distribuída em $\bm{x}$. Para isto, basta recuperar o vetor $t_{q} \in \bm{T}_{q}$ correspondente a cada palavra presente em nossa questão. Logo, temos $\bm{x} = \{ x(w_{0}), x(w_{1}), . . ., x(w_{n - 1})\}$, tal que $x(w_{i}) \in \bm{T}_{q}$ e $\bm{x}(w_{i}) \in \mathbb{R}^{d}$ é um vetor de representação distribuída. Com o vetor $\bm{x}$, o próximo passo é combinar os seus elementos para obter uma representação da sentença.
+Com esta matriz $\bm{T}_{v}$, que contém as palavras das questões e dos trechos de código-fonte mapeadas, podemos representar uma sentença através de vetores de representação distribuída. Por exemplo, dado uma questão $\bm{s} = \{ w_{0}, w_{1}, . . ., w_{n - 1}\}$, onde $w_{i}, 0 \leq i < n$ é uma palavra. Podemos representar $\bm{s}$ através de um outro vetor $\bm{x}$, onde para cada palavra presente em $\bm{s}$, elas serão representadas através de um vetor de representação distribuída em $\bm{x}$. Para isto, basta recuperar o vetor $t_{p} \in \bm{T}_{v}$ correspondente a cada palavra presente em nossa questão. Logo, temos $\bm{x} = \{ x(w_{0}), x(w_{1}), . . ., x(w_{n - 1})\}$, tal que $x(w_{i}) \in \bm{T}_{v}$ e $\bm{x}(w_{i}) \in \mathbb{R}^{d}$ é um vetor de representação distribuída. O próximo passo é combinar os elementos do vetor $\bm{x}$ para obter uma representação da sentença.
 
 
 
