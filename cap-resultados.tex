@@ -199,15 +199,8 @@ A matriz $\bm{T_{v}}$ é gerada pelo \textit{word2vec} com \textit{skip-gram}. N
 
 \section{Arquiteturas}
 
-Para este estudo, comparamos a arquitetura CNN com outras duas arquiteturas: bi-LSTM com CNN e \textit{Embedding}. A arquitetura \textit{Embedding} combina os vetores de representação distribuída de cada palavra através de uma camada \textit{max pool}. A arquitetura CNN utilizada neste estudo, utiliza uma camada inicial \textit{hidden}.
-Esta camada obtém um vetor $\bm{z}$ a partir das questões e trechos de código-fonte. Este vetor $\bm{z}$ servirá como entrada para a nossa arquitetura CNN que foi descrita na Seção~\ref{sec:representacao-sentenca}.
 
-\begin{equation}
-    \bm{z} = tanh(\bm{W} * \bm{x} + \bm{b})
-\end{equation}
-
-Onde $\bm{W}$ é a matriz de pesos, $\bm{x}$ é vetor que contém os vetores de representação distribuída das palavras e $\bm{b}$ é o vetor \textit{bias}. As figuras~\ref{fig:arquitetura-bi-lstm-com-cnn}, \ref{fig:arquitetura-cnn} e \ref{fig:arquitetura-embedding} ilustram as arquiteturas utilizadas:
-
+Para este estudo, comparamos a arquitetura CNN com outras duas arquiteturas: \textit{Unif} e \textit{Embedding}. A arquitetura \textit{Unif} proposta por \cite{cambronero-deep-learning-code-search:2019} utiliza duas abordagens diferentes para representação das questões e trechos de código-fonte. No caso das questões, os vetores de representação distribuída de cada palavra são combinados através de uma média aritmética simples. Quanto aos trechos de código, aplica-se o \gls{mecanismo-atencao} que calcula uma média ponderada sobre os vetores de representação distribuída e aprende a ``prestar atenção`` nas palavras mais importantes.  Já a arquitetura \textit{Embedding} combina os vetores de representação distribuída de cada palavra através de uma camada \textit{max pool}. As figuras~\ref{fig:arquitetura-bi-lstm-com-cnn}, \ref{fig:arquitetura-cnn} e \ref{fig:arquitetura-embedding} ilustram as arquiteturas utilizadas:
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.6\textwidth]{figuras/cap-resultados-preliminares/ArquiteturaBiLSTM.pdf}
