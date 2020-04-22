@@ -155,8 +155,8 @@ O procedimento de treinamento utilizado foi: O modelo é treinado durante 500 é
 
 \begin{figure}[p]
 \centering
-\includegraphics[height=1.50\textwidth]{figuras/cap-experimento/evaluation_process.pdf}
-\caption{Boxplot.} 
+\includegraphics[height=1.3\textwidth]{figuras/cap-experimento/evaluation_process.pdf}
+\caption{Ilustração do exemplo de treinamento de uma rede convolucional. Este procedimento é o mesmo adotado por \cite{iyer-etal-2016-summarizing}. $E$ é uma variável de controle para armazenar a quantidade de épocas. $P$ refere-se a quantidade de iterações seguidas em que não há diminuição do resultado da função de perda na amostra de validação. Os vetores de entrada dos modelos durante o treinamento são os vetores de representação distribuída $q, c^{+}, c^{'} \in \mathbb{R}^{150 X d}$, onde $150$ é o tamanho fixo dos vetores e $d$ é a dimensão do vetor. $F \in \mathbb{R}^{k X d}$ é o filtro convolucional, onde $k$ é o tamanho da janela e $d$ a dimensão do vetor. $h_{\theta}$ é a função \textit{cosine} de similaridade, $J$ é a função de perda \textit{hinge} e $m$ é a margem. O procedimento de treinamento está descrito na seção~\ref{sec:treinamento}.}
 \label{fig:evaluation-process}
 \end{figure}
 
@@ -180,7 +180,7 @@ A avaliação final na amostra \emph{EVAL} utiliza o mesmo procedimento da amost
 \begin{figure}[h]
 \centering
 \includegraphics[height=1\textwidth]{figuras/cap-experimento/final_evaluation_process.pdf}
-\caption{Boxplot.}
+\caption{Ilustração do procedimento de avaliação proposto por \cite{iyer-etal-2016-summarizing}. O modelo com a maior média MRR no treinamento é avaliado na amostra EVAL. Durante 20 iterações, calculamos o MRR para os pares $<q, c^{+}>$ junto com outros 49 $c^{'}$ distratores, que são escolhidos da amostra de treinamento. Onde $q, c^{+}, c^{'} \in \mathbb{R}^{150 X d}$, tal $c^{+} \neq c^{'}$. A cada iteração outros 49 distratores $c^{'}$ são escolhidos. E ao final, obtemos o resultado do modelo.}
 \label{fig:final-evaluation-process}
 \end{figure}
 
