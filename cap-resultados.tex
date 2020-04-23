@@ -2,71 +2,59 @@
 \chapter{Resultados}
 \label{cap:resultados}
 
-Neste capítulo apresentamos os resultados da avaliação do uso das redes convolucionais no problema de \textit{code retrieval}. Utilizamos a nossa arquitetura proposta no Capítulo~\ref{cap:abordagem}. E para comparar, utilizamos duas arquiteturas: uma arquitetura de referência \textit{Embedding} e outra arquitetura que é o estado da arte em recuperação de trecho de código-fonte proposta por \cite{cambronero-deep-learning-code-search:2019}. Os resultados da arquitetura CNN foram promissores. A arquitetura apresentou um valor de métrica \acrfull{mrr} de $0,58$. \todo{atualizar o valor} Em $75\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas. \todo{atualizar o valor}
+Neste capítulo apresentamos os resultados da avaliação do uso das redes convolucionais no problema de \textit{code retrieval}. Utilizamos a nossa arquitetura proposta no Capítulo~\ref{cap:abordagem}. E para comparar, utilizamos duas arquiteturas: uma arquitetura de referência \textit{Embedding} e outra arquitetura que é o estado da arte em recuperação de trecho de código-fonte proposta por \cite{cambronero-deep-learning-code-search:2019}. Os resultados da arquitetura CNN foram promissores. A arquitetura apresentou um valor de métrica \acrfull{mrr} de $0,70$. Em $75\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas. \todo{atualizar o valor}
 
+\section{Avaliação}
 
+Os resultados foram coletados a partir da avaliação dos modelos na amostra \emph{EVAL}. O valor final MRR é a média obtida após 20 iterações. Conforme a Tabela~\ref{table:resultados},  a arquitetura CNN obteve um resultado próximo da arquitetura bi-LSTM com CNN. Apesar do resultado ser relativamente menor, o seu tempo de duração de treinamento é de apenas 6s, enquanto o treinamento do bi-LSTM durou cerca de 48 minutos. Tanto o treinamento quanto a avaliação foram executadas na plataforma \Gls{colab} do Google. No momento de treinamento e coleta dos resultados, a execução foi feita em uma máquina virtual com acesso a uma \acrshort{vgpu} Tesla K80.
 
-Os resultados foram coletados a partir da avaliação dos modelos na amostra \emph{EVAL}. O valor final MRR é a média obtida após 20 iterações. Conforme a Tabela~\ref{table:resultados-preliminares},  a arquitetura CNN obteve um resultado próximo da arquitetura bi-LSTM com CNN. Apesar do resultado ser relativamente menor, o seu tempo de duração de treinamento é de apenas 6s, enquanto o treinamento do bi-LSTM durou cerca de 48 minutos. Tanto o treinamento quanto a avaliação foram executadas na plataforma \Gls{colab} do Google. No momento de treinamento e coleta dos resultados, a execução foi feita em uma máquina virtual com acesso a uma \acrshort{vgpu} Tesla K80.
-
-\begin{table}[h]
+\begin{table}[H]
 \centering
-\begin{tabular}{ p{10cm} P{3cm} P{3cm} }
+\begin{tabular}{ p{7cm} P{4cm} P{4cm} }
  \hline
- \textbf{Modelos} & \textbf{Resultados MMVL (MRR)} & \textbf{Resultados MMMR (MRR)}\\
+    & \multicolumn{2}{c}{\textbf{Resultados}}\\
  \hline
- Embedding & $0,52 \pm 0,01$ & $0,52 \pm 0,01$\\
+ \textbf{Modelos} & \textbf{MRR} & \textbf{TOP1}\\
+ \hline
+ Embedding (m = $0.1$) & $0.637$& $0.493 \pm 0.009$\\
  
- Unif & $0,52 \pm 0,01$\\
+ Unif (m = $0.2$) & $0.675 \pm 0.006$ & $0.539 \pm 0.009$\\
  
- CNN - F = 50 & $0,52 \pm 0,01$\\
+ CNN / F = 1000 & $0.669 \pm 0.006$ & $0.527 \pm 0.012$\\
  
- CNN - F = 100 & $0,52 \pm 0,01$\\
+ CNN / F = 2000 & $0.673 \pm 0.007$ & $0.531 \pm 0.012$\\
  
- CNN - F = 200 & $0,52 \pm 0,01$\\
+ CNN / F = 4000 & $0.687 \pm 0.006$ & $0.553 \pm 0.011$\\
  
- CNN - F = 500 & $0,52 \pm 0,01$\\
+ CNN Compartilhado / F = 1000 & $0.678 \pm 0.007$ & $0.548 \pm 0.012$\\
  
- CNN - F = 1000 & $0,52 \pm 0,01$\\
+ CNN Compartilhado / F = 2000 & $0.694 \pm 0.008$ & $0.565 \pm 0.012$\\
  
- CNN compartilhado - F = 50 & $0,52 \pm 0,01$\\
+ CNN Compartilhado / F = 4000 & $0.700 \pm 0.004$ & $0.569 \pm 0.009$\\
  
- CNN compartilhado - F = 100 & $0,52 \pm 0,01$\\
- 
- CNN compartilhado - F = 200 & $0,52 \pm 0,01$\\
- 
- CNN compartilhado - F = 500 & $0,52 \pm 0,01$\\
- 
- CNN compartilhado - F = 1000 & $0,52 \pm 0,01$\\
  
  
  \hline
  
- Unif com NL & $0,52 \pm 0,01$\\
+ Unif (m = $0.05$) com NL & $0.653 \pm 0.006$ & $0.515 \pm 0.011$\\
  
- CNN com NL - F = 50 & $0,52 \pm 0,01$\\
+ CNN com NL / F = 1000 & $0.682 \pm 0.007$ & $0.543 \pm 0.012$\\
  
- CNN com NL - F = 100 & $0,52 \pm 0,01$\\
+ CNN com NL / F = 2000 & $0.689 \pm 0.006$ & $0.553 \pm 0.011$\\
  
- CNN com NL - F = 200 & $0,52 \pm 0,01$\\
+ CNN com NL / F = 4000 & $0.688 \pm 0.006$ & $0.553 \pm 0.011$\\
  
- CNN com NL - F = 500 & $0,52 \pm 0,01$\\
+ \rowcolor{blue!40}
+ CNN Compartilhado com NL / F = 1000 & $0.690 \pm 0.008$ & $0.553 \pm 0.015$\\
  
- CNN com NL - F = 1000 & $0,52 \pm 0,01$\\
+ CNN Compartilhado com NL / F = 2000 & $0.700 \pm 0.007$ & $0.573 \pm 0.012$\\
  
- CNN compartilhado com NL - F = 50 & $0,52 \pm 0,01$\\
+ CNN Compartilhado com NL / F = 4000 & $0.701 \pm 0.008$ & $0.577 \pm 0.015$\\
  
- CNN compartilhado com NL - F = 100 & $0,52 \pm 0,01$\\
- 
- CNN compartilhado com NL - F = 200 & $0,52 \pm 0,01$\\
- 
- CNN compartilhado com NL - F = 500 & $0,52 \pm 0,01$\\
- 
- CNN compartilhado com NL - F = 1000 & $0,52 \pm 0,01$\\
- 
- \hline
+  \hline
 \end{tabular}
-\caption{Resultado preliminar do modelo CNN proposto para o artigo \cite{marcelo-vem-2019} em comparação com outras duas arquiteturas (bi-LSTM com CNN e Embedding). Estes resultados foram obtidos a partir da amostra EVAL.}
-\label{table:resultados-preliminares}
+\caption{Resultado do modelo CNN em comparação com as outras arquiteturas \Gls{unif} e Embedding. MRR refere-se ao cálculo do Mean Reciprocal Rank da equação~\ref{eq:mrr}.}
+\label{table:resultados}
 \end{table}
 
 Para entender um pouco melhor o resultado da média harmônica MRR, a figura abaixo exibe as posições da primeira ocorrência do trecho de código-fonte encontradas durante a avaliação dos modelos.

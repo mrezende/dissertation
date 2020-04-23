@@ -2,7 +2,10 @@
 \chapter{Experimento}
 \label{cap:experimento}
 
-Neste capítulo apresentamos os resultados da avaliação do uso das redes convolucionais no problema de \textit{code retrieval}. Utilizamos a nossa arquitetura proposta no Capítulo~\ref{cap:abordagem}. E para comparar, utilizamos duas arquiteturas: uma arquitetura de referência \textit{Embedding} e outra arquitetura que é o estado da arte em recuperação de trecho de código-fonte proposta por \cite{cambronero-deep-learning-code-search:2019}. Os resultados da arquitetura CNN foram promissores. A arquitetura apresentou um valor de métrica \acrfull{mrr} de $0,58$. \todo{atualizar o valor} Em $75\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas. \todo{atualizar o valor}
+
+Neste capítulo apresentamos o conjunto de dados, os procedimentos utilizados para treinamento e avaliação do nosso modelo, além das arquiteturas utilizadas para comparação. Descrevemos também o pré-processamento feito no conjunto de dados antes do treinamento. O código-fonte do pré-processamento, bem como o código dos modelos propostos e de comparação, estão disponíveis em um repositório do \Gls{github},  juntamente com o conjunto de dados utilizados, no seguinte endereço: \url{https://github.com/mrezende/concra}.
+
+
 
 \section{Conjunto de dados}
 \label{sec:conjunto-dados}
@@ -164,7 +167,7 @@ Para cada par $<q_{i}, c_{i}^{+}>$ da amostra \emph{DEV}, onde $q_{i}$ uma quest
 
 Posteriormente, os trechos de código-fonte são ordenados de forma decrescente, do mais similar (maior pontuação) ao menos similar (menor pontuação). Com os trechos ordenados, obtém-se a posição do trecho $c_{i}^{+}$ para cálculo do \textit{reciprocal rank}. \textit{Reciprocal rank} é o inverso da posição da primeira ocorrência de $c_{i}^{+}$ encontrada no resultado. Com o \textit{reciprocal rank}, calcula-se o \acrshort{mrr}. \acrshort{mrr} é a média do \textit{reciprocal rank} para a amostra inteira \citep{Gu-deep-code-search:2018}:
 
-\begin{equation}
+\begin{equation}\label{eq:mrr}
 MRR = \frac{1}{n} * \sum_{i = 1}^{n}\frac{1}{p_{i}^{+}}    
 \end{equation}
 
@@ -203,21 +206,21 @@ Para este estudo, comparamos a arquitetura CNN com outras duas arquiteturas: \te
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{figuras/cap-experimento/cnn-architecture-proposal.pdf}
-    \caption{Figura da arquitetura CNN descrita no Capítulo~\ref{cap:abordagem}.}
+    \caption{Figura da arquitetura CNN descrita no Capítulo~\ref{cap:abordagem}. O termo \emph{Embedding Layer} refere-se a camada composta por vetores de representação distribuída. OL é o acrônimo de \emph{Output Layer}, i.e., camada de saída. $O_{q}$ e $O_{c}$ indicam a saída do vetor de representação final das questões e trechos de código-fonte, respectivamente. \emph{Cosine} indica a função de similaridade.}
     \label{fig:cnn-architecture}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{figuras/cap-experimento/unif-architecture.pdf}
-    \caption{Figura da arquitetura \Gls{unif} proposta por \cite{cambronero-deep-learning-code-search:2019}.}
+    \caption{Figura da arquitetura \Gls{unif} proposta por \cite{cambronero-deep-learning-code-search:2019}. \emph{Embedding} refere-se a camada composta pelos vetores de representação distribuída. \emph{Média} é camada que combina os vetores através de uma média aritmética simples. \emph{Atenção} refere-se ao \gls{mecanismo-atencao}, que combina os vetores através de uma média ponderada e aprende a ''prestar atenção'' nos termos mais relevantes. \emph{OL} é o acrônimo de \emph{Output Layer}, i.e., camada de saída. $O_{q}$ e $O_{c}$ referem-se ao vetor de representação final das questões e trechos de código, respectivamente. \emph{Cosine} indica a função de similaridade. }
     \label{fig:unif-architecture}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{figuras/cap-experimento/embedding-architecture.pdf}
-    \caption{Figura da arquitetura de referência \textit{Embedding} para comparação. Figura utilizada no artigo \cite{marcelo-vem-2019}.}
+    \caption{Figura da arquitetura de referência \textit{Embedding} para comparação. \emph{Embedding Layer} refere-se a camada composta pelos vetores de representação distribuída. \emph{OL} é o acrônimo de \emph{Output Layer}, i.e., camada de saída. $O_{q}$ e $O_{c}$ referem-se aos vetores de representação final das questões e trechos de código, respectivamente. \emph{Cosine} refere-se a função de similaridade. Figura utilizada no artigo \cite{marcelo-vem-2019}.}
     \label{fig:embedding-architecture}
 \end{figure}
 Nas figuras \ref{fig:cnn-architecture}, \ref{fig:unif-architecture} e \ref{fig:embedding-architecture}, a palavra \textit{Embedding Layer} refere-se ao vetor de representação distribuída das palavras. \emph{OL} é um acrônimo de \textit{Output Layer} ou camada de saída. $O_{q}$ indica a camada de saída da questão. $O_{c}$ indica a camada de saída do trecho de código-fonte. As arquiteturas CNN e \textit{Embedding} utilizam uma camada \textit{max pool}. E todas, ao final, calculam a similaridade atravás da função \textit{cosine}. Os ajustes dos hiper-parâmetros são discutidos com mais detalhes no Apêndicê~\ref{ape:ajuste-hiper-parametros-cnn} e no Capítulo~\ref{cap:resultados}, que também apresenta os resultados dos experimentos.
