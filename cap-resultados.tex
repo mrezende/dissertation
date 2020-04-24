@@ -2,60 +2,76 @@
 \chapter{Resultados}
 \label{cap:resultados}
 
-Neste capítulo apresentamos os resultados da avaliação do uso das redes convolucionais no problema de \textit{code retrieval}. Utilizamos a nossa arquitetura proposta no Capítulo~\ref{cap:abordagem}. E para comparar, utilizamos duas arquiteturas: uma arquitetura de referência \textit{Embedding} e outra arquitetura que é o estado da arte em recuperação de trecho de código-fonte proposta por \cite{cambronero-deep-learning-code-search:2019}. Os resultados da arquitetura CNN foram promissores. A arquitetura apresentou um valor de métrica \acrfull{mrr} de $0,70$. Em $75\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas. \todo{atualizar o valor}
+Neste capítulo apresentamos os resultados da avaliação do uso das redes convolucionais na recuperação de trecho de código-fonte. Utilizamos a nossa arquitetura proposta no Capítulo~\ref{cap:abordagem} e comparamos com outras duas arquiteturas: uma arquitetura de referência \textit{Embedding} e outra arquitetura que é o estado da arte em recuperação de trecho de código proposta por \cite{cambronero-deep-learning-code-search:2019}. Os resultados da arquitetura CNN foram promissores. A arquitetura apresentou um valor de métrica \acrfull{mrr} de $0,70$. Em $78\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas.
 
 \section{Avaliação}
 
-Os resultados foram coletados a partir da avaliação dos modelos na amostra \emph{EVAL}. O valor final MRR é a média obtida após 20 iterações. Conforme a Tabela~\ref{table:resultados},  a arquitetura CNN obteve um resultado próximo da arquitetura bi-LSTM com CNN. Apesar do resultado ser relativamente menor, o seu tempo de duração de treinamento é de apenas 6s, enquanto o treinamento do bi-LSTM durou cerca de 48 minutos. Tanto o treinamento quanto a avaliação foram executadas na plataforma \Gls{colab} do Google. No momento de treinamento e coleta dos resultados, a execução foi feita em uma máquina virtual com acesso a uma \acrshort{vgpu} Tesla K80.
+Avaliamos a arquitetura CNN juntamente com outras duas arquiteturas, Embedding e \Gls{unif} na recuperação de trecho de código-fonte através do procedimento proposto por \cite{iyer-etal-2016-summarizing} e descrito na Seção~\ref{sec:avaliacao}. Os resultados foram coletados a partir da amostra \emph{EVAL} e o valor final MRR é a média obtida após 20 iterações. Conforme a Tabela~\ref{table:resultados}, as arquiteturas CNNs compartilhadas com 4000 filtros convolucionais (linhas D3 e G3) obtiveram o melhor resultado. A arquitetura CNN obteve uma média MRR 5\% superior ao melhor resultado obtido pela arquitetura Unif (linha B1), atual estado da arte, e um resultado 11\% superior a arquitetura de referência Embedding (linha A1). 
 
 \begin{table}[H]
 \centering
-\begin{tabular}{ p{7cm} P{4cm} P{4cm} }
+\begin{tabular}{ p{1cm} p{6cm} P{4cm} P{4cm} }
  \hline
-    & \multicolumn{2}{c}{\textbf{Resultados}}\\
+    & & \multicolumn{2}{c}{\textbf{Resultados}}\\
  \hline
- \textbf{Modelos} & \textbf{MRR} & \textbf{TOP1}\\
+ & \textbf{Modelos} & \textbf{MRR} & \textbf{TOP1}\\
  \hline
- Embedding (m = $0.1$) & $0.637$& $0.493 \pm 0.009$\\
- 
- Unif (m = $0.2$) & $0.675 \pm 0.006$ & $0.539 \pm 0.009$\\
- 
- CNN / F = 1000 & $0.669 \pm 0.006$ & $0.527 \pm 0.012$\\
- 
- CNN / F = 2000 & $0.673 \pm 0.007$ & $0.531 \pm 0.012$\\
- 
- CNN / F = 4000 & $0.687 \pm 0.006$ & $0.553 \pm 0.011$\\
- 
- CNN Compartilhado / F = 1000 & $0.678 \pm 0.007$ & $0.548 \pm 0.012$\\
- 
- CNN Compartilhado / F = 2000 & $0.694 \pm 0.008$ & $0.565 \pm 0.012$\\
- 
- CNN Compartilhado / F = 4000 & $0.700 \pm 0.004$ & $0.569 \pm 0.009$\\
- 
- 
+ A1 & Embedding (m = $0.1$) & $0.637$& $0.493 \pm 0.009$\\
  
  \hline
  
- Unif (m = $0.05$) com NL & $0.653 \pm 0.006$ & $0.515 \pm 0.011$\\
+ B1 & Unif (m = $0.2$) & $0.675 \pm 0.006$ & $0.539 \pm 0.009$\\
  
- CNN com NL / F = 1000 & $0.682 \pm 0.007$ & $0.543 \pm 0.012$\\
+ \hline
  
- CNN com NL / F = 2000 & $0.689 \pm 0.006$ & $0.553 \pm 0.011$\\
+ C1 & CNN / F = 1000 & $0.669 \pm 0.006$ & $0.527 \pm 0.012$\\
  
- CNN com NL / F = 4000 & $0.688 \pm 0.006$ & $0.553 \pm 0.011$\\
+ C2 & CNN / F = 2000 & $0.673 \pm 0.007$ & $0.531 \pm 0.012$\\
  
- \rowcolor{blue!40}
- CNN Compartilhado com NL / F = 1000 & $0.690 \pm 0.008$ & $0.553 \pm 0.015$\\
+ C3 & CNN / F = 4000 & $0.687 \pm 0.006$ & $0.553 \pm 0.011$\\
  
- CNN Compartilhado com NL / F = 2000 & $0.700 \pm 0.007$ & $0.573 \pm 0.012$\\
+ \hline
  
- CNN Compartilhado com NL / F = 4000 & $0.701 \pm 0.008$ & $0.577 \pm 0.015$\\
+ D1 & CNN Compartilhado / F = 1000 & $0.678 \pm 0.007$ & $0.548 \pm 0.012$\\
+ 
+ D2 & CNN Compartilhado / F = 2000 & $0.694 \pm 0.008$ & $0.565 \pm 0.012$\\
+ 
+ D3 & CNN Compartilhado / F = 4000 & $0.700 \pm 0.004$ & $0.569 \pm 0.009$\\
+ 
+ 
+ 
+ \hline
+ 
+ E1 & Unif (m = $0.05$) com NL & $0.653 \pm 0.006$ & $0.515 \pm 0.011$\\
+ 
+ \hline
+ 
+ F1 & CNN com NL / F = 1000 & $0.682 \pm 0.007$ & $0.543 \pm 0.012$\\
+ 
+ F2 & CNN com NL / F = 2000 & $0.689 \pm 0.006$ & $0.553 \pm 0.011$\\
+ 
+ F3 & CNN com NL / F = 4000 & $0.688 \pm 0.006$ & $0.553 \pm 0.011$\\
+ 
+ \hline
+ 
+ G1 & CNN Compartilhado com NL / F = 1000 & $0.690 \pm 0.008$ & $0.553 \pm 0.015$\\
+ 
+ G2 & CNN Compartilhado com NL / F = 2000 & $0.700 \pm 0.007$ & $0.573 \pm 0.012$\\
+ 
+ G3 & CNN Compartilhado com NL / F = 4000 & $0.701 \pm 0.008$ & $0.577 \pm 0.015$\\
  
 \hline
 \end{tabular}
-\caption{Resultado do modelo CNN em comparação com as outras arquiteturas \Gls{unif} e Embedding. MRR refere-se ao cálculo do Mean Reciprocal Rank da equação~\ref{eq:mrr}.}
+\caption{Resultado do modelo CNN em comparação com as outras arquiteturas \Gls{unif} e Embedding. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}) na amostra EVAL. TOP1 refere-se a frequência da ocorrência da resposta anotada como correta na primeira posição em comparação com outros 49 distratores. Nas linhas A1, B1 e E1, \emph{m} refere-se ao hiper-parâmetro margem utilizada na função de perda \emph{hinge}. F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. NL é o acrônimo de normalização em lote. As arquiteturas CNN utilizaram margem $m = 0.05$ e o tamanho da janela do filtro (kernel) $k = 2$.}
 \label{table:resultados}
 \end{table}
+
+Conforme os resultados da Tabela~\ref{table:resultados}, os ajustes dos hiper-parâmetros para a arquitetura CNN foram ao encontro de \cite{tan-lstm-qa}, no qual verificou que o aumento da quantidade de filtros, que aumenta a capacidade das redes convolucionais, melhorou o desempenho. Além disso, verificamos também que o valor do kernel 2 obteve o melhor resultado assim como \cite{tan-lstm-qa}. Porém com relação a margem utilizada na função de perda hinge, as redes convolucionais obtiveram um resultado melhor com $0.05$, já Unif obteve o melhor resultado com $0.2$ e enquanto Embedding obteve com $0.1$. No caso de \cite{tan-lstm-qa} ele fixou a margem em $0.2$. Os experimentos preliminares e ajustes dos hiper-parâmetros estão descritos no Apêndice~\ref{ape:ajuste-hiper-parametros-cnn}.
+
+
+Verificamos tanto quanto \cite{feng-2015} quanto \cite{tan-lstm-qa} que o compartilhamento dos parâmetros obteve um resultado melhor em comparação com cada rede neural com o seu proprio parâmetro. Isto faz sentido, pois se a questao e o trecho de código tem parametros individuais, a rede precisa aprender o dobro de parâmetros, dificultando a aprendizgame. Isto foi também um resultado do estudo XXX que verificou desempenho melhor quando os parâmetros sãp compartilhados desde o inicio no problema de seleção de respostas, pois caso a otimizacao dos parâmetros sejam deferido somente ao final, a rede neural demora mais para aprender.
+
+Os resultados 
 
 Para entender um pouco melhor o resultado da média harmônica MRR, a figura abaixo exibe as posições da primeira ocorrência do trecho de código-fonte encontradas durante a avaliação dos modelos.
 
@@ -98,6 +114,18 @@ with |\colorbox{green}{open}|("output.csv", "wb") as f:
 Conforme citado anteriormente, \cite{yao-2018} anotaram o conjunto de dados utilizando um framework proposto em seu artigo. Para anotá-los, os autores treinaram uma rede neural no conjunto de dados anotado manualmente. Em nosso trabalho, fizemos o caminho inverso. Treinamos os nossos modelos nos dados anotados automaticamente e avaliamos no conjunto anotado manualmente. Para diminuir o viés, adotamos o procedimento proposto por \cite{iyer-etal-2016-summarizing} descrito na Seções~\ref{sec:treinamento} e \ref{sec:avaliacao}.
 
 \subsection{Considerações}
+
+Os resultados foram muito promissores, as arquiteturas propostas para problema de seleção de respostas obtiveram um bom desempenho no problema de recuperação de trecho de código-fonte. Alguns pontos tem que ser levados em consideração quanto ao bom desempenho das redes convolucionasi e outros pontos devem ser investigados em um trabalho futuro:
+
+\begin{itemize}
+    \item Linguagem PYTHON é verbosa e parecida com a linguagem humanda, devido a isso sem um tratamento específico obtivemos um desempenho bom neste problema sem muito pré-processamento além do word2vec. Como seria o desempenho em uma linguagem lisp ou perl??
+    \item o tamanho das respostas e questões. Elas são curtas e com isso o desempenho do CNN foi bom. 
+\end{itemize}
+
+
+
+
+---------
 
 Os resultados apresentados pelo nosso modelo CNN parecem bastante promissores, a nosso ver. O próximo passo é comparar o nosso modelo com o modelo proposto por \cite{cambronero-deep-learning-code-search:2019}, que é o estado da arte. 
 
