@@ -2,6 +2,22 @@
 \chapter{Conclusões}
 \label{cap:conclusoes}
 
+
+Os resultados do CNN foram promissores, utilizamos estratégias de NLP e seleção de respostas e obtivemos este resultado na recuperação de trecho de código-fonte. Um ponto importante a salientar é o uso de questoes e trechos de código do Stack Over Flow que conforme \cite{cambronero-deep-learning-code-search:2019} contém as intenções do usuário em uma busca, diferente do uso de docstrings.
+
+Algumas perguntas para trabalhos futuros:
+
+ - As estratégias de NLP aqui usadas servem para uma linguagem verbosa como o Python. Qual seria o desempenho em uma linguagem como lisp ou haskell??
+ 
+ - Os dados utilizados no treinamento e avaliação do modelo são restritas a 62000 pares de questoes do tipo how-to-do it, limitando a zona de interpolação do modelo. O ideal é ampliar a quantidade de dados durante o treinamento para aumentar a zonna de interpolação. 
+ 
+ \todo{nao afirmar isso talvez na conclusao, pois eu nao testei isso, foi o cambronero. soh posso afirmar na conclusao oq eu testei.}
+ 
+ Mas diferente do conjunto de dados disponibilizado pelo Github em uma competição XXXXX, devemos coletar pares de questões e respostas mais próximas das intenções do desenvolvedor, a fim de construir um modelo que consiga atender as intenções de busca do usuário.
+ 
+ - Avaliar o desempenho do modelo treinado com pares de questoes e respostas do stack over flow na recuperação de trecho de código em repositorios do GitHUb. 
+
+
 Texto texto texto texto texto texto texto texto texto texto texto texto texto
 texto texto texto texto texto texto texto texto texto texto texto texto texto
 texto texto texto texto texto texto\footnote{Exemplo de referência para página
