@@ -71,9 +71,8 @@ Conforme os resultados da Tabela~\ref{table:resultados}, os ajustes dos hiper-pa
 
 Conforme verificado por \cite{tan-lstm-qa} e \cite{feng-2015}, as redes convolucionais que compartilham os parâmetros dos pares de questões e respostas durante a aprendizagem (linhas D e G) obtiveram um desempenho superior aos modelos que utilizaram parâmetros independentes (linhas C e F). Conforme \cite{tan-lstm-qa}, os parâmetros indepdendentes tornam a aprendizagem mais difícil, pois o otimizador terá que aprender o dobro de parâmetros. Já para \cite{wen-joint-modeling-question-answer-2019}, as redes convolucionais que aprendem as representações de forma independente e postergam a interação entre elas para a última camada (cálculo da similaridade e função de perda \textit{hinge}), exploram de forma ineficiente a correlação semântica entre as respectivas representações dos pares de questões e respostas. No nosso caso, verificamos que ao treinar por mais épocas, não houve melhora significativa no desempenho, salientando a dificuldade das redes convolucionais que aprendem as representações de forma independente em encontrar uma correlação semântica entre os pares de questões e respostas.
 
+Durante o treinamento, para evitar o \textit{overfitting} dos modelos, adotamos a técnica de normalização em lote, que além de melhorar o desempenho, a velocidade e a estabilidade das redes neurais, ele mitiga o \textit{overfitting}, reduzindo a necessidade do uso de outra técnica de regularização como o \textit{dropout} \citep{sergey-batch-normalization-2015}. No nosso caso, verificamos a melhora no desempenho e robustez do modelo nas redes convolucionais (ver linhas F e G da Tabela~\ref{table:resultados} e ver Apêndice~\ref{ape:ajuste-hiper-parametros-cnn}). No caso da arquitetura Unif proposta por \cite{cambronero-deep-learning-code-search:2019}, não notamos melhora significativa no desempenho, somente na robustez do modelo.
 
-Conforme apontado por ZZZ, as redes convolucionais que aprenderam os parâmetros das q
-Verificamos tanto quanto \cite{feng-2015} quanto \cite{tan-lstm-qa} que o compartilhamento dos parâmetros obteve um resultado melhor em comparação com cada rede neural com o seu proprio parâmetro. Isto faz sentido, pois se a questao e o trecho de código tem parametros individuais, a rede precisa aprender o dobro de parâmetros, dificultando a aprendizgame. Isto foi também um resultado do estudo XXX que verificou desempenho melhor quando os parâmetros sãp compartilhados desde o inicio no problema de seleção de respostas, pois caso a otimizacao dos parâmetros sejam deferido somente ao final, a rede neural demora mais para aprender.
 
 Os resultados 
 
@@ -113,11 +112,11 @@ with |\colorbox{green}{open}|("output.csv", "wb") as f:
 
 \end{tcolorbox}
 
-\subsection{Ameaças à validade}
+\section{Ameaças à validade}
 
 Conforme citado anteriormente, \cite{yao-2018} anotaram o conjunto de dados utilizando um framework proposto em seu artigo. Para anotá-los, os autores treinaram uma rede neural no conjunto de dados anotado manualmente. Em nosso trabalho, fizemos o caminho inverso. Treinamos os nossos modelos nos dados anotados automaticamente e avaliamos no conjunto anotado manualmente. Para diminuir o viés, adotamos o procedimento proposto por \cite{iyer-etal-2016-summarizing} descrito na Seções~\ref{sec:treinamento} e \ref{sec:avaliacao}.
 
-\subsection{Considerações}
+\section{Considerações}
 
 Os resultados foram muito promissores, as arquiteturas propostas para problema de seleção de respostas obtiveram um bom desempenho no problema de recuperação de trecho de código-fonte. Alguns pontos tem que ser levados em consideração quanto ao bom desempenho das redes convolucionasi e outros pontos devem ser investigados em um trabalho futuro:
 
