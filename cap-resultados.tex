@@ -5,6 +5,7 @@
 Neste capítulo apresentamos os resultados da avaliação do uso das redes convolucionais na recuperação de trecho de código-fonte. Utilizamos a nossa arquitetura proposta no Capítulo~\ref{cap:abordagem} e comparamos com outras duas arquiteturas: uma arquitetura de referência \textit{Embedding} e outra arquitetura que é o estado da arte em recuperação de trecho de código proposta por \cite{cambronero-deep-learning-code-search:2019}. Os resultados da arquitetura CNN foram promissores. A arquitetura apresentou um valor de métrica \acrfull{mrr} de $0,70$. Em $78\%$ das vezes, as respostas corretas apareceram entre as 3 primeiras posições, de um total de 50 possíveis respostas.
 
 \section{Avaliação}
+\label{sec:resultados-avaliacao}
 
 Avaliamos a arquitetura CNN juntamente com outras duas arquiteturas, Embedding e \Gls{unif} na recuperação de trecho de código-fonte através do procedimento proposto por \cite{iyer-etal-2016-summarizing} e descrito na Seção~\ref{sec:avaliacao}. Os resultados foram coletados a partir da amostra \emph{EVAL} e o valor final MRR é a média obtida após 20 iterações. Conforme a Tabela~\ref{table:resultados}, as arquiteturas CNNs compartilhadas com 4000 filtros convolucionais (linhas D3 e G3) obtiveram o melhor resultado. A arquitetura CNN obteve uma média MRR 5\% superior ao melhor resultado obtido pela arquitetura Unif (linha B1), atual estado da arte, e um resultado 11\% superior a arquitetura de referência Embedding (linha A1). 
 
@@ -74,43 +75,19 @@ Conforme verificado por \cite{tan-lstm-qa} e \cite{feng-2015}, as redes convoluc
 Durante o treinamento, para evitar o \textit{overfitting} dos modelos, adotamos a técnica de normalização em lote, que além de melhorar o desempenho, a velocidade e a estabilidade das redes neurais, ele mitiga o \textit{overfitting}, reduzindo a necessidade do uso de outra técnica de regularização como o \textit{dropout} \citep{sergey-batch-normalization-2015}. No nosso caso, verificamos a melhora no desempenho e robustez do modelo nas redes convolucionais (ver linhas F e G da Tabela~\ref{table:resultados} e ver Apêndice~\ref{ape:ajuste-hiper-parametros-cnn}). No caso da arquitetura Unif proposta por \cite{cambronero-deep-learning-code-search:2019}, não notamos melhora significativa no desempenho, somente na robustez do modelo.
 
 
-Os resultados 
-
-Para entender um pouco melhor o resultado da média harmônica MRR, a figura abaixo exibe as posições da primeira ocorrência do trecho de código-fonte encontradas durante a avaliação dos modelos.
+Para entender um pouco melhor o resultado da média harmônica MRR, a Figura~\ref{fig:histogram-mrr} exibe as posições da primeira ocorrência do trecho de código-fonte encontradas durante a avaliação dos modelos.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/histogram_results.png}
-    \caption{Figura das primeiras posições observadas para o trecho de código-fonte anotado como correto.}
+    \includegraphics[width=1\textwidth]{figuras/cap-resultados/histogram.pdf}
+    \caption{Figura das primeiras posições observadas para o trecho de código-fonte anotado como correto. As legendas \emph{shared-cnn-with-bn}, \emph{unif} e \emph{embedding} referem-se as linhas G3, A1 e B1 da Tabela~\ref{table:resultados} respectivamente.}
     \label{fig:histogram-mrr}
 \end{figure}
 
 
-Tanto o CNN quanto o bi-LSTM com CNN conseguiram classificar os trechos de código-fonte entre as 3 (três) primeiras posições em 75\% dos casos. O modelo bi-LSTM com CNN obteve uma precisão TOP-1 de 51\%, i.e., em mais da metade das vezes, o trecho de código-fonte relevante ficou na primeira posição. Já a nossa arquitetura proposta obteve um TOP-1 de aproximadamente 41\%. Um ponto a ser levantado é que a nossa métrica MRR só leva em consideração a posição apontada pelo modelo para o trecho de código-fonte anotado como correto. Mesmo que o modelo apresente um outro trecho de código-fonte que também é solução, o nosso método de avaliação não leva em consideração. Neste caso, o modelo é penalizado.
+Tanto o CNN quanto a arquitetura Unif conseguiram classificar os trechos de código-fonte entre as 3 (três) primeiras posições em 75\% dos casos. A nossa arquitetura proposta obteve uma precisão TOP-1 de aproximadamente 60\%, i.e., em aproximadamente 60\% das vezes, o trecho de código-fonte relevante ficou na primeira posição. Já a arquitetura Unif e Embedding obtiveram uma precisão TOP-1 de pouco mais de 50\%. Um ponto a ser levantado é que a nossa métrica MRR só leva em consideração a posição apontada pelo modelo para o trecho de código-fonte anotado como correto. Mesmo que o modelo apresente um outro trecho de código-fonte que também é solução, o nosso método de avaliação não leva em consideração. Neste caso, o modelo é penalizado.
 
-No exemplo a seguir\footnote{Este exemplo refere-se a questão \url{https://stackoverflow.com/questions/24593478/python-and-appending-items-to-text-and-excel-file}\label{foot:exemplo-resultados-preliminares}}, a rede bi-LSTM com CNN conseguiu apontar corretamente o trecho de código-fonte anotado como correto na primeira posição.
-A nossa arquitetura CNN, apesar de não apresentar o trecho propriamente anotado, ele apresentou outro trecho que também serve como solução. Neste caso, apesar de ter sido penalizado, ele conseguiu responder a questão. Este é um ponto importante que teremos que analisar com cautela ao longo deste trabalho. 
 
-\begin{tcolorbox}[colframe=orange!75!black,colback=gray!15!white,fonttitle=\bfseries,adjusted title=\large{Python and appending items to text and \colorbox{green}{excel} \colorbox{green}{file}}~\ref{foot:exemplo-resultados-preliminares},
-enlarge top by=1cm%equivalent to mdframed 'skipabove'
-]
-\begin{mypython-without-margin}{bi-LSTM com CNN}
-Yvalues = [1, 2, 3, 4, 5]
-file_out = |\colorbox{green}{open}|('file.csv','wb')
-mywriter=|\colorbox{green}{csv}|.|\colorbox{green}{writer}|(file_out, delimiter = '\n')
-mywriter.|\colorbox{green}{writerow}|(Yvalues)
-file_out.close()
-\end{mypython-without-margin}
-
-\begin{mypython-without-margin}{CNN}
-import csv
-
-with |\colorbox{green}{open}|("output.csv", "wb") as f:
-    writer = |\colorbox{green}{csv}|.|\colorbox{green}{writer}|(f)
-    writer.|\colorbox{green}{writerows}|(a)
-\end{mypython-without-margin}
-
-\end{tcolorbox}
 
 \section{Ameaças à validade}
 
@@ -118,41 +95,15 @@ Conforme citado anteriormente, \cite{yao-2018} anotaram o conjunto de dados util
 
 \section{Considerações}
 
-Os resultados foram muito promissores, as arquiteturas propostas para problema de seleção de respostas obtiveram um bom desempenho no problema de recuperação de trecho de código-fonte. Alguns pontos tem que ser levados em consideração quanto ao bom desempenho das redes convolucionasi e outros pontos devem ser investigados em um trabalho futuro:
+Os resultados foram muito promissores, as arquiteturas propostas obtiveram um bom desempenho na recuperação de trecho de código-fonte. Algumas considerações a respeito do experimento e dos resultados das redes convolucionais:
 
 \begin{itemize}
-    \item Linguagem PYTHON é verbosa e parecida com a linguagem humanda, devido a isso sem um tratamento específico obtivemos um desempenho bom neste problema sem muito pré-processamento além do word2vec. Como seria o desempenho em uma linguagem lisp ou perl??
-    \item o tamanho das respostas e questões. Elas são curtas e com isso o desempenho do CNN foi bom. 
+    \item Não houve a necessidade de um tratamento especial para os trechos de código em Python, devido as suas características como sintaxe mais concisa, clara e muito menos verbosa quando comparada a outras linguagens \citep{theodora-introductory-programming-python-2015}, facilitando a extração das palavras durante o pré-processamento. 
+    
+    \item Isto nos ajudou também a implementar de forma mais rápida as abordagens já conhecidas em \acrshort{nlp} \citep{feng-2015, tan-lstm-qa}. E mostrou um possível caminho para a criação de uma busca semântica de trecho de código utilizando aprendizagem de representação. No nosso caso, utilizamos word2vec, mas recentes avanços em NLP apresentaram outras soluções como ELMo, Transformers, BERT e o mais recente XLNet \citep{yang2019xlNet, devlin-etal-2019-bert}. Trabalhos futuros podem investigar como estes recentes avanços podem auxiliar na recuperação de trecho de código-fonte.
+    \item Conforme apontado por \cite{tom-young:trends-deep-learning-nlp}, as redes convolucionais tentam extrair os n-grams mais importantes e dão prioridade às interações locais. E apesar de \cite{tom-young:trends-deep-learning-nlp} ter observado em outros trabalhos que o CNN tem dificuldades em inferir o contexto em sentenças curtas, no nosso caso, o uso de vetores de representação distribuída ajudou a rede convolucional a extrair a semântica do trecho de código correlacionando-a à questão. Adotamos o mesmo procedimento de \cite{tan-lstm-qa} e criamos uma matriz de representação distribuída comum a partir da junção do vocabulário das questões e dos trechos de código, ver Seção~\ref{sec:abordagem-representacao-token}.
+    \item Segundo \cite{Goodfellow-et-al-2016:convolutional-networks}, as redes convolucionais não conseguem correlacionar palavras muito distantes em um sentença. No nosso caso, isto não foi um problema, pois conforme apontado na Tabela~\ref{table:statistical-descriptive-of-pythons-sample}, 75\% das questões das nossas amostras tem 11 palavras no máximo, enquanto 75\% dos trechos de código tem no máximo 55 palavras, i.e., tanto as questões e as respostas são relativamente curtas. Por exemplo, o conjunto de dados Squad, que contém mais de $100.000$ questões e respostas coletadas de artigos do Wikipedia, apresenta em média 15 palavras para as questões e 150 para as respostas, i.e., praticamente o dobro do tamanho das questões que utilizamos e o triplo de palavras do trecho de código-fonte \citep{rajpurkar-etal-2016-squad}. 
+    \item Adotamos a métrica MRR que indica o quanto um modelo está conseguindo classificar a informação relevante entre as primeiras posições. No nosso caso, a informação relevante é o trecho de código anotado como correto. Conforme o resultado apresentado na Seção~\ref{sec:resultados-avaliacao}, o valor alto do MRR indica que o modelo está conseguindo classificar o trecho anotado como correto entre as primeiras posições. No caso do CNN (linha G3 da Tabela~\ref{table:resultados}), ele conseguiu classificar o trecho anotado como correto entre as 3 primeiras posições, de um total de 50, em 78\% dos casos. Para nós, isto é um indicativo de que o modelo está atentendendo a intenção do usuário, pois a informação relevante está aparecendo entre as primeiras posições. Porém, somente a métrica MRR não é suficiente, é necessário investigar e analisar estes resultados com usuários finais. Um estudo mais minucioso e qualitativo é necessário para validar estes resultados.
 \end{itemize}
 
 
-
-
----------
-
-Os resultados apresentados pelo nosso modelo CNN parecem bastante promissores, a nosso ver. O próximo passo é comparar o nosso modelo com o modelo proposto por \cite{cambronero-deep-learning-code-search:2019}, que é o estado da arte. 
-
-Não fizemos ajustes dos hiper-parâmetros e nem uso de regularização durante o treinamento. Na Figura \ref{fig:grafico-erro-cnn} abaixo, podemos ver que o CNN apresenta uma diferença grande entre a curva de erro na amostra de validação e da amostra de treinamento, principalmente a partir da época $5$ (eixo $X$), próximo da interrupção do treinamento. Isto é um indicativo de \textit{overfitting}. A arquitetura bi-LSTM com CNN apresenta o mesmo problema (ver Figura~\ref{fig:grafico-erro-bi-lstm-cnn}). Já no caso da arquitetura \textit{Embedding}, Figura \ref{fig:grafico-embedding}, as duas curvas de erro estão próximas até a interrupção. 
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/569229_ConvolutionalLSTM_plot.png}
-    \caption{Gráfico do treinamento do modelo bi-LSTM com CNN. Gráfico do erro de validação (\emph{val\_loss}) e erro na amostra de treinamento (\emph{loss}) por época (\emph{eixo X}). O melhor modelo em relação a métrica MRR foi obtido na época $9$.}
-    \label{fig:grafico-erro-bi-lstm-cnn}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/569229_ConvolutionModel_plot.png}
-    \caption{Gráfico do treinamento do CNN. Gráfico do erro de validação (\emph{val\_loss}) e erro na amostra de treinamento (\emph{loss}) por época (\emph{eixo X}). O melhor modelo em relação a métrica MRR foi obtido na época $9$.}
-    \label{fig:grafico-erro-cnn}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{figuras/cap-resultados-preliminares/569229_EmbeddingModel_plot.png}
-    \caption{Gráfico do treinamento do modelo \textit{Embedding}. Gráfico do erro de validação (\emph{val\_loss}) e erro na amostra de treinamento (\emph{loss}) por época (\emph{eixo X}). O melhor modelo em relação a métrica MRR foi obtido na época $39$.}
-    \label{fig:grafico-embedding}
-\end{figure}
-
-Podemos perceber que de acordo com as figuras~\ref{fig:grafico-erro-cnn} e \ref{fig:grafico-erro-bi-lstm-cnn}, tanto o CNN quanto o bi-LSTM com CNN tem uma margem a melhorar. Além da margem de melhora no treinamento, uma análise mais detalhada do resultado é necessária. Conforme o exemplo citado na seção anterior, o modelo CNN apresentou uma resposta correta para a pergunta, porém foi penalizada pois não era exatamente o trecho anotado como correto. Caso haja mais casos deste tipo, podemos adotar o mesmo procedimento proposto por \cite{cambronero-deep-learning-code-search:2019} de avaliação automática. Um trecho será considerado correto quando a diferença do resultado da função $h_{\theta}$ de similaridade entre ele e o trecho anotado como correto estiver dentro de um certo intervalo.
