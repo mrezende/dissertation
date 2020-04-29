@@ -35,6 +35,7 @@ Uma boa representação para as palavras, que compõem eles, é um vetor de repr
 A representação é um fator importante para a tarefa de \textit{code retrieval}. Pois com uma boa representação, um modelo de redes neurais será capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor mais facilmente. Três aspectos devem ser levados em consideração ao fazer esta aproximação. O primeiro aspecto é a representação dos \textit{tokens} ou palavras que compõem as intenções e os trechos de códigos-fontes. O segundo é a obtenção de uma representação para as intenções e trechos de códigos. E por último, como fazer a associação entre eles.
 
 \subsection{\textit{Representação dos \textit{tokens} ou palavras}}
+\label{sec:fundamentao-representacao-tokens-palavras}
 
 As questões e os trechos de códigos-fontes são compostas por um conjunto de palavras ou \textit{tokens}. E conforme citado anteriormente, uma boa representação para as palavras é um vetor de representação distribuída. No caso, o vetor de representação distribuída ou \textit{embedding} permite representar uma palavra através de um vetor com valores reais ($\mathbb{R}$). Podemos definir \textbf{embedding} como uma função $\mathbb{E}$ \citep{cambronero-deep-learning-code-search:2019}:
 

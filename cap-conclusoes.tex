@@ -3,7 +3,19 @@
 \label{cap:conclusoes}
 
 
-Os resultados do CNN foram promissores, utilizamos estratégias de NLP e seleção de respostas e obtivemos este resultado na recuperação de trecho de código-fonte. Um ponto importante a salientar é o uso de questoes e trechos de código do Stack Over Flow que conforme \cite{cambronero-deep-learning-code-search:2019} contém as intenções do usuário em uma busca, diferente do uso de docstrings.
+A recuperação de trecho de código-fonte consiste em recuperar um trecho de código a partir de um repositório de modo a atender as intenções de um usuário, descritas em linguagem natural. Para auxiliar a recuperação de trecho de código e criar uma busca semântica, apresentamos neste trabalho uma proposta que utiliza redes neurais convolucionais na aprendizagem de representação. Os resultados, conforme apontados no Capítulo~\ref{cap:resultados}, foram promissores. A nossa arquitetura \acrshort{cnn} conseguiu classificar os trechos de código relevantes entre as 3 primeiras posições, de um total de 50, em 78\% dos casos. Além disso, conseguimos um resultado comparável com a arquitetura proposta por \cite{cambronero-deep-learning-code-search:2019}, que é o estado da arte atualmente, em nosso experimento, obtendo um resultado 5\% superior em nossa avaliação.
+
+Além de uma nova proposta baseada em arquiteturas de seleção de respostas em NLP \citep{feng-2015, tan-lstm-qa}, avaliamos o nosso modelo em uma amostra contendo pares de questões e trechos de código-fonte em Python coletados do \Gls{sof}. A peculiaridade desta amostra é que ela contém somente questões do tipo ''how-to-do-it'', questões que exigem normalmente uma resposta direta. Além disso, diferente de \cite{cambronero-deep-learning-code-search:2019} e \cite{husain-github-semantic-search-code-2019} que tentaram criar uma busca semântica correlacionando os trechos de código a comentários \gls{docstring}, no nosso caso, buscamos correlacionar os trechos de código às questões feitas em um fórum aberto de perguntas e respostas. E conforme os próprios pesquisadores \cite{cambronero-deep-learning-code-search:2019, husain-github-semantic-search-code-2019} verificaram, as questões de fórums de dúvidas de programação aproximam-se mais das intenções de busca do usuário do que os comentários docstring. 
+
+Acreditamos que a aprendizagem de representação, que mostrou-se essencial em diversas tarefas em NLP, como tradução, classificação de textos, seleção de respostas \citep{devlin-etal-2019-bert, yang2019xlNet}, é um caminho para a recuperação de trecho de código-fonte. Juntamente a isso, acreditamos que as amostras obtidas através de fóruns abertos de perguntas e respostas como o \Gls{sof} são de extrema importância, pois foram organizados e curados coletivamente pelos usuáios, tornando-se uma fonte preciosa de informações \citep{Wang-quora:2013}.
+
+novos avancos em nlp, mas é necessario avaliar com cautela e fazer experimentos. usp de aprendizagem por tranfesferencia. mas é necessario testar e verificar
+
+os resultados forma promissores, mas é apenas um indício de um caminho. é necessario ampliar os dados de treinament para aumentar a zona de interpolacao. 
+
+E além disso, seria interessante avaliar a transferencia de aprendizagem, e avaliar o desempenho de um modelo treinado em dados do stack over flow e recuperar trechos de codgio no github, por exemplo, que nao possui uma busca semantica.
+
+
 
 possível caminho para a busca semântica.
 
