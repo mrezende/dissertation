@@ -27,28 +27,12 @@ Devemos salientar que os resultados obtidos até aqui são apenas um indicativo 
 %------------------------------------------------------
 \section{Sugestões para Pesquisas Futuras} 
 
-Conforme apontado na Seção~\ref{sec:consideracoes-resultados} e reforçado na Seção~\ref{sec:consideracoes-finais}, 
+Ao longo deste trabalho, levantamos algumas questões e a partir das respostas e resultados obtidos, fizemos alguns apontamentos sobre possíveis direções a serem seguidas em futuras pesquisas. Dentre elas, destacamos três importantes linhas que irão contribuir para o avanço da recuperação de trecho de código-fonte:
 
-muitos dos comportamentos são parecidos e vão ao encontro das estrategias NLP em nossa amostra.
+\begin{itemize}
+    \item Conforme citado anteriormente na Seção~\ref{sec:consideracoes-finais}, a criação de uma base curada e organizada de questões e trechos de código-fonte é de suma importância para o avanço da área. E acreditamos que esta base de dados deva se basear em informações coletadas de fóruns abertos de perguntas e respostas e/ou tutoriais, no qual a descrição em linguagem natural do trecho de código aproxima-se mais da intenção de busca do desenvolvedor.
+    \item O bom desempenho de estratégias já conhecidas em NLP na recuperação de trecho de código-fonte torna-se um importante ponto de partida para futuras pesquisas. E acreditamos que os recentes avanços na aprendizagem de representação obtidas pelo \acrshort{elmo}, \acrshort{bert} e \Gls{xlnet} devem permear os futuros trabalhos. 
+    \item E por último e não menos importante, acreditemos que a aprendizagem de representação feita em dados coletados de fóruns abertos de perguntas e respostas, podem servir como base para treinar um modelo para recuperar trechos de código em repositórios de código-fonte como o Github. A transferência de aprendizagem, que é uma realidade em NLP e obteve ótimos resultados em diversas áreas como reconhecimento de fala, tradução e classificação de texto \cite{devlin-etal-2019-bert}, deve auxiliar novos avanços na área e ajudar na criação de uma busca semântica de código-fonte.
+\end{itemize}
 
-novos avancos em nlp, mas é necessario avaliar com cautela e fazer experimentos. usp de aprendizagem por tranfesferencia. mas é necessario testar e verificar
-
-os resultados forma promissores, mas é apenas um indício de um caminho. é necessario ampliar os dados de treinament para aumentar a zona de interpolacao. 
-
-E além disso, seria interessante avaliar a transferencia de aprendizagem, e avaliar o desempenho de um modelo treinado em dados do stack over flow e recuperar trechos de codgio no github, por exemplo, que nao possui uma busca semantica.
-
-
-
-possível caminho para a busca semântica.
-
-Algumas perguntas para trabalhos futuros:
-
- - As estratégias de NLP aqui usadas servem para uma linguagem verbosa como o Python. Qual seria o desempenho em uma linguagem como lisp ou haskell??
- 
- - Os dados utilizados no treinamento e avaliação do modelo são restritas a 62000 pares de questoes do tipo how-to-do it, limitando a zona de interpolação do modelo. O ideal é ampliar a quantidade de dados durante o treinamento para aumentar a zonna de interpolação. 
- 
- \todo{nao afirmar isso talvez na conclusao, pois eu nao testei isso, foi o cambronero. soh posso afirmar na conclusao oq eu testei.}
- 
- Mas diferente do conjunto de dados disponibilizado pelo Github em uma competição XXXXX, devemos coletar pares de questões e respostas mais próximas das intenções do desenvolvedor, a fim de construir um modelo que consiga atender as intenções de busca do usuário.
- 
- - Avaliar o desempenho do modelo treinado com pares de questoes e respostas do stack over flow na recuperação de trecho de código em repositorios do GitHUb. 
+Estas são algumas sugestões que julgamos pertinentes e relevantes e, acreditamos, irão permear os futuros trabalhos na área de recuperação de trecho de código-fonte. E, eu, pessoalmente, tenho muito interesse em contribuir no avanço desta área.
