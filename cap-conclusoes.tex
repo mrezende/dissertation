@@ -7,7 +7,29 @@ A recuperação de trecho de código-fonte consiste em recuperar um trecho de c�
 
 Além de uma nova proposta baseada em arquiteturas de seleção de respostas em NLP \citep{feng-2015, tan-lstm-qa}, avaliamos o nosso modelo em uma amostra contendo pares de questões e trechos de código-fonte em Python coletados do \Gls{sof}. A peculiaridade desta amostra é que ela contém somente questões do tipo ''how-to-do-it'', questões que exigem normalmente uma resposta direta. Além disso, diferente de \cite{cambronero-deep-learning-code-search:2019} e \cite{husain-github-semantic-search-code-2019} que tentaram criar uma busca semântica correlacionando os trechos de código a comentários \gls{docstring}, no nosso caso, buscamos correlacionar os trechos de código às questões feitas em um fórum aberto de perguntas e respostas. E conforme os próprios pesquisadores \cite{cambronero-deep-learning-code-search:2019, husain-github-semantic-search-code-2019} verificaram, as questões de fórums de dúvidas de programação aproximam-se mais das intenções de busca do usuário do que os comentários docstring. 
 
+Ao optarmos pela arquitetura CNN, levamos em consideração as suas peculiaridades como priorização de interações locais através da extração dos n-grams mais importantes e a dificuldade em correlacionar dependências entre palavras muito distantes em uma sentença. Durante os nossos experimentos, verificamos que as redes convolucionais obtiveram um melhor desempenho através da extração de características latentes utilizando bi-grams, ao invés de combinar filtros convolucionais de diferentes tamanhos conforme apontado por \cite{tang-hybrid-deep-representation-2018} (ver Apêndice~\ref{ape:ajuste-hiper-parametros-cnn}). E quanto a dificuldade em extrair correlações entre palavras distantes, isto não foi um problema aparente dado as características de nossa amostra. A nossa amostra é composta marjoritariamente por questões e trechos de código relativamente curtos, onde 75\% da questões tem 11 palavras e 75\% dos trechos de código tem no máximo 55 palavras. 
+
+Dado as características da arquitetura CNN e da amostra, consideramos o resultado obtido em nossos experimentos muito bom. E não esperávamos, inicialmente, um resultado tão promissor, pois conseguimos em nossa avaliação um resultado comparável com a arquitetura proposta por \cite{cambronero-deep-learning-code-search:2019}, atual estado da arte. E um ponto a favor em nossos experimentos, foi a linguagem Python, pois dado as suas características como concisa, clara, isso acabou ajudando o nosso trabalho para extração dos termos dos trechos de código e facilitou o emprego de técnicas de seleção de respostas, comumente utilizadas em NLP, na recuperação de trecho de código-fonte.
+
+
+%------------------------------------------------------
+\section{Considerações Finais} 
+\label{sec:consideracoes-finais}
+
 Acreditamos que a aprendizagem de representação, que mostrou-se essencial em diversas tarefas em NLP, como tradução, classificação de textos, seleção de respostas \citep{devlin-etal-2019-bert, yang2019xlNet}, é um caminho para a recuperação de trecho de código-fonte. Juntamente a isso, acreditamos que as amostras obtidas através de fóruns abertos de perguntas e respostas como o \Gls{sof} são de extrema importância, pois foram organizados e curados coletivamente pelos usuáios, tornando-se uma fonte preciosa de informações \citep{Wang-quora:2013}.
+
+Além da aprendizagem de representação, as estratégias de seleção de respostas em NLP mostraram-se promissoras na recuperação de trecho de código-fonte. Em nosso caso, utilizamos a estratégia cunhada por \cite{feng-2015} e \cite{tan-lstm-qa}, que faz uso da aprendizagem de representação através de redes neurais convolucionais. E conforme os resultados apontados no Capítulo~\ref{cap:resultados}, o comportamento do nosso modelo na amostra contendo pares de questões e trechos código-fonte foi ao encontro dos modelos cunhados pelos pesquisadores em questões e respostas em linguagem natural. Para nós, isto é um indicativo de que as técnicas de seleção de respostas em NLP devam servir como referência e ponto de partida para futuros pesquisadores na criação de uma busca semântica de código-fonte.
+
+Devemos salientar que os resultados obtidos até aqui são apenas um indicativo promitente do bom desempenho das estratégias e técnicas de NLP na recuperação de trecho de código-fonte. Estudos futuros para validar os resultados com usuários finais e uma análise qualitativa sobre o que as redes neurais convolucionais estão aprendendendo faz-se necessário. Além disso, utilizamos apenas 60.000 pares de questões e trechos de código-fonte durante o treinamento e 1000 pares de questões e respostas anotadas manualmente para avaliação. Esta é uma pequena porcentagem dada imensidão de dados disponíveis em fóruns abertos de perguntas e respostas, por exemplo, pois somente o StackOverFlow, até o final de abril de 2020\footnote{Consulta feita em 30 de Abril de 2020 no BigQuery do Google, que permite consultar as questões e perguntas do StackOverFlow através de uma consulta SQL}\todo{confirmar os números}, possuía mais 1.000.000 de perguntas marcadas com a palavra-chave Python. Acreditamos que somente após aprender a usar esta enorme quantidade de informações e termos criado uma base de dados organizada e curada como a ImageNet ou a Squad, teremos os primeiros avanços reais na área de recuperação de trecho de código-fonte, assim como os avanços recentes nas áreas de processamento de imagens e processamento de linguagem natural.
+
+
+
+%------------------------------------------------------
+\section{Sugestões para Pesquisas Futuras} 
+
+Conforme apontado na Seção~\ref{sec:consideracoes-resultados} e reforçado na Seção~\ref{sec:consideracoes-finais}, 
+
+muitos dos comportamentos são parecidos e vão ao encontro das estrategias NLP em nossa amostra.
 
 novos avancos em nlp, mas é necessario avaliar com cautela e fazer experimentos. usp de aprendizagem por tranfesferencia. mas é necessario testar e verificar
 
@@ -30,29 +52,3 @@ Algumas perguntas para trabalhos futuros:
  Mas diferente do conjunto de dados disponibilizado pelo Github em uma competição XXXXX, devemos coletar pares de questões e respostas mais próximas das intenções do desenvolvedor, a fim de construir um modelo que consiga atender as intenções de busca do usuário.
  
  - Avaliar o desempenho do modelo treinado com pares de questoes e respostas do stack over flow na recuperação de trecho de código em repositorios do GitHUb. 
-
-
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto\footnote{Exemplo de referência para página
-Web: \url{www.vision.ime.usp.br/~jmena/stuff/tese-exemplo}}.
-
-%------------------------------------------------------
-\section{Considerações Finais} 
-
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto. 
-
-%------------------------------------------------------
-\section{Sugestões para Pesquisas Futuras} 
-
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto.
-
-Finalmente, leia o trabalho de \citet{alon09:how} no qual apresenta-se
-uma reflexão sobre a utilização da Lei de Pareto para tentar definir/escolher
-problemas para as diferentes fases da vida acadêmica.  A direção dos novos
-passos para a continuidade da vida acadêmica deveriam ser discutidos com seu
-orientador.
