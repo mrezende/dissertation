@@ -72,7 +72,7 @@ De acordo com a Figura~\ref{fig:treinamento-cnn-k-2-m-0009}, o aumento de filtro
 Conforme exibido no Capítulo~\ref{cap:abordagem}, o kernel define na rede convolucional de 1 dimensão, o n-grams a serem extraídos. Durante o treinamento, analisamos diferentes valores para o kernel. Verificamos o comportamento para kernel de tamanho 2, 3, 4 e a combinação de valores 2, 3, 5 e 7. Conforme as Figuras~\ref{fig:treinamento-cnn-diferentes-kernels} e \ref{fig:treinamento-cnn-diferentes-kernels-2}, não houve melhora significativa para kernels de tamanho 3 e 4 em comparação com o kernel de tamanho 2. E até mesmo a combinação de kernels não gerou uma melhora significativa dado a quantidade de parâmetros utilizados. Neste caso, optamos por manter o kernel fixado em $2$.
 
 
-\begin{figure}[p]
+\begin{figure}[H]
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000.png}
@@ -113,7 +113,7 @@ Conforme exibido no Capítulo~\ref{cap:abordagem}, o kernel define na rede convo
 \label{fig:treinamento-cnn-diferentes-kernels}
 \end{figure}
 
-\begin{figure}[p]
+\begin{figure}[H]
 \begin{subfigure}{.5\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000-k-3.png}
@@ -157,6 +157,42 @@ Conforme exibido no Capítulo~\ref{cap:abordagem}, o kernel define na rede convo
 
 
 \section{Ajuste da margem - Função de perda hinge}
+
+Além dos hiper-parâmetros das redes convolucionais, a função de perda \textit{hinge} conforme descrito na Seção~\ref{sec:funcao-objetivo}, exige um parâmetro \emph{margem}. Este parâmetro define a magnitude da diferença da distância de similaridade entre os trechos de código anotados como corretos e os trechos que não são respostas com relação as questões. Os pesquisadores \cite{feng-2015} recomendaram uma margem de $0,009$, enquanto \cite{tan-lstm-qa} utilizaram uma margem de $0,2$. Em nosso caso, fizemos alguns experimentos com os valores $0,009$, $0,05$, $0,1$ e $0,2$. 
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ p{1cm} p{4cm} P{2.2cm} P{2.2cm} P{2.2cm} P{2.2cm} }
+ \hline
+    & & \multicolumn{4}{c}{\textbf{Resultados MRR}}\\
+ \hline
+ & \textbf{Modelos} & \textbf{$m = 0,009$} & \textbf{$m = 0,05$} & \textbf{$m = 0,1$}& \textbf{$m = 0,2$}\\
+ \hline
+ A1 & Embedding (m = $0.1$) & $0.637$& $0.49$& $0.637$& $0.49$\\
+ 
+ \hline
+ 
+ B1 & Unif (m = $0.2$) & $0.675 $ & $0.539$& $0.637$& $0.49$\\
+ 
+ \hline
+ 
+ C1 & CNN / F = 1000 & $0.669 $ & $0.527$& $0.637$& $0.49$\\
+ 
+ C2 & CNN / F = 2000 & $0.673 $ & $0.531$& $0.637$& $0.49$\\
+ 
+ C3 & CNN / F = 4000 & $0.687 $ & $0.553$& $0.637$& $0.49$\\
+ 
+\hline
+\end{tabular}
+\caption{Resultado do modelo CNN em comparação com as outras arquiteturas \Gls{unif} e Embedding. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}) na amostra EVAL. TOP1 refere-se a frequência da ocorrência da resposta anotada como correta na primeira posição em comparação com outros 49 distratores. Nas linhas A1, B1 e E1, \emph{m} refere-se ao hiper-parâmetro margem utilizada na função de perda \emph{hinge}. F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. NL é o acrônimo de normalização em lote. As arquiteturas CNN utilizaram margem $m = 0.05$ e o tamanho da janela do filtro (kernel) $k = 2$.}
+\label{table:alteracao-margem}
+\end{table}
+
+
+
+Notamos que não há um consenso sobre o valor da margem, conforme a Tabela XXX, cada arquitetura obteve um melhor desempenho para um valor diferente de margem. As redes convolucionais obtiveram o melhor desempenho para uma margem de valor $0,05$, já a arquitetura Unif proposta por \cite{cambronero-deep-learning-code-search:2019} obteve o melhor desempenho para o valor $0,2$, enquanto a arquitetura \textit{Embedding} obteve com o valor $0,1$. Optamos por fixar estes valores específicos para cada arquitetura. E conforme descrito na Tabela XXX, escolhemos o valor da margem baseado no valor mais alto da métrica MRR obtida através da avaliação do melhor modelo na amostra EVAL. Ver a Seção~\ref{sec:avaliacao} para mais detalhes sobre o procedimento de avaliação.
+
 
 \section{Regularização - Normalização em Lote}
 \label{sec:regularizacao-normalizacao-lote}
