@@ -244,29 +244,22 @@ Podemos notar também que enquanto a normalização em lote auxiliou as redes co
 \label{fig:treinamento-cnn-normalizacao-em-lote}
 \end{figure}
 
-Apesar do ''grande salto'' para a rede convolucional com 4000 filtros, a normalização em lote melhorou o desempenho em todas as redes convolucionais. Conforme a Tabela XXX, podemos verificar que houve um aumento do valor do MRR na amostra EVAL. Para nós, isto é um indicativo de que a normalização em lote auxiliou na aprendizagem. Além disso, a parada antecipada impediu o \textit{overfitting} do modelo, permitindo que selecionássemos o melhor candidato à avaliação final na amostra EVAL. Para ter um comparativo nos testes finais, optamos por apresentar os resultados de ambos os modelos, as redes convolucionais com normalização em lote e as redes sem normalização, na Seção~\ref{sec:resultados-avaliacao}.
+Apesar do ''grande salto'' para a rede convolucional com 4000 filtros, a normalização em lote melhorou o desempenho em todas as redes convolucionais. Conforme a Tabela XXX, podemos verificar que houve um aumento do valor do MRR na amostra EVAL. Para nós, isto é um indicativo de que a normalização em lote auxiliou na aprendizagem. Além disso, a parada antecipada impediu o \textit{overfitting} do modelo, permitindo que selecionássemos o melhor candidato à avaliação final na amostra EVAL. Para ter um comparativo dos resultados nos testes finais, optamos por apresentar os valores finais do MRR de ambos os modelos, as redes convolucionais com normalização em lote e as redes sem normalização, na Seção~\ref{sec:resultados-avaliacao}.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{ p{1cm} p{4cm} P{2.2cm} P{2.2cm} P{2.2cm} P{2.2cm} }
+\begin{tabular}{ p{1cm} p{4cm} P{4cm} P{4cm} }
  \hline
-    & & \multicolumn{4}{c}{\textbf{Resultados MRR}}\\
+    & & \multicolumn{2}{c}{\textbf{Resultados MRR}}\\
  \hline
- & \textbf{Modelos} & \textbf{$m = 0,009$} & \textbf{$m = 0,05$} & \textbf{$m = 0,1$}& \textbf{$m = 0,2$}\\
- \hline
- A1 & Embedding & $0.600$& $0.632$& \cellcolor{Gray!35} $0.637$& $0.635$\\
- 
- \hline
- \
- B1 & Unif & $0.647 $ & $0.652$& $0.660$& \cellcolor{Gray!35} $0.674$\\
- 
+ & \textbf{Modelos} & \textbf{Sem NL} & \textbf{Com NL}\\
  \hline
  
- C1 & CNN / F = 1000 & $0.654 $ & $0.669$& \cellcolor{Gray!35} $0.676$& $0.637$\\
+ C1 & CNN / F = 1000 &  $0.669$&  \cellcolor{Gray!35}$0.682$\\
  
- C2 & CNN / F = 2000 & $0.675 $ & \cellcolor{Gray!35} $0.673$& $0.661$& $0.647$\\
+ C2 & CNN / F = 2000 &  $0.673$&  \cellcolor{Gray!35}$0.689$\\
  
- C3 & CNN / F = 4000 & $0.664$ & \cellcolor{Gray!35} $0.687$& $0.672$& $0.651$\\
+ C3 & CNN / F = 4000 &  $0.687$& \cellcolor{Gray!35} $0.688$\\
  
 \hline
 \end{tabular}
@@ -275,10 +268,12 @@ Apesar do ''grande salto'' para a rede convolucional com 4000 filtros, a normali
 \end{table}
 
 
-Unif
-
 
 Shared layers BN e individual
+
+
+
+
 
 Melhor modelo valloss vs MRR.
 
