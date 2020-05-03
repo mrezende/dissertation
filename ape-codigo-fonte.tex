@@ -236,6 +236,8 @@ else:
 Na primeira condição na linha 1, verificamos se o vetor \emph{kernel\_size}, que indica o tamanho das janelas dos filtros convolucionais, possui mais de 1 tamanho de janela. Caso ele possua, criamos os filtros convolucionais para cada tamanho (linha 2) e concatenamos ao final (linha 8). Uma ilustração deste procedimento pode ser visualizado Figura~\ref{fig:cnn-architecture-proposal} do Capítulo~\ref{cap:abordagem}. Caso o vetor \emph{kernel\_size} possua apenas 1 tamanho de janela, não há necessidade de concatenar os filtros e apenas aplicamos a operação de convolução nos vetores de representação distribuída (linhas 12, 14, 20).
 
 \subsection{Rede convolucional com parâmetros independentes entre as camadas de questão e trecho de código-fonte}
+\label{sec:rede-convolucional-parametros-indepdentes-codigo-fonte-sem-normalizacao}
+O código a seguir apresenta a rede convolucional no qual os parâmetros de aprendizagem da questão e trecho de código-fonte são independentes. Nas linhas 31 e 39 e nas linhas 47 e 55, criamos uma camada Conv1D para a questão e outra para o trecho de código-fonte. Com isto, não compartilhamos os parâmetros durante a aprendizagem de representação da questão e do trecho de código-fonte.
 
 \begin{mypython-linenumber}{Rede convolucional com parâmetros independentes}
 class ConvolutionModel(LanguageModel):
@@ -318,6 +320,10 @@ class ConvolutionModel(LanguageModel):
 \end{mypython-linenumber}
 \vspace{2cm}
 \subsection{Rede convolucional com parâmetros compartilhados}
+
+O código a seguir exibe o modelo de rede convolucional onde os parâmetros são compartilhados durante a aprendizagem das representações das questões e dos trechos de código-fonte. Diferente da Seção~\ref{sec:rede-convolucional-parametros-indepdentes-codigo-fonte-sem-normalizacao}, nas linhas 31 e 43, instanciamos apenas 1 camada do Conv1D e utilizamos este \textit{tensor} nas linhas seguintes (linhas 37,40 e linhas 49, 52).
+
+
 \begin{mypython-linenumber}{Rede convolucional com parâmetros compartilhados}
 class SharedConvolutionModel(LanguageModel):
     def build(self):
@@ -394,10 +400,12 @@ class SharedConvolutionModel(LanguageModel):
 \vspace{2cm}
 \subsection{Normalização em lote}
 
+Durante os experimentos, verificamos que os modelos apresentavam sinais de \textit{overfitting}, onde havia um decréscimo rápido do erro na amostra de treinamento em comparação com o erro na amostra de validação (ver Seção~\ref{sec:regularizacao-normalizacao-lote}). Para mitigar este problema, criamos modelos que utilizam a normalização em lote. Durante a criação dos modelos, seguimos a recomendação dos próprios autores \cite{sergey-batch-normalization-2015} e adicionamos a normalização em lote antes da função de ativação.
+
 \subsubsection{Rede convolucional com parâmetros independentes entre as camadas}
 
 \begin{mypython-linenumber}{Rede convolucional com parâmetros independentes}
-class ConvolutionModel(LanguageModel):
+class ConvolutionModelWithBatchNormalization(LanguageModel):
     def build(self):
         assert self.config.question_len() == self.config.answer_len()
 
@@ -426,37 +434,56 @@ class ConvolutionModel(LanguageModel):
         question_cnn = None
         answer_cnn = None
 
+
         if len(kernel_size) > 1:
             q_cnns = [Conv1D(kernel_size=k,
                              filters=filters,
-                             activation='relu',
                              padding='same',
-                             name=f'question_conv1d_{k}') for k in kernel_size]
+                             name=f'question_conv1d_with_bn_{k}') for k in kernel_size]
             # question_cnn = merge([cnn(question_embedding) for cnn in cnns], mode='concat')
-            question_cnn = concatenate([cnn(question_embedding) for cnn in q_cnns])
+
+            question_outputs_cnn = [cnn(question_embedding) for cnn in q_cnns]
+            bn_question_outputs_cnn = [BatchNormalization()(output) for output in question_outputs_cnn]
+            activation_question_outputs_cnn = [Activation('relu')(output) for output in bn_question_outputs_cnn]
+
+            question_cnn = concatenate([activation_output for activation_output in activation_question_outputs_cnn])
+
             # answer_cnn = merge([cnn(answer_embedding) for cnn in cnns], mode='concat')
             a_cnns = [Conv1D(kernel_size=k,
                              filters=filters,
-                             activation='relu',
                              padding='same',
-                             name=f'answer_conv1d_{k}') for k in kernel_size]
-            answer_cnn = concatenate([cnn(answer_embedding) for cnn in a_cnns])
+                             name=f'answer_conv1d_with_bn_{k}') for k in kernel_size]
+
+            answer_outputs_cnn = [cnn(answer_embedding) for cnn in a_cnns]
+            bn_answer_outputs_cnn = [BatchNormalization()(output) for output in answer_outputs_cnn]
+            activation_answer_outputs_cnn = [Activation('relu')(output) for output in bn_answer_outputs_cnn]
+
+            answer_cnn = concatenate([activation_output for activation_output in activation_answer_outputs_cnn])
         else:
             k = kernel_size[0]
             q_cnn = Conv1D(kernel_size=k,
                              filters=filters,
-                             activation='relu',
                              padding='same',
-                             name=f'question_conv1d_{k}')
+                             name=f'question_conv1d_with_bn_{k}')
             # question_cnn = merge([cnn(question_embedding) for cnn in cnns], mode='concat')
-            question_cnn = q_cnn(question_embedding)
+
+            question_output_cnn = q_cnn(question_embedding)
+            bn_question_output_cnn = BatchNormalization()(question_output_cnn)
+            activation_question_output_cnn = Activation('relu')(bn_question_output_cnn)
+
+            question_cnn = activation_question_output_cnn
+
             # answer_cnn = merge([cnn(answer_embedding) for cnn in cnns], mode='concat')
             a_cnn = Conv1D(kernel_size=k,
                              filters=filters,
-                             activation='relu',
                              padding='same',
-                             name=f'answer_conv1d_{k}')
-            answer_cnn = a_cnn(answer_embedding)
+                             name=f'answer_conv1d_with_bn_{k}')
+
+            answer_output_cnn = a_cnn(answer_embedding)
+            bn_answer_output_cnn = BatchNormalization()(answer_output_cnn)
+            activation_answer_output_cnn = Activation('relu')(bn_answer_output_cnn)
+
+            answer_cnn = activation_answer_output_cnn
 
         # maxpooling
         maxpool = Lambda(lambda x: K.max(x, axis=1, keepdims=False), output_shape=lambda x: (x[0], x[2]),
@@ -467,6 +494,8 @@ class ConvolutionModel(LanguageModel):
         # answer_pool = enc(maxpool(answer_cnn))
         question_pool = maxpool(question_cnn)
         answer_pool = maxpool(answer_cnn)
+
+        
 
         cos_similarity = Lambda(lambda x: cosine_similarity(x[0], x[1], axis=1)
                                        , output_shape=lambda _: (None, 1), name='similarity')([question_pool,
