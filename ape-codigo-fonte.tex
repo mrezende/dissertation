@@ -2,10 +2,12 @@
 \chapter{Código-fonte dos modelos}
 \label{ape:codigo-fonte-dos-modelos}
 
-Neste capítulo apresentamos os resultados dos ajustes dos hiper-parâmetros e da normalização em lote feita nas arquiteturas convolucional, \Gls{unif} e \textit{Embedding}. O intuito destes ajustes é obter um modelo mais robusto e evitar o \textit{overfitting}.
+Neste capítulo apresentamos parte do código-fonte utilizado em nossos experimentos. O código-fonte completo está disponível no seguinte endereço: \url{https://github.com/mrezende/concra}. Neste repositório estão disponíveis o código-fonte para treinamento, avaliação dos modelos, juntamente com os dados originais e os dados pré-preprocessados. Além disso, também estão disponíveis o word2vec utilizado como entrada em nossos modelos. Utilizamos a linguagem Python, versão 3.6.9 com as bibliotecas \Gls{keras} (versão 2.2.4-tf) e \Gls{tensorflow} (1.15.2). Todos os nossos experimentos foram executados na plataforma \Gls{colab} do Google. Optamos por apresentar neste capítulo apenas os códigos-fontes dos modelos propostos para o presente trabalho. Os códigos-fontes do pré-processamento, treinamento e avaliação estão disponíveis publicamente em nosso repositório. Os dados estão sob a licença \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons} e os códigos estão disponíveis sob a licença \href{https://opensource.org/licenses/MIT}{MIT}.
 
 \section{Código do modelo de referência \textit{Embedding}}
 \label{sec:codigo-modelo-embedding}
+
+O código a seguir é referente ao modelo que utilizamos como base para comparação em nossos experimentos. Este modelo é bem simples, ele recebe como entrada na primeira camada os vetores de representação distribuída das questões e trechos de código-fonte. E extrai as características mais relevantes dos vetores através de uma camada \textit{maxpool} (linha 22). E ao final calcula a distância de similaridade \textit{cosine} entre os vetores de representação da questão e do trecho de código-fonte. 
 
 \begin{mypython-linenumber}{Embedding}
 class EmbeddingModel(LanguageModel):
@@ -44,9 +46,11 @@ class EmbeddingModel(LanguageModel):
 
 \end{mypython-linenumber}
 
+\vspace{2cm}
 
 \section{Código do modelo Unif}
 
+O código a seguir apresenta a camada da questão do modelo Unif proposto por \cite{cambronero-deep-learning-code-search:2019}. O vetor de representação da questão é obtido através do cálculo da média aritmética simples dos vetores de representação de cada palavra que fazem parte da sentença (linha 32).
 
 \begin{mypython-linenumber}{Camada da questão do modelo Unif}
 class AverageLayer(Layer):
@@ -88,9 +92,9 @@ class AverageLayer(Layer):
         return input_shape[0], input_shape[2] # (batch, input_dim)
 \end{mypython-linenumber}
 
-
 \vspace{2cm}
 
+O código a seguir refere-se a camada de atenção utilizada para obter o vetor de representação final do trecho de código-fonte. A camada de atenção calcula uma média ponderada sobre os vetores de representação distribuída de cada palavra da sentença (linhas 50, 58, 59). E esta camada aprende ao longo do treinamento a ''prestar atenção'' (ponderar) as palavras mais importantes de acordo com o objetivo da tarefa. No nosso caso, o objetivo é aproximar os trechos de código-fonte anotados como corretos às suas questões.
 
 \begin{mypython-linenumber}{Camada de atenção do modelo Unif}
 # attention from https://github.com/tech-srl/code2vec
@@ -161,6 +165,9 @@ class AttentionLayer(Layer):
 
 \vspace{2cm}
 
+O código a seguir refere-se ao modelo Unif. Ele recebe como parâmetro os vetores de representação distribuída das questões e trechos de código-fonte e, ao final, calcula a similaridade entre eles através da função \textit{cosine}. O vetor de representação da questão é obtido através da média aritmética simples dos vetores de cada palavra da sentença (linha 17). E os vetores de representação dos trechos de código-fonte são obtidos através da camada de atenção (linha 27).
+
+
 \begin{mypython-linenumber}{Unif}
 class UnifModel(LanguageModel):
     def build(self):
@@ -197,7 +204,7 @@ class UnifModel(LanguageModel):
         return Model(inputs=[question, answer], outputs=cos_similarity,
                                    name='qa_model')
 \end{mypython-linenumber}
-
+\vspace{2cm}
 \section{Redes convolucionais}
 
 \subsection{Rede convolucional com parâmetros independentes entre as camadas de questão e trecho de código-fonte}
@@ -356,6 +363,7 @@ class SharedConvolutionModel(LanguageModel):
                                    name='qa_model')
 \end{mypython-linenumber}
 
+\vspace{2cm}
 \subsection{Normalização em lote}
 
 \subsubsection{Rede convolucional com parâmetros independentes entre as camadas}
