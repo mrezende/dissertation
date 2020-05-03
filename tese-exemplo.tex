@@ -163,12 +163,15 @@ enlarge bottom by=1cm,%  equivalent to mdframed 'skipbelow'
 listing engine=minted,
 minted style=colorful,
 minted language=python,
-minted options= {xleftmargin=10pt, escapeinside=||, linenos},
+minted options= {xleftmargin=10pt, escapeinside=||, linenos, breaklines},
 listing only,
 title={#1}, fonttitle=\bfseries,
 enlarge top by=1cm,%     equivalent to mdframed 'skipabove'
 enlarge bottom by=1cm,%  equivalent to mdframed 'skipbelow'
+breakable=unlimited
   }
+  
+
   
 \newtcblisting{mypythonembedding}[1]{%
 listing engine=minted,
@@ -500,6 +503,7 @@ text text text.
 \fancyhead[RE,LO]{}
 \appendix
 \include{ape-ajustes-hiper-parametros}
+\include{ape-codigo-fonte}
 %\include{ape-conjuntos}      % associado ao arquivo: 'ape-conjuntos.tex'
 
 % ---------------------------------------------------------------------------- %

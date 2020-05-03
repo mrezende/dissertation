@@ -1,0 +1,533 @@
+%% ------------------------------------------------------------------------- %%
+\chapter{Código-fonte dos modelos}
+\label{ape:codigo-fonte-dos-modelos}
+
+Neste capítulo apresentamos os resultados dos ajustes dos hiper-parâmetros e da normalização em lote feita nas arquiteturas convolucional, \Gls{unif} e \textit{Embedding}. O intuito destes ajustes é obter um modelo mais robusto e evitar o \textit{overfitting}.
+
+\section{Código do modelo de referência \textit{Embedding}}
+\label{sec:codigo-modelo-embedding}
+
+\begin{mypython-linenumber}{Embedding}
+class EmbeddingModel(LanguageModel):
+    def build(self):
+        question = Input(shape=(self.question_len,), dtype='int32', name='question')
+        answer = Input(shape=(self.answer_len,), dtype='int32', name='answer')
+
+        # add embedding layers
+        question_weights = np.load(self.config.initial_question_weights())
+        q_embedding = Embedding(input_dim=question_weights.shape[0],
+                                output_dim=question_weights.shape[1],
+                                weights=[question_weights],
+                                name='question_embedding')
+        question_embedding = q_embedding(question)
+
+        answer_weights = np.load(self.config.initial_answer_weights())
+        a_embedding = Embedding(input_dim=answer_weights.shape[0],
+                                output_dim=answer_weights.shape[1],
+                                weights=[answer_weights],
+                                name='answer_embedding')
+        answer_embedding = a_embedding(answer)
+
+        # maxpooling
+        maxpool = Lambda(lambda x: K.max(x, axis=1, keepdims=False), output_shape=lambda x: (x[0], x[2]),
+                         name='max')
+        maxpool.supports_masking = True
+        question_pool = maxpool(question_embedding)
+        answer_pool = maxpool(answer_embedding)
+        
+        cos_similarity = Lambda(lambda x: cosine_similarity(x[0], x[1], axis=1)
+                                       , output_shape=lambda _: (None, 1), name='similarity')([question_pool,
+                                                                                               answer_pool])
+
+        return Model(inputs=[question, answer], outputs=cos_similarity,
+                                   name='qa_model')
+
+\end{mypython-linenumber}
+
+
+\section{Código do modelo Unif}
+
+
+\begin{mypython-linenumber}{Camada da questão do modelo Unif}
+class AverageLayer(Layer):
+    def __init__(self, **kwargs):
+        super(AverageLayer, self).__init__(**kwargs)
+
+    def build(self, inputs_shape):
+        inputs_shape = inputs_shape if isinstance(inputs_shape, list) else [inputs_shape]
+
+        if len(inputs_shape) != 1:
+            raise ValueError("AverageLayer expect one input.")
+
+        # The first (and required) input is the actual input to the layer
+        input_shape = inputs_shape[0]
+
+        # Expected input shape consists of a triplet: (batch, input_length, input_dim)
+        if len(input_shape) != 3:
+            raise ValueError("Input shape for AverageLayer should be of 3 dimension.")
+
+        self.input_length = int(input_shape[1])
+        self.input_dim = int(input_shape[2])
+
+        super(AverageLayer, self).build(input_shape)
+
+    def call(self, inputs, **kwargs):
+        inputs = inputs if isinstance(inputs, list) else [inputs]
+
+        if len(inputs) != 1:
+            raise ValueError("AverageLayer expect one input.")
+
+        actual_input = inputs[0]
+
+        # (batch, input_length, input_dim) = mean => (batch, input_dim)
+        result = K.mean(actual_input, axis=1)
+
+        return result
+
+    def compute_output_shape(self, input_shape):
+        return input_shape[0], input_shape[2] # (batch, input_dim)
+\end{mypython-linenumber}
+
+
+\vspace{2cm}
+
+
+\begin{mypython-linenumber}{Camada de atenção do modelo Unif}
+# attention from https://github.com/tech-srl/code2vec
+# paper: Code2Vec: Learning Distributed Representations of Code
+
+class AttentionLayer(Layer):
+    def __init__(self, **kwargs):
+        super(AttentionLayer, self).__init__(**kwargs)
+
+    def build(self, inputs_shape):
+        inputs_shape = inputs_shape if isinstance(inputs_shape, list) else [inputs_shape]
+
+        if len(inputs_shape) < 1 or len(inputs_shape) > 2:
+            raise ValueError("AttentionLayer expect one or two inputs.")
+
+        # The first (and required) input is the actual input to the layer
+        input_shape = inputs_shape[0]
+
+        # Expected input shape consists of a triplet: (batch, input_length, input_dim)
+        if len(input_shape) != 3:
+            raise ValueError("Input shape for AttentionLayer should be of 3 dimension.")
+
+        self.input_length = int(input_shape[1])
+        self.input_dim = int(input_shape[2])
+        attention_param_shape = (self.input_dim, 1)
+
+        self.attention_param = self.add_weight(
+            name='attention_param',
+            shape=attention_param_shape,
+            initializer='uniform',
+            trainable=True,
+            dtype=tf.float32)
+        super(AttentionLayer, self).build(input_shape)
+
+    def call(self, inputs, **kwargs):
+        inputs = inputs if isinstance(inputs, list) else [inputs]
+
+        if len(inputs) < 1 or len(inputs) > 2:
+            raise ValueError("AttentionLayer expect one or two inputs.")
+
+        actual_input = inputs[0]
+        mask = inputs[1] if len(inputs) > 1 else None
+        if mask is not None and not (((len(mask.shape) == 3 and mask.shape[2] == 1) or len(mask.shape) == 2)
+                                     and mask.shape[1] == self.input_length):
+            raise ValueError('mask should be of shape (batch, input_length)'
+                             'or (batch, input_length, 1) '
+                             'when calling an AttentionLayer.')
+
+        assert actual_input.shape[-1] == self.attention_param.shape[0]
+
+        # (batch, input_length, input_dim) * (input_dim, 1) ==> (batch, input_length, 1)
+        attention_weights = K.dot(actual_input, self.attention_param)
+
+        if mask is not None:
+            if len(mask.shape) == 2:
+                mask = K.expand_dims(mask, axis=2)  # (batch, input_length, 1)
+            mask = K.log(mask)
+            attention_weights += mask
+
+        attention_weights = K.softmax(attention_weights, axis=1)  # (batch, input_length, 1)
+        result = K.sum(actual_input * attention_weights, axis=1)  # (batch, input_length)  [multiplication uses broadcast]
+        return result
+
+    def compute_output_shape(self, input_shape):
+        return input_shape[0], input_shape[2] # (batch, input_dim)
+\end{mypython-linenumber}
+
+
+\vspace{2cm}
+
+\begin{mypython-linenumber}{Unif}
+class UnifModel(LanguageModel):
+    def build(self):
+        print(tf.__version__)
+        print(tf.keras.__version__)
+        question = Input(shape=(self.question_len,), dtype='int32', name='question')
+        answer = Input(shape=(self.answer_len,), dtype='int32', name='answer')
+
+        # add embedding layers
+        question_weights = np.load(self.config.initial_question_weights())
+        q_embedding = Embedding(input_dim=question_weights.shape[0],
+                                output_dim=question_weights.shape[1],
+                                weights=[question_weights],
+                                name='question_embedding')
+        question_embedding = q_embedding(question)
+
+        f_average_layer = AverageLayer(name='average')
+        e_q = f_average_layer([question_embedding])
+
+        answer_weights = np.load(self.config.initial_answer_weights())
+        a_embedding = Embedding(input_dim=answer_weights.shape[0],
+                                output_dim=answer_weights.shape[1],
+                                weights=[answer_weights],
+                                name='answer_embedding')
+        answer_embedding = a_embedding(answer)
+
+        f_attention_layer = AttentionLayer(name='attention')
+        e_c = f_attention_layer([answer_embedding])
+        
+        cos_similarity = Lambda(lambda x: cosine_similarity(x[0], x[1], axis=1)
+                                       , output_shape=lambda _: (None, 1), name='similarity')([e_q,
+                                                                                               e_c])
+
+        return Model(inputs=[question, answer], outputs=cos_similarity,
+                                   name='qa_model')
+\end{mypython-linenumber}
+
+\section{Redes convolucionais}
+
+\subsection{Rede convolucional com parâmetros independentes entre as camadas de questão e trecho de código-fonte}
+
+\begin{mypython-linenumber}{Rede convolucional com parâmetros independentes}
+class ConvolutionModel(LanguageModel):
+    def build(self):
+        assert self.config.question_len() == self.config.answer_len()
+
+        question = Input(shape=(self.question_len,), dtype='int32', name='question')
+        answer = Input(shape=(self.answer_len,), dtype='int32', name='answer')
+
+        # add embedding layers
+        question_weights = np.load(self.config.initial_question_weights())
+        q_embedding = Embedding(input_dim=question_weights.shape[0],
+                                output_dim=question_weights.shape[1],
+                                weights=[question_weights],
+                                name='question_embedding')
+        question_embedding = q_embedding(question)
+
+        answer_weights = np.load(self.config.initial_answer_weights())
+        a_embedding = Embedding(input_dim=answer_weights.shape[0],
+                                output_dim=answer_weights.shape[1],
+                                weights=[answer_weights],
+                                name='answer_embedding')
+        answer_embedding = a_embedding(answer)
+
+        # cnn
+        filters = self.config.filters()
+        kernel_size = self.kernel_size
+
+        question_cnn = None
+        answer_cnn = None
+
+        if len(kernel_size) > 1:
+            q_cnns = [Conv1D(kernel_size=k,
+                             filters=filters,
+                             activation='relu',
+                             padding='same',
+                             name=f'question_conv1d_{k}') for k in kernel_size]
+            # question_cnn = merge([cnn(question_embedding) for cnn in cnns], mode='concat')
+            question_cnn = concatenate([cnn(question_embedding) for cnn in q_cnns])
+            # answer_cnn = merge([cnn(answer_embedding) for cnn in cnns], mode='concat')
+            a_cnns = [Conv1D(kernel_size=k,
+                             filters=filters,
+                             activation='relu',
+                             padding='same',
+                             name=f'answer_conv1d_{k}') for k in kernel_size]
+            answer_cnn = concatenate([cnn(answer_embedding) for cnn in a_cnns])
+        else:
+            k = kernel_size[0]
+            q_cnn = Conv1D(kernel_size=k,
+                             filters=filters,
+                             activation='relu',
+                             padding='same',
+                             name=f'question_conv1d_{k}')
+            # question_cnn = merge([cnn(question_embedding) for cnn in cnns], mode='concat')
+            question_cnn = q_cnn(question_embedding)
+            # answer_cnn = merge([cnn(answer_embedding) for cnn in cnns], mode='concat')
+            a_cnn = Conv1D(kernel_size=k,
+                             filters=filters,
+                             activation='relu',
+                             padding='same',
+                             name=f'answer_conv1d_{k}')
+            answer_cnn = a_cnn(answer_embedding)
+
+        # maxpooling
+        maxpool = Lambda(lambda x: K.max(x, axis=1, keepdims=False), output_shape=lambda x: (x[0], x[2]),
+                         name='max')
+        maxpool.supports_masking = True
+        # enc = Dense(100, activation='tanh')
+        # question_pool = enc(maxpool(question_cnn))
+        # answer_pool = enc(maxpool(answer_cnn))
+        question_pool = maxpool(question_cnn)
+        answer_pool = maxpool(answer_cnn)
+
+        cos_similarity = Lambda(lambda x: cosine_similarity(x[0], x[1], axis=1)
+                                       , output_shape=lambda _: (None, 1), name='similarity')([question_pool,
+                                                                                               answer_pool])
+
+        return Model(inputs=[question, answer], outputs=cos_similarity,
+                                   name='qa_model')
+\end{mypython-linenumber}
+\vspace{2cm}
+\subsection{Rede convolucional com parâmetros compartilhados}
+\begin{mypython-linenumber}{Rede convolucional com parâmetros compartilhados}
+class SharedConvolutionModel(LanguageModel):
+    def build(self):
+        assert self.config.question_len() == self.config.answer_len()
+
+        question = Input(shape=(self.question_len,), dtype='int32', name='question')
+        answer = Input(shape=(self.answer_len,), dtype='int32', name='answer')
+
+        # add embedding layers
+        question_weights = np.load(self.config.initial_question_weights())
+        q_embedding = Embedding(input_dim=question_weights.shape[0],
+                                output_dim=question_weights.shape[1],
+                                weights=[question_weights],
+                                name='question_embedding')
+        question_embedding = q_embedding(question)
+
+        answer_weights = np.load(self.config.initial_answer_weights())
+        a_embedding = Embedding(input_dim=answer_weights.shape[0],
+                                output_dim=answer_weights.shape[1],
+                                weights=[answer_weights],
+                                name='answer_embedding')
+        answer_embedding = a_embedding(answer)
+
+        # cnn
+        filters = self.config.filters()
+        kernel_size = self.kernel_size
+
+        question_cnn = None
+        answer_cnn = None
+
+        if len(kernel_size) > 1:
+            cnns = [Conv1D(kernel_size=k,
+                           filters=filters,
+                           activation='relu',
+                           padding='same',
+                           name=f'shared_conv1d_{k}') for k in kernel_size]
+            # question_cnn = merge([cnn(question_embedding) for cnn in cnns], mode='concat')
+            question_cnn = concatenate([cnn(question_embedding) for cnn in cnns])
+            # answer_cnn = merge([cnn(answer_embedding) for cnn in cnns], mode='concat')
+
+            answer_cnn = concatenate([cnn(answer_embedding) for cnn in cnns])
+        else:
+            k = kernel_size[0]
+            cnn = Conv1D(kernel_size=k,
+                           filters=filters,
+                           activation='relu',
+                           padding='same',
+                           name=f'shared_conv1d_{k}')
+            # question_cnn = merge([cnn(question_embedding) for cnn in cnns], mode='concat')
+            question_cnn = cnn(question_embedding)
+            # answer_cnn = merge([cnn(answer_embedding) for cnn in cnns], mode='concat')
+
+            answer_cnn = cnn(answer_embedding)
+
+        # maxpooling
+        maxpool = Lambda(lambda x: K.max(x, axis=1, keepdims=False), output_shape=lambda x: (x[0], x[2]),
+                         name='max')
+        maxpool.supports_masking = True
+        # enc = Dense(100, activation='tanh')
+        # question_pool = enc(maxpool(question_cnn))
+        # answer_pool = enc(maxpool(answer_cnn))
+        question_pool = maxpool(question_cnn)
+        answer_pool = maxpool(answer_cnn)
+
+        cos_similarity = Lambda(lambda x: cosine_similarity(x[0], x[1], axis=1)
+                                       , output_shape=lambda _: (None, 1), name='similarity')([question_pool,
+                                                                                               answer_pool])
+        
+
+        return Model(inputs=[question, answer], outputs=cos_similarity,
+                                   name='qa_model')
+\end{mypython-linenumber}
+
+\subsection{Normalização em lote}
+
+\subsubsection{Rede convolucional com parâmetros independentes entre as camadas}
+
+\begin{mypython-linenumber}{Rede convolucional com parâmetros independentes}
+class ConvolutionModel(LanguageModel):
+    def build(self):
+        assert self.config.question_len() == self.config.answer_len()
+
+        question = Input(shape=(self.question_len,), dtype='int32', name='question')
+        answer = Input(shape=(self.answer_len,), dtype='int32', name='answer')
+
+        # add embedding layers
+        question_weights = np.load(self.config.initial_question_weights())
+        q_embedding = Embedding(input_dim=question_weights.shape[0],
+                                output_dim=question_weights.shape[1],
+                                weights=[question_weights],
+                                name='question_embedding')
+        question_embedding = q_embedding(question)
+
+        answer_weights = np.load(self.config.initial_answer_weights())
+        a_embedding = Embedding(input_dim=answer_weights.shape[0],
+                                output_dim=answer_weights.shape[1],
+                                weights=[answer_weights],
+                                name='answer_embedding')
+        answer_embedding = a_embedding(answer)
+
+        # cnn
+        filters = self.config.filters()
+        kernel_size = self.kernel_size
+
+        question_cnn = None
+        answer_cnn = None
+
+        if len(kernel_size) > 1:
+            q_cnns = [Conv1D(kernel_size=k,
+                             filters=filters,
+                             activation='relu',
+                             padding='same',
+                             name=f'question_conv1d_{k}') for k in kernel_size]
+            # question_cnn = merge([cnn(question_embedding) for cnn in cnns], mode='concat')
+            question_cnn = concatenate([cnn(question_embedding) for cnn in q_cnns])
+            # answer_cnn = merge([cnn(answer_embedding) for cnn in cnns], mode='concat')
+            a_cnns = [Conv1D(kernel_size=k,
+                             filters=filters,
+                             activation='relu',
+                             padding='same',
+                             name=f'answer_conv1d_{k}') for k in kernel_size]
+            answer_cnn = concatenate([cnn(answer_embedding) for cnn in a_cnns])
+        else:
+            k = kernel_size[0]
+            q_cnn = Conv1D(kernel_size=k,
+                             filters=filters,
+                             activation='relu',
+                             padding='same',
+                             name=f'question_conv1d_{k}')
+            # question_cnn = merge([cnn(question_embedding) for cnn in cnns], mode='concat')
+            question_cnn = q_cnn(question_embedding)
+            # answer_cnn = merge([cnn(answer_embedding) for cnn in cnns], mode='concat')
+            a_cnn = Conv1D(kernel_size=k,
+                             filters=filters,
+                             activation='relu',
+                             padding='same',
+                             name=f'answer_conv1d_{k}')
+            answer_cnn = a_cnn(answer_embedding)
+
+        # maxpooling
+        maxpool = Lambda(lambda x: K.max(x, axis=1, keepdims=False), output_shape=lambda x: (x[0], x[2]),
+                         name='max')
+        maxpool.supports_masking = True
+        # enc = Dense(100, activation='tanh')
+        # question_pool = enc(maxpool(question_cnn))
+        # answer_pool = enc(maxpool(answer_cnn))
+        question_pool = maxpool(question_cnn)
+        answer_pool = maxpool(answer_cnn)
+
+        cos_similarity = Lambda(lambda x: cosine_similarity(x[0], x[1], axis=1)
+                                       , output_shape=lambda _: (None, 1), name='similarity')([question_pool,
+                                                                                               answer_pool])
+
+        return Model(inputs=[question, answer], outputs=cos_similarity,
+                                   name='qa_model')
+\end{mypython-linenumber}
+\vspace{2cm}
+\subsubsection{Rede convolucional com parâmetros compartilhados}
+
+\begin{mypython-linenumber}{Rede convolucional com parâmetros compartilhados e normalização em lote}
+class SharedConvolutionModelWithBatchNormalization(LanguageModel):
+    def build(self):
+        assert self.config.question_len() == self.config.answer_len()
+
+        question = Input(shape=(self.question_len,), dtype='int32', name='question')
+        answer = Input(shape=(self.answer_len,), dtype='int32', name='answer')
+
+        # add embedding layers
+        question_weights = np.load(self.config.initial_question_weights())
+        q_embedding = Embedding(input_dim=question_weights.shape[0],
+                                output_dim=question_weights.shape[1],
+                                weights=[question_weights],
+                                name='question_embedding')
+        question_embedding = q_embedding(question)
+
+        answer_weights = np.load(self.config.initial_answer_weights())
+        a_embedding = Embedding(input_dim=answer_weights.shape[0],
+                                output_dim=answer_weights.shape[1],
+                                weights=[answer_weights],
+                                name='answer_embedding')
+        answer_embedding = a_embedding(answer)
+
+        # cnn
+        filters = self.config.filters()
+        kernel_size = self.kernel_size
+        question_cnn = None
+        answer_cnn = None
+
+        if len(kernel_size) > 1:
+            cnns = [Conv1D(kernel_size=k,
+                           filters=filters,
+                           padding='same',
+                           name=f'shared_conv1d_with_bn_{k}') for k in kernel_size]
+            # question_cnn = merge([cnn(question_embedding) for cnn in cnns], mode='concat')
+
+            question_outputs_cnn = [cnn(question_embedding) for cnn in cnns]
+            bn_question_outputs_cnn = [BatchNormalization()(output) for output in question_outputs_cnn]
+            activation_question_outputs_cnn = [Activation('relu')(output) for output in bn_question_outputs_cnn]
+
+            question_cnn = concatenate([activation_output for activation_output in activation_question_outputs_cnn])
+            # answer_cnn = merge([cnn(answer_embedding) for cnn in cnns], mode='concat')
+
+            answer_outputs_cnn = [cnn(answer_embedding) for cnn in cnns]
+            bn_answer_outputs_cnn = [BatchNormalization()(output) for output in answer_outputs_cnn]
+            activation_answer_outputs_cnn = [Activation('relu')(output) for output in bn_answer_outputs_cnn]
+
+            answer_cnn = concatenate([activation_output for activation_output in activation_answer_outputs_cnn])
+        else:
+            k = kernel_size[0]
+            cnn = Conv1D(kernel_size=k,
+                           filters=filters,
+                           padding='same',
+                           name=f'shared_conv1d_with_bn_{k}')
+            # question_cnn = merge([cnn(question_embedding) for cnn in cnns], mode='concat')
+
+            question_output_cnn = cnn(question_embedding)
+            bn_question_output_cnn = BatchNormalization()(question_output_cnn)
+            activation_question_output_cnn = Activation('relu')(bn_question_output_cnn)
+
+            question_cnn = activation_question_output_cnn
+            # answer_cnn = merge([cnn(answer_embedding) for cnn in cnns], mode='concat')
+
+            answer_output_cnn = cnn(answer_embedding)
+            bn_answer_output_cnn = BatchNormalization()(answer_output_cnn)
+            activation_answer_output_cnn = Activation('relu')(bn_answer_output_cnn)
+
+            answer_cnn = activation_answer_output_cnn
+
+        # maxpooling
+        maxpool = Lambda(lambda x: K.max(x, axis=1, keepdims=False), output_shape=lambda x: (x[0], x[2]),
+                         name='max')
+        maxpool.supports_masking = True
+        # enc = Dense(100, activation='tanh')
+        # question_pool = enc(maxpool(question_cnn))
+        # answer_pool = enc(maxpool(answer_cnn))
+        question_pool = maxpool(question_cnn)
+        answer_pool = maxpool(answer_cnn)
+
+        cos_similarity = Lambda(lambda x: cosine_similarity(x[0], x[1], axis=1)
+                                       , output_shape=lambda _: (None, 1), name='similarity')([question_pool,
+                                                                                               answer_pool])
+
+        
+
+        return Model(inputs=[question, answer], outputs=cos_similarity,
+                                   name='qa_model')
+\end{mypython-linenumber}
+
