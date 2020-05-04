@@ -7,7 +7,7 @@ Neste capítulo apresentamos parte do código-fonte utilizado em nossos experime
 \section{Código do modelo de referência \textit{Embedding}}
 \label{sec:codigo-modelo-embedding}
 
-O código a seguir é referente ao modelo que utilizamos como base para comparação em nossos experimentos. Este modelo é bem simples, ele recebe como entrada na primeira camada os vetores de representação distribuída das questões e trechos de código-fonte. E extrai as características mais relevantes dos vetores através de uma camada \textit{maxpool} (linha 22). E ao final calcula a distância de similaridade \textit{cosine} entre os vetores de representação da questão e do trecho de código-fonte. 
+O código a seguir é referente ao modelo que utilizamos como base para comparação em nossos experimentos. Este modelo é bem simples, ele recebe como entrada na primeira camada os vetores de representação distribuída das questões e trechos de código-fonte. E extrai as características mais relevantes dos vetores através de uma camada \textit{maxpool} (linha 22). E, ao final, a distância de similaridade \textit{cosine} é calculada entre os vetores de representação distribuída da questão e do trecho de código-fonte. 
 
 \begin{mypython-linenumber}{Embedding}
 class EmbeddingModel(LanguageModel):
@@ -50,7 +50,7 @@ class EmbeddingModel(LanguageModel):
 
 \section{Código do modelo Unif}
 
-O código a seguir apresenta a camada da questão do modelo Unif proposto por \cite{cambronero-deep-learning-code-search:2019}. O vetor de representação da questão é obtido através do cálculo da média aritmética simples dos vetores de representação de cada palavra que fazem parte da sentença (linha 32).
+O código a seguir apresenta a camada da questão do modelo Unif proposto por \cite{cambronero-deep-learning-code-search:2019}. O vetor de representação final da questão é obtido através do cálculo da média aritmética simples dos vetores de representação distribuída de cada palavra que fazem parte da sentença (linha 32).
 
 \begin{mypython-linenumber}{Camada da questão do modelo Unif}
 class AverageLayer(Layer):
@@ -94,7 +94,7 @@ class AverageLayer(Layer):
 
 \vspace{2cm}
 
-O código a seguir refere-se a camada de atenção utilizada para obter o vetor de representação final do trecho de código-fonte. A camada de atenção calcula uma média ponderada sobre os vetores de representação distribuída de cada palavra da sentença (linhas 50, 58, 59). E esta camada aprende ao longo do treinamento a ''prestar atenção'' (ponderar) as palavras mais importantes de acordo com o objetivo da tarefa. No nosso caso, o objetivo é aproximar os trechos de código-fonte anotados como corretos às suas questões.
+O código a seguir refere-se a camada de atenção utilizada para obter o vetor de representação final do trecho de código-fonte. A camada de atenção calcula uma média ponderada sobre os vetores de representação distribuída de cada palavra da sentença (linhas 50, 58, 59). E esta camada aprende ao longo do treinamento a ''prestar atenção'' (ponderar) às palavras mais importantes de acordo com o objetivo da tarefa. No nosso caso, o objetivo é aproximar os trechos de código-fonte anotados como corretos às suas questões.
 
 \begin{mypython-linenumber}{Camada de atenção do modelo Unif}
 # attention from https://github.com/tech-srl/code2vec
@@ -165,7 +165,7 @@ class AttentionLayer(Layer):
 
 \vspace{2cm}
 
-O código a seguir refere-se ao modelo Unif. Ele recebe como parâmetro os vetores de representação distribuída das questões e trechos de código-fonte e, ao final, calcula a similaridade entre eles através da função \textit{cosine}. O vetor de representação da questão é obtido através da média aritmética simples dos vetores de cada palavra da sentença (linha 17). E os vetores de representação dos trechos de código-fonte são obtidos através da camada de atenção (linha 27).
+O código a seguir refere-se ao modelo Unif. Ele recebe como parâmetro os vetores de representação distribuída das questões e trechos de código-fonte e, ao final, calcula a similaridade entre eles através da função \textit{cosine}. O vetor de representação final da questão é obtido através da média aritmética simples dos vetores de cada palavra da sentença (linha 17). E os vetores de representações finais dos trechos de código-fonte são obtidos através da camada de atenção (linha 27).
 
 
 \begin{mypython-linenumber}{Unif}
@@ -207,7 +207,7 @@ class UnifModel(LanguageModel):
 \vspace{2cm}
 \section{Redes convolucionais}
 
-Os códigos apresentados a seguir referem-se a rede convolucional proposta no Capítulo~\ref{cap:abordagem}. Estes códigos foram utilizados durante treinamento e avaliação dos nossos modelos. E uma adaptação foi necessária para comportar o experimento que avalia os diferentes tamanhos de janela do filtro convolucional. Em todos os códigos foram necessários o acréscimo do seguinte trecho para permitir a combinação de filtros convolucionais com diferentes tamanhos de janela:
+Os códigos apresentados a seguir referem-se a rede convolucional proposta no Capítulo~\ref{cap:abordagem}. Um ponto importante com relação a eles, é uma adaptação necessária que fizemos para comportar o experimento que avalia os diferentes tamanhos de janela do filtro convolucional. Em todos os códigos acrescentamos o seguinte trecho para permitir a combinação de filtros convolucionais com diferentes tamanhos de janela:
 
 \begin{mypython-linenumber}{Trecho para permitir filtros convolucionais com diferentes tamanhos de janela}
 if len(kernel_size) > 1:
@@ -233,11 +233,11 @@ else:
 \end{mypython-linenumber}
 
 \vspace{2cm}
-Na primeira condição na linha 1, verificamos se o vetor \emph{kernel\_size}, que indica o tamanho das janelas dos filtros convolucionais, possui mais de 1 tamanho de janela. Caso ele possua, criamos os filtros convolucionais para cada tamanho (linha 2) e concatenamos ao final (linha 8). Uma ilustração deste procedimento pode ser visualizado Figura~\ref{fig:cnn-architecture-proposal} do Capítulo~\ref{cap:abordagem}. Caso o vetor \emph{kernel\_size} possua apenas 1 tamanho de janela, não há necessidade de concatenar os filtros e apenas aplicamos a operação de convolução nos vetores de representação distribuída (linhas 12, 14, 20).
+Na primeira condição na linha 1, verificamos se o vetor \emph{kernel\_size}, que indica o tamanho das janelas dos filtros convolucionais, possui mais de 1 elemento. Caso ele possua, criamos os filtros convolucionais para cada tamanho de janela (linha 2) e concatenamos ao final (linha 8). Uma ilustração deste procedimento pode ser visualizado Figura~\ref{fig:cnn-architecture-proposal} do Capítulo~\ref{cap:abordagem}. Caso o vetor \emph{kernel\_size} possua apenas 1 elemento, não há necessidade de concatenar os filtros e apenas aplicamos a operação de convolução nos vetores de representação distribuída (linhas 12, 14, 20).
 
 \subsection{Rede convolucional com parâmetros independentes entre as camadas de questão e trecho de código-fonte}
 \label{sec:rede-convolucional-parametros-indepdentes-codigo-fonte-sem-normalizacao}
-O código a seguir apresenta a rede convolucional no qual os parâmetros de aprendizagem da questão e trecho de código-fonte são independentes. Nas linhas 31 e 39 e nas linhas 47 e 55, criamos uma camada Conv1D para a questão e outra para o trecho de código-fonte. Com isto, não compartilhamos os parâmetros durante a aprendizagem de representação da questão e do trecho de código-fonte.
+O código a seguir apresenta a rede convolucional no qual os parâmetros de aprendizagem são independentes entre as camadas da questão e do trecho de código-fonte. Nas linhas 31 e 39 e nas linhas 47 e 55, criamos uma camada Conv1D para a questão e outra para o trecho de código-fonte. Com isto, não compartilhamos a mesma camada entre eles e, como consequência, os parâmetros também não são compartilhados.
 
 \begin{mypython-linenumber}{Rede convolucional com parâmetros independentes}
 class ConvolutionModel(LanguageModel):
@@ -321,7 +321,7 @@ class ConvolutionModel(LanguageModel):
 \vspace{2cm}
 \subsection{Rede convolucional com parâmetros compartilhados}
 
-O código a seguir exibe o modelo de rede convolucional onde os parâmetros são compartilhados durante a aprendizagem das representações das questões e dos trechos de código-fonte. Diferente da Seção~\ref{sec:rede-convolucional-parametros-indepdentes-codigo-fonte-sem-normalizacao}, nas linhas 31 e 43, instanciamos apenas 1 camada do Conv1D e utilizamos este \textit{tensor} nas linhas seguintes (linhas 37,40 e linhas 49, 52).
+O código a seguir exibe o modelo de rede convolucional onde os parâmetros são compartilhados durante a aprendizagem das representações das questões e dos trechos de código-fonte. Diferente da Seção~\ref{sec:rede-convolucional-parametros-indepdentes-codigo-fonte-sem-normalizacao}, nas linhas 31 e 43, instanciamos apenas 1 camada do Conv1D e ela recebe como entrada os vetores de representação distribuída das questões e trechos de código-fonte (linhas 37,40 e 49, 52). Conforme a documentação da biblioteca \Gls{keras} (\url{https://keras.io/getting-started/functional-api-guide/}), esta é a maneira como deve ser criada uma camada compartilhada, onde os parâmetros de aprendizagem são compartilhados também.
 
 
 \begin{mypython-linenumber}{Rede convolucional com parâmetros compartilhados}
@@ -403,6 +403,8 @@ class SharedConvolutionModel(LanguageModel):
 Durante os experimentos, verificamos que os modelos apresentavam sinais de \textit{overfitting}, onde havia um decréscimo rápido do erro na amostra de treinamento em comparação com o erro na amostra de validação (ver Seção~\ref{sec:regularizacao-normalizacao-lote}). Para mitigar este problema, criamos modelos que utilizam a normalização em lote. Durante a criação dos modelos, seguimos a recomendação dos próprios autores \cite{sergey-batch-normalization-2015} e adicionamos a normalização em lote antes da função de ativação.
 
 \subsubsection{Rede convolucional com parâmetros independentes entre as camadas}
+
+No código a seguir, acrescentamos a normalização em lote nas linhas 39, 51, 64 e 76.
 
 \begin{mypython-linenumber}{Rede convolucional com parâmetros independentes}
 class ConvolutionModelWithBatchNormalization(LanguageModel):
@@ -506,6 +508,8 @@ class ConvolutionModelWithBatchNormalization(LanguageModel):
 \end{mypython-linenumber}
 \vspace{2cm}
 \subsubsection{Rede convolucional com parâmetros compartilhados}
+
+A normalização em lote foi acrescentada no código a seguir nas linhas 37, 44, 57 e 64.
 
 \begin{mypython-linenumber}{Rede convolucional com parâmetros compartilhados e normalização em lote}
 class SharedConvolutionModelWithBatchNormalization(LanguageModel):
