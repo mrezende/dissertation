@@ -3,25 +3,63 @@
 \label{cap:experimento}
 
 
-Neste capítulo apresentamos o conjunto de dados, os procedimentos utilizados para treinamento e avaliação do nosso modelo, além das arquiteturas utilizadas para comparação. Descrevemos também o pré-processamento feito no conjunto de dados antes do treinamento. O código-fonte do pré-processamento, bem como o código dos modelos propostos e de comparação, estão disponíveis em um repositório do \Gls{github},  juntamente com o conjunto de dados utilizados, no seguinte endereço: \url{https://github.com/mrezende/concra}.
+Neste capítulo apresentaremos as etapas do processo de treinamento e avaliação das redes neurais. De acordo com \cite{nndesign:2014:pratical-training-issues}, o treinamento e avaliação de uma rede neural são compostas pelas seguintes etapas:
+\begin{itemize}
+    \item Coleta e pré-processamento dos dados
+    \item Definição do tipo de rede neural e arquitetura
+    \item Seleção do algoritmo de treinamento
+    \item Treinamento
+    \item Análise do desempenho da rede neural
+    \item Utilização do modelo
+\end{itemize}
+
+Conforme a Figura~\ref{fig:training-neural-network-cyclic}, este é um processo cíclico e iterativo que inicia-se com a coleta e pré-processamento dos dados e termina com a utilização do modelo. Neste capítulo iremos apresentar as seguintes etapas deste processo:
+
+\begin{itemize}
+    \item Coleta e pré-processamento dos dados
+    \item Treinamento
+    \item Análise do desempenho da rede neural
+\end{itemize}
+
+E com relação as outras etapas, algumas já foram discutidas em outros capítulos ou estão fora do escopo do presente trabalho. A etapa de ''definição do tipo de rede neural e arquitetura'' já foi discutida no Capítulo~\ref{cap:abordagem} e a ''utilização do modelo'' está fora do escopo do trabalho neste momento. Em relação a etapa de ''seleção do algoritmo de treinamento'', optamos por fixar o algoritmo de otimização \emph{Adam} para aprendizagem, proposto por \cite{yao-2018}. 
 
 
 
-\section{Conjunto de dados}
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/cap-experimento/neural_network_training_lifecycle_dissertation.pdf}
+\caption{Ilustração do processo de treinamento e avaliação de uma rede neural. Figura adaptada do \cite{nndesign:2014:pratical-training-issues}.} 
+\label{fig:training-neural-network-cyclic}
+\end{figure}
+
+\section{Coleta e pré-processamento dos dados}
+\label{sec:coleta-pre-processamento-dos-dados}
+
+Conforme \cite{nndesign:2014:pratical-training-issues}, o processo de treinamento e avaliação de uma rede neural inicia-se com a coleta e pré-processamento dos dados. Em nosso caso, não houve coleta, pois utilizamos parte do conjunto de dados disponibilizados por \cite{yao-2018}. E estes dados estão sob a licença \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons}, onde o uso é permitido desde que faça referência ao trabalho dos pesquisadores. Ressaltamos que utilizamos parte do conjunto, pois os pesquisadores coletaram questões e trechos de código-fonte em Python e SQL do site \Gls{sof} e, em nosso trabalho, optamos apenas por utilizar o conjunto de dados em Python. 
+
+ Uma peculiaridade desses dados em relação às amostras utilizadas em outros trabalhos \cite{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015}, é o fato de conter ''apenas'' questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Além disso, conforme apontado por \cite{cambronero-deep-learning-code-search:2019}, as questões coletadas em fóruns abertos de perguntas e respostas de programação costumam expressar mais as intenções do desenvolvedor quando comparadas com comentários \gls{docstring}, por exemplo. Esta característica vai  ao encontro com a nossa definição adotada para o problema de \textit{code retrieval}, onde pretendemos encontrar uma semântica para o trecho de código-fonte, de forma que atenda às intenções de busca do desenvolvedor. Para isto, um caminho é ensinar um modelo a associar trechos de código-fonte a questões que expressem as intenções do desenvolvedor.
+
+\subsection{Conjunto de dados}
 \label{sec:conjunto-dados}
 
-Para este estudo, utilizamos parte do conjunto de dados disponibilizados por \cite{yao-2018}. Esse conjunto é formado por $\bm{147.546}$ pares de questões em inglês e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Estes pares foram coletados do site \Gls{sof} e disponibilizados publicamente através de um repositório no \Gls{github} pelos pesquisadores\footnote{\url{https://github.com/LittleYUYU/StackOverflow-Question-Code-Dataset}}. Uma peculiaridade desses dados em relação aos dados utilizados nos outros trabalhos \cite{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015}, é o fato de conter questões do tipo \textit{how-to-do-it}. As respostas para este tipo de questão costumam ser mais diretas e ter apenas um trecho de código-fonte como solução \citep{yao-2018}. Essas questões normalmente expressam as intenções do desenvolvedor, indo ao encontro com a nossa definição da Seção~\ref{sec:code-retrieval-definicao} adotada para o problema de \textit{code retrieval}.
+O conjunto de dados disponibilizado por \cite{yao-2018} é formado por $\bm{147.546}$ pares de questões em inglês e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Eles foram coletados do site \Gls{sof} e contemplam questões do ano de 2008 a 2016\footnote{\url{https://github.com/LittleYUYU/StackOverflow-Question-Code-Dataset}}. Podemos dividi-los em 3 (três) subconjuntos distintos:
 
-Os dados disponibilizados por \cite{yao-2018} são divididos em 3 (três) subconjuntos distintos. Um subconjunto é formado apenas por questões coletadas do \Gls{sof} que continham apenas um trecho de código-fonte na descrição da resposta. O outro é formado por questões que apresentavam mais de um trecho de código-fonte na descrição. O terceiro é formado por pares de questões e trechos de código-fonte anotados manualmente. A divisão dos subconjuntos podem ser visualizados na Figura~\ref{fig:distinct-subset-python-pair-question-code}.
+\begin{itemize}
+    \item N1: Questões coletadas do \Gls{sof} que continham apenas um trecho de código-fonte na descrição da resposta
+    \item N2: Questões que apresentavam mais de um trecho de código-fonte na descrição
+    \item N3: Pares de questões e trechos de código-fonte anotados manualmente
+\end{itemize}
 
-\begin{figure}[h]
+
+
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textwidth]{figuras/cap-experimento/distinct-subsets-yao-sample.pdf}
 \caption{Divisão das amostras de pares de questões e trechos de código disponibilizados por \cite{yao-2018}: $N_{1} = \{(q_{i}, c_{i}^{+})\;,\; \forall\; q_{i},\;\nexists\; c_{j}^{+}\; |\; c_{j}^{+} \neq c_{i}^{+}\; \text{para}\; i \neq j,\; 1 \leq i,j \leq |N_{1}| \}$, $N_{2} = \{(q_{i}, c_{i}^{+})\;,\; \exists\; q_{i}\; | \;\exists\; c_{j}^{+} \neq c_{i}^{+}\; \text{para} \; i \neq j,\; 1 \leq i,j \leq |N_{2}| \}$, $N_{3} = \{(q_{i}, c_{i}^{+}),\; \forall\; c_{i}^{+} \text{foi anotado manualmente}, 1 \leq i \leq |N_{3}| \}$. Onde $N_{1} \cap N_{2} \cap N_{3} = \varnothing$, $q_{i} \in \mathbb{Q}$ e $c_{i}^{+},  c_{j}^{+} \in \mathbb{C}$. E $c_{i}^{+}, c_{j}^{+}$ são respostas anotadas como corretas. $\mathbb{Q}$ e $\mathbb{C}$ representam o conjunto de questões e trechos de código respectivamente.} 
 \label{fig:distinct-subset-python-pair-question-code}
 \end{figure}
 
-Nos casos em que há mais de um trecho de código-fonte na descrição da resposta, um trecho de código não é necessariamente uma solução para a pergunta. No exemplo a seguir, os trechos \emph{T2} e \emph{T4} não são soluções para a questão. O trecho \emph{T2} apenas inicializa um array e o trecho \emph{T4} mostra a saída do comando \textit{print} para o vetor já convertido\footnote{Site: \url{https://stackoverflow.com/questions/34349762/convert-2d-numpy-array-to-string} Esta questão apresenta 6 trechos de código-fonte, mas para melhor visualização, optamos por colocar apenas 4 trechos em nosso exemplo\label{foot:exemplo-stackoverflow-mais-de-um-trecho}}.
+A ilustração da divisão dos subconjuntos pode ser visualizada na Figura~\ref{fig:distinct-subset-python-pair-question-code}. Um ponto importante a ser ressaltado, são os casos em que há mais de um trecho de código-fonte na descrição da resposta, pois nem todo trecho é necessariamente uma solução para a questão. No exemplo a seguir, os trechos \emph{T2} e \emph{T4} não são soluções para a dúvida do usuário. O trecho \emph{T2} apenas inicializa um array e o trecho \emph{T4} mostra a saída do comando \textit{print} para o vetor já convertido\footnote{Site: \url{https://stackoverflow.com/questions/34349762/convert-2d-numpy-array-to-string} Esta questão apresenta 6 trechos de código-fonte, mas para melhor visualização, optamos por colocar apenas 4 trechos em nosso exemplo\label{foot:exemplo-stackoverflow-mais-de-um-trecho}}.
 
 
 
@@ -55,7 +93,7 @@ b = '\n'.join(res)
 \end{tcolorbox}
 
 
-Para diferenciar os trechos de código presentes em uma mesma resposta, \cite{yao-2018} anotaram os pares com $\bm{1}$, quando o trecho é solução para a pergunta e $\bm{0}$, caso contrário. Inicialmente foi feita uma anotação manual em uma amostra de aproximadamente 2000 pares. E posteriormente, uma rede neural recorrente foi treinada a classificar os trechos de código que são soluções para as perguntas. Ao final da avaliação, eles obtiveram um resultado de F1 de $0,916$ e acurácia de $0,911$ em seus testes. Com este modelo, o conjunto de pares $N_{2}$ foram classificados. Ao final, o conjunto de dados pelos pesquisadores é dividido da seguinte maneira:
+Para diferenciar os trechos de código presentes em uma mesma resposta, \cite{yao-2018} anotaram os pares com $\bm{1}$, quando o trecho é solução para a pergunta e $\bm{0}$, caso contrário. Inicialmente foi feita uma anotação manual em uma amostra de aproximadamente 2000 pares. E posteriormente, uma rede neural recorrente foi treinada a classificar os trechos de código que são soluções para as perguntas, obtendo um resultado de F1 de $0,916$ e acurácia de $0,911$ em seus testes. Ao final, os pesquisadores utilizaram este modelo para classificar automaticamente o conjunto de pares $N_{2}$ e disponibilizaram os dados anotados e divididos conforme a Tabela~\ref{table:summary-training-data-yao-staqc}.
 
 \begin{table}[h]
 \centering
@@ -84,7 +122,7 @@ $N_{3}$: Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
 \subsection{Conjunto de dados para avaliação e treinamento}
 \label{sec:conjunto-dados-avaliacao-treinamento}
 
-Avaliamos a quantidade de palavras presentes nas questões e trechos de código-fonte para os conjuntos $N_{2}$ e $N_{3}$. Estes conjuntos foram utilizados para treinamento e avaliação do nosso modelo. O conjunto de amostras $N_{2}$ apresenta uma variabilidade maior, em torno de 27\% das questões contém mais de um trecho de código-fonte anotados como correto, i.e., 27\% das perguntas tem mais de uma opção de solução. A quantidade de pares presentes nas amostras $N_{2}$ e $N_{3}$ podem ser visualizados na Tabela~\ref{table:divisao-amostras}. Lembrando que $N_{3} = DEV \cup EVAL$. E $N_{2} \cap N_{3} = \varnothing$.
+Para avaliar a dificuldade do problema, analisamos a quantidade de palavras presentes nas questões e trechos de código-fonte das amostras utilizadas no treinamento e avaliação dos nossos modelos. Para o treinamento, optamos por utilizar o conjunto $N_{2}$, pois ele apresenta uma variabilidade maior, já que em torno de 27\% das questões contém mais de um trecho de código-fonte anotados como correto, ou seja, 27\% das perguntas tem mais de uma opção de solução. No caso da avaliação, utilizamos o conjunto $N_{3}$, que apresenta uma maior qualidade e acurácia nos dados, pois eles foram anotados manualmente. A quantidade de pares presentes nas amostras $N_{2}$ e $N_{3}$ podem ser visualizadas na Tabela~\ref{table:divisao-amostras}. Lembrando que $N_{3} = DEV \cup EVAL$. E $N_{2} \cap N_{3} = \varnothing$.
 
 \begin{table}[h]
 \centering
@@ -106,7 +144,7 @@ Avaliamos a quantidade de palavras presentes nas questões e trechos de código-
 \end{table}
 
 
-De acordo com a Tabela~\ref{table:statistical-descriptive-of-pythons-sample}, as questões tem aproximadamente em média $9$ palavras com um desvio padrão de $\pm 3.71$. Já os trechos de código apresentam aproximadamente uma média de $44$ e um desvio padrão de $\pm 49$. O valor alto do desvio padrão para os trechos de código é um indicativo de maior variabilidade da quantidade de palavras. Este valor da média e desvio padrão são influenciados também por pontos fora da curva, i.e., trechos de código com uma enorme quantidade de palavras. Então, para entender melhor como está distribuída esta quantidade, apresentamos os percentis na Tabela~\ref{table:statistical-descriptive-of-pythons-sample} e o diagrama de caixa com os respectivos quartis na Figura~\ref{fig:boxplot-number-of-words}.
+De acordo com a Tabela~\ref{table:statistical-descriptive-of-pythons-sample}, as questões tem aproximadamente em média $9$ palavras com um desvio padrão de $\pm 3.71$. Já os trechos de código apresentam aproximadamente uma média de $44$ e um desvio padrão de $\pm 49$. O valor alto do desvio padrão para os trechos de código é um indicativo de maior variabilidade da quantidade de palavras. Este valor da média e desvio padrão alto podem ser influenciados por pontos fora da curva também, i.e., trechos de código com uma enorme quantidade de palavras. Para entender um pouco melhor como está distribuída esta quantidade, apresentamos os percentis na Tabela~\ref{table:statistical-descriptive-of-pythons-sample} e o diagrama de caixa com os respectivos quartis na Figura~\ref{fig:boxplot-number-of-words}.
 
 \begin{table}[h]
 \centering
@@ -139,7 +177,7 @@ Máximo & $32$ & $3566$ &	 $25$ & $708$ &	 $27$ & $439$ \\
 \label{table:statistical-descriptive-of-pythons-sample}
 \end{table}
 
-Tanto pela Tabela~\ref{table:statistical-descriptive-of-pythons-sample} quanto pela Figura~\ref{fig:boxplot-number-of-words}, podemos verificar que as questões apresentam um variabilidade e quantidade menor de palavras. Aproximadamente 50\% das questões tem em torno de $6$ a $11$ palavras. Enquanto os trechos de código apresentam 50\% das vezes a quantidade aproximada de $15$ a $54$ palavras. A partir destas informações, podemos dizer que a recuperação de trecho de código-fonte, no nosso caso, é constituída por questões relativamente curtas e trechos de código que variam de 1 (uma) a 3 (três) sentenças de tamanho em linguagem natural \citep{casi-newell-sentence-length-2018}. 
+Tanto pela Tabela~\ref{table:statistical-descriptive-of-pythons-sample} quanto pela Figura~\ref{fig:boxplot-number-of-words}, podemos verificar que as questões apresentam um variabilidade e quantidade menor de palavras. Aproximadamente 50\% das questões tem em torno de $6$ a $11$ palavras. Enquanto os trechos de código apresentam 50\% das vezes a quantidade aproximada de $15$ a $54$ palavras. A partir destas informações, podemos dizer que a recuperação de trecho de código-fonte, no nosso caso, é constituída por questões relativamente curtas e trechos de código que variam de 1 (uma) a 3 (três) sentenças de tamanho em linguagem natural \citep{casi-newell-sentence-length-2018}. De acordo com \cite{tom-young:trends-deep-learning-nlp}, as redes convolucionais, aparentemente, não terão dificuldade de aprendizagem nestas amostras, pois elas priorizam as interações locais e tem dificuldade em correlacionar palavras muito distantes em uma sentença, que não é o nosso caso.
 
 
 
@@ -148,6 +186,31 @@ Tanto pela Tabela~\ref{table:statistical-descriptive-of-pythons-sample} quanto p
 \includegraphics[width=1\textwidth]{figuras/cap-experimento/boxplot_number_of_words.png}
 \caption{Diagrama de caixa para visualizar graficamente a distribuição da quantidade de palavras das questões e trechos de código-fonte por meio de quartis. Este diagrama de caixa exibe o Q1 (primeiro quartil), Q2 (segundo quartil) e Q3 (terceiro quartil). Eles referem-se aos percentis 25\%, 50\% e 75\% da Tabela~\ref{table:statistical-descriptive-of-pythons-sample}. O segundo quartil (Q2) refere-se a mediana. }. 
 \label{fig:boxplot-number-of-words}
+\end{figure}
+
+\subsection{Pré-processamento}
+\label{sec:pre-processamento}
+
+O pré-processamento dos dados é a primeira etapa a ser realizada após a coleta e o objetivo é transformar e/ou adaptar os dados para atender aos requisitos de entrada do modelo e/ou facilitar a aprendizagem durante o treinamento. Em nosso trabalho, utilizamos dois procedimentos com o intuito de facilitar a aprendizagem das redes neurais:
+
+\begin{itemize}
+    \item Substituição dos literais numéricos e textuais dos trechos de código-fonte
+    \item Representação das palavras através de um vetor de representação distribuída
+\end{itemize}
+
+Para diminuir a dispersão dos dados, substituimos os literais númericos e textuais por palavras \emph{''NUMBER''} e \emph{''STRING''}, e também as variáveis pela palavra \emph{''VAR''}. Para isto, utilizamos uma função disponibilizada por \cite{yao-2018} que percorre a árvore sintática do trecho do código-fonte em Python e realiza estas substituições. Além disso, utilizamos a função de \textit{tokenização} da biblioteca \Gls{keras} para transformar as questões e trechos de código-fonte em vetores numéricos, remover os caracteres especiais e tornar todas as palavras minúsculas. Os caracteres especiais removidos podem ser visualizados no código a seguir, através do parâmetro \textit{filters} no construtor da classe \textit{Tokenizer}.
+
+\begin{mypythonembedding}{Vetor de \textit{tokens} embaralhado.}
+Tokenizer(filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower=True, split=' ')
+\end{mypythonembedding}
+
+
+Para auxiliar a aprendizagem das redes neurais, geramos uma matriz de representação distribuída $\bm{T_{v}}$ para o vocabulário das questões e para o vocabulário dos trechos de código-fonte, conforme citado no Capítulo~\ref{cap:abordagem}. A matriz $\bm{T_{v}}$ é gerada pelo \textit{word2vec} com \textit{skip-gram}. Na Figura~\ref{fig:tsne-code-snippet-python}, podemos visualizar um exemplo da representação do vetor de representação distribuída gerada pelo \textit{word2vec}. Essa imagem foi criada com o auxílio da ferramenta \textit{t-SNE}. Ela auxilia na visualização de dados de dimensão elevada \citep{scikit-learn-tsne-2019, quora-tsne-2019}. De acordo com a Figura~\ref{fig:tsne-code-snippet-python}, as palavras \emph{file}, \emph{open}  e \emph{write} são similares. Assim como \emph{set}, \emph{dict} e \emph{list}, por exemplo.
+
+\begin{figure}[H]
+\includegraphics[width=1\textwidth]{figuras/cap-experimento/code_tsne.png}
+\caption{Representação em 2D do vetor de representação distribuída de trechos de código-fonte. Imagem gerada através da ferramenta t-SNE. O vetor de representação distribuída foi criado a partir da amostra de pares de questões e trechos de código-fonte em Python disponibilizada por \cite{yao-2018}. Vetor criado utilizando o \textit{word2vec} com o algoritmo \textit{skip-gram} e o parâmetro \textit{window} com o valor $5$.}
+\label{fig:tsne-code-snippet-python}
 \end{figure}
 
 \section{Treinamento}
@@ -176,7 +239,14 @@ Onde $n$ é a quantidade de questões presentes na amostra, $p_{i}^{+}$ é a pos
 
 Este procedimento é repetido durante 20 iterações. A cada iteração, outros 49 distratores são selecionados e, ao final, obtém-se a média \emph{MRR} do modelo. Basicamente, a cada época verificamos o resultado MRR do modelo comparando a resposta anotada como correta com outros 49 distratores. E selecionamos o modelo que obtiver a melhor média MRR. Este modelo escolhido será utilizado na avaliação final.
 
-\section{Avaliação}
+
+
+
+
+\section{Análise do desempenho da rede neural}
+\label{sec:analise-do-desempenho-da-rede-neural}
+
+\subsection{Avaliação}
 \label{sec:avaliacao}
 
 A avaliação final na amostra \emph{EVAL} utiliza o mesmo procedimento da amostra \emph{DEV} descrito anteriormente. Quer dizer, calculamos o MRR para cada par $<q_{i}, c_{i}^{+}>$ da amostra \emph{EVAL} juntamente com outros 49 distratores $c'$ que são selecionados aleatoriamente da amostra de treinamento, tal que $c_{i}^{+} \neq c'$. Este procedimento de cálculo do MRR é repetido durante 20 iterações. Após as 20 iterações, obtemos a média final do nosso modelo. A ilustração deste procedimento pode ser visualizada na Figura~\ref{fig:final-evaluation-process}.
@@ -188,20 +258,9 @@ A avaliação final na amostra \emph{EVAL} utiliza o mesmo procedimento da amost
 \label{fig:final-evaluation-process}
 \end{figure}
 
-\section{Pré-processamento}
-\label{sec:pre-processamento}
 
-Conforme o trabalho de \cite{tan-lstm-qa}, nós geramos uma matriz de representação distribuída $\bm{T_{v}}$ para o vocabulário das questões e para o vocabulário dos trechos de código-fonte, conforme citado no Capítulo~\ref{cap:abordagem}. Antes de gerar a matriz $\bm{T_{v}}$, utilizamos uma função disponibilizada por \cite{yao-2018} para fazer um pré-processamento dos trechos de código-fonte. Essa função substitui os valores literais numéricos e textos pelas palavras \emph{"NUMBER"} e \emph{"STRING"}. Além disso, os comentários são removidos e as variáveis são substituídas por \emph{"VAR"}. O caractere de quebra de linha é substituído por \emph{"NEWLINE"}.
 
-A matriz $\bm{T_{v}}$ é gerada pelo \textit{word2vec} com \textit{skip-gram}. Na Figura~\ref{fig:tsne-code-snippet-python}, podemos visualizar um exemplo da representação do vetor de representação distribuída gerada pelo \textit{word2vec}. Essa imagem foi criada com o auxílio da ferramenta \textit{t-SNE}. Ela auxilia na visualização de dados de dimensão elevada \citep{scikit-learn-tsne-2019, quora-tsne-2019}. De acordo com a Figura~\ref{fig:tsne-code-snippet-python}, as palavras \emph{file}, \emph{open}  e \emph{write} são similares. Assim como \emph{set}, \emph{dict} e \emph{list}, por exemplo.
-
-\begin{figure}[h]
-\includegraphics[width=1\textwidth]{figuras/cap-experimento/code_tsne.png}
-\caption{Representação em 2D do vetor de representação distribuída de trechos de código-fonte. Imagem gerada através da ferramenta t-SNE. O vetor de representação distribuída foi criado a partir da amostra de pares de questões e trechos de código-fonte em Python disponibilizada por \cite{yao-2018}. Vetor criado utilizando o \textit{word2vec} com o algoritmo \textit{skip-gram} e o parâmetro \textit{window} com o valor $5$.}
-\label{fig:tsne-code-snippet-python}
-\end{figure}
-
-\section{Arquiteturas}
+\subsection{Arquiteturas}
 
 Para este estudo, comparamos a arquitetura CNN com outras duas arquiteturas: \textit{Unif} e \textit{Embedding}. A arquitetura \textit{Unif} proposta por \cite{cambronero-deep-learning-code-search:2019} utiliza duas abordagens diferentes para representação das questões e trechos de código-fonte. No caso das questões, os vetores de representação distribuída de cada palavra são combinados através de uma média aritmética simples. Quanto aos trechos de código, aplica-se o \gls{mecanismo-atencao} que calcula uma média ponderada sobre os vetores de representação distribuída e aprende a ``prestar atenção`` nas palavras mais importantes.  Já a arquitetura \textit{Embedding} combina os vetores de representação distribuída de cada palavra através de uma camada \textit{max pool}. As figuras~\ref{fig:cnn-architecture}, \ref{fig:unif-architecture} e \ref{fig:embedding-architecture} ilustram as arquiteturas utilizadas.
 \begin{figure}[h]
