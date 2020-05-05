@@ -191,7 +191,7 @@ Tanto pela Tabela~\ref{table:statistical-descriptive-of-pythons-sample} quanto p
 \subsection{Pré-processamento}
 \label{sec:pre-processamento}
 
-O pré-processamento dos dados é a primeira etapa a ser realizada após a coleta e o objetivo é transformar e/ou adaptar os dados para atender aos requisitos de entrada do modelo e/ou facilitar a aprendizagem durante o treinamento. Em nosso trabalho, utilizamos dois procedimentos com o intuito de facilitar a aprendizagem das redes neurais:
+O pré-processamento é a primeira etapa a ser realizada após a coleta dos dados e o objetivo é transformá-los e/ou adaptá-los para atender aos requisitos de entrada do modelo e/ou facilitar a aprendizagem durante o treinamento. Em nosso trabalho, utilizamos dois procedimentos com o intuito de facilitar a aprendizagem das redes neurais:
 
 \begin{itemize}
     \item Substituição dos literais numéricos e textuais dos trechos de código-fonte
@@ -203,6 +203,9 @@ Para diminuir a dispersão dos dados, substituimos os literais númericos e text
 \begin{mypythonembedding}{Vetor de \textit{tokens} embaralhado.}
 Tokenizer(filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower=True, split=' ')
 \end{mypythonembedding}
+
+
+Conforme citado no Capítulo~\ref{cap:abordagem}, cada palavra presente nas questões e trechos de código-fonte serão representados por um vetor de representação distribuída. Segundo \cite{Goodfellow-et-al-2016:representation-learning}, as redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída, pois elas induzem a um rico espaço de similaridade, no qual conceitos semanticamente similares estão próximos. 
 
 
 Para auxiliar a aprendizagem das redes neurais, geramos uma matriz de representação distribuída $\bm{T_{v}}$ para o vocabulário das questões e para o vocabulário dos trechos de código-fonte, conforme citado no Capítulo~\ref{cap:abordagem}. A matriz $\bm{T_{v}}$ é gerada pelo \textit{word2vec} com \textit{skip-gram}. Na Figura~\ref{fig:tsne-code-snippet-python}, podemos visualizar um exemplo da representação do vetor de representação distribuída gerada pelo \textit{word2vec}. Essa imagem foi criada com o auxílio da ferramenta \textit{t-SNE}. Ela auxilia na visualização de dados de dimensão elevada \citep{scikit-learn-tsne-2019, quora-tsne-2019}. De acordo com a Figura~\ref{fig:tsne-code-snippet-python}, as palavras \emph{file}, \emph{open}  e \emph{write} são similares. Assim como \emph{set}, \emph{dict} e \emph{list}, por exemplo.
