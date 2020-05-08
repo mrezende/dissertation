@@ -400,9 +400,10 @@ Notamos que não há um consenso sobre o valor da margem, conforme a Tabela~\ref
 
 
 
-\section{Escolha do melhor modelo}
+\section{Critério de seleção do modelo}
+\label{sec:ape-criterio-de-selecao-do-modelo-experimento}
 
-Para treinamento e avaliação, utilizamos o procedimento descrito por \cite{iyer-etal-2016-summarizing}. No caso do treinamento, ao final de cada época, avaliamos o modelo em uma amostra contendo pares de questões e trechos de código-fonte anotados manualmente. O modelo que obtiver a maior média MRR nesta amostra é utilizado na avaliação final. Este procedimento está descrito com mais detalhes na Seção~\ref{sec:treinamento}. Tanto \cite{iyer-etal-2016-summarizing} quanto \cite{yao-2018} verificaram que este procedimento levaram à escolha do melhor modelo com relação a métrica MRR. Para verificar esta afirmação, adotamos este procedimento de \cite{iyer-etal-2016-summarizing} e comparamos com um outro procedimento comumente utilizado, onde o modelo escolhido é o modelo que obtiver o menor valor do erro na amostra de validação. Conforme os resultados da Tabela~\ref{table:escolha-melhor-modelo}, não houve uma diferença significativa no desempenho entre as formas de escolha do modelo. No nosso caso, optamos por manter o mesmo procedimento adotado por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}.
+Ao final do treinamento, um modelo deve ser selecionado para ser utilizado na avaliação final. Um critério de seleção comumente utilizado é selecionar o modelo com o menor erro na amostra de validação. Porém, \cite{iyer-etal-2016-summarizing} e \cite{yao-2018} adotaram um outro critério, no qual, ao final de cada época, o modelo é avaliado em uma amostra anotada manualmente e o modelo que obtiver a maior média MRR é selecionado. Segundo os pesquisadores, este procedimento levaram à escolha do melhor modelo com relação a métrica MRR. Para verificar esta afirmação, avaliamos os modelos selecionados por ambos os critérios na amostra EVAL (Mais informações sobre essa amostra, ver Seção~\ref{sec:conjunto-dados-avaliacao-treinamento}). Diferentemente dos resultados apontados pelos pesquisadores, no nosso caso, não houve uma diferença significativa no desempenho entre os diferentes critérios de seleção do modelo conforme apontado na Tabela~\ref{table:escolha-melhor-modelo}. No nosso caso, optamos por manter o mesmo procedimento adotado por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}.
 
 
 \begin{table}[H]
@@ -431,4 +432,4 @@ Para treinamento e avaliação, utilizamos o procedimento descrito por \cite{iye
 \end{tabular}
 \caption{Resultado da avaliação dos modelos CNN, \Gls{unif} e Embedding na amostra EVAL. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). Utilizamos normalização em lote e compartilhamento de parâmetros nas redes convolucionais. Os hiper-parâmetros utilizados nas redes convolucionais foram: $K = 2$ e $m = 0,05$. Já a rede \emph{Embedding} utilizou o parâmetro $m = 0,1$. E a arquitetura \emph{Unif} utilizou o parâmetro $m = 0,2$. F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. A coluna \emph{Erro de validação} indica os resultados dos modelos que foram escolhidos com base no erro na amostra de validação. A coluna \emph{MRR} indicam os resultados dos modelos que foram escolhidos com base na métrica MRR.}
 \label{table:escolha-melhor-modelo}
-\end{table}
+\end{table}t

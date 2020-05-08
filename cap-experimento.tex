@@ -218,7 +218,7 @@ Conforme apontado no Capítulo~\ref{cap:abordagem}, mapeamos cada palavra presen
 \section{Treinamento}
 \label{sec:treinamento}
 
-Após as etapas de coleta de dados e pré-processamento, a próxima etapa é a de treinamento. Durante a etapa de treinamento que o nosso modelo irá aprender a correlacionar os trechos de código-fonte às questões. Para isto, o modelo irá treinar durante várias épocas com o objetivo de minimizar a função de custo. No nosso caso, a função de custo é a função de perda \textit{hinge}. Conforme citado na Seção~\ref{sec:funcao-objetivo}, o objetivo dessa função é induzir o nosso modelo a classificar os trechos de código-fonte anotados como corretos com uma pontuação maior que os trechos de código-fonte incorretos. A cada época, o algoritmo de otimização atualiza os pesos do modelo a fim de encontrar o conjunto ótimo de pesos que minimize a função de custo e permita o nosso modelo classificar corretamente os trechos de código-fonte às suas questões.
+Após as etapas de coleta de dados e pré-processamento, a próxima etapa é a de treinamento. Durante a etapa de treinamento que o nosso modelo irá aprender a correlacionar os trechos de código-fonte às questões. Para isto, o modelo irá treinar durante várias épocas com o objetivo de minimizar a função de custo. No nosso caso, a função de custo é a função de perda \textit{hinge}. Conforme citado na Seção~\ref{sec:funcao-objetivo}, o objetivo dessa função é induzir o nosso modelo a classificar os trechos de código-fonte anotados como corretos com uma pontuação maior que os trechos de código-fonte incorretos. A cada época, o algoritmo de otimização atualiza os pesos do modelo a fim de encontrar o conjunto ótimo de pesos que minimize a função de custo e permita o nosso modelo classificar com uma maior acurácia os trechos de código-fonte relevantes às questões.
 
 Para realizar a etapa de treinamento, algumas decisões foram tomadas. Listamos a seguir os principais pontos pelos quais tomamos decisão:
 
@@ -229,6 +229,7 @@ Para realizar a etapa de treinamento, algumas decisões foram tomadas. Listamos 
     \item Função objetivo
 \end{itemize}
 
+Conforme apontado pela Tabela~\ref{table:training-decisions}, dividimos a nossa amostra durante o treinamento em 70\% / 30\%, 70\% é utilizada para treinamento e 30\% para a validação, mesma divisão adotada por \cite{yao-2018} e \cite{cambronero-deep-learning-code-search:2019}. Tanto o critério de seleção do modelo e duração do treinamento quanto critério de parada, foram adotados os mesmos procedimentos de \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}. Com relação a função objetivo, utilizamos a função de perda \textit{hinge} comumente utilizada na área de recuperação de informação e classificação de documentos e que esteve presente também na recuperação de trecho de código-fonte nos trabalhos de \cite{Gu-deep-code-search:2018} e \cite{cambronero-deep-learning-code-search:2019}.
 
 
 \begin{table}[h]
@@ -237,47 +238,31 @@ Para realizar a etapa de treinamento, algumas decisões foram tomadas. Listamos 
 \hline
 \textbf{Item} & \textbf{Decisão} \\
 \hline
- Divisão da amostra de treinamento e validação & Utilizamos o conjunto $N_{2}$ composto por $60.083$ pares de questões e trechos de código-fonte. Durante o treinamento, do total de $60.083$ amostras, $42.058$ foram utilizadas para o conjunto de treinamento e $18.025$ para o conjunto de validação\\
+ Divisão da amostra de treinamento e validação & Utilizamos o conjunto $N_{2}$ composto por $60.083$ pares de questões e trechos de código-fonte. Durante o treinamento $42.058$ foram utilizadas para o conjunto de treinamento e $18.025$ para o conjunto de validação.\\
 
 
 \hline
  
-Duração do treinamento e critério de parada & O modelo é treinado durante 500 épocas. Caso o valor da função de perda \textit{hinge} na amostra de treinamento fique abaixo de $0,0001$ ou o valor da função de perda na amostra de validação não diminua após 25 épocas consecutivas, o treinamento é interrompido\\
+Duração do treinamento e critério de parada & O modelo é treinado durante 500 épocas. Caso o valor da função de perda \textit{hinge} na amostra de treinamento fique abaixo de $0,0001$ ou o valor da função de perda na amostra de validação não diminua após 25 épocas consecutivas, o treinamento é interrompido.\\
 
  \hline
-Critério de seleção do modelo & \gls{one-hot-encoding} para questão e código-fonte \\
- 
- & Combinou os vetores usando \acrshort{lstm} com \gls{mecanismo-atencao}\\
+Critério de seleção do modelo & A cada época o modelo é avaliado em uma amostra anotada manualmente. O modelo que obtitver a maior média MRR é selecionado. Mais detalhes sobre o procedimento de critério de seleção pode ser visualizado na Seção~\ref{sec:criterio-selecao-modelo-treinamento}.\\
  
  \hline
  
- \multirow{2}{8em}{\cite{Gu-deep-code-search:2018}} & \textit{word2vec} para questão e código-fonte\\
+ Função objetivo & Adotamos a função de perda \textit{hinge} como função objetivo do nosso modelo. \\
  
- & Combinou os vetores usando uma rede bi-\acrshort{lstm}\\
- 
- \hline
- 
- \multirow{2}{8em}{\citep{Sachdev-neural-code-search:2018}} & \textit{word2vec} para código-fonte e questão\\
- 
- & Combinou os vetores de \textit{tokens} da questão usando a média / Combinou os vetores do código-fonte através do \acrshort{tf-idf} \\
- 
- \hline
- 
- \multirow{2}{8em}{\cite{cambronero-deep-learning-code-search:2019}} & \textit{word2vec} para questões e código-fonte \\
- 
- & Combinou os vetores de cada palavra da questão calculando a média / Combinou os vetores do código-fonte usando o \gls{mecanismo-atencao}\\
- 
- \hline
+  \hline
  
 \end{tabular}
-\caption{Sumário das diferentes abordagens adotadas pelos pesquisadores para o problema do \textit{code retrieval}. Tabela adaptada de \cite{cambronero-deep-learning-code-search:2019}}
+\caption{Sumário dos principais itens pelos quais tomamos decisão durante a etapa de treinamento.}
 \label{table:training-decisions}
 \end{table}
 
+\subsection{Critério de seleção do modelo}
+\label{sec:criterio-selecao-modelo-treinamento}
 
-Adotamos o mesmo procedimento de treinamento proposto por \cite{iyer-etal-2016-summarizing}.  Para escolha do modelo e avaliação final, foi utilizado o conjunto $N_{3}$ de dados anotados manualmente. A divisão das amostras para treinamento e avaliação podem ser visualizadas na Tabela~\ref{table:divisao-amostras}. 
-
-O procedimento de treinamento utilizado foi: . A cada época, o modelo é avaliado na amostra \emph{DEV}. O intuito desta avaliação é obter o melhor modelo conforme a métrica \acrshort{mrr}. A ilustração deste procedimento pode ser visualizado na Figura~\ref{fig:evaluation-process}.
+Conforme citado anteriormente, adotamos o mesmo procedimento de critério de seleção do modelo proposto por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}. O modelo é treinado durante 500 épocas e a cada época o modelo é avaliado na amostra \emph{DEV}. O intuito desta avaliação é obter o melhor modelo conforme a métrica \acrshort{mrr}. Um outro critério de seleção do modelo comumente utilizado é selecionar o modelo com o menor erro na amostra de validação. Porém, conforme os resultados apontados pelos experimentos que fizemos (ver Seção~\ref{sec:ape-criterio-de-selecao-do-modelo-experimento} no Apêndice), não houve diferença significativa no desempenho dos modelos com relação ao critério de seleção. Ao final, optamos por manter o mesmo critério de seleção adotados por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}. A ilustração deste procedimento de critério de seleção pode ser visualizado na Figura~\ref{fig:evaluation-process}.
 
 \begin{figure}[p]
 \centering
@@ -286,7 +271,10 @@ O procedimento de treinamento utilizado foi: . A cada época, o modelo é avalia
 \label{fig:evaluation-process}
 \end{figure}
 
-Para cada par $<q_{i}, c_{i}^{+}>$ da amostra \emph{DEV}, onde $q_{i}$ uma questão e $c_{i}^{+}$ uma questão anotada como correta. Outros 49 distratores $c'$ são selecionados aleatoriamente da amostra de treinamento, tal que $c_{i}^{+} \neq c'$. Para cada questão, o modelo calcula a similaridade entre a questão e os trechos de código-fonte. O cálculo de similaridade é feito através da função $h_{\theta}$, onde $h_{\theta}$ é a função \textit{cosine}. 
+Conforme a Figura~\ref{fig:evaluation-process}, a cada época um modelo candidato é avaliado quanto a média MRR. Esta média MRR é calculada na amostra DEV, onde todos os pares $<q_{i}, c_{i}^{+}>$ da amostra, sendo $q_{i}$ uma questão e $c_{i}^{+}$ uma questão anotada como correta, são avaliados juntos com outros 49 distratores $c'$, que são selecionados aleatoriamente da amostra de treinamento, tal que $c_{i}^{+} \neq c'$. 
+
+
+Para cada questão, o modelo calcula a similaridade entre a questão e os trechos de código-fonte. O cálculo de similaridade é feito através da função $h_{\theta}$, onde $h_{\theta}$ é a função \textit{cosine}. 
 
 Posteriormente, os trechos de código-fonte são ordenados de forma decrescente, do mais similar (maior pontuação) ao menos similar (menor pontuação). Com os trechos ordenados, obtém-se a posição do trecho $c_{i}^{+}$ para cálculo do \textit{reciprocal rank}. \textit{Reciprocal rank} é o inverso da posição da primeira ocorrência de $c_{i}^{+}$ encontrada no resultado. Com o \textit{reciprocal rank}, calcula-se o \acrshort{mrr}. \acrshort{mrr} é a média do \textit{reciprocal rank} para a amostra inteira \citep{Gu-deep-code-search:2018}:
 
