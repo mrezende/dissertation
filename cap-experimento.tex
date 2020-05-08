@@ -262,7 +262,7 @@ Critério de seleção do modelo & A cada época o modelo é avaliado em uma amo
 \subsection{Critério de seleção do modelo}
 \label{sec:criterio-selecao-modelo-treinamento}
 
-Conforme citado anteriormente, adotamos o mesmo procedimento de critério de seleção do modelo proposto por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}. O modelo é treinado durante 500 épocas e a cada época o modelo é avaliado na amostra \emph{DEV}. O intuito desta avaliação é obter o melhor modelo conforme a métrica \acrshort{mrr}. Um outro critério de seleção do modelo comumente utilizado é selecionar o modelo com o menor erro na amostra de validação. Porém, conforme os resultados apontados pelos experimentos que fizemos (ver Seção~\ref{sec:ape-criterio-de-selecao-do-modelo-experimento} no Apêndice), não houve diferença significativa no desempenho dos modelos com relação ao critério de seleção. Ao final, optamos por manter o mesmo critério de seleção adotados por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}. A ilustração deste procedimento de critério de seleção pode ser visualizado na Figura~\ref{fig:evaluation-process}.
+Conforme citado anteriormente, adotamos o mesmo procedimento de critério de seleção do modelo proposto por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}. O modelo é treinado durante 500 épocas e a cada época o modelo é avaliado na amostra \emph{DEV}. O intuito desta avaliação é obter o melhor modelo conforme a métrica \acrshort{mrr}. Um outro critério de seleção do modelo comumente utilizado é selecionar o modelo com o menor erro na amostra de validação. Porém, conforme os resultados apontados pelos nossos experimentos (ver Seção~\ref{sec:ape-criterio-de-selecao-do-modelo-experimento} no Apêndice), não houve diferença significativa no desempenho dos modelos com relação ao critério de seleção. Ao final, optamos por manter o mesmo critério de seleção adotados por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}. A ilustração deste procedimento de critério de seleção pode ser visualizado na Figura~\ref{fig:evaluation-process}.
 
 \begin{figure}[p]
 \centering
@@ -271,20 +271,13 @@ Conforme citado anteriormente, adotamos o mesmo procedimento de critério de sel
 \label{fig:evaluation-process}
 \end{figure}
 
-Conforme a Figura~\ref{fig:evaluation-process}, a cada época um modelo candidato é avaliado quanto a média MRR. Esta média MRR é calculada na amostra DEV, onde todos os pares $<q_{i}, c_{i}^{+}>$ da amostra, sendo $q_{i}$ uma questão e $c_{i}^{+}$ uma questão anotada como correta, são avaliados juntos com outros 49 distratores $c'$, que são selecionados aleatoriamente da amostra de treinamento, tal que $c_{i}^{+} \neq c'$. 
-
-
-Para cada questão, o modelo calcula a similaridade entre a questão e os trechos de código-fonte. O cálculo de similaridade é feito através da função $h_{\theta}$, onde $h_{\theta}$ é a função \textit{cosine}. 
-
-Posteriormente, os trechos de código-fonte são ordenados de forma decrescente, do mais similar (maior pontuação) ao menos similar (menor pontuação). Com os trechos ordenados, obtém-se a posição do trecho $c_{i}^{+}$ para cálculo do \textit{reciprocal rank}. \textit{Reciprocal rank} é o inverso da posição da primeira ocorrência de $c_{i}^{+}$ encontrada no resultado. Com o \textit{reciprocal rank}, calcula-se o \acrshort{mrr}. \acrshort{mrr} é a média do \textit{reciprocal rank} para a amostra inteira \citep{Gu-deep-code-search:2018}:
+De acordo com a Figura~\ref{fig:evaluation-process}, a cada época um modelo candidato é avaliado quanto a média MRR. Para calcular a média MRR, calculamos inicialmente a distância de similaridade entre cada questão da amostra DEV e 50 trechos de código-fonte, onde 1 trecho de código-fonte é a resposta anotada como correta e 49 são trechos de código distratores selecionados aleatoriamente da amostra de treinamento.  Posteriormente, os trechos de código-fonte são ordenados de forma decrescente, do mais similar (maior pontuação) ao menos similar (menor pontuação). Com os trechos ordenados, verificamos qual é a posição do trecho anotado como correto para cálculo do \textit{reciprocal rank}, pois \textit{reciprocal rank} é o inverso da primeira posição encontrada para o trecho anotado como correto. Com o \textit{reciprocal rank}, podemos calcular, finalmente, o \acrshort{mrr}, que é a média do \textit{reciprocal rank} para a amostra inteira \citep{Gu-deep-code-search:2018}:
 
 \begin{equation}\label{eq:mrr}
 MRR = \frac{1}{n} * \sum_{i = 1}^{n}\frac{1}{p_{i}^{+}}    
 \end{equation}
 
-Onde $n$ é a quantidade de questões presentes na amostra, $p_{i}^{+}$ é a posição da primeira ocorrência do trecho $c_{i}^{+}$ entre os trechos ordenados. 
-
-Este procedimento é repetido durante 20 iterações. A cada iteração, outros 49 distratores são selecionados e, ao final, obtém-se a média \emph{MRR} do modelo. Basicamente, a cada época verificamos o resultado MRR do modelo comparando a resposta anotada como correta com outros 49 distratores. E selecionamos o modelo que obtiver a melhor média MRR. Este modelo escolhido será utilizado na avaliação final.
+Onde $n$ é a quantidade de questões presentes na amostra, $p_{i}^{+}$ é a posição da primeira ocorrência do trecho anotado como correto entre os trechos ordenados. Este procedimento é repetido durante 20 iterações. A cada iteração, outros 49 distratores são selecionados e, ao final, obtém-se a média \emph{MRR} do modelo. Basicamente, a cada época verificamos o resultado MRR do modelo comparando a resposta anotada como correta com outros 49 distratores. E selecionamos o modelo que obtiver a melhor média MRR. Este modelo escolhido será utilizado na avaliação final.
 
 
 
