@@ -15,43 +15,14 @@ Pesquisadores do Facebook \citep{cambronero-deep-learning-code-search:2019} tamb
 
 No caso do \Gls{sof}, os usuários expressam suas perguntas em linguagem natural e outros usuários podem responder com trechos de código-fonte. Além disso, o próprio usuário que fez a pergunta, pode apontar qual é a resposta correta. E outros usuários podem votar na resposta que eles acharam mais relevante ou indicar se uma resposta está incorreta, pontuando negativamente a mesma. Essas ações coletivas feitas pelos usuários ajudam na curadoria e organização da informação, facilitando a busca por informações relevantes \citep{Wang-quora:2013, cambronero-deep-learning-code-search:2019}. 
 
-Atualmente diversas conquistas foram obtidas na área de inteligência artificial através do uso das redes neurais artificiais. As redes neurais artificiais mostraram-se capazes de reconhecer voz e imagem, fazer diagnósticos médicos e traduções com desempenho, muitas vezes, equiparável ao do ser humano. Este avanço refletiu também nos trabalhos sobre recuperação de trecho de código-fonte. Os primeiros trabalhos para criar uma busca semântica de trecho de código-fonte baseavam-se em sistemas baseados em regras e características extraídas manualmente do código-fonte. O recente sucesso das redes neurais artificiais em diversas tarefas \acrfull{nlp}, processamento de linguagem natural, como sumarização, tradução e resposta automática a perguntas fez com que os trabalhos migrassem de ferramentas baseadas em regras lógico-dedutivas e extração manual de caractéristicas para ferramentas baseadas em aprendizagem de máquina utilizando redes neurais artificiais. Segundo \cite{cambronero-deep-learning-code-search:2019}, a maioria dos trabalhos feitos na academia e indústria atualmente em direção a uma busca mais avançada de código-fonte utilizaram redes neurais artificiais \citep{Gu-deep-code-search:2018, yao-2018, iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015, Chen-bi-variational-autoencoder:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019}. \cite{cambronero-deep-learning-code-search:2019} cunharam o termo \textit{neural code search}, i.e., busca de código-fonte através do uso de redes neurais artificiais.
+Atualmente diversas conquistas foram obtidas na área de inteligência artificial através do uso das redes neurais artificiais. As redes neurais artificiais mostraram-se capazes de reconhecer voz e imagem, fazer diagnósticos médicos e traduções com desempenho, muitas vezes, equiparável ao do ser humano. Este avanço refletiu também nos trabalhos sobre recuperação de trecho de código-fonte. Os primeiros trabalhos para criar uma busca semântica de trecho de código-fonte baseavam-se em sistemas baseados em regras e características extraídas manualmente do código-fonte. O sucesso das redes neurais artificiais fez com que os trabalhos migrassem de ferramentas baseadas em regras lógico-dedutivas e extração manual de caractéristicas para ferramentas baseadas em aprendizagem de máquina utilizando redes neurais artificiais. Segundo \cite{cambronero-deep-learning-code-search:2019}, a maioria dos trabalhos feitos na academia e indústria atualmente em direção a uma busca mais avançada de código-fonte utilizaram redes neurais artificiais \citep{Gu-deep-code-search:2018, yao-2018, iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015, Chen-bi-variational-autoencoder:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019}. \cite{cambronero-deep-learning-code-search:2019} cunharam o termo \textit{neural code search}, i.e., busca de código-fonte através do uso de redes neurais artificiais.
 
 
-
-Os avanços na área de recuperação de trecho de código-fonte caminharam juntos com os avanços na área de processamento de linguagem natural, \acrfull{nlp}. Porém, boa parte dos trabalhos ....
-
-
-O sucesso das redes neurais artificiais em diversas tarefas \acrshort{nlp} como tradução, sumarização e resposta automática a perguntas  extração manual 
+A maioria dos trabalhos utilizaram redes neurais artificiais para sumarizar e recuperar trechos de código-fonte \citep{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015, Chen-bi-variational-autoencoder:2018}. Apesar de uma mesma arquitetura de rede neural mostrar-se 
+útil em diversas tarefas \acrshort{nlp}, sumarização e recuperação automática de código-fonte são duas tarefas distintas, cada uma com suas peculiaridades, desafios e métricas de avaliação de desempenho \citep{allahyari-text-summarization-2017}. O nosso trabalho avalia uma proposta de arquitetura de redes neurais artificiais apenas para a tarefa de recuperação de trechos de código-fonte. E diferente do trabalho de \cite{Gu-deep-code-search:2018} que propôs uma arquitetura com redes neurais recorrentes e do trabalho de \cite{cambronero-deep-learning-code-search:2019} que utilizou redes neurais com mecanismo de atenção, nós utilizamos uma arquitetura composta por redes neurais convolucionais, que apresentaram um bom desempenho em tarefas de seleção de resposta em \acrshort{nlp} \citep{feng-2015, tan-lstm-qa, wen-joint-modeling-question-answer-2019}.
 
 
-
-Os primeiros trabalhos sobre recuperação de trecho de código-fonte utilizavam n-grams, faziam extração manual dos trechos de código-fonte e calculavam a similaridade A adoção das redes neurais artificiais na criação de uma busca semântica de trecho de código-fonte deve-se principalmente a 
-O sucesso recente das redes neurais artificiais devem-se, principalmente, a dois fatores: era do ''\textit{Big Data}'' e recurso computacional. Era do ''\textit{Big Data}'' disponibilizou o acesso a uma grande quantidade de informações através da internet e essas informações podem ser utilizadas como entrada de dados para treinamento das redes neurais artificiais. O primeiro programa de computador a ganhar de um campeão mundial no jogo de tabuleiro \textit{Go}, treinou com 30 milhões de movimentos de especialistas para adivinhar com uma maior precisão o movimento do adversário \citep{silver-mastering-the-game-go:2016}. 
-
-permitiu que os pesquisadores utilizassem esta massa de informação como entrada de dados para as suas redes neurais, permitindo por exemplo  treinar as redes neurais artificiais em uma grande quantidade
-
-
-em tarefas comumente realizadas pelo ser humano como tradução, reconhecimento de voz e imagem e diagnóstico médico, por exemplo. Dois fatores contribuíram para o avanço dessa área: era do Big Data e recurso computacional.
-
-
-, i.e., disponibilidade de acesso a grande quantidade de informações atualmente
-
-
- Um ponto em comum na maioria destes trabalhos é o uso de redes neurais artificiais para associar os trechos de código-fonte às suas descrições em linguagem natural. 
-
-
-
-
-
-A principal abordagem utilizada nestes trabalhos é encontrar um \gls{modelo} que seja capaz de correlacionar os trechos de código as intenções do usuário. Uma técnica comumente utilizada é a \textit{joint embedding} ou agrupamento de representações distribuídas. Esta técnica mapeia dados de diferentes distribuições, modalidades para um mesmo espaço vetorial, de tal forma que conceitos similares ocupem regiões próximas neste espaço. Técnica bastante utilizada para associar textos e imagens, traduções e até mesmo problema de perguntas e respostas e recomendações \citep{lai-etal-2018-review, Zhang:2019:deep-learning-recommender-survey}.
-
-A representação dos dados heterogêneos na técnica joint embedding tem um papel importante. Uma boa representação deve ser capaz de auxiliar na aprendizagem de uma tarefa
-posterior \citep{Goodfellow-et-al-2016:representation-learning}. No nosso caso, uma boa representação das intenções e dos trechos de código-fonte deve ser capaz de ajudar a encontrar um modelo que seja capaz de correcioná-los. Além disso, uma boa representação pode ser útil para dados que seguem uma outra distribuição. Uma representação de trechos de código-fonte que foram coletadas de um site de dúvidas de programação podem ser utilizadas para encontrar trechos de código-fonte similares em repositórios de código aberto.
-
-A proposta deste trabalho é verificar o uso das redes convolucionais na aprendizagem de representação. Dado que as redes convolucionais apresentaram um bom desempenho em diversos problema NLP, atingindo resultados competitivos em relação a outras arquiteturas como RNN \citep{tom-young:trends-deep-learning-nlp}, queremos avaliá-las na recuperação de trecho de código-fonte. Mais especificamente, pretendemos avaliar se elas auxiliam na obtenção de um modelo capaz de correlacionar os trechos de código-fonte as intenções do desenvolvedor. 
-
-Um ponto importante a ressaltar é que ao optarmos por uma arquitetura CNN, estamos levando em consideração as suas características e limitações inerentes. Enquanto o RNN é capaz de fazer associações entre palavras muito distantes em um texto, o CNN prioriza interações locais. Ele tem dificuldades para extrair dependências de palavras muito distantes. E outro ponto é que o CNN é sensível a permutação, ele não é capaz de memorizar a localização exata de uma palavra em um texto \citep{Goodfellow-et-al-2016:convolutional-networks, tom-young:trends-deep-learning-nlp}.
+Um ponto importante a ser ressaltado é o fato de termos utilizado uma arquitetura comumente utilizada na tarefa de seleção de respostas em \acrshort{nlp} na recuperação de trechos de código-fonte. A seleção de respostas em NLP consiste em recuperar a resposta mais relevante de um conjunto de possíveis respostas a partir de uma questão. Tanto as respostas quanto as questões estão expressas em linguagem natural. Enquanto na recuperação de trecho de código-fonte, somente a intenção de busca está expressa em linguagem natural.  
 
 A partir destas considerações, as perguntas que este trabalho pretende responder são:
 
@@ -80,7 +51,7 @@ O foco deste trabalho é a recuperação de trecho de código-fonte. Diferenteme
 \section{Objetivos}
 \label{sec:objetivo}
 
-O objetivo principal deste trabalho é propor uma nova abordagem para a recuperação de trecho de código-fonte. Queremos avaliar se o uso de redes convolucionais auxiliam na obtenção de um modelo que seja capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor. 
+O objetivo principal deste trabalho é propor uma nova arquitetura para a recuperação de trecho de código-fonte. Queremos avaliar se o uso de redes convolucionais auxiliam na obtenção de um modelo que seja capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor. 
 
 %% ------------------------------------------------------------------------- %%
 \section{Contribuições}
