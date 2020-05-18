@@ -13,34 +13,21 @@ seja capaz de recuperar um trecho de código-fonte relevante a partir dos termos
 
 Pesquisadores do Facebook \citep{cambronero-deep-learning-code-search:2019} também verificaram este problema e constataram que comentários \gls{docstring} não conseguem extrair a semântica do código-fonte de forma a atender às intenções do usuário em uma busca. Esses autores verificaram que as intenções dos usuários foram melhor expressas através de questões extraídas de comunidades abertas de perguntas e respostas, como o \gls{sof}. No caso do \Gls{sof}, os usuários expressam suas perguntas em linguagem natural e outros usuários podem responder com trechos de código-fonte. O usuário que fez a pergunta pode indicar qual é a resposta correta, enquanto outros usuários podem votar na resposta mais relevante ou eleger uma resposta incorreta, pontuando negativamente a mesma. Essas ações coletivas feitas pelos usuários ajudam na curadoria e organização da informação, facilitando a busca por informações relevantes \citep{Wang-quora:2013, cambronero-deep-learning-code-search:2019}. 
 
+A ação coletiva dos usuários na coleta, curadoria e organização de informação permitiu a criação de sites como o Wikipedia ou Quora, que são importantes fontes de conhecimento. Esse conhecimento coletivo e a grande quantidade de informação à disposição, permitiu o avanço da área de inteligência artificial, mais especificamente do avanço atual das redes neurais artificiais. Segundo \cite{Goodfellow-et-al-2016}, dois fatores foram cruciais para o grande sucesso das redes neurais artificiais hoje quando comparado ao pequeno sucesso da década de 80: disponibilidade de recurso computacional e a grande quantidade de informação disponível. Hoje é possível treinar modelos com milhares de parâmetros em uma amostra de milhões de imagens utilizando GPUs disponíveis gratuitamente online. A GPU permite realizar operações numéricas em paralelo de forma massiva e tem uma largura de banda de memória muito maior que o CPU, tornando-se ideal para as redes neurais artificiais \citep{Goodfellow-et-al-2016}.
+
 Atualmente diversas conquistas foram obtidas na área de inteligência artificial através do uso das redes neurais artificiais. As redes neurais artificiais mostraram-se capazes de reconhecer voz e imagem, fazer diagnósticos médicos e traduções com desempenho, muitas vezes, equiparável ao do ser humano. Este avanço refletiu também nos trabalhos sobre recuperação de trechos de código-fonte. Os primeiros trabalhos de busca semântica de código-fonte utilizavam ferramentas baseadas em regras lógico-dedutivas e extração manual de caractéristicas do código-fonte. Com o sucesso das redes neurais artificiais, os trabalhos migraram para ferramentas baseadas em aprendizagem de máquina utilizando redes neurais \citep{Gu-deep-code-search:2018, yao-2018, iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015, Chen-bi-variational-autoencoder:2018, Sachdev-neural-code-search:2018, cambronero-deep-learning-code-search:2019}. \cite{cambronero-deep-learning-code-search:2019} cunharam o termo \textit{neural code search}, i.e., busca de código-fonte através do uso de redes neurais artificiais.
 
 
 A maioria dos trabalhos aplicaram redes neurais artificiais para sumarizar e recuperar trechos de código-fonte \citep{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015, Chen-bi-variational-autoencoder:2018}. Apesar de uma mesma arquitetura de rede neural mostrar-se 
 útil em diversas tarefas \acrshort{nlp}, sumarização e recuperação automática de código-fonte são duas tarefas distintas, cada uma com suas peculiaridades, desafios e métricas de avaliação de desempenho \citep{allahyari-text-summarization-2017}. Segundo \cite{Allamanis-bimodal-source-code-natural-language:2015}, as redes neurais apresentaram uma maior dificuldade na tarefa de recuperação de trecho de código-fonte quando comparada à sumarização. De acordo com os pesquisadores, as redes neurais tiveram dificuldades em notar as sutis diferenças entre os trechos de código-fonte no momento de discriminar os trechos relevantes dos não-relevantes. 
 
-O nosso trabalho avalia uma proposta de arquitetura de redes neurais artificiais apenas para a tarefa de recuperação de trechos de código-fonte. E diferente do trabalho de \cite{Gu-deep-code-search:2018} que propôs uma arquitetura com redes neurais recorrentes e do trabalho de \cite{cambronero-deep-learning-code-search:2019} que utilizou redes neurais com mecanismo de atenção, nós aplicamos uma arquitetura composta por redes neurais convolucionais, que apresentaram um bom desempenho em tarefas de seleção de resposta em \acrshort{nlp} \citep{feng-2015, tan-lstm-qa, wen-joint-modeling-question-answer-2019}. E diferente dos trabalhos de \cite{Gu-deep-code-search:2018} e \cite{cambronero-deep-learning-code-search:2019}, que associaram trechos de código a comentários \gls{docstring}, o nosso trabalho utilizou os dados disponibilizados por \cite{yao-2018}, que consiste em questões e trechos de código-fonte extraídas do \Gls{sof}.
+O nosso trabalho propõe uma nova abordagem de arquitetura de redes neurais artificiais apenas para a tarefa de recuperação de trechos de código-fonte. E diferente do trabalho de \cite{Gu-deep-code-search:2018} que propuseram uma arquitetura com redes neurais recorrentes e do trabalho de \cite{cambronero-deep-learning-code-search:2019} que utilizou redes neurais com mecanismo de atenção, a nossa abordagem é baseada em redes neurais convolucionais, que apresentaram um bom desempenho em tarefas de seleção de resposta em \acrshort{nlp} \citep{feng-2015, tan-lstm-qa, wen-joint-modeling-question-answer-2019}. E diferente dos trabalhos de \cite{Gu-deep-code-search:2018} e \cite{cambronero-deep-learning-code-search:2019}, que associaram trechos de código a comentários \gls{docstring}, o nosso trabalho utilizou os dados disponibilizados por \cite{yao-2018}, que consiste em questões e trechos de código-fonte extraídas do \Gls{sof}.
 
 %% ------------------------------------------------------------------------- %%
 \section{Objetivos}
 \label{sec:objetivo}
 
-O objetivo principal deste trabalho é propor uma nova arquitetura para a recuperação de trecho de código-fonte. Queremos avaliar se o uso de redes convolucionais auxiliam na obtenção de um modelo que seja capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor. 
-
-As perguntas que este trabalho pretende responder são:
-
-\begin{itemize}
-    \item Aprendizagem de representação através de uma arquitetura CNN auxilia na recuperação de trecho de código-fonte?
-    
-    \item Será que o CNN é capaz de extrair as características latentes e mais importantes de modo a facilitar o modelo a encontrar uma correlação entre os trechos de código-fonte e as intenções expressas em linguagem natural?
-\end{itemize}
-
-Indiretamente, dado que o CNN prioriza interações locais, estaremos respondendo também a seguinte pergunta:
-\begin{itemize}
-        \item As interações locais auxiliam na aproximação das intenções aos trechos de código-fonte?
-\end{itemize}
-
-Para respondê-las, avaliaremos um modelo que busca aproximar as intenções aos trechos de código-fonte. Para isto, o modelo vai ser estimulado a aproximar as suas representações. Estas representações serão obtidas a partir da nossa arquitetura CNN. A avaliação final do modelo será feita em um conjunto de dados composto por pares de questões e trechos de código-fonte coletados do site Stack Overflow. 
+O objetivo principal deste trabalho é propor uma nova abordagem  para a recuperação de trecho de código-fonte. Avaliamos a eficácia das redes neurais convolucionais na tarefa de discriminar os trechos de código-fonte relevantes dos não-relevantes a partir de uma questão. Para isto, comparamos a nossa arquitetura com outras duas arquiteturas de referência: uma arquitetura de rede neural mais simples que serve como base de comparação e a arquitetura proposta por \cite{cambronero-deep-learning-code-search:2019}, que utiliza o mecanismo de atenção e é o estado da arte atualmente na recuperação de trechos de código-fonte. Os experimentos foram realizados utilizando uma nova base de dados disponibilizada por \cite{yao-2018}, composta por questões e trechos de código-fonte em Python e SQL coletadas do site StackOverflow. No nosso trabalho, utilizamos apenas as questões e trechos de código-fonte em Python.
 
 %% ------------------------------------------------------------------------- %%
 \section{Contribuições}
@@ -49,9 +36,9 @@ Para respondê-las, avaliaremos um modelo que busca aproximar as intenções aos
 Dentre as contribuições deste trabalho estão:
 
 \begin{itemize}
-\item Proposta de uma nova abordagem para uma busca semântica de código-fonte;
-\item Avaliação de uma nova arquitetura;
-\item Avaliação do modelo utilizando uma nova base de dados disponibilizada por \cite{yao-2018};
+\item Proposta de uma nova abordagem utilizando redes neurais convolucionais na tarefa de recuperação de trechos de código-fonte;
+\item Avaliação da eficácia do desempenho da nova arquitetura com relação a outras duas arquiteturas de referência;
+\item Realização dos experimentos utilizando uma nova base de dados disponibilizada por \cite{yao-2018};
 \item Disponibilização do código-fonte, desde o pré-processamento até a avaliação final, em um repositório público;
 \end{itemize}
 
@@ -59,4 +46,4 @@ Dentre as contribuições deste trabalho estão:
 \section{Organização do Trabalho}
 \label{sec:organizacao_trabalho}
 
-No Capítulo~\ref{cap:fundamentacao-teorica}, apresentamos os conceitos e trabalhos relacionados a recuperação de trecho de código-fonte. No Capítulo~\ref{cap:abordagem}, apresentamos a nossa abordagem para o item de pesquisa proposto. No Capítulo~\ref{cap:experimento}, exibimos os resultados da arquitetura proposta utilizando os dados de \cite{yao-2018}. Já no Capítulo~\ref{cap:conclusoes}, apresentamos as nossas conclusões e os próximos passos para trabalhos futuros.
+No Capítulo~\ref{cap:fundamentacao-teorica}, apresentamos os conceitos e trabalhos relacionados à recuperação de trecho de código-fonte. No Capítulo~\ref{cap:abordagem}, apresentamos a nossa abordagem para o item de pesquisa proposto. No Capítulo~\ref{cap:experimento}, detalhamos o conjunto de dados e os procedimentos utilizados para treinamento e avaliação das redes neurais artificiais. Os resultados dos experimentos foram exibidos e discutidos no Capítulo~\ref{cap:resultados}. Expomos as nossas conclusões e observações acerca de trabalhos futuros no Capítulo~\ref{cap:conclusoes}.
