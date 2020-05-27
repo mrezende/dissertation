@@ -6,14 +6,9 @@ De acordo com \cite{Chen-bi-variational-autoencoder:2018}, a tarefa de recupera�
 
 \emph{Recuperar um trecho de código-fonte relevante para atender a necessidade do usuário, descrita em linguagem natural.}
 
-Diversos trabalhos foram feitos para a criação de uma busca semântica de trechos de código-fonte. Segundo \cite{yan-benchmark-code-search-information-retrieval-deep-learning:2020}, as duas estratégias comumente utilizadas são:
+Diversos trabalhos foram feitos para a criação de uma busca semântica de trechos de código-fonte. Os primeiros trabalhos utilizavam ferramentas baseadas em regras lógico-dedutivas e extração manual de características. As ferramentas baseadas em regras lógico-dedutivas, e.g., o modelo booleano, recuperam informações com base na correspondência exata entre as palavras-chaves e os termos presentes nos trechos de código-fonte. Segundo \cite{yan-benchmark-code-search-information-retrieval-deep-learning:2020}, a correspondência exata dos termos é útil para encontrar informações relativas a erros ou chamadas de \textit{API}, porém é incapaz de recuperar informações relativas a reuso de código ou exemplos de uma biblioteca de programação, onde não há uma correspondência exata entre as palavras-chaves, havendo a necessidade de inferir a semântica do trecho de código-fonte.
 
-\begin{itemize}
-    \item Fuzzy retrieval. Será??
-\end{itemize}
-
-
-
+A maior parte dos trabalhos atuais sobre recuperação de trecho de código-fonte passaram a utilizar aprendizagem de máquina com redes neurais artificiais. Tanto que \cite{cambronero-deep-learning-code-search:2019} cunharam o termo \textit{neural code search}, i.e., busca de código-fonte utilizando redes neurais artificiais. A principal abordagem utilizada nesses trabalhos é ensinar a rede neural a discriminar os trechos de código-fonte relevantes dos não relevantes a partir de uma intenção de busca. Para isso, as redes neurais aprendem a classificar os trechos de código-fonte relevantes com uma pontuação maior que os não-relevantes. Para realizar esta classificação, os trabalhos utilizam a técnica de agrupamento de vetores de representação distribuída ou \textit{joint embedding}.  
 
 
 
