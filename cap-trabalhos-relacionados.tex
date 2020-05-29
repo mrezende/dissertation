@@ -6,46 +6,32 @@ De acordo com \cite{Chen-bi-variational-autoencoder:2018}, o objetivo da tarefa 
 
 \emph{Recuperar um trecho de código-fonte relevante para atender a necessidade do usuário, descrita em linguagem natural.}
 
-Diversos trabalhos foram feitos para a criação de uma busca semântica de trechos de código-fonte. Os primeiros trabalhos utilizavam ferramentas baseadas em regras lógico-dedutivas e extração manual de características. As ferramentas baseadas em regras lógico-dedutivas, e.g., o modelo booleano, recuperam informações com base na correspondência exata entre as palavras-chaves e os termos presentes nos trechos de código-fonte. Segundo \cite{yan-benchmark-code-search-information-retrieval-deep-learning:2020}, a correspondência exata dos termos é útil para encontrar informações relativas a erros ou chamadas de \textit{API}, porém é incapaz de recuperar informações relativas a reuso de código ou exemplos de uma biblioteca de programação, onde não há uma correspondência exata entre as palavras-chaves, havendo a necessidade de inferir a semântica do trecho de código-fonte.
+Diversos trabalhos foram feitos para a criação de uma busca semântica de trechos de código-fonte. Os primeiros trabalhos utilizavam ferramentas baseadas em regras lógico-dedutivas e extração manual de características. As ferramentas baseadas em regras lógico-dedutivas, e.g., o modelo booleano, recuperam informações com base na correspondência exata entre as palavras-chaves e os termos presentes nos trechos de código-fonte. Segundo \cite{yan-benchmark-code-search-information-retrieval-deep-learning:2020}, a correspondência exata dos termos é útil para encontrar informações relativas a erros ou chamadas de \textit{API}, porém é incapaz de recuperar informações relativas a reuso de código ou exemplos de uma biblioteca de programação, onde não há uma correspondência exata entre as palavras-chaves. Nesse caso, há a necessidade de inferir a semântica para conseguir recuperar o trecho de código-fonte.
 
 A maior parte dos trabalhos atuais sobre recuperação de trecho de código-fonte passaram a utilizar ferramentas baseadas em aprendizagem de máquina com redes neurais artificiais. Tanto que \cite{cambronero-deep-learning-code-search:2019} cunharam o termo \textit{neural code search}, i.e., busca de código-fonte utilizando redes neurais artificiais. A principal abordagem utilizada nesses trabalhos é ensinar a rede neural a discriminar os trechos de código-fonte relevantes dos não relevantes dado uma questão. Para realizar essa discriminação, os trabalhos utilizam a técnica de agrupamento de vetores de representação distribuída ou \textit{joint embedding}. A ilustração dessa técnica pode ser visualizada na Figura~\ref{fig:joint-embedding}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{figuras/cap-trabalhos-relacionados/joint_embedding.pdf}
-\caption{Ilustração do processo de treinamento e avaliação de uma rede neural. Figura adaptada do \cite{nndesign:2014:pratical-training-issues}.} 
+\caption{Ilustração da técnica \textit{joint embedding} baseada na figura de \cite{cambronero-deep-learning-code-search:2019}. Duas redes neurais mapeiam os dados de entrada para vetores contínuos. Esses vetores contínuos são agrupados em um mesmo espaço vetorial, de modo que os vetores das questões fiquem próximos aos vetores dos trechos de código-fonte anotados como corretos. A distância entre os vetores pode ser calculada através de uma função de similaridade, e.g., função cosseno ou \textit{cosine}. A rede neural funciona como um codificador ou \textit{encoder} na técnica \textit{joint embedding}, pois a rede neural mapeia os dados de entrada para um vetor contínuo ou \emph{vetor de representação distribuída} em um espaço vetorial de menor dimensão.} 
 \label{fig:joint-embedding}
 \end{figure}
 
-A rede neural mapeia os dados de entrada para um vetor contínuo ou \emph{vetor de representação distribuída} em um espaço vetorial de menor dimensão. De acordo com a Figura~\ref{fig:joint-embedding}, a técnica \textit{joint embedding} utiliza duas redes neurais, uma para mapear as questões para um vetor contínuo e a outra para mapear os trechos de código-fonte. Os vetores contínuos das questões e dos trechos de código-fonte são agrupados em um mesmo espaço vetorial de tal forma que os vetores das questões fiquem próximos dos vetores dos trechos de código-fonte que foram anotados como respostas. Daí vem o nome agrupamento de vetores contínuos ou agrupamento de vetores de representação distribuída, pois as redes neurais aprendem a aproximar os vetores contínuos de diferentes tipos de dados em um mesmo espaço vetorial. No nosso caso, estamos agrupando vetores que representam trechos de código-fonte com vetores de questões coletadas do \Gls{sof}, mas essa técnica permite agrupar dados de diferentes modalidades como imagem e texto, áudio e imagem etc. Basta ter um vetor de representação dos dados, no nosso caso, obtemos o vetor de representação através da rede neural, que funciona como codificador ou \textit{encoder}. A rede neural mapeia os dados para um vetor contínuo.
+ De acordo com a Figura~\ref{fig:joint-embedding}, a técnica \textit{joint embedding} utiliza duas redes neurais, uma para mapear as questões para um vetor contínuo e a outra para mapear os trechos de código-fonte. Os vetores contínuos das questões e dos trechos de código-fonte são agrupados em um mesmo espaço vetorial de tal forma que os vetores das questões fiquem próximos dos vetores dos trechos de código-fonte que foram anotados como respostas. Por isso o nome agrupamento de vetores contínuos ou agrupamento de vetores de representação distribuída, pois os vetores contínuos de diferentes tipos de dados são agrupados em um mesmo espaço vetorial. No nosso caso, estamos agrupando vetores que representam trechos de código-fonte com vetores de questões coletadas do \Gls{sof}, mas é possível agrupar vetores de imagens e texto ou áudio e imagens, por exemplo. 
 
-A 
+O vetor contínuo é um importante fator para a técnica \textit{joint embedding}, pois, um vetor que contenha as características latentes e mais importantes dos dados de entrada, auxiliará as redes neurais a aproximar os trechos de código-fonte às questões mais facilmente. Para realizar essa aproximação, três aspectos devem ser levados em consideração:
 
-Nesse caso, a rede neural irá aprender a aproximar as questões dos trechos de código-fonte anotados como corretos. 
+\begin{itemize}
+    \item Representação dos \textit{tokens} ou palavras
+    \item Representação das sentenças
+    \item Agrupamento dos vetores contínuos 
+\end{itemize}
 
-\section{Definição}\label{sec:code-retrieval-definicao}
+
+No primeiro item devemos definir como os \textit{tokens} ou palavras, que compõem as questões e os trechos de códigos-fontes, serão representadas. No segundo item, os vetores de representação de cada \textit{token} ou palavra serão combinados para obter um vetor contínuo final, que é o vetor de representação da questão ou trecho de código-fonte. Por último, devemos indicar à rede neural como fazer a associação entre eles.
 
 
-Para formalizarmos a tarefa de \textit{code retrieval}, adotaremos a mesma definição proposta por \cite{Allamanis-bimodal-source-code-natural-language:2015} e \cite{Yao-coacor:2019}:
-
-Seja $\mathbb{Q}$ um conjunto formado por questões e/ou intenções descritas em linguagem natural. Seja $\mathbb{C}_{a}$ um conjunto de trechos de códigos-fontes candidatos. Dado uma questão em linguagem natural $q \in \mathbb{Q}$, o objetivo do \textit{code retrieval} é recuperar os trechos de códigos $\mathbb{C}^{+} \subset \mathbb{C}_{a}$, onde $\mathbb{C}^{+}$ são as respostas relevantes a dada questão. Entendemos como relevantes as respostas que atendam as intenções dos usuários. Formalmente, para um corpus de treinamento composto por pares de questões e trechos de código-fonte, \textit{code retrieval} é definido como:
-
-\textbf{Code Retrieval}: Dada uma questão em linguagem natural $q \in \mathbb{Q}$, um modelo $F_{r}$ será treinado a recuperar os trechos $\mathbb{C}^{+} \subset \mathbb{C}_{a}$ com a maior pontuação:
-
-\begin{equation}\label{eq:code-retrieval}
-\mathbb{C}^{+} = \underset{c \in \mathbb{C}_{a}}{argmax}\text{ } F_{r}(q , c)
-\end{equation}
-
-\section{\textit{Joint Embeddings}}
-
-Segundo \cite{Goodfellow-et-al-2016}, um fator importante a ser levado em consideração é a forma como os dados são representados. Uma boa representação consegue identificar as características relevantes e os fatores causadores dos dados observados. Além disso, uma boa representação deve ser capaz de facilitar na aprendizagem de uma tarefa posterior.
-
-Dado que o nosso conjunto de dados é formado por pares de questões e trechos de código-fonte coletados do Stack Overflow. E cada questão e trecho de código-fonte é composto por uma sequência de palavras e símbolos.
-Uma boa representação para as palavras, que compõem eles, é um vetor de representação distribuída. Segundo \cite{Goodfellow-et-al-2016}, as redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída em comparação a um \gls{one-hot-encoding}. Representação distribuída induz a um rico espaço de similaridade, no qual conceitos semanticamente similares estão próximos, uma propriedade que não está presente em representações puramente simbólicas.
-
-A representação é um fator importante para a tarefa de \textit{code retrieval}. Pois com uma boa representação, um modelo de redes neurais será capaz de aproximar os trechos de código-fonte as intenções do desenvolvedor mais facilmente. Três aspectos devem ser levados em consideração ao fazer esta aproximação. O primeiro aspecto é a representação dos \textit{tokens} ou palavras que compõem as intenções e os trechos de códigos-fontes. O segundo é a obtenção de uma representação para as intenções e trechos de códigos. E por último, como fazer a associação entre eles.
-
-\subsection{\textit{Representação dos \textit{tokens} ou palavras}}
+\section{\textit{Representação dos \textit{tokens} ou palavras}}
 \label{sec:fundamentao-representacao-tokens-palavras}
 
 As questões e os trechos de códigos-fontes são compostas por um conjunto de palavras ou \textit{tokens}. E conforme citado anteriormente, uma boa representação para as palavras é um vetor de representação distribuída. No caso, o vetor de representação distribuída ou \textit{embedding} permite representar uma palavra através de um vetor com valores reais ($\mathbb{R}$). Podemos definir \textbf{embedding} como uma função $\mathbb{E}$ \citep{cambronero-deep-learning-code-search:2019}:
@@ -78,7 +64,7 @@ Neste caso, ao utilizar o \textit{skip-gram} do \textit{wordvec} para a palavra 
 O algoritmo \textit{skip-gram} mapeia as palavras que estão perto uma das outras em diferentes contextos para regiões próximas no espaço vetorial $\mathbb{R}^{d}$. Lembrando que estas palavras são representadas por vetores de valores reais ($\mathbb{R}$). Os vetores que estão próximos um dos outros são considerados similares. No caso da aplicação do \textit{word2vec} em trechos de código-fonte em Python, por exemplo, é possível verificar que a palavra \emph{if} tem como palavras similares \emph{elif} e \emph{else}. Ou no caso do exemplo anterior, a palavra \emph{file} terá como palavras similares \emph{mode}, \emph{as}, \emph{write}. Isto ocorre pois este conjunto de palavras costumam aparecer próximas umas das outras em diferentes trechos de código-fonte. Devido a isto, o \textit{skip-gram} vai mapear os vetores que representam estas palavras para regiões próximas no espaço vetorial $\mathbb{R}^{d}$.
 
 
-\subsection{\textit{Representação das sentenças e código-fonte}}
+\section{\textit{Representação das sentenças e código-fonte}}
 \label{sec:representacao-das-sentencas-fundamentacao-teorica}
 
 O vetor de representação distribuída de cada palavra pode ser combinada para gerar um vetor de representação distribuída para a sentença inteira, e.g., podemos ter um vetor de representação distribuída para a questão inteira, combinando os vetores de cada palavra que fazem parte da questão. De acordo com \cite{cambronero-deep-learning-code-search:2019}, duas possíveis abordagens podem ser utilizadas para combinar as palavras. Na primeira abordagem, podemos tratar o vetor de palavras como um \textit{bag}. Neste caso, a ordem das palavras não importa. Por exemplo, o vetor abaixo:
@@ -125,7 +111,7 @@ A arquitetura do LSTM tem três portas (porta de entrada $i$, porta \textit{forg
 O vetor \textit{hidden} $\bm{h}$ é apontado comumemente como a parte mais importante do \acrshort{lstm}. Pois ele engloba o resultado dos cálculos e, implicitamente, através da célula de mémoria $C$, os resultados prévios. Normalmente, ele é utilizado para representar os dados \citep{tom-young:trends-deep-learning-nlp}.
 No nosso caso, para representar uma questão ou trecho de código-fonte, podemos calcular a média dos vetores de resultado $\bm{h} = \{ \bm{h}_{1}, \bm{h}_{2}, . . ., \bm{h}_t \}$ após $t$ iterações, por exemplo.
 
-\subsection{Agrupamento de representações distribuídas}
+\section{Agrupamento de representações distribuídas}
 
 Com os vetores de representação das questões e trechos de código-fonte, o objetivo é encontrar um modelo que seja capaz de recuperar o trecho de código-fonte mais relevante para uma determinada questão. Uma abordagem comumente utilizada é mapear os vetores das questões e trechos de código-fonte para um mesmo espaço vetorial. E apróximá-los através de uma função objetivo, de tal maneira que as questões fiquem próximas dos trechos de código-fonte relevantes. 
 
