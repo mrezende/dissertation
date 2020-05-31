@@ -2,13 +2,15 @@
 \chapter{Fundamentação teórica}
 \label{cap:fundamentacao-teorica}
 
-De acordo com \cite{Chen-bi-variational-autoencoder:2018}, o objetivo da tarefa de recuperação de trecho de código-fonte é:
+De acordo com \cite{Chen-bi-variational-autoencoder:2018}, o objetivo da recuperação de trecho de código-fonte é:
 
 \emph{Recuperar um trecho de código-fonte relevante para atender a necessidade do usuário, descrita em linguagem natural.}
 
-Diversos trabalhos foram feitos para a criação de uma busca semântica de trechos de código-fonte. Os primeiros trabalhos utilizavam ferramentas baseadas em regras lógico-dedutivas e extração manual de características. As ferramentas baseadas em regras lógico-dedutivas, e.g., o modelo booleano, recuperam informações com base na correspondência exata entre as palavras-chaves e os termos presentes nos trechos de código-fonte. Segundo \cite{yan-benchmark-code-search-information-retrieval-deep-learning:2020}, a correspondência exata dos termos é útil para encontrar informações relativas a erros ou chamadas de \textit{API}, porém é incapaz de recuperar informações relativas a reuso de código ou exemplos de uma biblioteca de programação, onde não há uma correspondência exata entre as palavras-chaves. Nesse caso, há a necessidade de inferir a semântica para conseguir recuperar o trecho de código-fonte.
+Diversos trabalhos foram feitos com o intuito de sugerir uma forma de recuperar os trechos de código-fonte. Os primeiros trabalhos utilizavam ferramentas baseadas em regras lógico-dedutivas e extração manual de características. As ferramentas baseadas em regras lógico-dedutivas, e.g., o modelo booleano, recuperam informações com base na correspondência exata entre as palavras-chaves e os termos presentes nos trechos de código-fonte. Segundo \cite{yan-benchmark-code-search-information-retrieval-deep-learning:2020}, a correspondência exata dos termos é útil para encontrar informações relativas a erros ou chamadas de \textit{API}, porém é incapaz de recuperar informações relativas a reuso de código ou exemplos de uma biblioteca de programação, onde não há uma correspondência exata entre as palavras-chaves. Nesse caso, há a necessidade de inferir a semântica para conseguir recuperar o trecho de código-fonte.
 
-A maior parte dos trabalhos atuais sobre recuperação de trecho de código-fonte passaram a utilizar ferramentas baseadas em aprendizagem de máquina com redes neurais artificiais. Tanto que \cite{cambronero-deep-learning-code-search:2019} cunharam o termo \textit{neural code search}, i.e., busca de código-fonte utilizando redes neurais artificiais. A principal abordagem utilizada nesses trabalhos é ensinar a rede neural a discriminar os trechos de código-fonte relevantes dos não relevantes dado uma questão. Para realizar essa discriminação, os trabalhos utilizam a técnica de agrupamento de vetores de representação distribuída ou \textit{joint embedding}. A ilustração dessa técnica pode ser visualizada na Figura~\ref{fig:joint-embedding}.
+As redes neurais artificiais surgiram como uma alternativa aos métodos tradicionais de recuperação de informação, pois mostraram-se capazes de inferir a semântica das palavras ou o contexto de frases na busca por documentos ou nas respostas automáticas a perguntas \citep{guo-deep-look-into-neural-ranking-models:2019}. Devido a isso, a maior parte dos trabalhos atuais sobre recuperação de trecho de código-fonte passaram a utilizar ferramentas baseadas em aprendizagem de máquina com redes neurais artificiais. Tanto que \cite{cambronero-deep-learning-code-search:2019} cunharam o termo \textit{neural code search}, i.e., busca de código-fonte utilizando redes neurais artificiais. 
+
+Um ponto em comum nesses trabalhos é a abordagem utilizada. A principal abordagem utilizada é ensinar a rede neural a discriminar os trechos de código-fonte relevantes dos não relevantes a partir de uma questão. Para realizar essa discriminação, os trabalhos utilizaram a técnica de agrupamento de vetores de representação distribuída ou \textit{joint embedding}. Essa técnica permite agrupar dados heterogêneos em um mesmo espaço vetorial de modo que dados semanticamente similares ocupem regiões próximas uns dos outros. A ilustração dessa técnica pode ser visualizada na Figura~\ref{fig:joint-embedding}.
 
 \begin{figure}[H]
 \centering
@@ -17,9 +19,9 @@ A maior parte dos trabalhos atuais sobre recuperação de trecho de código-font
 \label{fig:joint-embedding}
 \end{figure}
 
- De acordo com a Figura~\ref{fig:joint-embedding}, a técnica \textit{joint embedding} utiliza duas redes neurais, uma para mapear as questões para um vetor contínuo e a outra para mapear os trechos de código-fonte. Os vetores contínuos das questões e dos trechos de código-fonte são agrupados em um mesmo espaço vetorial de tal forma que os vetores das questões fiquem próximos dos vetores dos trechos de código-fonte que foram anotados como respostas. Por isso o nome agrupamento de vetores contínuos ou agrupamento de vetores de representação distribuída, pois os vetores contínuos de diferentes tipos de dados são agrupados em um mesmo espaço vetorial. No nosso caso, estamos agrupando vetores que representam trechos de código-fonte com vetores de questões coletadas do \Gls{sof}, mas é possível agrupar vetores de imagens e texto ou áudio e imagens, por exemplo. 
+ De acordo com a Figura~\ref{fig:joint-embedding}, a técnica \textit{joint embedding} utiliza duas redes neurais, uma para mapear as questões para um vetor contínuo e a outra para mapear os trechos de código-fonte. Os vetores contínuos das questões e dos trechos de código-fonte são agrupados em um mesmo espaço vetorial de tal forma que os vetores das questões fiquem próximos dos vetores dos trechos de código-fonte que foram anotados como respostas. Daí o nome agrupamento de vetores contínuos ou agrupamento de vetores de representação distribuída, pois os vetores de diferentes tipos de dados são agrupados em um mesmo espaço vetorial. No nosso caso, estamos agrupando vetores que representam trechos de código-fonte com vetores de questões coletadas do \Gls{sof}, mas é possível agrupar vetores de imagens e texto ou áudio e imagens, por exemplo. 
 
-O vetor contínuo é um importante fator para a técnica \textit{joint embedding}, pois, um vetor que contenha as características latentes e mais importantes dos dados de entrada, auxiliará as redes neurais a aproximar os trechos de código-fonte às questões mais facilmente. Para realizar essa aproximação, três aspectos devem ser levados em consideração:
+Para utilizar a técnica \textit{joint embedding}, três itens devem ser levados em consideração:
 
 \begin{itemize}
     \item Representação dos \textit{tokens} ou palavras
@@ -28,7 +30,7 @@ O vetor contínuo é um importante fator para a técnica \textit{joint embedding
 \end{itemize}
 
 
-No primeiro item devemos definir como os \textit{tokens} ou palavras, que compõem as questões e os trechos de códigos-fontes, serão representadas. No segundo item, os vetores de representação de cada \textit{token} ou palavra serão combinados para obter um vetor contínuo final, que é o vetor de representação da questão ou trecho de código-fonte. Por último, devemos indicar à rede neural como fazer a associação entre eles.
+No primeiro item é necessário definir como os \textit{tokens} ou palavras, que compõem as questões e os trechos de códigos-fontes, serão representadas. No segundo item, os vetores de representação de cada \textit{token} ou palavra serão combinados para obter um vetor contínuo final, que é o vetor de representação da questão ou trecho de código-fonte. Diante disso, é necessário apontar a maneira como os vetores de cada palavra serão combinados. Por último, é preciso indicar à rede neural como agrupar os vetores de representação final das questões e trechos de código-fonte.
 
 
 \section{\textit{Representação dos \textit{tokens} ou palavras}}
