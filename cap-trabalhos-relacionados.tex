@@ -36,7 +36,35 @@ No primeiro item é necessário definir como os \textit{tokens} ou palavras, que
 \section{\textit{Representação dos \textit{tokens} ou palavras}}
 \label{sec:fundamentao-representacao-tokens-palavras}
 
-As questões e os trechos de códigos-fontes são compostas por um conjunto de palavras ou \textit{tokens}. E conforme citado anteriormente, uma boa representação para as palavras é um vetor de representação distribuída. No caso, o vetor de representação distribuída ou \textit{embedding} permite representar uma palavra através de um vetor com valores reais ($\mathbb{R}$). Podemos definir \textbf{embedding} como uma função $\mathbb{E}$ \citep{cambronero-deep-learning-code-search:2019}:
+As questões e os trechos de códigos-fontes são compostas por um conjunto de palavras ou \textit{tokens}. Cada palavra ou \textit{token} deverá ser representado por um vetor numérico. A forma como cada palavra será representada é de extrema importância, pois uma boa representação da palavra auxiliará as redes neurais a correlacionarem as questões aos trechos de código-fonte mais facilmente, no nosso caso. Na Figura~\ref{fig:discrete-vs-distributed-representation} ilustramos duas representações típicas para as palavras: vetor de representação esparsa e um vetor de representação distribuída.
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{.7\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{figuras/cap-trabalhos-relacionados/discrete-representation.pdf}
+  \caption{Representação esparsa}
+  \label{fig:discrete-representation}
+\end{subfigure}%
+\\
+\begin{subfigure}{.7\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{figuras/cap-trabalhos-relacionados/distributed-representation.pdf}
+  \caption{Representação distribuída}
+  \label{fig:distributed-representation}
+\end{subfigure}
+
+\caption{Ilustração de vetores de representação esparsa e distribuída. }
+\label{fig:discrete-vs-distributed-representation}
+\end{figure}
+
+
+FAZER UMA IMAGEM explicando a diferença como o site do oreilly. \url{https://www.oreilly.com/content/how-neural-networks-learn-distributed-representations/}.
+
+
+
+No caso, o vetor de representação distribuída ou \textit{embedding} permite representar uma palavra através de um vetor com valores reais ($\mathbb{R}$). Podemos definir \textbf{embedding} como uma função $\mathbb{E}$ \citep{cambronero-deep-learning-code-search:2019}:
 
 \begin{equation}
     \mathbb{E}: \mathbb{X} \rightarrow \mathbb{R}^{d}
