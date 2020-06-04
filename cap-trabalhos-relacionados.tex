@@ -36,7 +36,7 @@ No primeiro item é necessário definir como os \textit{tokens} ou palavras, que
 \section{\textit{Representação dos \textit{tokens} ou palavras}}
 \label{sec:fundamentao-representacao-tokens-palavras}
 
-As questões e os trechos de códigos-fontes são compostas por um conjunto de palavras ou \textit{tokens}. Cada palavra ou \textit{token} deverá ser representado por um vetor numérico. A forma como cada palavra será representada é de extrema importância, pois uma boa representação da palavra auxiliará as redes neurais a correlacionarem as questões aos trechos de código-fonte mais facilmente, no nosso caso. Na Figura~\ref{fig:discrete-vs-distributed-representation} ilustramos duas representações típicas para as palavras: vetor de representação esparsa e um vetor de representação distribuída.
+As questões e os trechos de códigos-fontes são compostas por um conjunto de palavras ou \textit{tokens}. Cada palavra ou \textit{token} deverá ser representado por um vetor numérico. A forma como cada palavra será representada é de extrema importância, pois uma boa representação da palavra auxiliará as redes neurais a correlacionarem as questões aos trechos de código-fonte mais facilmente. Na Figura~\ref{fig:discrete-vs-distributed-representation} ilustramos duas representações típicas para as palavras: vetor de representação esparsa e um vetor de representação distribuída.
 
 
 \begin{figure}[H]
@@ -55,22 +55,43 @@ As questões e os trechos de códigos-fontes são compostas por um conjunto de p
   \label{fig:distributed-representation}
 \end{subfigure}
 
-\caption{Ilustração de vetores de representação esparsa e distribuída. }
+\caption{Ilustração de vetores de representação esparsa e distribuída. \url{https://www.oreilly.com/content/how-neural-networks-learn-distributed-representations/}}
 \label{fig:discrete-vs-distributed-representation}
 \end{figure}
 
+O vetor de representação esparsa (Figura~\ref{fig:discrete-representation}) é composto por poucos coeficientes diferentes de zero e o restante é composto por valores nulos. Esse tipo de representação tem duas limitações: o tamanho do vetor cresce de acordo com o tamanho do vocabulário e os coeficientes do vetor não indicam nenhum tipo de relação semântica ou sintática entre as palavras. Já o vetor de representação distribuída é um vetor denso, cujo tamanho é menor que o tamanho do vocabulário de palavras, e o acréscimo de uma palavra não altera a dimensão do vetor. A principal característica dos vetores de representação distribuída é a abstração da relação semântica e/ou sintática entre as palavras através dos seus coeficientes. A Figura~\ref{fig:distributed-representation} ilustra essa característica, onde um coeficiente ou conceito está relacionado a várias palavras e uma palavra está relacionada a vários conceitos, permitindo estabelecer uma relação entre as palavras através do cálculo de similaridade dos seus respectivos vetores.
 
-FAZER UMA IMAGEM explicando a diferença como o site do oreilly. \url{https://www.oreilly.com/content/how-neural-networks-learn-distributed-representations/}.
-
-
-
-No caso, o vetor de representação distribuída ou \textit{embedding} permite representar uma palavra através de um vetor com valores reais ($\mathbb{R}$). Podemos definir \textbf{embedding} como uma função $\mathbb{E}$ \citep{cambronero-deep-learning-code-search:2019}:
+ O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras que estão próximas umas das outras, em diferentes sentenças, tem significados similares \citep{Goodfellow-et-al-2016}. O vetor de representação distribuída de uma palavra é representado por um vetor contínuo ou também chamado de \textit{embedding}. Podemos definir \textbf{embedding} através da seguinte função \citep{cambronero-deep-learning-code-search:2019}:
 
 \begin{equation}
-    \mathbb{E}: \mathbb{X} \rightarrow \mathbb{R}^{d}
+    f: \mathbb{V} \rightarrow \mathbb{E}
 \end{equation}
 
-A função $\mathbb{E}$ mapeia um dado de entrada $x$, $x \in \mathbb{X}$, para um vetor de \gls{representacao-distribuida} correspondente em um espaço vetorial de dimensão $d$. O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras que estão próximas uma das outras em vários contextos tem significados similares \citep{Goodfellow-et-al-2016}. Uma opção para a função $\mathbb{E}$ é utilizar o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} utiliza o algoritmo \textit{skip-gram} ou \acrshort{cbow}. A diferença basicamente entre eles é que o \acrshort{cbow} prediz uma palavra de acordo com as palavras do contexto e o \textit{skip-gram} faz o inverso, prediz as palavras do contexto dado uma palavra alvo \citep{mikolov2013distributed}.
+A função $f$ mapeia uma palavra $w$, $w \in \mathbb{V}$, para um vetor contínuo $e, e \in \mathbb{R}^{d}$, onde $\mathbb{V}$ representa o vocabulário de palavras e $d$ é a dimensão do vetor. Uma opção comumente utilizada para a função $f$ é o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} recebe como entrada um vocabulário de palavras representada por uma matriz, onde cada índice da matriz indica uma palavra, e retorna, ao final, uma matriz de vetores contínuos. \todo{inverter a frase}
+ 
+ 
+ 
+ 
+ Uma opção para a função $\mathbb{E}$ é utilizar o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} utiliza o algoritmo \textit{skip-gram} ou \acrshort{cbow}. A diferença basicamente entre eles é que o \acrshort{cbow} prediz uma palavra de acordo com as palavras do contexto e o \textit{skip-gram} faz o inverso, prediz as palavras do contexto dado uma palavra alvo \citep{mikolov2013distributed}.
+
+
+
+
+No caso, o vetor de representação distribuída ou \textit{embedding} permite representar uma palavra através de um vetor com valores reais ($\mathbb{R}$). 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.8\textwidth]{figuras/cap-trabalhos-relacionados/word2vec-cbow.pdf}
+\caption{Ilustração da técnica cbow do word2vec.} 
+\label{fig:word2vec-cbow}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.8\textwidth]{figuras/cap-trabalhos-relacionados/word2vec-skip-gram.pdf}
+\caption{Ilustração da técnica word2vec skip-gram.} 
+\label{fig:word2vec-skip-gram}
+\end{figure}
 
 Por exemplo, dado o trecho de código-fonte abaixo:
 
