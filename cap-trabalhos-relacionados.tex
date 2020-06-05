@@ -67,17 +67,17 @@ O vetor de representação esparsa (Figura~\ref{fig:discrete-representation}) é
     f: \mathbb{V} \rightarrow \mathbb{E}
 \end{equation}
 
-A função $f$ mapeia uma palavra $w$, $w \in \mathbb{V}$, para um vetor contínuo $e, e \in \mathbb{R}^{d}$, onde $\mathbb{V}$ representa o vocabulário de palavras e $d$ é a dimensão do vetor. Uma opção comumente utilizada para a função $f$ é o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} recebe como entrada um vocabulário de palavras representada por uma matriz, onde cada índice da matriz indica uma palavra, e retorna, ao final, uma matriz de vetores contínuos. \todo{inverter a frase}
- 
- 
- 
- 
- Uma opção para a função $\mathbb{E}$ é utilizar o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} utiliza o algoritmo \textit{skip-gram} ou \acrshort{cbow}. A diferença basicamente entre eles é que o \acrshort{cbow} prediz uma palavra de acordo com as palavras do contexto e o \textit{skip-gram} faz o inverso, prediz as palavras do contexto dado uma palavra alvo \citep{mikolov2013distributed}.
+A função $f$ mapeia uma palavra $w$, $w \in \mathbb{V}$, para um vetor contínuo $e, e \in \mathbb{E}, \mathbb{E }\subseteq \mathbb{R}^{d}$, onde $\mathbb{V}$ representa o vocabulário de palavras, $\mathbb{E}$ é um conjunto de vetores contínuos e $d$ é a dimensão do vetor. Uma opção comumente utilizada para a função $f$ é o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} recebe uma matriz de inteiros como entrada, onde cada índice da matriz indica uma palavra, e retorna, ao final, uma matriz de vetores contínuos. O \textit{word2vec} tem duas abordagens para obter a matriz de vetores contínuos:
 
-
-
-
-No caso, o vetor de representação distribuída ou \textit{embedding} permite representar uma palavra através de um vetor com valores reais ($\mathbb{R}$). 
+\begin{itemize}
+    \item \acrfull{cbow}
+    \item \textit{Skip-gram}
+\end{itemize}
+ 
+ O \acrshort{cbow} é uma rede neural sequencial que mapeia uma matriz de inteiros para uma matriz de vetores contínuos. Conforme a Figura~\ref{fig:word2vec-cbow}, o \acrshort{cbow} aprende os coeficientes da matriz predizendo uma palavra-alvo a partir de um contexto de palavras ao redor. A partir disso, os ajustes dos coeficientes são realizados nos vetores contínuos das palavras do contexto. Ao final, temos uma matriz de vetores contínuos aprendidos, onde a ordem dos vetores para predizer uma palavra não importa, pois os vetores contínuos são somados antes de predizer a palavra-alvo (ver Figura
+~\ref{fig:word2vec-cbow}).
+ 
+ O \textit{Skip-gram} também é formado por uma rede neural sequencial, porém os coeficientes da matriz são aprendidos predizendo as palavras do contexto a partir de uma palavra-alvo, conforme a Figura~\ref{fig:word2vec-skip-gram}. Diferente do \acrshort{cbow}, o \textit{Skip-gram} realiza ajustes nos vetores contínuos das palavras-alvos.  Essa diferença no método de aprendizagem, resulta em vetores contínuos com diferentes características extraídas das palavras. De acordo com \cite{mikolov2013distributed}, o \acrshort{cbow} apresentou bons resultados para tarefas associadas a relações sintáticas das palavras, e.g., associar o adjetivo a advérbio, encontrar o antôninmo ou o superlativo de uma palavra. Enquanto o \textit{Skip-gram} apresentou melhores resultados para associações semânticas como encontrar a cidade de um estado, a moeda de um país ou relacionar palavras masculinas e femininas.
 
 \begin{figure}[H]
 \centering
@@ -93,7 +93,7 @@ No caso, o vetor de representação distribuída ou \textit{embedding} permite r
 \label{fig:word2vec-skip-gram}
 \end{figure}
 
-Por exemplo, dado o trecho de código-fonte abaixo:
+Para exemplificar o uso do \textit{word2vec}, suponha que tenhamos o trecho de código-fonte a seguir:
 
 \begin{mypython}{Python: Exemplo de código para escrever em um arquivo}
 with open(filename, mode) as file:
