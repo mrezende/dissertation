@@ -44,22 +44,22 @@ As questões e os trechos de códigos-fontes são compostas por um conjunto de p
 \begin{subfigure}{.7\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{figuras/cap-trabalhos-relacionados/discrete-representation.pdf}
-  \caption{Representação esparsa}
+  \caption{Ilustração de um vetor de representação esparsa, onde poucos coeficientes são diferentes de zero. Nesse exemplo, cada palavra é representada apenas por um conceito e cada conceito está associado a apenas uma palavra. Uma limitação desse tipo de representação é que o tamanho do vetor cresce de acordo com o tamanho do vocabulário.}
   \label{fig:discrete-representation}
 \end{subfigure}%
 \\
 \begin{subfigure}{.7\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{figuras/cap-trabalhos-relacionados/distributed-representation.pdf}
-  \caption{Representação distribuída}
+  \caption{Ilustração do vetor de representação distribuída, onde cada palavra é representada por vários conceitos e cada conceito está associado a várias palavras \citep{Hinton-distributed-representatons:1986}. No vetor de representação distribuída, o acréscimo de uma nova palavra não aumenta o tamanho do vetor, conforme exibido na Figura.}
   \label{fig:distributed-representation}
 \end{subfigure}
 
-\caption{Ilustração de vetores de representação esparsa e distribuída. \url{https://www.oreilly.com/content/how-neural-networks-learn-distributed-representations/}}
+\caption{Ilustração de vetores de representação esparsa e distribuída. Ilustração baseada na Figura da página web: \url{https://www.oreilly.com/content/how-neural-networks-learn-distributed-representations/}}
 \label{fig:discrete-vs-distributed-representation}
 \end{figure}
 
-O vetor de representação esparsa (Figura~\ref{fig:discrete-representation}) é composto por poucos coeficientes diferentes de zero e o restante é composto por valores nulos. Esse tipo de representação tem duas limitações: o tamanho do vetor cresce de acordo com o tamanho do vocabulário e os coeficientes do vetor não indicam nenhum tipo de relação semântica ou sintática entre as palavras. Já o vetor de representação distribuída é um vetor denso, cujo tamanho é menor que o tamanho do vocabulário de palavras, e o acréscimo de uma palavra não altera a dimensão do vetor. A principal característica dos vetores de representação distribuída é a abstração da relação semântica e/ou sintática entre as palavras através dos seus coeficientes. A Figura~\ref{fig:distributed-representation} ilustra essa característica, onde um coeficiente ou conceito está relacionado a várias palavras e uma palavra está relacionada a vários conceitos, permitindo estabelecer uma relação entre as palavras através do cálculo de similaridade dos seus respectivos vetores.
+O vetor de representação esparsa, conforme a Figura~\ref{fig:discrete-representation}, é composto por poucos coeficientes diferentes de zero. Esse tipo de representação tem duas limitações: o tamanho do vetor cresce de acordo com o tamanho do vocabulário e os coeficientes do vetor não indicam nenhum tipo de relação semântica ou sintática entre as palavras. Já o vetor de representação distribuída é um vetor denso, cujo tamanho é menor que o tamanho do vocabulário de palavras, e o acréscimo de uma palavra não altera a dimensão do vetor. A principal característica dos vetores de representação distribuída é a abstração da relação semântica e/ou sintática através dos seus coeficientes. A Figura~\ref{fig:distributed-representation} ilustra essa característica, onde um coeficiente ou conceito está relacionado a várias palavras e uma palavra está relacionada a vários conceitos, permitindo verificar uma relação entre as palavras através do cálculo de similaridade dos seus respectivos vetores.
 
  O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras que estão próximas umas das outras, em diferentes sentenças, tem significados similares \citep{Goodfellow-et-al-2016}. O vetor de representação distribuída de uma palavra é representado por um vetor contínuo ou também chamado de \textit{embedding}. Podemos definir \textbf{embedding} através da seguinte função \citep{cambronero-deep-learning-code-search:2019}:
 
@@ -74,22 +74,19 @@ A função $f$ mapeia uma palavra $w$, $w \in \mathbb{V}$, para um vetor contín
     \item \textit{Skip-gram}
 \end{itemize}
  
- O \acrshort{cbow} é uma rede neural sequencial que mapeia uma matriz de inteiros para uma matriz de vetores contínuos. Conforme a Figura~\ref{fig:word2vec-cbow}, o \acrshort{cbow} aprende os coeficientes da matriz predizendo uma palavra-alvo a partir de um contexto de palavras ao redor. A partir disso, os ajustes dos coeficientes são realizados nos vetores contínuos das palavras do contexto. Ao final, temos uma matriz de vetores contínuos aprendidos, onde a ordem dos vetores para predizer uma palavra não importa, pois os vetores contínuos são somados antes de predizer a palavra-alvo (ver Figura
-~\ref{fig:word2vec-cbow}).
- 
- O \textit{Skip-gram} também é formado por uma rede neural sequencial, porém os coeficientes da matriz são aprendidos predizendo as palavras do contexto a partir de uma palavra-alvo, conforme a Figura~\ref{fig:word2vec-skip-gram}. Diferente do \acrshort{cbow}, o \textit{Skip-gram} realiza ajustes nos vetores contínuos das palavras-alvos.  Essa diferença no método de aprendizagem, resulta em vetores contínuos com diferentes características extraídas das palavras. De acordo com \cite{mikolov2013distributed}, o \acrshort{cbow} apresentou bons resultados para tarefas associadas a relações sintáticas das palavras, e.g., associar o adjetivo a advérbio, encontrar o antôninmo ou o superlativo de uma palavra. Enquanto o \textit{Skip-gram} apresentou melhores resultados para associações semânticas como encontrar a cidade de um estado, a moeda de um país ou relacionar palavras masculinas e femininas.
+ O \acrshort{cbow} é uma rede neural sequencial que mapeia uma matriz de inteiros para uma matriz de vetores contínuos. Conforme a Figura~\ref{fig:word2vec-cbow}, o \acrshort{cbow} aprende os coeficientes da matriz predizendo uma palavra-alvo a partir de um contexto de palavras ao redor. Já o \textit{Skip-gram} ajusta os coeficientes da matriz predizendo as palavras do contexto a partir de uma palavra central, conforme a Figura~\ref{fig:word2vec-skip-gram}. Essa diferença no método de aprendizagem resulta em vetores contínuos com diferentes características extraídas das palavras. De acordo com \cite{mikolov2013distributed}, o \acrshort{cbow} apresentou bons resultados para tarefas associadas a relações sintáticas das palavras, e.g., associar o adjetivo a advérbio, encontrar o antôninmo ou o superlativo de uma palavra. Enquanto o \textit{Skip-gram} apresentou melhores resultados para associações semânticas como relacionar a cidade a um estado, encontrar a moeda de um país ou associar palavras masculinas e femininas.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=.8\textwidth]{figuras/cap-trabalhos-relacionados/word2vec-cbow.pdf}
-\caption{Ilustração da técnica cbow do word2vec.} 
+\caption{Ilustração da técnica \acrfull{cbow} do \textit{word2vec}. Conforme exibido na Figura, \textit{continuous bag-of-words} prediz uma palavra-alvo $w_{t}$ a partir das palavras do contexto ao redor, $w_{t - 2}, w_{t - 1}, w_{t + 1}, w_{t + 2}$. Imagem baseada na Figura do artigo de \cite{mikolov2013distributed}.} 
 \label{fig:word2vec-cbow}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=.8\textwidth]{figuras/cap-trabalhos-relacionados/word2vec-skip-gram.pdf}
-\caption{Ilustração da técnica word2vec skip-gram.} 
+\caption{Ilustração da técnica \textit{skip-gram} do word2vec. A técnica \textit{skip-gram} prediz as palavras do contexto, $w_{t - 2}, w_{t - 1}, w_{t + 1}, w_{t + 2}$, a partir de uma palavra central $w_{t}$. Ilustração baseada na Figura do artigo de \cite{mikolov2013distributed}. } 
 \label{fig:word2vec-skip-gram}
 \end{figure}
 
@@ -106,13 +103,13 @@ Removendo os acentos, tabulações, quebra de linha e as pontuações, o código
   ['with', 'open', 'filename', 'mode', 'as', 'file', 'file', 'write', 'text']
 \end{mypythonembedding}
 
-Neste caso, ao utilizar o \textit{skip-gram} do \textit{wordvec} para a palavra \emph{file}. Ele representará a palavra \emph{file} próxima das palavras \emph{mode}, \emph{as}, \emph{file}, \emph{write}, caso o parâmetro \textit{window} seja $2$. O parâmetro \textit{window} define basicamente quantas palavras a direita e a esquerda fazem parte do contexto.
+Nesse caso, ao utilizar o \textit{skip-gram} para a palavra \emph{file} e um parâmetro \textit{window} de valor 2, onde o parâmetro \textit{window} define a quantidade de palavras anteriores e posteriores à palavra central, o algoritmo deverá irá associar a palavra \textit{file} às palavras \emph{mode}, \emph{as}, \emph{file}, \emph{write}.
 
-\begin{mypythonembedding}{Palavra \textit{file}, em amarelo, e as palavras similares, em verde.}
+\begin{mypythonembedding}{Palavra central \textit{file}, em amarelo, e as palavras anteriores e posteriores, em verde, para o parâmetro \textit{window} 2.}
   ['with', 'open', 'filename', |\colorbox{green}{mode}|, |\colorbox{green}{as}|, |\colorbox{yellow}{file}|, |\colorbox{green}{file}|, |\colorbox{green}{write}|, 'text']
 \end{mypythonembedding}
 
-O algoritmo \textit{skip-gram} mapeia as palavras que estão perto uma das outras em diferentes contextos para regiões próximas no espaço vetorial $\mathbb{R}^{d}$. Lembrando que estas palavras são representadas por vetores de valores reais ($\mathbb{R}$). Os vetores que estão próximos um dos outros são considerados similares. No caso da aplicação do \textit{word2vec} em trechos de código-fonte em Python, por exemplo, é possível verificar que a palavra \emph{if} tem como palavras similares \emph{elif} e \emph{else}. Ou no caso do exemplo anterior, a palavra \emph{file} terá como palavras similares \emph{mode}, \emph{as}, \emph{write}. Isto ocorre pois este conjunto de palavras costumam aparecer próximas umas das outras em diferentes trechos de código-fonte. Devido a isto, o \textit{skip-gram} vai mapear os vetores que representam estas palavras para regiões próximas no espaço vetorial $\mathbb{R}^{d}$.
+O algoritmo \textit{skip-gram} mapeia as palavras que estão perto umas das outras em diferentes contextos para regiões próximas no espaço vetorial $\mathbb{R}^{d}$. No caso da aplicação do \textit{word2vec} em trechos de código-fonte em Python, é possível verificar que a palavra \emph{if} tem como palavras similares \emph{elif} e \emph{else}. Ou no exemplo anterior, a palavra \emph{file} terá como palavras similares \emph{mode}, \emph{as}, \emph{write}. 
 
 
 \section{\textit{Representação das sentenças e código-fonte}}
