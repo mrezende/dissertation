@@ -90,7 +90,7 @@ A função $f$ mapeia uma palavra $w$, $w \in \mathbb{V}$, para um vetor contín
 \label{fig:word2vec-skip-gram}
 \end{figure}
 
-Para exemplificar o uso do \textit{word2vec}, suponha que tenhamos o trecho de código-fonte a seguir:
+Para exemplificar o uso do \textit{word2vec}, suponha que tenhamos o seguinte trecho de código-fonte:
 
 \begin{mypython}{Python: Exemplo de código para escrever em um arquivo}
 with open(filename, mode) as file:
@@ -109,7 +109,7 @@ Nesse caso, ao utilizar o \textit{skip-gram} para a palavra \emph{file} e um par
   ['with', 'open', 'filename', |\colorbox{green}{mode}|, |\colorbox{green}{as}|, |\colorbox{yellow}{file}|, |\colorbox{green}{file}|, |\colorbox{green}{write}|, 'text']
 \end{mypythonembedding}
 
-O algoritmo \textit{skip-gram} mapeia as palavras que estão perto umas das outras em diferentes contextos para regiões próximas no espaço vetorial $\mathbb{R}^{d}$. No caso da aplicação do \textit{word2vec} em trechos de código-fonte em Python, é possível verificar que a palavra \emph{if} tem como palavras similares \emph{elif} e \emph{else}. Ou no exemplo anterior, a palavra \emph{file} terá como palavras similares \emph{mode}, \emph{as}, \emph{write}. 
+O algoritmo \textit{skip-gram} mapeia as palavras que estão perto umas das outras em diferentes contextos para regiões próximas no espaço vetorial $\mathbb{R}^{d}$. No caso da aplicação do \textit{word2vec} em trechos de código-fonte em Python, é possível verificar que a instrução de decisão \emph{if} tem como palavras similares as instruções \emph{elif} e \emph{else}. Já a instrução de repetição \emph{while} tem como instruções similares \emph{continue} e \textit{break}. Enquanto no exemplo anterior, as palavras \emph{file}, \emph{mode}, \emph{as}, \emph{write} serão consideradas similares. 
 
 
 \section{\textit{Representação das sentenças e código-fonte}}
