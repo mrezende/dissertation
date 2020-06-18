@@ -136,7 +136,7 @@ A diferença básica entre as duas abordagens é a importância relativa dada a 
 \begin{subfigure}{.7\textwidth}
   \centering
   \includegraphics[width=1\linewidth]{figuras/cap-trabalhos-relacionados/sentence-representation-sequential.pdf}
-  \caption{Ilustração da abordagem sequencial, onde os vetores são fornecidos individualmente à rede neural. A cada passo $t$, a rede neural \emph{A} combina um vetor da palavra $w_{t}$ com o vetor de resultado anterior $h_{t - 1}$. Ao final de $t$ passos, obtemos o vetor de representação da sentença $h_{t}$. Imagem baseada na figura do website: \url{https://colah.github.io/posts/2015-08-Understanding-LSTMs/}}
+  \caption{Ilustração da abordagem sequencial, onde os vetores são fornecidos individualmente à rede neural. A cada passo $i$, a rede neural \emph{A} combina um vetor da palavra $w_{i}$ com o vetor do resultado anterior $h_{i - 1}$. Ao final de $t$ passos, obtemos o vetor de representação da sentença $h_{t}$. Imagem baseada na figura do website: \url{https://colah.github.io/posts/2015-08-Understanding-LSTMs/}}
   \label{fig:sentence-representation-sequential}
 \end{subfigure}
 
@@ -147,9 +147,7 @@ A diferença básica entre as duas abordagens é a importância relativa dada a 
 
 O exemplo de \textit{bag-of-words} ilustrado na Figura~\ref{fig:sentence-representation-bag-of-words} utiliza a função soma para combinar os vetores contínuos das palavras, porém, é possível utilizar outras funções como média ou \emph{max}, por exemplo. Já a abordagem sequencial combina os vetores individualmente, onde a cada passo o vetor é fornecido a uma função ou rede neural e pode ser combinado com o resultado da etapa anterior. De acordo com o exemplo da Figura~\ref{fig:sentence-representation-sequential}, ao final de $t$ passos, obtemos um vetor $h_{t}$, que pode ser utilizado para representar tanto uma questão quanto um trecho de código-fonte. Uma outra maneira de representar uma questão ou trecho de código-fonte seria combinar os $t$ vetores de resultados ($h_{1}, h_{2}, ..., h_{t-1}, h_{t}$) através da função soma ou média, por exemplo. 
 
-O intuito de combinar os vetores contínuos das palavras é sintetizar as principais características da sentença em um vetor. Além disso, queremos estabelecer relações semânticas, onde sentenças semanticamente similares sejam representadas por vetores similares. Com um rico espaço de similaridade, é possível ensinar a rede neural a correlacionar as questões aos trechos de código-fonte mais facilmente. Além disso, é possivel reutilizar estes vetores de representação em outras tarefas, onde o codigo -fonte pode ser recomendado, ou permitir a identificação de linguagens e etc. autocomplete, duvida, etc.
-
-
+Uma boa combinação dos vetores contínuos permite sintetizar as principais características da sentença em um vetor. Um dos objetivos da recuperação de trechos de código-fonte é a possibilidade de estabelecer relações semânticas também, onde trechos de código semanticamente similares sejam representadas por vetores similares. A partir deste rico espaço de similaridade, é possível ensinar a rede neural a correlacionar as questões aos trechos de código-fonte mais facilmente. Além disso, os vetores de representação podem ser reutilizados em outras tarefas como recomendação ou sumarização de trechos de código-fonte e identificação de linguagem de programação, por exemplo.
 
 \section{Agrupamento dos vetores contínuos}
 
