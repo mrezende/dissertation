@@ -151,24 +151,39 @@ Uma boa combinação dos vetores contínuos permite sintetizar as principais car
 
 \section{Agrupamento dos vetores contínuos}
 
-Os vetores contínuos das questões e trechos de código-fonte , o objetivo é treinar a rede neural a correlacionar o trecho de código-fonte à questão. Conforme citado anteriormente, uma abordagem comumente utilizada é o agrupamento de vetores contínuos ou \textit{joint embedding}, que mapeia os vetores das questões e trechos de código-fonte para um mesmo espaço vetorial. O intuito  E apróximá-los através de uma função objetivo, de tal maneira que as questões fiquem próximas dos trechos de código-fonte relevantes. 
+Os vetores contínuos das questões e trechos de código-fonte podem ser correlacionados através de uma rede neural. Uma abordagem comumente utilizada é o agrupamento de vetores contínuos ou \textit{joint embedding}, que mapeia os vetores das questões e trechos de código-fonte para um mesmo espaço vetorial. O intuito é agrupar os vetores semanticamente, onde conceitos semanticamente similares ocupem regiões próximas no espaço vetorial. Formalmente para um conjunto $\mathbb{Q}$ de questões e $\mathbb{C}$ de trechos de código-fonte, o agrupamento de vetores contínuos pode ser formulado como:
+
+\begin{equation}
+        f: q \mapsto t_{q} \mapsto h_{\theta}(t_{q}, t_{c}) \mapsfrom t_{c} \mapsfrom c :g
+\end{equation}
+
+A função ou \textit{encoder} $f$ mapeia o vetor $q \in \mathbb{Q}$ para um espaço vetorial $\mathbb{R}^{d}$, onde $d$ é a dimensão. O \textit{encoder} $g$ mapeia o vetor $c \in \mathbb{C}$ para o mesmo espaço vetorial $\mathbb{R}^{d}$. A função $h_{\theta}$ calcula a similaridade entre os vetores $t_{q}$ e $t_{c}$. O objetivo é aproximar as questões aos trechos de código-fonte anotados como solução, i.e., maximizar a função $h_{\theta}$ para um vetor $t_{q}$ e um correspondente vetor $t_{c^{+}}$, anotado como correto. Para realizar a aproximação dos vetores, é necessário definir uma função objetivo à rede neural. De acordo com \cite{guo-deep-look-into-neural-ranking-models:2019}, há três categorias de funções objetivo comumente utilizadas:
+
+\begin{itemize}
+    \item Comparação individual ou \textit{pointwise}
+    \item Comparação em pares ou \textit{pairwise}
+    \item Comparação em lista ou \textit{listwise}
+\end{itemize}
+
+Na comparação indidividual, o intuito é maximizar a função $h_{\theta}$ para cada par de questão e trecho de código-fonte anotado como correto. Para um par $(t_{q_{i}}, t_{c_{i}})$ e a correspondente relevância $y_{i}$ anotada, onde $t_{q_{i}}$ é um vetor contínuo de uma questão e $t_{c_{i}}$ é um vetor contínuo de um trecho de código, a função objetivo \textit{pointwise} pode ser definida como:
+
+\begin{equation}
+    L (h_{\theta}, \mathbb{Y}): \sum_{i} L(y_{i}, h_{\theta}(t_{q_{i}}, t_{c_{i}})) 
+\end{equation}
+
+$\mathbb{Y}$ representa o conjunto das correspondentes relevâncias anotadas entre os pares de questões e trechos de código-fonte. O objetivo é minimizar a função $L$, para isso, é necessário maximizar a verossimilhança entre o resultado da 
+
+Seja $t_{q}$ um vetor contínuo da questão, $t_{c^{+}}$ um vetor contínuo do trecho de código-fonte anotado como correto. 
+E apróximá-los através de uma função objetivo, de tal maneira que as questões fiquem próximas dos trechos de código-fonte relevantes. 
 
 Nesta abordagem, o objetivo é encontrar um modelo que consiga correlacionar dados heterogêneos. No livro \cite{Goodfellow-et-al-2016}, a associação entre as representações é referida como agrupamento de distribuições ou \textit{joint distribution}. Já \cite{cambronero-deep-learning-code-search:2019} e \cite{Allamanis-bimodal-source-code-natural-language:2015} utilizam o termo \textit{bi-modal embedding}. \cite{Zhang:2019:deep-learning-recommender-survey} utilizam \textit{jointly model}. E \cite{Gu-deep-code-search:2018} utilizam o temo agrupamento de representação distribuída ou \textit{joint embedding}. Neste trabalho, utilizaremos o termo \textit{joint embedding} ou agrupamento de representação distribuída.
 
 
 \textit{Joint embedding}, ou agrupamento de representação distribuída, é uma técnica para mapear dados heterogêneos para um mesmo espaço vetorial, de tal forma que conceitos similares ocupem regiões próximas neste espaço \citep{Gu-deep-code-search:2018}. Esta técnica é comumente utilizada para encontrar modelos que correlacionem imagem e texto, tradução de textos e também é utilizada em problemas de perguntas e respostas e recomendações de conteúdo \citep{lai-etal-2018-review, Zhang:2019:deep-learning-recommender-survey}.
 
-Por exemplo, sejam $\mathbb{Q}$ e $\mathbb{C}$ conjuntos de dados heterogêneos. \textit{Joint embedding} pode ser formulado como:
-
-\begin{equation}
-        f: q \mapsto t_{q} \mapsto h_{\theta}(t_{q}, t_{c}) \mapsfrom t_{c} \mapsfrom c :g
-\end{equation}
-
-A função $f$, $f: q \mapsto \mathbb{R}^{d}$, mapeia o vetor  $q \in \mathbb{Q}$ para um espaço vetorial $\mathbb{R}$ de dimensão \emph{d}. A função $g$, $g: c \mapsto \mathbb{R}^{d}$, mapeia o vetor $c \in \mathbb{C}$ para o mesmo espaço vetorial $\mathbb{R}$. A função $h_{\theta}$ calcula a similaridade entre dois vetores do mesmo espaço vetorial.
+Por exemplo, sejam  conjuntos de dados heterogêneos. \textit{Joint embedding} pode ser formulado como:
 
 
-O objetivo é aprender as funções $f$ e $g$ tal que para uma função de similaridade $h_{\theta}$, e.g., \textit{cosine}, e vetores $t_{q} \in \mathbb{R}^{d}$ e $t_{c} \in \mathbb{R}^{d}$. A função  $h_{\theta}(t_{q}, t_{c})$ seja maximizada para $t_{q}$ e seu correspondente vetor $t_{c}$.
-Através do \textit{joint embedding}, os vetores $t_{q}$ e $t_{c}$ podem ser correlacionados \citep{Gu-deep-code-search:2018, cambronero-deep-learning-code-search:2019}.
 
     
 
