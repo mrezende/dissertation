@@ -165,13 +165,22 @@ A função ou \textit{encoder} $f$ mapeia o vetor $q \in \mathbb{Q}$ para um esp
     \item Comparação em lista ou \textit{listwise}
 \end{itemize}
 
-Na comparação indidividual, o intuito é maximizar a função $h_{\theta}$ para cada par de questão e trecho de código-fonte anotado como correto. Para um par $(t_{q_{i}}, t_{c_{i}})$ e a correspondente relevância $y_{i}$ anotada, onde $t_{q_{i}}$ é um vetor contínuo de uma questão e $t_{c_{i}}$ é um vetor contínuo de um trecho de código, a função objetivo \textit{pointwise} pode ser definida como:
+Na comparação indidividual, os pares de questões e trechos de código-fonte são comparados individualmente. Para um par $(t_{q_{i}}, t_{c_{i}})$ e a correspondente relevância $y_{i}$ anotada, onde $t_{q_{i}}$ é um vetor contínuo de uma questão e $t_{c_{i}}$ é um vetor contínuo de um trecho de código, podemos definir a função objetivo \textit{pointwise} como:
 
 \begin{equation}
     L (h_{\theta}, \mathbb{Y}): \sum_{i} L(y_{i}, h_{\theta}(t_{q_{i}}, t_{c_{i}})) 
 \end{equation}
 
-$\mathbb{Y}$ representa o conjunto das correspondentes relevâncias anotadas entre os pares de questões e trechos de código-fonte. O objetivo é minimizar a função $L$, para isso, é necessário maximizar a verossimilhança entre o resultado da 
+$\mathbb{Y}$ representa o conjunto das correspondentes relevâncias anotadas entre os pares de questões e trechos de código-fonte. Podemos utilizar a função de entropia cruzada ou \textit{cross entropy} para a função $L$, por exemplo:
+
+\begin{equation}
+    L (h_{\theta}, \mathbb{Y}): \sum_{i} y_{i} log( h_{\theta}(t_{q_{i}}, t_{c_{i}})) + (1 - y_{i})log(1 - h_{\theta}(t_{q_{i}}, t_{c_{i}})) 
+\end{equation}
+
+Pode ser atribuído ao $y_{i}$ um valor binário e a função $h_{\theta}$ deve estar dentro do intervalo $[0, 1]$ (e.g., função de similaridade cosseno ou \textit{cosine}). 
+
+
+
 
 Seja $t_{q}$ um vetor contínuo da questão, $t_{c^{+}}$ um vetor contínuo do trecho de código-fonte anotado como correto. 
 E apróximá-los através de uma função objetivo, de tal maneira que as questões fiquem próximas dos trechos de código-fonte relevantes. 
