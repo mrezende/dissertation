@@ -191,7 +191,7 @@ De acordo com \cite{guo-deep-look-into-neural-ranking-models:2019}, a comparaç�
     L (h_{\theta}): \sum_{i} \sum_{j \neq i} L( h_{\theta}(q_{i}, c_{i}^{+}) - h_{\theta}(q_{i}, c_{j}^{-})) 
 \end{equation}
 
-Dado um vetor $q_{i}$, o vetor $c_{i}^{+}$ é preferível ao vetor $c_{j}^{-}$. No caso de recuperação de trecho de código-fonte, o vetor $c_{i}^{+}$ é uma possível solução à questão $q_{i}$, enquanto o vetor $c_{j}^{-}$ representa um trecho de código que não é solução. Para a função $L$, podemos utilizar a função de perda de articulação ou \textit{hinge loss}, por exemplo:
+Dado um vetor $q_{i}$, o vetor $c_{i}^{+}$ é preferível ao vetor $c_{j}^{-}$. No caso de recuperação de trecho de código-fonte, o vetor $c_{i}^{+}$ pode ser uma possível solução à questão $q_{i}$, enquanto o vetor $c_{j}^{-}$ representa um trecho de código que não é solução. Para a função $L$, podemos utilizar a função de perda de articulação ou \textit{hinge loss}, por exemplo:
 
 \begin{equation}
     L (h_{\theta}): \sum_{i} \sum_{j \neq i} max(0, 1 - h_{\theta}(q_{i}, c_{i}^{+}) + h_{\theta}(q_{i}, c_{j}^{-})) 
