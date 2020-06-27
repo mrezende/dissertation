@@ -168,7 +168,7 @@ A função ou \textit{encoder} $f$ mapeia o vetor $q \in \mathbb{Q}$ para um esp
 
 \subsection{Comparação individual ou \textit{pointwise}}
 
-Na comparação indidividual, os pares de questões e trechos de código-fonte são comparados individualmente. Para um par $(q_{i}, c_{i})$ e a correspondente classificação $y_{i}$ anotada, onde $q_{i}$ é um vetor contínuo de uma questão e $c_{i}$ é um vetor contínuo de um trecho de código, podemos definir a função objetivo \textit{pointwise} como:
+Na comparação indidividual ou \textit{pointwise}, a aproximação dos pares de questões e trechos de código-fonte é reduzido a um problema de classificação ou regressão. Para um par $(q_{i}, c_{i})$, o objetivo é maximizar a verossimilhança ou diminuir a diferença entre o resultado da função $h_{\theta}$ e a correspondente classificação $y_{i}$. De uma maneira geral, podemos definir a função objetivo \textit{pointwise} como:
 
 \begin{equation}
     L (h_{\theta}, \mathbb{Y}): \sum_{i} L(y_{i}, h_{\theta}(q_{i}, c_{i})) 
@@ -180,24 +180,24 @@ $\mathbb{Y}$ representa o conjunto das correspondentes classificações anotadas
     L (h_{\theta}, \mathbb{Y}): \sum_{i} y_{i} log( h_{\theta}(q_{i}, c_{i})) + (1 - y_{i})log(1 - h_{\theta}(q_{i}, c_{i})) 
 \end{equation}
 
-A função $h_{\theta}$ deve estar dentro do intervalo $[0, 1]$ (e.g., função de similaridade cosseno ou \textit{cosine}) e um valor binário pode ser atribuído ao $y_{i}$. De acordo com \cite{guo-deep-look-into-neural-ranking-models:2019, wu-sql-rank-listwise-approach:2018},  \textit{pointwise} apresenta um bom desempenho para predição de valores absolutos, e.g., indicação da classe de um trecho de código (e.g. correto ou incorreto) ou apontamento da relevância do código-fonte para uma determinada questão. Porém, de acordo com os pesquisadores, a comparação individual não leva em consideração a relativa preferência entre os dados, não apresentando um bom desempenho em tarefas de classificação ou recomendação, onde uma lista de informações é apresentada ao usuário. Nesses casos, a utilização da comparação em pares ou em lista é o mais indicado.
+A função $h_{\theta}$ deve estar dentro do intervalo $[0, 1]$ (e.g., função de similaridade cosseno ou \textit{cosine}) e um valor binário pode ser atribuído ao $y_{i}$. De acordo com \cite{guo-deep-look-into-neural-ranking-models:2019, wu-sql-rank-listwise-approach:2018},  \textit{pointwise} apresenta um bom desempenho em classificação e regressão, e.g., indicação da classe de um trecho de código (e.g. correto ou incorreto) ou apontamento da relevância do código-fonte para uma determinada questão. Porém, de acordo com os pesquisadores, a comparação individual não leva em consideração a relativa preferência das informações, não apresentando um bom desempenho em tarefas de classificação e ordenação de um conjunto de informações por relevância, por exemplo. Nesses casos, a utilização da comparação em pares ou em lista é o mais indicado.
 
 
 \subsection{Comparação em pares ou \textit{pairwise}}
 
-De acordo com \cite{guo-deep-look-into-neural-ranking-models:2019}, a comparação em pares utiliza a relativa preferência dos itens, ao invés da relação direta dos itens com a correspondente classificação anotada. Diferentemente da comparação individual, onde a função objetivo é resultado da soma da função para cada item, na comparação em pares, o resultado é fruto da soma das permutações de cada par de itens. Formalmente, a função de comparação em pares pode ser definida como:
+De acordo com \cite{guo-deep-look-into-neural-ranking-models:2019}, a comparação em pares prioriza a relativa preferência dos itens, ao invés da correta classificação das informações. Diferentemente da comparação individual, onde a função objetivo é resultado da soma da função para cada item, na comparação em pares, o resultado é fruto da soma das permutações de cada par de itens. Formalmente, a função de comparação em pares pode ser definida como:
 
 \begin{equation}
     L (h_{\theta}): \sum_{i} \sum_{j \neq i} L( h_{\theta}(q_{i}, c_{i}^{+}) - h_{\theta}(q_{i}, c_{j}^{-})) 
 \end{equation}
 
-Dado um vetor $q_{i}$, o vetor $c_{i}^{+}$ é preferível ao vetor $c_{j}^{-}$. No caso de recuperação de trecho de código-fonte, o vetor $c_{i}^{+}$ pode ser uma possível solução à questão $q_{i}$, enquanto o vetor $c_{j}^{-}$ representa um trecho de código que não é solução. Para a função $L$, podemos utilizar a função de perda de articulação ou \textit{hinge loss}, por exemplo:
+ Dado um vetor $q_{i}$, o vetor $c_{i}^{+}$ é preferível ao vetor $c_{j}^{-}$. No caso de recuperação de trecho de código-fonte, o vetor $c_{i}^{+}$ pode ser uma possível solução à questão $q_{i}$, enquanto o vetor $c_{j}^{-}$ representa um trecho de código que não é solução. Para a função $L$, podemos utilizar a função de perda de articulação ou \textit{hinge loss}, por exemplo:
 
 \begin{equation}
     L (h_{\theta}): \sum_{i} \sum_{j \neq i} max(0, 1 - h_{\theta}(q_{i}, c_{i}^{+}) + h_{\theta}(q_{i}, c_{j}^{-})) 
 \end{equation}
 
-
+De acordo com \cite{feng-2015, guo-deep-look-into-neural-ranking-models:2019, wu-sql-rank-listwise-approach:2018}, a aprendizagem através da função de comparação em pares apresentou bons resultados nas tarefas de seleção de respostas e recomendação. Porém, de acordo com \cite{wu-sql-rank-listwise-approach:2018}, a comparação entre os pares apresenta o mesmo problema da comparação individual, ambas as funções não priorizam a ordenação das informações. A relativa preferência entre os pares não reflete a relativa preferência de um conjunto de informações. Nesse caso, de acordo com \cite{wu-sql-rank-listwise-approach:2018}, o mais indicado é utilizar a comparação em lista ou \textit{listwise}.
 
 
 \subsection{Comparação em lista ou \textit{listwise}}
