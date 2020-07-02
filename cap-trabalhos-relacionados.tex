@@ -61,13 +61,13 @@ As questões e os trechos de códigos-fontes são compostas por um conjunto de p
 
 O vetor de representação esparsa, conforme a Figura~\ref{fig:discrete-representation}, é composto por poucos coeficientes diferentes de zero. Esse tipo de representação tem duas limitações: o tamanho do vetor cresce de acordo com o tamanho do vocabulário e os coeficientes do vetor não indicam nenhum tipo de relação semântica ou sintática entre as palavras. Já o vetor de representação distribuída é um vetor denso, cujo tamanho é menor que o tamanho do vocabulário de palavras, e o acréscimo de uma palavra não altera a dimensão do vetor. A principal característica dos vetores de representação distribuída é a abstração da relação semântica e/ou sintática através dos seus coeficientes. A Figura~\ref{fig:distributed-representation} ilustra essa característica, onde um coeficiente ou conceito está relacionado a várias palavras e uma palavra está relacionada a vários conceitos, permitindo verificar uma relação entre as palavras através do cálculo de similaridade dos seus respectivos vetores.
 
- O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras que estão próximas umas das outras, em diferentes sentenças, tem significados similares \citep{Goodfellow-et-al-2016}. O vetor de representação distribuída de uma palavra é representado por um vetor contínuo ou também chamado de \textit{embedding}. Podemos definir \textbf{embedding} através da seguinte função \citep{cambronero-deep-learning-code-search:2019}:
+ O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras que estão próximas umas das outras, em diferentes sentenças, tem significados similares \citep{Goodfellow-et-al-2016}. O vetor de representação distribuída de uma palavra é representado por um vetor contínuo ou também chamado de \textit{embedding}. Uma função que mapeia um palavra para um vetor contínuo é chamado de \textit{encoder} ou codificador. Podemos definir \textit{encoder} através da seguinte função \citep{cambronero-deep-learning-code-search:2019}:
 
 \begin{equation}
     f: \mathbb{V} \rightarrow \mathbb{E}
 \end{equation}
 
-A função $f$ mapeia uma palavra $w$, $w \in \mathbb{V}$, para um vetor contínuo $e, e \in \mathbb{E}, \mathbb{E }\subseteq \mathbb{R}^{d}$, onde $\mathbb{V}$ representa o vocabulário de palavras, $\mathbb{E}$ é um conjunto de vetores contínuos e $d$ é a dimensão do vetor. Uma opção comumente utilizada para a função $f$ é o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} recebe uma matriz de inteiros como entrada, onde cada índice da matriz indica uma palavra, e retorna, ao final, uma matriz de vetores contínuos. O \textit{word2vec} tem duas abordagens para obter a matriz de vetores contínuos:
+A função ou \textit{encoder} $f$ mapeia uma palavra $w$, $w \in \mathbb{V}$, para um vetor contínuo $e, e \in \mathbb{E}, \mathbb{E }\subseteq \mathbb{R}^{d}$, onde $\mathbb{V}$ representa o vocabulário de palavras, $\mathbb{E}$ é um conjunto de vetores contínuos e $d$ é a dimensão do vetor. Uma opção comumente utilizada para a função $f$ é o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} recebe uma matriz de inteiros como entrada, onde cada índice da matriz indica uma palavra, e retorna, ao final, uma matriz de vetores contínuos. O \textit{word2vec} tem duas abordagens para obter a matriz de vetores contínuos:
 
 \begin{itemize}
     \item \acrfull{cbow}
@@ -201,6 +201,8 @@ De acordo com \cite{feng-2015, guo-deep-look-into-neural-ranking-models:2019, wu
 
 
 \subsection{Comparação em lista ou \textit{listwise}}
+
+
 
 Seja $t_{q}$ um vetor contínuo da questão, $t_{c^{+}}$ um vetor contínuo do trecho de código-fonte anotado como correto. 
 E apróximá-los através de uma função objetivo, de tal maneira que as questões fiquem próximas dos trechos de código-fonte relevantes. 
