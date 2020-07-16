@@ -50,7 +50,7 @@ Com cada palavra representada por um vetor de representação distribuída, o pr
 \end{itemize}
 
 A operação de convolução utiliza um filtro convolucional $\bm{F}  = [\bm{F}(0),· · ·, \bm{F}(m - 1)]$, tal que $\bm{F} \in \mathbb{R}^{m X d}$. Este filtro é aplicado em uma janela de $m$ palavras para produzir um novo vetor.
-Seja $\bm{x}(i, i + j)$ referência a concatenação dos vetores $\bm{x}(i), \bm{x}(i + 1), . . ., \bm{x}(i + j)$. . Ao aplicar $\bm{F}$ na seguinte janela de palavras $\bm{x}(i, i + m - 1)$, um novo vetor $\bm{c}(i)$ é calculado da seguinte maneira:
+Seja $\bm{x}(i, i + j)$ referência a concatenação dos vetores $\bm{x}(i), \bm{x}(i + 1), . . ., \bm{x}(i + j)$. Ao aplicar $\bm{F}$ na seguinte janela de palavras $\bm{x}(i, i + m - 1)$, um novo vetor $\bm{c}(i)$ é calculado da seguinte maneira:
 
 \begin{equation}\label{eq:calc_convolution_ci}
     \bm{c}(i) = tanh \left[\left(\sum_{j=0}^{m - 1} \bm{x}(i + j)^{T}\bm{F}(j)\right) + b\right]

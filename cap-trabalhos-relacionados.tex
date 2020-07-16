@@ -202,17 +202,13 @@ De acordo com \cite{feng-2015, guo-deep-look-into-neural-ranking-models:2019, wu
 
 \subsection{Comparação em lista ou \textit{listwise}}
 
+De acordo com \cite{wu-sql-rank-listwise-approach:2018}, a função de comparação em lista ou \textit{listwise} atribui um valor à lista de itens observados, ao invés de realizar a comparação individualmente. Dado um vetor $q_{i}$ e uma lista de candidatos $T_{i}$, a função de perda \textit{listwise} pode ser definida como \citep{guo-deep-look-into-neural-ranking-models:2019}:
 
+\begin{equation}
+    L (h_{\theta}, Y, T): \sum_{i} \sum_{j = 1}^{|T_{i}|} L( y_{i,j}, h_{\theta}(q_{i}, c_{j}))
+\end{equation}
 
-Seja $t_{q}$ um vetor contínuo da questão, $t_{c^{+}}$ um vetor contínuo do trecho de código-fonte anotado como correto. 
-E apróximá-los através de uma função objetivo, de tal maneira que as questões fiquem próximas dos trechos de código-fonte relevantes. 
-
-Nesta abordagem, o objetivo é encontrar um modelo que consiga correlacionar dados heterogêneos. No livro \cite{Goodfellow-et-al-2016}, a associação entre as representações é referida como agrupamento de distribuições ou \textit{joint distribution}. Já \cite{cambronero-deep-learning-code-search:2019} e \cite{Allamanis-bimodal-source-code-natural-language:2015} utilizam o termo \textit{bi-modal embedding}. \cite{Zhang:2019:deep-learning-recommender-survey} utilizam \textit{jointly model}. E \cite{Gu-deep-code-search:2018} utilizam o temo agrupamento de representação distribuída ou \textit{joint embedding}. Neste trabalho, utilizaremos o termo \textit{joint embedding} ou agrupamento de representação distribuída.
-
-
-\textit{Joint embedding}, ou agrupamento de representação distribuída, é uma técnica para mapear dados heterogêneos para um mesmo espaço vetorial, de tal forma que conceitos similares ocupem regiões próximas neste espaço \citep{Gu-deep-code-search:2018}. Esta técnica é comumente utilizada para encontrar modelos que correlacionem imagem e texto, tradução de textos e também é utilizada em problemas de perguntas e respostas e recomendações de conteúdo \citep{lai-etal-2018-review, Zhang:2019:deep-learning-recommender-survey}.
-
-Por exemplo, sejam  conjuntos de dados heterogêneos. \textit{Joint embedding} pode ser formulado como:
+Onde $c_{j} \in T_{i}$ e a função de perda $L$ é calculada de acordo com os itens ordenados $y_{i,j}$, de modo que $j$ indica a posição do elemento observado na lista para um vetor $q_{i}$. Uma possível abordagem é maximizar a verossimilhança entre a lista de candidatos $T_{i}$ e uma lista de itens observados $\pi_{i}$.
 
 
 
