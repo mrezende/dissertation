@@ -208,11 +208,19 @@ De acordo com \cite{wu-sql-rank-listwise-approach:2018}, a função de comparaç
     L (h_{\theta}, Y, T): \sum_{i} \sum_{j = 1}^{|T_{i}|} L( y_{i,j}, h_{\theta}(q_{i}, c_{j}))
 \end{equation}
 
-Onde $c_{j} \in T_{i}$ e a função de perda $L$ é calculada de acordo com os itens ordenados $y_{i,j}$, de modo que $j$ indica a posição do elemento observado na lista para um vetor $q_{i}$. Uma possível abordagem é maximizar a verossimilhança entre a lista de candidatos $T_{i}$ e uma lista de itens observados $\pi_{i}$.
+Onde $c_{j} \in T_{i}$ e a função de perda $L$ é calculada de acordo com os itens ordenados $y_{i,j}$, de modo que $j$ indica a posição do elemento observado na lista para um vetor $q_{i}$. Uma possível abordagem é maximizar a verossimilhança entre a lista de candidatos $T_{i}$ e uma lista de itens anotados $\pi_{i}$. Neste caso, a função $L$ seria calculada da seguinte maneira \citep{guo-deep-look-into-neural-ranking-models:2019}:
 
+\begin{equation}
+    L (h_{\theta}, Y, T): \sum_{i} \sum_{j = 1}^{|\pi_{i}|} log P( y_{i,j} | T_{i}, h_{\theta})
+\end{equation}
 
+Onde $P(y_{i,j} | T{i}, h_{\theta})$ é a probabilidade de selectionar o j-ésimo elemento na lista ordenada $\pi_{i}$ com a função $h_{\theta}$:
 
-    
+\begin{equation}
+    P(y_{i,j} | T_{i}, h_{\theta}): \frac{exp(h_{\theta}(q_{i}, c_{j}))}{\sum_{k = j}^{\pi_{i}} exp(h_{\theta}(q_{i}, c_{k}))}
+\end{equation}
+
+A função $L$ busca encontrar a permutação ótima da lista de candidatos $T_{i}$. De acordo com \cite{guo-deep-look-into-neural-ranking-models:2019}, apesar da comparação em lista ser mais efetivo que a comparação em pares, o custo computacional limita a sua aplicação. O método \textit{listwise} torna-se uma opção para as etapas de reclassificação, onde um número limitado de documentos é avaliado. 
 
 \section{Trabalhos relacionados}\label{sec:code-retrieval-trabalhos-relacionados}
 
