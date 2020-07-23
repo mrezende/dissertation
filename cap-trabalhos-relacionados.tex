@@ -224,55 +224,48 @@ A função $L$ busca encontrar a permutação ótima da lista de candidatos $T_{
 
 \section{Trabalhos relacionados}\label{sec:code-retrieval-trabalhos-relacionados}
 
-Conforme \cite{cambronero-deep-learning-code-search:2019}, uma boa parte dos modelos propostos para o \textit{code retrieval} utilizam a abordagem \textit{joint embedding}. Compilamos os principais trabalhos que utilizam esta abordagem na Tabela~\ref{table:summary-joint-embedding}. Para compilar estes artigos, inicialmente, fizemos uso das referências apontadas nos  trabalhos de \citeauthor{Allamanis:2018:SML} e \citeauthor{yao-2018}. Posteriormente, realizamos buscas nas bases Scopus, Google Scholar e IEEE com as palavras-chaves \textit{neural network}, \textit{code retrieval} e \textit{code search}. Após as leituras dos títulos, resumos e palavras-chaves, mantivemos os artigos que vão ao encontro com a nossa definição de \textit{code retrieval}.
+A principal abordagem utilizada na recuperação de trecho de código-fonte é a técnica \textit{joint embedding}. Na Tabela~\ref{table:summary-joint-embedding} apontamos as diferentes abordagens utilizadas pelos trabalhos com relação a composição do par descrição e trecho de código, as técnicas para criação dos vetores contínuos das palavras e das sentenças.
 
-\begin{table}[h]
+
+\begin{table}[H]
 \centering
-\begin{tabular}{  p{5cm}  p{10cm}   }
-\hline
-\textbf{Artigo} & \textbf{Sumário} \\
-\hline
-\multirow{2}{8em}{\cite{Allamanis-bimodal-source-code-natural-language:2015}} & Representação distribuída para as questões / Árvore sintática para o código-fonte\\
 
-& Combinou os vetores de \textit{tokens} de questão através da média / Combinou os \textit{tokens} de código-fonte usando operações multiplicativas\\
+\begin{tabular}{ l p{3cm} p{3cm} p{3cm} }
+ \hline
+ \textbf{Trabalho} & \textbf{Composição} & \textbf{Vetor contínuo das palavras} & \textbf{Vetor contínuo das sentenças} \\
+ \hline
+\citep{Allamanis-bimodal-source-code-natural-language:2015} & \Gls{token} / Árvore sintática & Modelo Probabilístico & Média / Matriz de conteúdo  \\
 
-\hline
- 
-\multirow{2}{8em}{\cite{Chen-bi-variational-autoencoder:2018}} & Representação distribuída para questão e código-fonte\\
+\citep{iyer-etal-2016-summarizing} & \Gls{token} & \Gls{one-hot-encoding} & \acrshort{lstm} com \gls{mecanismo-atencao}  \\
 
-& Combinou os vetores de representação distribuída usando \acrshort{vae}\\
+\citep{Chen-bi-variational-autoencoder:2018} & \Gls{token} & Bi-\acrshort{vae} & Bi-\acrshort{vae}, Média e \acrshort{mlp}  \\
+
+\citep{Gu-deep-code-search:2018} & \Gls{token} / Nome do método, chamada de API e \Gls{token} & bi-\acrshort{lstm} & \Gls{max-pooling} / \Gls{max-pooling} e \acrshort{mlp}   \\
+
+\citep{Sachdev-neural-code-search:2018} & \Gls{token} & \Gls{skip-gram} & Média / \acrshort{tf-idf}   \\
+
+\citep{cambronero-deep-learning-code-search:2019} & \Gls{token} & \Gls{skip-gram} & Média / \Gls{mecanismo-atencao}   \\
+
+\textit{Nosso trabalho} & \Gls{token} & \Gls{skip-gram} & \acrshort{cnn}   \\
 
  \hline
-\multirow{2}{8em}{\cite{iyer-etal-2016-summarizing}} & \gls{one-hot-encoding} para questão e código-fonte \\
- 
- & Combinou os vetores usando \acrshort{lstm} com \gls{mecanismo-atencao}\\
- 
- \hline
- 
- \multirow{2}{8em}{\cite{Gu-deep-code-search:2018}} & \textit{word2vec} para questão e código-fonte\\
- 
- & Combinou os vetores usando uma rede bi-\acrshort{lstm}\\
- 
- \hline
- 
- \multirow{2}{8em}{\citep{Sachdev-neural-code-search:2018}} & \textit{word2vec} para código-fonte e questão\\
- 
- & Combinou os vetores de \textit{tokens} da questão usando a média / Combinou os vetores do código-fonte através do \acrshort{tf-idf} \\
- 
- \hline
- 
- \multirow{2}{8em}{\cite{cambronero-deep-learning-code-search:2019}} & \textit{word2vec} para questões e código-fonte \\
- 
- & Combinou os vetores de cada palavra da questão calculando a média / Combinou os vetores do código-fonte usando o \gls{mecanismo-atencao}\\
- 
- \hline
- 
 \end{tabular}
-\caption{Sumário das diferentes abordagens adotadas pelos pesquisadores para o problema do \textit{code retrieval}. Tabela adaptada de \cite{cambronero-deep-learning-code-search:2019}}
+\caption{Sumário dos trabalhos relacionados à recuperação de trecho de código-fonte. A coluna \emph{Composição} refere-se ao par questão e trecho de código-fonte. Diferentes métodos são separados por barra (''/''), exibindo o método para a questão e posteriormente o método para o código-fonte. Adaptação de \cite{yan-benchmark-code-search-information-retrieval-deep-learning:2020}.}
 \label{table:summary-joint-embedding}
 \end{table}
 
-Conforme a Tabela~\ref{table:summary-joint-embedding}, a maioria dos trabalhos representaram as palavras através de vetores de representação distribuída. Com exceção do \cite{iyer-etal-2016-summarizing} que optou por representar com \gls{one-hot-encoding}. Já em relação a combinação das palavras, i.e., representação da sentença os trabalhos de \cite{Gu-deep-code-search:2018} e \cite{iyer-etal-2016-summarizing} optaram pelo uso de redes neurais recorrentes, levando em consideração a ordem das palavras. Já \cite{Allamanis-bimodal-source-code-natural-language:2015} optou por representar as questões como um \textit{bag} de palavras, enquanto para os trechos de código-fonte optou-se por representar através de uma árvore sintática obtida através do compilador. Neste caso, a relação hierárquiva entre as palavras foi levada em consideração. Os trabalhos de \cite{Chen-bi-variational-autoencoder:2018}, \cite{Sachdev-neural-code-search:2018} e \cite{cambronero-deep-learning-code-search:2019} optaram por uma abordagem mais simples e trataram o vetor de tokens como um \textit{bag}.
+Conforme a Tabela~\ref{table:summary-joint-embedding}, a maioria dos trabalhos representaram as palavras através de vetores de representação distribuída (e.g. modelo probabilístico, bi-\acrshort{vae}, \gls{skip-gram}), exceto \cite{iyer-etal-2016-summarizing} que optou por utilizar uma representação esparsa, \gls{one-hot-encoding}. Já em relação a combinação das palavras, i.e., representação da sentença, os trabalhos de \cite{Gu-deep-code-search:2018} e \cite{iyer-etal-2016-summarizing} optaram pelo uso de redes neurais recorrentes, levando em consideração a ordem das palavras. Enquanto os trabalhos de \cite{Chen-bi-variational-autoencoder:2018}, \cite{Sachdev-neural-code-search:2018} e \cite{cambronero-deep-learning-code-search:2019} optaram por uma abordagem mais simples e trataram o vetor de tokens como uma sacola ou \textit{bag}, i.e., indiferente à ordem das palavras na sentença.
+
+Conforme a Tabela~\ref{table:summary-joint-embedding}, todos os trabalhos extraíram as palavras e os termos individuais das questões, i.e., os \textit{tokens}, para compor os vetores. No caso do código-fonte, apenas os trabalhos de \cite{Allamanis-bimodal-source-code-natural-language:2015} e \cite{Gu-deep-code-search:2018} optaram por não compor os vetores através de \textit{tokens}. \cite{Allamanis-bimodal-source-code-natural-language:2015} preferiram compor o vetor do código-fonte por comandos e expressões obtidas por um analisador sintático, priorizando a relação hierárquica entre os termos. Já \cite{Gu-deep-code-search:2018} ...
+
+\cite{Allamanis-bimodal-source-code-natural-language:2015} -> NCE noise contrastive estimation -> pointwise
+\citep{iyer-etal-2016-summarizing} -> NLL -> pointwise
+
+\citep{Chen-bi-variational-autoencoder:2018} log likehood -> pointwise
+
+\cite{Gu-deep-code-search:2018} triple loss margin hinge loss -> pairwise
+
+
 
 É interessante observar que nenhum trabalho fez uso das redes convolucionais na recuperação de trecho de código-fonte. Sendo que as redes convolucionais apresentaram um bom desempenho em problemas similares em NLP \citep{lai-etal-2018-review, tan-lstm-qa, feng-2015}. \citeauthor{yao-2018} fez uma menção sobre a possibilidade do uso de CNN na tarefa de \textit{code retrieval}.
 

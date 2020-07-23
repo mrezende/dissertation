@@ -39,6 +39,13 @@
     }
 }
 
+\newglossaryentry{skip-gram}
+{
+    name=\textit{Skip-gram},
+    description={\textit{Skip-gram} é uma técnica do \gls{word2vec} que mapeia uma palavra para um vetor contínuo através da predição das palavras do contexto a partir de uma palavra-alvo. Mais informações na Seção~\ref{sec:fundamentao-representacao-tokens-palavras}
+    }
+}
+
 \newglossaryentry{one-hot-encoding}
 {
     name=\textit{one-hot encoding},
@@ -48,6 +55,20 @@
         \item O restante dos elementos tem o valor definido como 0
     \end{itemize}
     \textit{One-hot enconding} normalmente é utilizado para representar palavras e ou atributos que contém uma quantidade finita de valores \citep{glossary-ml}
+    }
+}
+
+\newglossaryentry{token}
+{
+    name=\textit{Token},
+    description={\textit{token} refere-se a palavra ou termo presente nas descrições e/ou trechos de código-fonte na tarefa de recuperação de trecho de código-fonte
+    }
+}
+
+\newglossaryentry{max-pooling}
+{
+    name=\textit{Max pooling},
+    description={\textit{Max pooling} refere-se a uma camada que reduz a dimensionalidade de um vetor aplicando a função \textit{max}, que retorna o maior elemento do vetor
     }
 }
 
@@ -126,6 +147,7 @@ description={
 \newacronym{lstm}{LSTM}{\textit{Long Short Term Memory}}
 \newacronym{nlp}{NLP}{\textit{Natural Language Processing}}
 \newacronym{vae}{VAE}{\textit{Variational AutoEncoder}}
+\newacronym{mlp}{MLP}{\textit{Multilayer Perceptron}}
 \newacronym{tf-idf}{TFIDF}{\textit{Term Frequency–Inverse Document
 Frequency}}
 \newacronym{cbow}{CBoW}{\textit{Continuous Bag-of-Words}}
