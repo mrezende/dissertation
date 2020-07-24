@@ -838,6 +838,22 @@ abstract = "Ranking models lie at the heart of research on information retrieval
   abstract = 	 {In this paper, we propose a listwise approach for constructing user-specific rankings in recommendation systems in a collaborative fashion. We contrast the listwise approach to previous pointwise and pairwise approaches, which are based on treating either each rating or each pairwise comparison as an independent instance respectively. By extending the work of ListNet (Cao et al., 2007), we cast listwise collaborative ranking as maximum likelihood under a permutation model which applies probability mass to permutations based on a low rank latent score matrix. We present a novel algorithm called SQL-Rank, which can accommodate ties and missing data and can run in linear time. We develop a theoretical framework for analyzing listwise ranking methods based on a novel representation theory for the permutation model. Applying this framework to collaborative ranking, we derive asymptotic statistical rates as the number of users and items grow together. We conclude by demonstrating that our SQL-Rank method often outperforms current state-of-the-art algorithms for implicit feedback such as Weighted-MF and BPR and achieve favorable results when compared to explicit feedback algorithms such as matrix factorization and collaborative ranking.}
 }
 
+@InProceedings{gutmann-nce-noise-contrastive-estimation-2010,
+  title = 	 {Noise-contrastive estimation: A new estimation principle for unnormalized statistical models},
+  author = 	 {Michael Gutmann and Aapo Hyvärinen},
+  booktitle = 	 {Proceedings of the Thirteenth International Conference on Artificial Intelligence and Statistics},
+  pages = 	 {297--304},
+  year = 	 {2010},
+  editor = 	 {Yee Whye Teh and Mike Titterington},
+  volume = 	 {9},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {Chia Laguna Resort, Sardinia, Italy},
+  month = 	 {13--15 May},
+  publisher = 	 {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v9/gutmann10a/gutmann10a.pdf},
+  url = 	 {http://proceedings.mlr.press/v9/gutmann10a.html},
+  abstract = 	 {We present a new estimation principle for parameterized statistical models. The idea is to perform nonlinear logistic regression to discriminate between the observed data and some artificially generated noise, using the model log-density function in the regression nonlinearity.  We show that this leads to a consistent (convergent) estimator of the parameters, and analyze the asymptotic variance.  In particular, the method is shown to directly work for unnormalized models, i.e. models where the density function does not integrate to one. The normalization constant can be estimated just like any other parameter. For a tractable ICA model, we compare the method with other estimation methods that can be used to learn unnormalized models, including score matching, contrastive divergence, and maximum-likelihood where the normalization constant is estimated with importance sampling. Simulations show that noise-contrastive estimation offers the best trade-off between computational and statistical efficiency. The method is then applied to the modeling of natural images: We show that the method can successfully estimate a large-scale two-layer model and a Markov random field.}
+}
 
 
 

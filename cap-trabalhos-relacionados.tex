@@ -256,18 +256,17 @@ A principal abordagem utilizada na recuperação de trecho de código-fonte é a
 
 Conforme a Tabela~\ref{table:summary-joint-embedding}, a maioria dos trabalhos representaram as palavras através de vetores de representação distribuída (e.g. modelo probabilístico, bi-\acrshort{vae}, \gls{skip-gram}), exceto \cite{iyer-etal-2016-summarizing} que optou por utilizar uma representação esparsa, \gls{one-hot-encoding}. Já em relação a combinação das palavras, i.e., representação da sentença, os trabalhos de \cite{Gu-deep-code-search:2018} e \cite{iyer-etal-2016-summarizing} optaram pelo uso de redes neurais recorrentes, levando em consideração a ordem das palavras. Enquanto os trabalhos de \cite{Chen-bi-variational-autoencoder:2018}, \cite{Sachdev-neural-code-search:2018} e \cite{cambronero-deep-learning-code-search:2019} optaram por uma abordagem mais simples e trataram o vetor de tokens como uma sacola ou \textit{bag}, i.e., indiferente à ordem das palavras na sentença.
 
-Conforme a Tabela~\ref{table:summary-joint-embedding}, todos os trabalhos extraíram as palavras e os termos individuais das questões, i.e., os \textit{tokens}, para compor os vetores. No caso do código-fonte, apenas os trabalhos de \cite{Allamanis-bimodal-source-code-natural-language:2015} e \cite{Gu-deep-code-search:2018} optaram por não compor os vetores através de \textit{tokens}. \cite{Allamanis-bimodal-source-code-natural-language:2015} preferiram compor o vetor do código-fonte por comandos e expressões obtidas por um analisador sintático, priorizando a relação hierárquica entre os termos. Já \cite{Gu-deep-code-search:2018} ...
+Conforme a Tabela~\ref{table:summary-joint-embedding}, todos os trabalhos extraíram as palavras e os termos individuais das questões, i.e., os \textit{tokens}, para compor os vetores. No caso do código-fonte, apenas os trabalhos de \cite{Allamanis-bimodal-source-code-natural-language:2015} e \cite{Gu-deep-code-search:2018} optaram por não compor os vetores através de \textit{tokens}. \cite{Allamanis-bimodal-source-code-natural-language:2015} preferiram compor o vetor do código-fonte por comandos e expressões obtidas por meio de um analisador sintático, priorizando a relação hierárquica entre os termos. Já \cite{Gu-deep-code-search:2018} consideraram mais de um aspecto na composição, os pesquisadores utilizaram o nome do método, a invocação da API e os tokens para a construção do vetor.
 
-\cite{Allamanis-bimodal-source-code-natural-language:2015} -> NCE noise contrastive estimation -> pointwise
+
+Com relação a função objetivo, 
+
+\cite{Allamanis-bimodal-source-code-natural-language:2015} -> NCE noise contrastive estimation -> pairwise
 \citep{iyer-etal-2016-summarizing} -> NLL -> pointwise
 
 \citep{Chen-bi-variational-autoencoder:2018} log likehood -> pointwise
 
 \cite{Gu-deep-code-search:2018} triple loss margin hinge loss -> pairwise
-
-
-
-É interessante observar que nenhum trabalho fez uso das redes convolucionais na recuperação de trecho de código-fonte. Sendo que as redes convolucionais apresentaram um bom desempenho em problemas similares em NLP \citep{lai-etal-2018-review, tan-lstm-qa, feng-2015}. \citeauthor{yao-2018} fez uma menção sobre a possibilidade do uso de CNN na tarefa de \textit{code retrieval}.
 
 Para avaliação do modelo, há uma diferença, basicamente, no corpus de busca. Corpus de busca entende-se como um conjunto formado por trechos de código-fonte no qual o modelo ou o sistema irá utilizar para recuperar o trecho de código mais relevante para uma questão. \cite{iyer-etal-2016-summarizing} e \cite{Chen-bi-variational-autoencoder:2018} utilizaram um corpus de busca composto pelo trecho de código-fonte apontado como correto e outros 49 distratores para avaliação. Já \cite{Gu-deep-code-search:2018}, \cite{Sachdev-neural-code-search:2018} e \cite{cambronero-deep-learning-code-search:2019} utilizaram repositórios do Github.  
 
