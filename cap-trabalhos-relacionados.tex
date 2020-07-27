@@ -184,6 +184,7 @@ A função $h_{\theta}$ deve estar dentro do intervalo $[0, 1]$ (e.g., função 
 
 
 \subsection{Comparação em pares ou \textit{pairwise}}
+\label{sec:secao-comparacao-em-pares-pairwise}
 
 De acordo com \cite{guo-deep-look-into-neural-ranking-models:2019}, a comparação em pares prioriza a relativa preferência dos itens, ao invés da correta classificação das informações. Diferentemente da comparação individual, onde a função objetivo é resultado da soma da função para cada item, na comparação em pares, o resultado é fruto da soma das permutações de cada par de itens. Formalmente, a função de comparação em pares pode ser definida como:
 
@@ -259,9 +260,10 @@ Conforme a Tabela~\ref{table:summary-joint-embedding}, a maioria dos trabalhos r
 Conforme a Tabela~\ref{table:summary-joint-embedding}, todos os trabalhos extraíram as palavras e os termos individuais das questões, i.e., os \textit{tokens}, para compor os vetores. No caso do código-fonte, apenas os trabalhos de \cite{Allamanis-bimodal-source-code-natural-language:2015} e \cite{Gu-deep-code-search:2018} optaram por não compor os vetores através de \textit{tokens}. \cite{Allamanis-bimodal-source-code-natural-language:2015} preferiram compor o vetor do código-fonte por comandos e expressões obtidas por meio de um analisador sintático, priorizando a relação hierárquica entre os termos. Já \cite{Gu-deep-code-search:2018} consideraram mais de um aspecto na composição, os pesquisadores utilizaram o nome do método, a invocação da API e os tokens para a construção do vetor.
 
 
-Com relação a função objetivo, 
+Com relação a função objetivo, os trabalhos de \cite{iyer-etal-2016-summarizing} e \cite{Chen-bi-variational-autoencoder:2018} otimizaram o modelo para classificar as respostas corretamente. Ambos os trabalhos utilizaram a função de custo log-verossimilhança negativa, cujo objetivo é maximizar a verossimilhança entre a resposta obtida pelo modelo e as respostas observadas. \cite{Allamanis-bimodal-source-code-natural-language:2015} optou pela função de estimativa do contraste de ruído ou \acrfull{nce}, que busca discriminar as respostas observadas entre uma amostra de ruídos \citep{gutmann-nce-noise-contrastive-estimation-2010}. Diferente dos outros trabalhos, \cite{Gu-deep-code-search:2018} utilizou a função de perda de articulação ou \textit{hinge loss}, que prioriza a relativa preferência das respostas corretas, ao invés da sua correta classificação. Conforme mencionado na Seção~\ref{sec:secao-comparacao-em-pares-pairwise}, essa funç
+ão 
 
-\cite{Allamanis-bimodal-source-code-natural-language:2015} -> NCE noise contrastive estimation -> pairwise
+\cite{Allamanis-bimodal-source-code-natural-language:2015} -> NCE noise contrastive estimation -> pairwise \cite{gutmann-nce-noise-contrastive-estimation-2010}
 \citep{iyer-etal-2016-summarizing} -> NLL -> pointwise
 
 \citep{Chen-bi-variational-autoencoder:2018} log likehood -> pointwise
