@@ -2,43 +2,39 @@
 \chapter{Abordagem}
 \label{cap:abordagem}
 
-Conforme citado no Capítulo~\ref{cap:fundamentacao-teorica}, uma técnica muito utilizada para \textit{code retrieval} é a \textit{joint embedding}. Para utilizar esta técnica, três fatores devem ser levados em consideração:
+Conforme citado no Capítulo~\ref{cap:fundamentacao-teorica}, uma técnica muito utilizada para a recuperação de trechos de código-fonte é o agrupamento de vetores contínuos ou \textit{joint embedding}. Para utilizar esta técnica, três fatores devem ser levados em consideração:
 
 \begin{itemize}
-    \item Representação de cada palavra de uma sentença ou trecho de código-fonte
-    \item Representação da sentença e do trecho de código-fonte
+    \item Representação dos \textit{tokens} ou palavras
+    \item Representação das sentenças
     \item Função objetivo do modelo
 \end{itemize}
 
-A nossa proposta é criar um modelo que faz uso das redes convolucionais na aprendizagem de representação das questões e trechos de código-fonte. Porém, conforme levantado anteriormente, outros aspectos também devem ser levados em consideração. Como as palavras serão representadas e qual função objetivo utilizaremos para que o modelo induza a aproximação das questões aos trechos de código-fonte que são solução. Então, neste capítulo, apresentaremos a nossa abordagem para cada um destes itens.
+Para a representação das palavras, optamos por uma representação distribuída através do uso do \textit{word2vec} com o algoritmo \textit{skip-gram}, que apresentou um bom desempenho em tarefas semânticas \citep{mikolov2013distributed}. No caso da representação das sentenças, utilizamos redes convolucionais com uma camada de \gls{max-pooling}, priorizando as interações locais e a invariância a pequenas translações (e.g. alteração da ordem de uma palavra na sentença). Com relação à função objetivo, optamos pela função de perda de articulação ou \textit{hinge loss}, que otimiza a relativa preferência das respostas, ao invés da sua correta classificação.
 
-\section{Representação de cada palavra de uma sentença ou trecho de código-fonte}
+
+
+\section{Representação dos tokens ou palavras}
 \label{sec:abordagem-representacao-token}
 
-As questões e os trechos de código-fonte são compostos por palavras, pontuações, separadores e caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, iremos representá-las como um vetor formado por uma sequência de palavaras, apenas removendo os caracteres de acento e pontuação.
+As questões e os trechos de código-fonte são compostos por palavras, pontuações, separadores. caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, iremos representá-las como um vetor formado por uma sequência de palavaras, apenas removendo os caracteres de acento e pontuação. No caso do código-fonte, acreditamos que os termos presentes no código-fonte contém informações suficientes para estabelecer uma relação semântica entre a questão e o trecho de código-fonte, mesma hipótese utilizada por \cite{Sachdev-neural-code-search:2018}. Neste caso, removemos os acentos e caracteres especiais dos trechos de código-fonte, tratando cada termo presente como um \gls{token}.
 
-No caso do código-fonte, iremos partir da  mesma hipótese que utilizamos no artigo \cite{marcelo-vem-2019}, apresentado no \acrfull{vem}. Essa hipótese foi levantada por \cite{Allamanis:2018:SML} e diz que software é uma forma de comunicação humana e tem propriedades estatísticas similares a corpora de linguagem natural. A partir disto, iremos aplicar os mesmos procedimentos adotados para as questões aos trechos de código-fonte. Quer dizer, os trechos de código-fonte serão tratados como uma sequência de palavras e terão os acentos e caracteres especiais removidos.
+Uma boa representação para as palavras são os vetores contínuos. De acordo com \cite{Goodfellow-et-al-2016}, as redes neurais generalizam bem quando as palavras são representadas através de vetores contínuos. Conforme os próprios autores, uma boa representação deve auxiliar na aprendizagem de uma tarefa posterior. No nosso caso, as representações devem auxiliar o modelo a encontrar uma correlação entre as questões e os trechos de código-fonte mais relevantes.
 
-Para cada palavra devemos definir uma representação. Uma boa representação para as palavras são os vetores de representação distribuída. Pois, segundo \cite{Goodfellow-et-al-2016}, as redes neurais generalizam bem quando as palavras são representadas através de vetores de representação distribuída. E conforme os próprios autores, uma boa representação deve auxiliar na aprendizagem de uma tarefa posterior. No nosso caso, as representações devem auxiliar a tarefa de aprender a encontrar uma correlação entre as questões e os trechos de código-fonte mais relevantes.
+Mapeamos as palavras para vetores contínuos através do \gls{word2vec} com o algoritmo \gls{skip-gram}, que prediz as palavras do contexto a partir de uma palavra alvo. Segundo \cite{mikolov2013distributed}, \textit{skip-gram} obteve um melhor desempenho em problemas semânticos, e.g., relacionar uma palavra masculina com a equivalente feminina, relacionar o nome de uma capital a um país ou cidade a um estado. No caso do código-fonte, isto é uma característica importante, pois pode auxiliar no agrupamento dos \textit{tokens} por tipo. 
 
-Portanto, neste trabalho, cada palavra será representada através de um vetor de representação distribuída. Para mapeá-las, utilizaremos, inicialmente, o algoritmo \textit{word2vec}. Ele será utilizado com \textit{skip-gram}, que prediz as palavras do contexto a partir de uma palavra alvo. Segundo \cite{mikolov2013distributed}, \textit{skip-gram} obteve um desempenho melhor em problemas semânticos, e.g., relacionar uma palavra masculina com a equivalente feminina, relacionar o nome de uma capital a um país ou cidade a um estado. No caso do código-fonte, isto é uma característica importante, pois pode ajudar a agrupar os \textit{tokens} de acordo com o tipo. Por exemplo, agrupar a instrução de decisão \textit{while} próxima da instrução \textit{for}. E relacionar a instrução de decisão \textit{if} próxima da \textit{else}.
-
-No nosso caso, o \textit{word2vec} irá mapear cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{V}$ o conjunto formado pelas palavras das questões e pelas palavras presentes nos trechos de código-fonte. Para cada palavra ${p} \in \mathbb{V}$ teremos:
+No nosso caso, o \textit{word2vec} mapeou cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{V}$ o conjunto formado pelas palavras das questões e pelas palavras presentes nos trechos de código-fonte. Para cada palavra ${p} \in \mathbb{V}$ temos:
 
 \begin{equation}
     f: {p} \mapsto t_{p},\; t_{p} \in \mathbb{R}^{d}
 \end{equation}
 
-Onde $f$ é o \textit{word2vec} com o algoritmo \textit{skip-gram}. A função $f$ irá mapear cada palavra pertencente ao vocabulário a uma matriz $\bm{T_{v}}$.
-Teremos uma matriz: $\bm{T}_{v}^{|\mathbb{V}| X d}$ onde $|\mathbb{V}|$ é o tamanho do vocabulário das questões e trechos de código-fonte. E $d$ é a dimensão do vetor de representação distribuída.
+Onde $f$ é o \textit{word2vec} com o algoritmo \textit{skip-gram}. A função $f$ mapeia cada palavra pertencente ao vocabulário a uma matriz $\bm{T_{v}}$.
+Temos uma matriz $\bm{T}_{v}^{|\mathbb{V}| X d}$, onde $|\mathbb{V}|$ é o tamanho do vocabulário das questões e trechos de código-fonte, e $d$ é a dimensão do vetor contínuo.
 
-Com esta matriz $\bm{T}_{v}$, que contém as palavras das questões e dos trechos de código-fonte mapeadas, podemos representar uma sentença através de vetores de representação distribuída. Por exemplo, dado uma questão $\bm{s} = \{ w_{0}, w_{1}, . . ., w_{n - 1}\}$, onde $w_{i}, 0 \leq i < n$ é uma palavra. Podemos representar $\bm{s}$ através de um outro vetor $\bm{x}$, onde para cada palavra presente em $\bm{s}$, elas serão representadas através de um vetor de representação distribuída em $\bm{x}$. Para isto, basta recuperar o vetor $t_{p} \in \bm{T}_{v}$ correspondente a cada palavra presente em nossa questão. Logo, temos $\bm{x} = \{ x(w_{0}), x(w_{1}), . . ., x(w_{n - 1})\}$, tal que $x(w_{i}) \in \bm{T}_{v}$ e $\bm{x}(w_{i}) \in \mathbb{R}^{d}$ é um vetor de representação distribuída. O próximo passo é combinar os elementos do vetor $\bm{x}$ para obter uma representação da sentença.
+Com esta matriz $\bm{T}_{v}$, que contém as palavras das questões e dos trechos de código-fonte mapeadas, podemos representar uma sentença através de vetores contínuos. Dado uma questão $\bm{s} = \{ w_{0}, w_{1}, . . ., w_{n - 1}\}$, onde $w_{i}, 0 \leq i < n$ é uma palavra. Podemos representar $\bm{s}$ através de um outro vetor $\bm{x}$, tal que $\bm{x} = \{ x(w_{0}), x(w_{1}), . . ., x(w_{n - 1})\}$, onde $x(w_{i}) \in \bm{T}_{v}$ e $\bm{x}(w_{i}) \in \mathbb{R}^{d}$ é um vetor contínuo. O próximo passo é combinar os elementos do vetor $\bm{x}$ para obter uma representação da sentença.
 
-
-
-
-
-\section{Representação da sentença e do trecho de código-fonte}
+\section{Representação das sentenças}
 \label{sec:representacao-sentenca}
 
 Com cada palavra representada por um vetor de representação distribuída, o próximo passo é combiná-las para obter uma representação para a questão e o trecho de código-fonte. Por exemplo, dado uma sentença $\bm{x} = \{ \bm{x}(0), \bm{x}(1), . . ., \bm{x}(n - 1) \}$, onde $\bm{x}(i) \in \mathbb{R}^{d}$ um vetor de representação distribuída da $i^{th}$ palavra da sentença, $d$ é a dimensão do vetor. Iremos combinar os elementos de $\bm{x}$ através das operações presentes em nossa arquitetura CNN. Basicamente são 3 operações:
