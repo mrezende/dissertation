@@ -97,17 +97,14 @@ Para exemplificar a operação completa, a Figura~\ref{fig:cnn-architecture-prop
 \section{Função objetivo}
 \label{sec:funcao-objetivo}
 
-O nosso objetivo é encontrar um modelo que correlacione as questões as respostas em um mesmo espaço vetorial. Lembrando que as questões e os trechos de código serão representados por um vetor calculado a partir da nossa arquitetura CNN. Para encontrar este modelo, adotaremos a mesma abordagem utilizada por \cite{feng-2015}, o método \textit{pairwise}. O método \textit{pairwise} consiste em treinar o modelo para classificar as respostas corretas com uma pontuação maior do que as incorretas. Formalmente, o modelo será treinado do seguinte modo:
-
-Seja $\mathbb{Q}$ um conjunto de questões e $\mathbb{C}$ um conjunto dos trechos de código-fonte. $\mathbb{Q}$ e $\mathbb{C}$ compõem o conjunto de dados de treinamento. O dado de entrada fornecido para o nosso modelo será uma tripla $<\bm{q}, \bm{c^{+}}, \bm{c^{-}}>$, onde $\bm{c^{+}} \in \mathbb{C}$ é uma resposta anotada como correta para a questão $\bm{q} \in \mathbb{Q}$ e $\bm{c^{-}} \in \mathbb{C}$ é uma resposta incorreta. O objetivo é induzir o nosso modelo a classificar $\bm{c^{+}}$ com uma pontuação maior que $\bm{c^{-}}$. Para isto, utilizaremos a seguinte função de custo \textit{hinge}:
+O nosso objetivo é ensinar o modelo a classificar os trechos de código anotados como corretos entre as primeiras posições de uma lista. Para isso, adotamos a função de comparação em pares ou \textit{pairwise}, que calcula a relativa preferência dos itens, ao invés da sua correta classificação. Seja $\mathbb{Q}$ um conjunto de questões e $\mathbb{C}$ um conjunto dos trechos de código-fonte. Dado uma tripla $<\bm{q}, \bm{c^{+}}, \bm{c^{-}}>$, onde $\bm{q}$ 
+é uma questão, $\bm{c^{+}} \in \mathbb{C}$ é uma resposta anotada como correta e $\bm{c^{-}} \in \mathbb{C}$ é uma resposta incorreta, o objetivo é induzir o modelo a classificar $\bm{c^{+}}$ com uma pontuação maior que $\bm{c^{-}}$. Neste caso, utilizamos função de custo de perda de articulação ou \textit{hinge loss} \citep{feng-2015}:
 
 \begin{equation}
 J = max(0, m - h_{\theta}(\bm{q}, \bm{c^{+}}) + h_{\theta}(\bm{q}, \bm{c^{-}}))
 \end{equation}
 
 Onde $m$ é uma margem e $h_{\theta}$ é uma função de similaridade, e.g., \textit{cosine}. Lembrando que o objetivo em uma rede neural é minimizar a função custo $J$. Desta maneira, o modelo vai ser incentivado a satisfazer a seguinte condição: $h_{\theta}(\bm{q}, \bm{c^{+}}) - h_{\theta}(\bm{q}, \bm{c^{-}}) \geq m$. Quer dizer, a função \textit{hinge} induz o modelo a classificar as respostas corretas com uma pontuação maior do que as incorretas por uma certa margem $m$. 
-
-Dado que estamos utilizando a função \textit{cosine} de similaridade, $h_{\theta}(\bm{q}, \bm{c})$ pode ser definido como $\{h_{\theta}(\bm{q}, \bm{c}) \in \mathbb{R} | -1 \leq h_{\theta}(\bm{q}, \bm{c}) \leq 1$\}, onde $\bm{q} \in \mathbb{Q}$, $\bm{c} \in \mathbb{C}$ e $-1$ indica vetores exatamente opostos e 1 vetores exatamente iguais. E conforme citado anteriormente, a nossa função $\mathbb{J}$ incentiva a seguinte condição: $h_{\theta}(\bm{q}, \bm{c^{+}}) \geq h_{\theta}(\bm{q}, \bm{c^{-}}) + m$. Desta forma, estamos estimulando os vetores $\bm{c^{+}}$ a ocuparem regiões próximas de $\bm{q}$, enquanto os vetores $\bm{c^{-}}$ serão estimulados a ocuparem regiões mais distantes. Este estímulo está de acordo com o nosso objetivo, que é encontrar um modelo que correlacione as questões as suas respostas.
 
 
 \section{Considerações}
