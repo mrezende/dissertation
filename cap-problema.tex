@@ -107,38 +107,4 @@ J = max(0, m - h_{\theta}(\bm{q}, \bm{c^{+}}) + h_{\theta}(\bm{q}, \bm{c^{-}}))
 Onde $m$ é uma margem e $h_{\theta}$ é uma função de similaridade, e.g., \textit{cosine}. Lembrando que o objetivo em uma rede neural é minimizar a função custo $J$. Desta maneira, o modelo vai ser incentivado a satisfazer a seguinte condição: $h_{\theta}(\bm{q}, \bm{c^{+}}) - h_{\theta}(\bm{q}, \bm{c^{-}}) \geq m$. Quer dizer, a função \textit{hinge} induz o modelo a classificar as respostas corretas com uma pontuação maior do que as incorretas por uma certa margem $m$. 
 
 
-\section{Considerações}
 
-A nossa proposta apresentada neste capítulo foi a utilização de redes convolucionais na representação de questões e trechos de código-fonte. Conforme apresentado na Seção~\ref{sec:representacao-sentenca}, a nossa arquitetura utiliza as operações de convolução e \textit{maxpool}. Estas operações partem da hipótese de que função que deve ser aprendida contém apenas interações locais e são invariantes a pequenas translações. Para a tarefa de \textit{code retrieval}, a nossa hipótese, é que a identificação das interações locais entre as palavras pode auxiliar na obtenção de uma representação contextualizada. Por exemplo, para inferir o contexto do trecho de código a seguir, o CNN deveria ser capaz de identificar a interação entre as palavras \emph{csv} e \emph{writer} na linha 4, por exemplo. 
-
-\begin{mypython-linenumber}{CNN}
-import csv
-
-with |\colorbox{green}{open}|("output.csv", "wb") as f:
-    writer = |\colorbox{green}{csv}|.|\colorbox{green}{writer}|(f)
-    writer.|\colorbox{green}{writerows}|(a)
-\end{mypython-linenumber}
-
-Um ponto observado por \cite{tom-young:trends-deep-learning-nlp} em outros trabalhos, é que o CNN, normalmente, não consegue inferir o contexto em sentenças curtas. Para o nosso conjunto de dados, isto é um problema, pois as questões são compostas em média por 9 palavras e no máximo 32. Já os trechos de código tem em média 50 palavras e no máximo 300. Uma forma de mitigar este problema é através do uso de um vetor de representação distribuída. No nosso caso, os vetores de entrada serão compostos por vetores de representação distribuída obtidos através do algoritmo não-supervisionado \textit{word2vec}.
-
-Além disso, segundo \cite{Goodfellow-et-al-2016}, CNN não consegue fazer associações entre palavras muito distantes em uma sentença. No exemplo anterior, o CNN teria dificuldade para associar a declaração da biblioteca \emph{csv} na linha 1 com a função \emph{writerows} na linha 5. A nossa hipótese é que uma associação muito distante entre as palavras de uma sentença não seja tão importante para a recuperação de trecho de código-fonte no nosso conjunto de dados. O nosso conjunto de dados é formado por questões do tipo \textit{how-to-do-it} coletadas a partir do site \gls{sof}. Este tipo de questão normalmente contém respostas curtas e diretas  \citep{yao-2018}. Uma dependência distante entre as palavras seria apropriado, provavelmente, para questões e trechos de código que envolvam regras de negócio, por exemplo.
-
-
-Ao optar por uma arquitetura, temos que levar em consideração as suas características inerentes e suas limitações. No caso do CNN, ele prioriza as interações locais ao invés de associações de palavras muito distantes. A nossa hipótese inicial é que esta característica seja mais importante para a recuperação de trecho de código-fonte no conjunto de dados que estamos utilizando. Dado estas características, reiteramos a nossa pergunta de pesquisa que pretendemos responder ao longo deste trabalho:
-
-\begin{itemize}
-    \item Será que o CNN é capaz de extrair as características latentes e mais importantes de modo a facilitar o modelo a encontrar uma correlação entre os trechos de código-fonte e as questões?
-\end{itemize}
-
-Indiretamente, dado que o CNN prioriza interações locais, estaremos respondendo as seguintes perguntas:
-\begin{itemize}
-    
-        \item As interações locais auxiliam na aproximação das questões aos trechos de código-fonte?
-        \item A partir das interações locais, é possível inferir o contexto do trecho de código?
-\end{itemize}
-
-
-
-O que entedemos por características latentes e importantes são palavras ou variáveis latentes que permitam inferir o contexto de um trecho de código. No exemplo anterior, as palavras \emph{csv}, \emph{writer} e \emph{writerows} permitem deduzir o contexto do trecho de código. Que no caso, refere-se a escrita dos valores de cada elemento de um vetor em um arquivo CSV. Nem sempre estas características são observáveis diretamente nos dados. Nestes casos, as redes deep learning capturam estas características através de variáveis latentes ou \textit{hidden}, $\bm{h}$. Através da variável \textit{hidden} $\bm{h}$, ela consegue identificar uma dependência indireta entre duas variáveis quaisquer $v_{i}$ e $v_{j}$ através da dependência direta entre $v_{i}$ e $\bm{h}$ e $\bm{h}$ e $v_{j}$ \citep{Goodfellow-et-al-2016}.
-
-Para avaliar se o modelo está inferindo o contexto do trecho de código corretamente, verificaremos se o modelo está aproximando as questões aos trechos de código que são respostas. Conforme descrito na Seção~\ref{sec:funcao-objetivo}, o modelo será induzido a fazer esta aproximação durante o treinamento através da função \textit{hinge}. Mas para saber se o modelo aprendeu, avaliaremos esta aproximação em outro conjunto de dados. No nosso caso, avaliaremos em um conjunto de dados anotados manualmente. O desempenho do modelo será medido através da métrica \acrshort{mrr} descrita no Capítulo~\ref{cap:experimento}. Um valor alto do MRR indica que o modelo está aproximando corretamente as questões aos trechos de código-fonte anotados como respostas. Para nós, isto é um indicativo de que o modelo está inferindo o contexto do trecho de código corretamente.
