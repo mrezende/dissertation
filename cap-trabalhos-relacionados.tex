@@ -10,7 +10,7 @@ Diversos trabalhos foram feitos com o intuito de sugerir uma forma de recuperar 
 
 As redes neurais artificiais surgiram como uma alternativa aos métodos tradicionais de recuperação de informação, pois mostraram-se capazes de inferir a semântica das palavras ou o contexto de frases na busca por documentos ou respostas automáticas a perguntas \citep{guo-deep-look-into-neural-ranking-models:2019}. Atualmente, a maior parte dos trabalhos sobre recuperação de trecho de código-fonte exploram a aprendizagem de máquina utilizando redes neurais artificiais. Tanto que \cite{cambronero-deep-learning-code-search:2019} cunharam o termo \textit{neural code search}, i.e., busca de código-fonte através de redes neurais artificiais. 
 
-A abordagem comumente utilizada ensina a rede neural a discriminar os trechos de códigos-fontes relevantes dos não relevantes a partir de uma questão. Para realizar essa discriminação, os trabalhos fazem uso da técnica de agrupamento de vetores contínuos ou \textit{joint embedding}. Essa técnica permite agrupar dados heterogêneos de forma que conceitos semanticamente similares ocupem regiões próximas em um mesmo espaço vetorial. A ilustração dessa técnica pode ser visualizada na Figura~\ref{fig:joint-embedding}.
+A abordagem comumente utilizada busca correlacionar os trechos de códigos-fontes relevantes às intenções de busca do usuário por meio da técnica de agrupamento de vetores contínuos ou \textit{joint embedding}. Essa técnica permite agrupar dados heterogêneos de forma que conceitos semanticamente similares ocupem regiões próximas em um mesmo espaço vetorial \citep{devise-deep-visual-semantic-embedding-frome-2013}. A ilustração dessa técnica pode ser visualizada na Figura~\ref{fig:joint-embedding}.
 
 \begin{figure}[H]
 \centering
@@ -19,7 +19,7 @@ A abordagem comumente utilizada ensina a rede neural a discriminar os trechos de
 \label{fig:joint-embedding}
 \end{figure}
 
- Na Figura~\ref{fig:joint-embedding}, ilustramos a técnica \textit{joint embedding} para a recuperação de trecho de código-fonte. Há duas redes neurais, que funcionam .... uma para mapear as questões para um vetor contínuo e a outra para mapear os trechos de código-fonte. No nosso caso, estamos agrupando vetores de trechos de código-fonte que foram anotados como corretos às questões coletadas do \Gls{sof}. Para utilizar essa técnica, três itens devem ser levados em consideração:
+ No nosso trabalho, as intenções foram expressas através de questões coletadas do \Gls{sof}. Na Figura~\ref{fig:joint-embedding}, ilustramos a técnica \textit{joint embedding} para a recuperação de trecho de código-fonte. Duas redes neurais mapeiam as questões e trechos de código-fonte para vetores contínuos em um mesmo espaço vetorial. Para utilizar essa técnica, três itens devem ser levados em consideração:
 
 \begin{itemize}
     \item Representação dos \textit{tokens} ou palavras
@@ -28,7 +28,7 @@ A abordagem comumente utilizada ensina a rede neural a discriminar os trechos de
 \end{itemize}
 
 
-No primeiro item é necessário definir como os \textit{tokens} ou palavras, que compõem as questões e os trechos de códigos-fontes, serão representadas. No segundo item, os vetores de representação de cada \textit{token} ou palavra serão combinados para obter um vetor contínuo final, que é o vetor de representação da questão ou trecho de código-fonte. Diante disso, é necessário apontar a maneira como os vetores de cada palavra serão combinados. Por último, é preciso indicar à rede neural como agrupar os vetores de representação final das questões e trechos de código-fonte.
+No primeiro item é necessário definir como os \textit{tokens} ou palavras, que compõem as questões e os trechos de códigos-fontes, serão representadas. No segundo item, os vetores de representação de cada \textit{token} ou palavra serão combinados para obter um vetor contínuo final, que é o vetor de representação da questão ou trecho de código-fonte. Por último, é preciso indicar a função objetivo à rede neural,  preciso indicar à rede neural como agrupar os vetores de representação final das questões e trechos de código-fonte.
 
 
 \section{\textit{Representação dos \textit{tokens} ou palavras}}
