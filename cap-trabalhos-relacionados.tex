@@ -28,7 +28,7 @@ A abordagem comumente utilizada busca correlacionar os trechos de códigos-fonte
 \end{itemize}
 
 
-No primeiro item é necessário definir como os \textit{tokens} ou palavras, que compõem as questões e os trechos de códigos-fontes, serão representadas. No segundo item, os vetores de representação de cada \textit{token} ou palavra serão combinados para obter um vetor contínuo final, que é o vetor de representação da questão ou trecho de código-fonte. Por último, é preciso indicar a função objetivo à rede neural,  preciso indicar à rede neural como agrupar os vetores de representação final das questões e trechos de código-fonte.
+No primeiro item é necessário definir como os \textit{tokens} ou palavras, que compõem as questões e os trechos de códigos-fontes, serão representadas. No segundo item, os vetores de representação de cada \textit{token} ou palavra serão combinados para obter um vetor contínuo final, que são os vetores da questão e trecho de código-fonte. Por último, definimos a função objetivo que a rede neural utilizará para encontrar a correlação entre as questões e os trechos de código-fonte.
 
 
 \section{\textit{Representação dos \textit{tokens} ou palavras}}
@@ -59,13 +59,13 @@ As questões e os trechos de códigos-fontes são compostas por um conjunto de p
 
 O vetor de representação esparsa, conforme a Figura~\ref{fig:discrete-representation}, é composto por poucos coeficientes diferentes de zero. Esse tipo de representação tem duas limitações: o tamanho do vetor cresce de acordo com o tamanho do vocabulário e os coeficientes do vetor não indicam nenhum tipo de relação semântica ou sintática entre as palavras. Já o vetor de representação distribuída é um vetor denso, cujo tamanho é menor que o tamanho do vocabulário de palavras, e o acréscimo de uma palavra não altera a dimensão do vetor. A principal característica dos vetores de representação distribuída é a abstração da relação semântica e/ou sintática através dos seus coeficientes. A Figura~\ref{fig:distributed-representation} ilustra essa característica, onde um coeficiente ou conceito está relacionado a várias palavras e uma palavra está relacionada a vários conceitos, permitindo verificar uma relação entre as palavras através do cálculo de similaridade dos seus respectivos vetores.
 
- O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras que estão próximas umas das outras, em diferentes sentenças, tem significados similares \citep{Goodfellow-et-al-2016}. O vetor de representação distribuída de uma palavra é representado por um vetor contínuo ou também chamado de \textit{embedding}. Uma função que mapeia um palavra para um vetor contínuo é chamado de \textit{encoder} ou codificador. Podemos definir \textit{encoder} através da seguinte função \citep{cambronero-deep-learning-code-search:2019}:
+ O vetor de representação distribuída utiliza a hipótese distribucional, no qual palavras que estão próximas umas das outras, em diferentes sentenças, tem significados similares \citep{Goodfellow-et-al-2016}. O vetor de representação distribuída de uma palavra é representado por um vetor contínuo ou também chamado de \textit{embedding}. Uma função que mapeia um dado de entrada (e.g. palavra ou imagem) para um vetor contínuo é chamado de \textit{encoder} ou codificador. Para um conjunto de palavras $\mathbb{V}$, podemos definir um \textit{encoder} $f$ da seguinte maneira \citep{cambronero-deep-learning-code-search:2019}:
 
 \begin{equation}
     f: \mathbb{V} \rightarrow \mathbb{E}
 \end{equation}
 
-A função ou \textit{encoder} $f$ mapeia uma palavra $w$, $w \in \mathbb{V}$, para um vetor contínuo $e, e \in \mathbb{E}, \mathbb{E }\subseteq \mathbb{R}^{d}$, onde $\mathbb{V}$ representa o vocabulário de palavras, $\mathbb{E}$ é um conjunto de vetores contínuos e $d$ é a dimensão do vetor. Uma opção comumente utilizada para a função $f$ é o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} recebe uma matriz de inteiros como entrada, onde cada índice da matriz indica uma palavra, e retorna, ao final, uma matriz de vetores contínuos. O \textit{word2vec} tem duas abordagens para obter a matriz de vetores contínuos:
+A função ou \textit{encoder} $f$ mapeia uma palavra $w$, $w \in \mathbb{V}$, para um vetor contínuo $e, e \in \mathbb{E}, \mathbb{E }\subseteq \mathbb{R}^{d}$, onde $\mathbb{E}$ é um conjunto de vetores contínuos e $d$ é a dimensão do vetor. Uma opção comumente utilizada para a função $f$ é o algoritmo não-supervisionado \textit{word2vec}. O \textit{word2vec} recebe uma matriz de inteiros como entrada, onde cada índice da matriz indica uma palavra, e retorna, ao final, uma matriz de vetores contínuos. O \textit{word2vec} tem duas abordagens para obter a matriz de vetores contínuos:
 
 \begin{itemize}
     \item \acrfull{cbow}
@@ -113,7 +113,7 @@ O algoritmo \textit{skip-gram} mapeia as palavras que estão perto umas das outr
 \section{\textit{Representação das sentenças}}
 \label{sec:representacao-das-sentencas-fundamentacao-teorica}
 
-O vetor contínuo de cada palavra pode ser combinado para gerar um vetor para a sentença inteira, e.g., podemos ter um vetor para o trecho de código-fonte, combinando os vetores de cada termo presente no trecho de código. Duas abordagens comumente utilizadas para agrupar os vetores são \citep{cambronero-deep-learning-code-search:2019}:
+O vetor contínuo de cada palavra pode ser combinado para gerar um vetor para a sentença inteira. Podemos ter um vetor para o trecho de código-fonte, combinando os vetores de cada termo presente no trecho de código. Duas abordagens comumente utilizadas para agrupar os vetores são \citep{cambronero-deep-learning-code-search:2019}:
 
 \begin{itemize}
     \item \textit{Bag-of-words}
@@ -145,11 +145,11 @@ A diferença básica entre as duas abordagens é a importância relativa dada a 
 
 O exemplo de \textit{bag-of-words} ilustrado na Figura~\ref{fig:sentence-representation-bag-of-words} utiliza a função soma para combinar os vetores contínuos das palavras, porém, é possível utilizar outras funções como média ou \emph{max}, por exemplo. Já a abordagem sequencial combina os vetores individualmente, onde a cada passo o vetor é fornecido a uma função ou rede neural e pode ser combinado com o resultado da etapa anterior. De acordo com o exemplo da Figura~\ref{fig:sentence-representation-sequential}, ao final de $t$ passos, obtemos um vetor $h_{t}$, que pode ser utilizado para representar tanto uma questão quanto um trecho de código-fonte. Uma outra maneira de representar uma questão ou trecho de código-fonte seria combinar os $t$ vetores de resultados ($h_{1}, h_{2}, ..., h_{t-1}, h_{t}$) através da função soma ou média, por exemplo. 
 
-Uma boa combinação dos vetores contínuos permite sintetizar as principais características da sentença em um vetor. Para a recuperação de trechos de código-fonte é importante ser possível estabelecer relações semânticas também, onde trechos de código semanticamente similares sejam representadas por vetores similares. Pois, através dessa relação semântica entre os vetores, é possível ensinar a rede neural a correlacionar as questões aos trechos de código-fonte mais facilmente. Além disso, os vetores contínuos das questões e trechos de código-fonte podem ser reutilizados em outras tarefas como recomendação ou sumarização de código-fonte e identificação de linguagem de programação, por exemplo.
+Uma boa combinação dos vetores contínuos permite sintetizar as principais características da sentença em um vetor. É importante ser possível estabelecer relações semânticas também, onde trechos de código semanticamente similares sejam representadas por vetores similares. Pois, através dessa relação semântica entre os vetores, é possível ensinar a rede neural a correlacionar as questões aos trechos de código-fonte mais facilmente. Além disso, os vetores contínuos das questões e trechos de código-fonte podem ser reutilizados em outras tarefas como recomendação, sumarização de código-fonte ou identificação de linguagem de programação, por exemplo.
 
 \section{Agrupamento dos vetores contínuos}
 
-Os vetores contínuos das questões e trechos de código-fonte podem ser correlacionados através de uma rede neural. Uma abordagem comumente utilizada é o agrupamento de vetores contínuos ou \textit{joint embedding}, que mapeia os vetores das questões e trechos de código-fonte para um mesmo espaço vetorial. O intuito é agrupar os vetores semanticamente, onde conceitos semanticamente similares ocupem regiões próximas no espaço vetorial. Formalmente para um conjunto $\mathbb{Q}$ de questões e $\mathbb{C}$ de trechos de código-fonte, o agrupamento de vetores contínuos pode ser formulado como:
+Os vetores contínuos das questões e trechos de código-fonte podem ser correlacionados através de uma rede neural. Uma abordagem comumente utilizada é o agrupamento de vetores contínuos ou \textit{joint embedding}, que mapeia os vetores das questões e trechos de código-fonte para um mesmo espaço vetorial. O intuito é agrupar os vetores semanticamente similares próximos uns dos outros. Para um conjunto $\mathbb{Q}$ de questões e $\mathbb{C}$ de trechos de código-fonte, o agrupamento de vetores contínuos pode ser formulado como:
 
 \begin{equation}
         f: q \mapsto t_{q} \mapsto h_{\theta}(t_{q}, t_{c}) \mapsfrom t_{c} \mapsfrom c :g
