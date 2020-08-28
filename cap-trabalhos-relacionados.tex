@@ -190,7 +190,7 @@ De acordo com \cite{guo-deep-look-into-neural-ranking-models:2019}, a comparaç�
     L (h_{\theta}): \sum_{i} \sum_{j \neq i} L( h_{\theta}(q_{i}, c_{i}^{+}) - h_{\theta}(q_{i}, c_{j}^{-})) 
 \end{equation}
 
- Dado um vetor $q_{i}$, o vetor $c_{i}^{+}$ é preferível ao vetor $c_{j}^{-}$. No caso de recuperação de trecho de código-fonte, o vetor $c_{i}^{+}$ pode ser uma possível solução à questão $q_{i}$, enquanto o vetor $c_{j}^{-}$ representa um trecho de código que não é solução. Para a função $L$, podemos utilizar a função de perda de articulação ou \textit{hinge loss}, por exemplo:
+ Dado um vetor $q_{i}$, o vetor $c_{i}^{+}$ é preferível ao vetor $c_{j}^{-}$. No caso da recuperação de trecho de código-fonte, o vetor $c_{i}^{+}$ pode ser uma possível solução à questão $q_{i}$, enquanto o vetor $c_{j}^{-}$ representa um trecho de código que não é solução. Para a função $L$, podemos utilizar a função de perda de articulação ou \textit{hinge loss}, por exemplo:
 
 \begin{equation}
     L (h_{\theta}): \sum_{i} \sum_{j \neq i} max(0, 1 - h_{\theta}(q_{i}, c_{i}^{+}) + h_{\theta}(q_{i}, c_{j}^{-})) 
@@ -223,7 +223,7 @@ A função $L$ busca encontrar a permutação ótima da lista de candidatos $T_{
 
 \section{Trabalhos relacionados}\label{sec:code-retrieval-trabalhos-relacionados}
 
-A principal abordagem utilizada na recuperação de trecho de código-fonte é a técnica \textit{joint embedding}. Na Tabela~\ref{table:summary-joint-embedding} apontamos as diferentes abordagens utilizadas pelos trabalhos com relação a composição do par descrição e trecho de código, as técnicas para criação dos vetores contínuos das palavras e das sentenças.
+A principal abordagem utilizada na recuperação de trecho de código-fonte é a técnica \textit{joint embedding}. Na Tabela~\ref{table:summary-joint-embedding} apontamos as diferentes abordagens utilizadas pelos trabalhos com relação a composição do par descrição e trecho de código, juntamente com as técnicas para criação dos vetores contínuos das palavras e das sentenças.
 
 
 \begin{table}[H]
@@ -253,7 +253,7 @@ A principal abordagem utilizada na recuperação de trecho de código-fonte é a
 \label{table:summary-joint-embedding}
 \end{table}
 
-Conforme a Tabela~\ref{table:summary-joint-embedding}, a maioria dos trabalhos representaram as palavras através de vetores de representação distribuída (e.g. modelo probabilístico, bi-\acrshort{vae}, \gls{skip-gram}), exceto \cite{iyer-etal-2016-summarizing} que optou por utilizar uma representação esparsa, \gls{one-hot-encoding}. Já em relação a combinação das palavras, i.e., representação da sentença, os trabalhos de \cite{Gu-deep-code-search:2018} e \cite{iyer-etal-2016-summarizing} optaram pelo uso de redes neurais recorrentes, levando em consideração a ordem das palavras. Enquanto os trabalhos de \cite{Chen-bi-variational-autoencoder:2018}, \cite{Sachdev-neural-code-search:2018} e \cite{cambronero-deep-learning-code-search:2019} optaram por uma abordagem mais simples e trataram o vetor de tokens como uma sacola ou \textit{bag}, i.e., indiferente à ordem das palavras na sentença.
+Conforme a Tabela~\ref{table:summary-joint-embedding}, a maioria dos trabalhos representaram as palavras através de vetores de representação distribuída (e.g. modelo probabilístico, bi-\acrshort{vae}, \gls{skip-gram}), exceto \cite{iyer-etal-2016-summarizing} que optou por utilizar uma representação esparsa, \gls{one-hot-encoding}. Já em relação a combinação das palavras, i.e., representação da sentença, os trabalhos de \cite{Gu-deep-code-search:2018} e \cite{iyer-etal-2016-summarizing} optaram pelo uso de redes neurais recorrentes, levando em consideração a ordem das palavras. Enquanto os trabalhos de \cite{Chen-bi-variational-autoencoder:2018}, \cite{Sachdev-neural-code-search:2018} e \cite{cambronero-deep-learning-code-search:2019} optaram por uma abordagem mais simples e trataram o vetor de \textit{tokens} como uma sacola ou \textit{bag}, i.e., indiferente à ordem das palavras na sentença.
 
 Conforme a Tabela~\ref{table:summary-joint-embedding}, todos os trabalhos extraíram as palavras e os termos individuais das questões, i.e., os \textit{tokens}, para compor os vetores. No caso do código-fonte, apenas os trabalhos de \cite{Allamanis-bimodal-source-code-natural-language:2015} e \cite{Gu-deep-code-search:2018} optaram por não compor os vetores através de \textit{tokens}. \cite{Allamanis-bimodal-source-code-natural-language:2015} preferiram compor o vetor do código-fonte por comandos e expressões obtidas por meio de um analisador sintático, priorizando a relação hierárquica entre os termos. Já \cite{Gu-deep-code-search:2018} consideraram mais de um aspecto na composição, os pesquisadores utilizaram o nome do método, a invocação da API e os tokens para a construção do vetor.
 
@@ -329,4 +329,4 @@ De acordo com \cite{cambronero-deep-learning-code-search:2019}, os dados utiliza
 
 
 A proposta do nosso trabalho foi analisar o desempenho das redes convolucionais na tarefa de recuperação de trechos de código-fonte. Para isto, comparamos a eficácia do nosso modelo com outros dois modelos: um modelo de base de comparação e o outro proposto por \cite{cambronero-deep-learning-code-search:2019}, que é o atual estado da arte. Para o treinamento e avaliação, utilizamos os dados coletados por \cite{yao-2018}, devido 
-a maior variabilidade das questões e trechos de código-fonte em comparação aos dados utilizados por \cite{Allamanis-bimodal-source-code-natural-language:2015} e \cite{iyer-etal-2016-summarizing}, por exemplo. 
+a maior variabilidade das questões e trechos de código-fonte em comparação aos dados utilizados por \cite{Allamanis-bimodal-source-code-natural-language:2015} e \cite{iyer-etal-2016-summarizing}. 
