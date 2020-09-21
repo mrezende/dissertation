@@ -117,7 +117,7 @@ $N_{3}$: Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
  \hline 
  
 \end{tabular}
-\caption{Divisão do conjunto de dados disponibilizado por \cite{yao-2018}. O conjunto formado por "Trechos de código-fonte anotados automaticamente" contém questões que tem mais de um trecho de código-fonte por resposta. Quando há mais de um trecho de código-fonte na descrição da resposta, pode haver algum trecho que não seja solução. Nesse caso, \cite{yao-2018} criaram um framework para anotá-los automaticamente e obtiveram F1 de $0,916$ e acurácia de $0,911$ em seus resultados de classificação automática das respostas corretas.}
+\caption{Divisão do conjunto de dados disponibilizado por \cite{yao-2018}. O conjunto formado por "Trechos de código-fonte anotados automaticamente" contém questões que tem mais de um trecho de código-fonte por resposta. Quando há mais de um trecho de código-fonte na descrição da resposta, pode haver algum trecho que não seja solução. Nesse caso, \cite{yao-2018} criaram um framework para anotá-los automaticamente e obtiveram F1 de $0,916$ e acurácia de $0,911$ em seus resultados de classificação automática das respostas corretas. Tabela do artigo \cite{martins2020concra}.}
 \label{table:summary-training-data-yao-staqc}
 \end{table}
 
@@ -141,7 +141,7 @@ Com relação ao conjunto de dados, utilizamos os conjuntos $N_{2}$ e $N_{3}$ pa
  \textbf{Total} & $\bm{62.252}$\\
  \hline
 \end{tabular}
-\caption{Divisão das amostras para treinamento e avaliação. O conjunto de dados é formado por pares $<q_{i}, c_{i}^{+}>$, onde $q_{i}$ é uma questão e $c_{i}^{+}$ é um trecho de código-fonte anotado como correto. O conjunto formado por pares anotados manualmente foi dividido em DEV e EVAL conforme o procedimento descrito por \cite{iyer-etal-2016-summarizing}. É possível visualizar uma ilustração deste procedimento nas Figuras \ref{fig:evaluation-process} e \ref{fig:final-evaluation-process}.}
+\caption{Divisão das amostras para treinamento e avaliação. O conjunto de dados é formado por pares $<q_{i}, c_{i}^{+}>$, onde $q_{i}$ é uma questão e $c_{i}^{+}$ é um trecho de código-fonte anotado como correto. O conjunto formado por pares anotados manualmente foi dividido em DEV e EVAL conforme o procedimento descrito por \cite{iyer-etal-2016-summarizing}. É possível visualizar uma ilustração deste procedimento nas Figuras \ref{fig:evaluation-process} e \ref{fig:final-evaluation-process}. Tabela do artigo \cite{martins2020concra}. }
 \label{table:divisao-amostras}
 \end{table}
 
@@ -213,7 +213,7 @@ Conforme apontado no Capítulo~\ref{cap:abordagem}, mapeamos cada palavra presen
 
 \begin{figure}[H]
 \includegraphics[width=1\textwidth]{figuras/cap-experimento/code_tsne.png}
-\caption{Representação em 2D dos vetores de representação distribuída das 66 palavras mais frequentes do vocabulário $\bm{V}$. O vocabulário $\bm{V}$ é composto por palavras presentes nas questões e trechos de código-fonte em Python das amostras $N_{2}$ e $N_{3}$. Imagem gerada através da ferramenta t-SNE que permite a visualização em 2D de dados de dimensão elevada. Vetores de representação distribuída criados a partir do \textit{word2vec} com o algoritmo \textit{skip-gram} e o parâmetro \textit{window} com o valor $5$.}
+\caption{Representação em 2D dos vetores de representação distribuída das 66 palavras mais frequentes do vocabulário $\bm{V}$. O vocabulário $\bm{V}$ é composto por palavras presentes nas questões e trechos de código-fonte em Python das amostras $N_{2}$ e $N_{3}$. Imagem gerada através da ferramenta t-SNE que permite a visualização em 2D de dados de dimensão elevada. Vetores de representação distribuída criados a partir do \textit{word2vec} com o algoritmo \textit{skip-gram} e o parâmetro \textit{window} com o valor $5$. Figura do artigo \cite{martins2020concra}.}
 \label{fig:tsne-code-snippet-python}
 \end{figure}
 

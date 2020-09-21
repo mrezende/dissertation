@@ -57,7 +57,7 @@ Avaliamos a arquitetura CNN juntamente com outras duas arquiteturas, Embedding e
  
 \hline
 \end{tabular}
-\caption{Resultado do modelo CNN em comparação com as outras arquiteturas \Gls{unif} e Embedding. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}) na amostra EVAL. TOP1 refere-se a frequência da ocorrência da resposta anotada como correta na primeira posição em comparação com outros 49 distratores. Nas linhas A1 e B1, \emph{m} refere-se ao hiper-parâmetro margem utilizada na função de perda \emph{hinge}. F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. NL é o acrônimo de normalização em lote. As arquiteturas CNN utilizaram margem $m = 0.05$ e o tamanho da janela do filtro (kernel) $k = 2$.}
+\caption{Resultado do modelo CNN em comparação com as outras arquiteturas \Gls{unif} e Embedding. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}) na amostra EVAL. TOP1 refere-se a frequência da ocorrência da resposta anotada como correta na primeira posição em comparação com outros 49 distratores. Nas linhas A1 e B1, \emph{m} refere-se ao hiper-parâmetro margem utilizada na função de perda \emph{hinge}. F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. NL é o acrônimo de normalização em lote. As arquiteturas CNN utilizaram margem $m = 0.05$ e o tamanho da janela do filtro (kernel) $k = 2$. Tabela do artigo \cite{martins2020concra}.}
 \label{table:resultados}
 \end{table}
 
@@ -71,7 +71,7 @@ A Figura~\ref{fig:histogram-mrr} exibe as posições da primeira ocorrência do 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-resultados/histogram.pdf}
-    \caption{Figura das primeiras posições observadas para o trecho de código-fonte anotado como correto. As legendas \emph{shared-cnn-with-bn}, \emph{unif} e \emph{embedding} referem-se as linhas F3, A1 e B1 da Tabela~\ref{table:resultados} respectivamente.}
+    \caption{Figura das primeiras posições observadas para o trecho de código-fonte anotado como correto. As legendas \emph{shared-cnn-with-bn}, \emph{unif} e \emph{embedding} referem-se as linhas F3, A1 e B1 da Tabela~\ref{table:resultados} respectivamente. Figura do artigo \cite{martins2020concra}.}
     \label{fig:histogram-mrr}
 \end{figure}
 
