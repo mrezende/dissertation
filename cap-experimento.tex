@@ -57,7 +57,7 @@ O conjunto de dados disponibilizado por \cite{yao-2018} é formado por $\bm{147.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textwidth]{figuras/cap-experimento/distinct-subsets-yao-sample.pdf}
-\caption{Divisão das amostras de pares de questões e trechos de código disponibilizados por \cite{yao-2018}: $N_{1} = \{(q_{i}, c_{i}^{+})\;,\; \forall\; q_{i},\;\nexists\; c_{j}^{+}\; |\; c_{j}^{+} \neq c_{i}^{+}\; \text{para}\; i \neq j,\; 1 \leq i,j \leq |N_{1}| \}$, $N_{2} = \{(q_{i}, c_{i}^{+})\;,\; \exists\; q_{i}\; | \;\exists\; c_{j}^{+} \neq c_{i}^{+}\; \text{para} \; i \neq j,\; 1 \leq i,j \leq |N_{2}| \}$, $N_{3} = \{(q_{i}, c_{i}^{+}),\; \forall\; c_{i}^{+} \text{foi anotado manualmente}, 1 \leq i \leq |N_{3}| \}$. Onde $N_{1} \cap N_{2} \cap N_{3} = \varnothing$, $q_{i} \in \mathbb{Q}$ e $c_{i}^{+},  c_{j}^{+} \in \mathbb{C}$. E $c_{i}^{+}, c_{j}^{+}$ são respostas anotadas como corretas. $\mathbb{Q}$ e $\mathbb{C}$ representam o conjunto de questões e trechos de código, respectivamente.} 
+\caption[Divisão das amostras de pares de questões e trechos de código.]{Divisão das amostras de pares de questões e trechos de código disponibilizados por \cite{yao-2018}: $N_{1} = \{(q_{i}, c_{i}^{+})\;,\; \forall\; q_{i},\;\nexists\; c_{j}^{+}\; |\; c_{j}^{+} \neq c_{i}^{+}\; \text{para}\; i \neq j,\; 1 \leq i,j \leq |N_{1}| \}$, $N_{2} = \{(q_{i}, c_{i}^{+})\;,\; \exists\; q_{i}\; | \;\exists\; c_{j}^{+} \neq c_{i}^{+}\; \text{para} \; i \neq j,\; 1 \leq i,j \leq |N_{2}| \}$, $N_{3} = \{(q_{i}, c_{i}^{+}),\; \forall\; c_{i}^{+} \text{foi anotado manualmente}, 1 \leq i \leq |N_{3}| \}$. Onde $N_{1} \cap N_{2} \cap N_{3} = \varnothing$, $q_{i} \in \mathbb{Q}$ e $c_{i}^{+},  c_{j}^{+} \in \mathbb{C}$. E $c_{i}^{+}, c_{j}^{+}$ são respostas anotadas como corretas. $\mathbb{Q}$ e $\mathbb{C}$ representam o conjunto de questões e trechos de código, respectivamente.} 
 \label{fig:distinct-subset-python-pair-question-code}
 \end{figure}
 
@@ -117,7 +117,7 @@ $N_{3}$: Trechos de código-fonte anotados manualmente & $2.169$ & $2.056$  \\
  \hline 
  
 \end{tabular}
-\caption{Divisão do conjunto de dados disponibilizado por \cite{yao-2018}. O conjunto formado por "Trechos de código-fonte anotados automaticamente" contém questões que tem mais de um trecho de código-fonte por resposta. Quando há mais de um trecho de código-fonte na descrição da resposta, pode haver algum trecho que não seja solução. Nesse caso, \cite{yao-2018} criaram um framework para anotá-los automaticamente e obtiveram F1 de $0,916$ e acurácia de $0,911$ em seus resultados de classificação automática das respostas corretas. Tabela do artigo \cite{martins2020concra}.}
+\caption[Divisão do conjunto de dados.]{Divisão do conjunto de dados disponibilizado por \cite{yao-2018}. O conjunto formado por "Trechos de código-fonte anotados automaticamente" contém questões que tem mais de um trecho de código-fonte por resposta. Quando há mais de um trecho de código-fonte na descrição da resposta, pode haver algum trecho que não seja solução. Nesse caso, \cite{yao-2018} criaram um framework para anotá-los automaticamente e obtiveram F1 de $0,916$ e acurácia de $0,911$ em seus resultados de classificação automática das respostas corretas. Tabela do artigo \cite{martins2020concra}.}
 \label{table:summary-training-data-yao-staqc}
 \end{table}
 
@@ -141,7 +141,7 @@ Com relação ao conjunto de dados, utilizamos os conjuntos $N_{2}$ e $N_{3}$ pa
  \textbf{Total} & $\bm{62.252}$\\
  \hline
 \end{tabular}
-\caption{Divisão das amostras para treinamento e avaliação. O conjunto de dados é formado por pares $<q_{i}, c_{i}^{+}>$, onde $q_{i}$ é uma questão e $c_{i}^{+}$ é um trecho de código-fonte anotado como correto. O conjunto formado por pares anotados manualmente foi dividido em DEV e EVAL conforme o procedimento descrito por \cite{iyer-etal-2016-summarizing}. É possível visualizar uma ilustração deste procedimento nas Figuras \ref{fig:evaluation-process} e \ref{fig:final-evaluation-process}. Tabela do artigo \cite{martins2020concra}. }
+\caption[Divisão das amostras para treinamento e avaliação.]{Divisão das amostras para treinamento e avaliação. O conjunto de dados é formado por pares $<q_{i}, c_{i}^{+}>$, onde $q_{i}$ é uma questão e $c_{i}^{+}$ é um trecho de código-fonte anotado como correto. O conjunto formado por pares anotados manualmente foi dividido em DEV e EVAL conforme o procedimento descrito por \cite{iyer-etal-2016-summarizing}. É possível visualizar uma ilustração deste procedimento nas Figuras \ref{fig:evaluation-process} e \ref{fig:final-evaluation-process}. Tabela do artigo \cite{martins2020concra}. }
 \label{table:divisao-amostras}
 \end{table}
 
@@ -175,7 +175,7 @@ Máximo & $32$ & $3566$ &	 $25$ & $708$ &	 $27$ & $439$ \\
  \hline 
  
 \end{tabular}
-\caption{Estatística descritiva da quantidade de palavras nas amostras de questões e trechos de código em Python utilizados no treinamento e avaliação dos modelos. O prefixo $\mathbf{N_{2}}$ refere-se a amostra de treinamento, conforme a Figura~\ref{fig:distinct-subset-python-pair-question-code}. Os prefixos \textbf{Dev} e \textbf{Eval} referem-se a amostra para escolha do modelo e a amostra para avaliação final conforme procedimento ilustrado nas Figuras \ref{fig:evaluation-process} e \ref{fig:final-evaluation-process}. Os sufixos \textbf{Q} e \textbf{C} referem-se ao conjunto de palavras das questões e trechos de código-fonte, respectivamente. Essa tabela inclui a média, desvio padrão e os percentis 25\%, 50\% e 75\% após o pré-processamento. Os detalhes sobre o pré-processamento estão presentes na Seção~\ref{sec:pre-processamento}.}
+\caption[Estatística descritiva da quantidade de palavras nas amostras de questões e trechos de código em Python utilizados no treinamento e avaliação dos modelos.]{Estatística descritiva da quantidade de palavras nas amostras de questões e trechos de código em Python utilizados no treinamento e avaliação dos modelos. O prefixo $\mathbf{N_{2}}$ refere-se a amostra de treinamento, conforme a Figura~\ref{fig:distinct-subset-python-pair-question-code}. Os prefixos \textbf{Dev} e \textbf{Eval} referem-se a amostra para escolha do modelo e a amostra para avaliação final conforme procedimento ilustrado nas Figuras \ref{fig:evaluation-process} e \ref{fig:final-evaluation-process}. Os sufixos \textbf{Q} e \textbf{C} referem-se ao conjunto de palavras das questões e trechos de código-fonte, respectivamente. Essa tabela inclui a média, desvio padrão e os percentis 25\%, 50\% e 75\% após o pré-processamento. Os detalhes sobre o pré-processamento estão presentes na Seção~\ref{sec:pre-processamento}.}
 \label{table:statistical-descriptive-of-pythons-sample}
 \end{table}
 
@@ -186,7 +186,7 @@ Tanto pela Tabela~\ref{table:statistical-descriptive-of-pythons-sample} quanto p
 \begin{figure}[h]
 \centering
 \includegraphics[width=1\textwidth]{figuras/cap-experimento/boxplot_number_of_words.png}
-\caption{Diagrama de caixa para visualizar graficamente a distribuição da quantidade de palavras das questões e trechos de código-fonte por meio de quartis. Este diagrama de caixa exibe o Q1 (primeiro quartil), Q2 (segundo quartil) e Q3 (terceiro quartil). Eles referem-se aos percentis 25\%, 50\% e 75\% da Tabela~\ref{table:statistical-descriptive-of-pythons-sample}. O segundo quartil (Q2) refere-se a mediana. }. 
+\caption[Diagrama de caixa para visualizar graficamente a distribuição da quantidade de palavras das questões e trechos de código-fonte por meio de quartis.]{Diagrama de caixa para visualizar graficamente a distribuição da quantidade de palavras das questões e trechos de código-fonte por meio de quartis. Este diagrama de caixa exibe o Q1 (primeiro quartil), Q2 (segundo quartil) e Q3 (terceiro quartil). Eles referem-se aos percentis 25\%, 50\% e 75\% da Tabela~\ref{table:statistical-descriptive-of-pythons-sample}. O segundo quartil (Q2) refere-se a mediana. }. 
 \label{fig:boxplot-number-of-words}
 \end{figure}
 
@@ -213,7 +213,7 @@ Conforme apontado no Capítulo~\ref{cap:abordagem}, mapeamos cada palavra presen
 
 \begin{figure}[H]
 \includegraphics[width=1\textwidth]{figuras/cap-experimento/code_tsne.png}
-\caption{Representação em 2D dos vetores de representação distribuída das 66 palavras mais frequentes do vocabulário $\bm{V}$. O vocabulário $\bm{V}$ é composto por palavras presentes nas questões e trechos de código-fonte em Python das amostras $N_{2}$ e $N_{3}$. Imagem gerada através da ferramenta t-SNE que permite a visualização em 2D de dados de dimensão elevada. Vetores de representação distribuída criados a partir do \textit{word2vec} com o algoritmo \textit{skip-gram} e o parâmetro \textit{window} com o valor $5$. Figura do artigo \cite{martins2020concra}.}
+\caption[Representação em 2D dos vetores de representação distribuída das 66 palavras mais frequentes do vocabulário $\bm{V}$.]{Representação em 2D dos vetores de representação distribuída das 66 palavras mais frequentes do vocabulário $\bm{V}$. O vocabulário $\bm{V}$ é composto por palavras presentes nas questões e trechos de código-fonte em Python das amostras $N_{2}$ e $N_{3}$. Imagem gerada através da ferramenta t-SNE que permite a visualização em 2D de dados de dimensão elevada. Vetores de representação distribuída criados a partir do \textit{word2vec} com o algoritmo \textit{skip-gram} e o parâmetro \textit{window} com o valor $5$. Figura do artigo \cite{martins2020concra}.}
 \label{fig:tsne-code-snippet-python}
 \end{figure}
 
@@ -267,7 +267,7 @@ Conforme citado anteriormente, adotamos o mesmo critério de seleção do modelo
 \begin{figure}[p]
 \centering
 \includegraphics[height=1.3\textwidth]{figuras/cap-experimento/evaluation_process.pdf}
-\caption{Ilustração do exemplo de treinamento de uma rede convolucional. Este procedimento é o mesmo adotado por \cite{iyer-etal-2016-summarizing}. $E$ é uma variável de controle para armazenar a quantidade de épocas. $P$ refere-se a quantidade de iterações consecutivas em que não há diminuição do resultado da função de perda na amostra de validação. Os vetores de entrada dos modelos durante o treinamento são os vetores de representação distribuída $q, c^{+}, c^{'} \in \mathbb{R}^{150 X d}$, onde $150$ é o tamanho fixo dos vetores e $d$ é a dimensão do vetor. $F \in \mathbb{R}^{k X d}$ é o filtro convolucional, onde $k$ é o tamanho da janela e $d$ a dimensão do vetor. $h_{\theta}$ é a função \textit{cosine} de similaridade, $J$ é a função de perda \textit{hinge} e $m$ é a margem. O procedimento de treinamento está descrito na Seção~\ref{sec:treinamento}.}
+\caption[Ilustração do exemplo de treinamento de uma rede convolucional.]{Ilustração do exemplo de treinamento de uma rede convolucional. Este procedimento é o mesmo adotado por \cite{iyer-etal-2016-summarizing}. $E$ é uma variável de controle para armazenar a quantidade de épocas. $P$ refere-se a quantidade de iterações consecutivas em que não há diminuição do resultado da função de perda na amostra de validação. Os vetores de entrada dos modelos durante o treinamento são os vetores de representação distribuída $q, c^{+}, c^{'} \in \mathbb{R}^{150 X d}$, onde $150$ é o tamanho fixo dos vetores e $d$ é a dimensão do vetor. $F \in \mathbb{R}^{k X d}$ é o filtro convolucional, onde $k$ é o tamanho da janela e $d$ a dimensão do vetor. $h_{\theta}$ é a função \textit{cosine} de similaridade, $J$ é a função de perda \textit{hinge} e $m$ é a margem. O procedimento de treinamento está descrito na Seção~\ref{sec:treinamento}.}
 \label{fig:evaluation-process}
 \end{figure}
 
@@ -311,7 +311,7 @@ Utilizamos o mesmo procedimento descrito na Seção~\ref{sec:criterio-selecao-mo
 \begin{figure}[h]
 \centering
 \includegraphics[height=1\textwidth]{figuras/cap-experimento/final_evaluation_process.pdf}
-\caption{Ilustração do procedimento de avaliação proposto por \cite{iyer-etal-2016-summarizing}. O modelo com a maior média MRR no treinamento é avaliado na amostra EVAL. Durante 20 iterações, calculamos o MRR para os pares $<q, c^{+}>$ junto com outros 49 $c^{'}$ distratores, que são escolhidos da amostra de treinamento. Onde $q, c^{+}, c^{'} \in \mathbb{R}^{150 X d}$, tal $c^{+} \neq c^{'}$. A cada iteração outros 49 distratores $c^{'}$ são escolhidos. E ao final, obtemos o resultado do modelo.}
+\caption[Ilustração do procedimento de avaliação proposto por \cite{iyer-etal-2016-summarizing}.]{Ilustração do procedimento de avaliação proposto por \cite{iyer-etal-2016-summarizing}. O modelo com a maior média MRR no treinamento é avaliado na amostra EVAL. Durante 20 iterações, calculamos o MRR para os pares $<q, c^{+}>$ junto com outros 49 $c^{'}$ distratores, que são escolhidos da amostra de treinamento. Onde $q, c^{+}, c^{'} \in \mathbb{R}^{150 X d}$, tal $c^{+} \neq c^{'}$. A cada iteração outros 49 distratores $c^{'}$ são escolhidos. E ao final, obtemos o resultado do modelo.}
 \label{fig:final-evaluation-process}
 \end{figure}
 
@@ -323,21 +323,21 @@ Para este estudo, comparamos a arquitetura CNN com outras duas arquiteturas: \te
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{figuras/cap-experimento/cnn-architecture-proposal.pdf}
-    \caption{Figura da arquitetura CNN descrita no Capítulo~\ref{cap:abordagem}. O termo \emph{Embedding Layer} refere-se a camada composta por vetores de representação distribuída. OL é o acrônimo de \emph{Output Layer}, i.e., camada de saída. $O_{q}$ e $O_{c}$ indicam a saída do vetor de representação final das questões e trechos de código-fonte, respectivamente. \emph{Cosine} indica a função de similaridade.}
+    \caption[Figura da arquitetura CNN descrita no Capítulo~\ref{cap:abordagem}.]{Figura da arquitetura CNN descrita no Capítulo~\ref{cap:abordagem}. O termo \emph{Embedding Layer} refere-se a camada composta por vetores de representação distribuída. OL é o acrônimo de \emph{Output Layer}, i.e., camada de saída. $O_{q}$ e $O_{c}$ indicam a saída do vetor de representação final das questões e trechos de código-fonte, respectivamente. \emph{Cosine} indica a função de similaridade.}
     \label{fig:cnn-architecture}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{figuras/cap-experimento/unif-architecture.pdf}
-    \caption{Figura da arquitetura \Gls{unif} proposta por \cite{cambronero-deep-learning-code-search:2019}. \emph{Embedding} refere-se a camada composta pelos vetores de representação distribuída. \emph{Média} é camada que combina os vetores através de uma média aritmética simples. \emph{Atenção} refere-se ao \gls{mecanismo-atencao}, que combina os vetores através de uma média ponderada e aprende a ''prestar atenção'' nos termos mais relevantes. \emph{OL} é o acrônimo de \emph{Output Layer}, i.e., camada de saída. $O_{q}$ e $O_{c}$ referem-se ao vetor de representação final das questões e trechos de código, respectivamente. \emph{Cosine} indica a função de similaridade. }
+    \caption[Figura da arquitetura \Gls{unif} proposta por \cite{cambronero-deep-learning-code-search:2019}.]{Figura da arquitetura \Gls{unif} proposta por \cite{cambronero-deep-learning-code-search:2019}. \emph{Embedding} refere-se a camada composta pelos vetores de representação distribuída. \emph{Média} é camada que combina os vetores através de uma média aritmética simples. \emph{Atenção} refere-se ao \gls{mecanismo-atencao}, que combina os vetores através de uma média ponderada e aprende a ''prestar atenção'' nos termos mais relevantes. \emph{OL} é o acrônimo de \emph{Output Layer}, i.e., camada de saída. $O_{q}$ e $O_{c}$ referem-se ao vetor de representação final das questões e trechos de código, respectivamente. \emph{Cosine} indica a função de similaridade. }
     \label{fig:unif-architecture}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{figuras/cap-experimento/embedding-architecture.pdf}
-    \caption{Figura da arquitetura de referência \textit{Embedding} para comparação. \emph{Embedding Layer} refere-se a camada composta pelos vetores de representação distribuída. \emph{OL} é o acrônimo de \emph{Output Layer}, i.e., camada de saída. $O_{q}$ e $O_{c}$ referem-se aos vetores de representação final das questões e trechos de código, respectivamente. \emph{Cosine} refere-se a função de similaridade. Figura utilizada no artigo \cite{marcelo-vem-2019}.}
+    \caption[Figura da arquitetura de referência \textit{Embedding} para comparação.]{Figura da arquitetura de referência \textit{Embedding} para comparação. \emph{Embedding Layer} refere-se a camada composta pelos vetores de representação distribuída. \emph{OL} é o acrônimo de \emph{Output Layer}, i.e., camada de saída. $O_{q}$ e $O_{c}$ referem-se aos vetores de representação final das questões e trechos de código, respectivamente. \emph{Cosine} refere-se a função de similaridade. Figura utilizada no artigo \cite{marcelo-vem-2019}.}
     \label{fig:embedding-architecture}
 \end{figure}
 Nas figuras \ref{fig:cnn-architecture}, \ref{fig:unif-architecture} e \ref{fig:embedding-architecture}, a palavra \textit{Embedding Layer} refere-se ao vetor contínuo das palavras. \emph{OL} é um acrônimo de \textit{Output Layer} ou camada de saída, $O_{q}$ indica a camada de saída da questão e $O_{c}$ indica a camada de saída do trecho de código-fonte. As arquiteturas CNN e \textit{Embedding} utilizam uma camada \textit{maxpool} e todas as arquiteturas, ao final, calculam a similaridade através da função \textit{cosine}. Os ajustes dos hiper-parâmetros são discutidos com mais detalhes no Apêndicê~\ref{ape:ajuste-hiper-parametros-cnn}.

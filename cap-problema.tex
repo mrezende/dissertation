@@ -55,14 +55,14 @@ $\bm{F}$ e $b$ são os parâmetros a serem aprendidos pela rede neural. Para exe
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-problema/first-step-convolution.pdf}
-    \caption{Primeiro passo da operação de convolução. Aplica-se um filtro $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$, em uma sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Este primeiro passo é equivalente a seguinte operação: $\bm{c}(\bm{0}) = tanh \left[\left(\sum_{j=0}^{m - 1} \bm{x}(\bm{0} + j)^{T}\bm{F}(j)\right) + b\right]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.} 
+    \caption[Primeiro passo da operação de convolução.]{Primeiro passo da operação de convolução. Aplica-se um filtro $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$, em uma sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Este primeiro passo é equivalente a seguinte operação: $\bm{c}(\bm{0}) = tanh \left[\left(\sum_{j=0}^{m - 1} \bm{x}(\bm{0} + j)^{T}\bm{F}(j)\right) + b\right]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.} 
     \label{fig:first-step-convolutional}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-problema/second-step-convolution.pdf}
-    \caption{Segundo passo da operação de convolução. Aplica-se o mesmo filtro $\bm{F} \in \mathbb{R}^{m X d}$ da Figura~\ref{fig:first-step-convolutional}. Neste segundo passo, deslocamos uma posição no eixo $0$. Este segundo passo é equivalente a: $\bm{c}(\bm{1}) = tanh [(\sum_{j=0}^{m - 1} \bm{x}(\bm{1} + j)^{T}\bm{F}(j)) + b]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.}
+    \caption[Segundo passo da operação de convolução.]{Segundo passo da operação de convolução. Aplica-se o mesmo filtro $\bm{F} \in \mathbb{R}^{m X d}$ da Figura~\ref{fig:first-step-convolutional}. Neste segundo passo, deslocamos uma posição no eixo $0$. Este segundo passo é equivalente a: $\bm{c}(\bm{1}) = tanh [(\sum_{j=0}^{m - 1} \bm{x}(\bm{1} + j)^{T}\bm{F}(j)) + b]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.}
     \label{fig:second-step-convolutional}
 \end{figure}
 
@@ -88,7 +88,7 @@ Para exemplificar a operação completa, a Figura~\ref{fig:cnn-architecture-prop
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{figuras/cap-problema/cnn-steps-word-embedding-article.pdf}
-    \caption{Ilustração das 2 operações realizadas pela arquitetura CNN para obter o vetor de representação final $\bm{o}$. Neste exemplo, utilizamos 4 filtros $\bm{F} \in \mathbb{R}^{m X d X f}$ com janela de tamanho $m = 2$. Cada filtro é aplicado a sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Figura do artigo \cite{martins2020concra}.}
+    \caption[Ilustração das 2 operações realizadas pela arquitetura CNN para obter o vetor de representação final $\bm{o}$.]{Ilustração das 2 operações realizadas pela arquitetura CNN para obter o vetor de representação final $\bm{o}$. Neste exemplo, utilizamos 4 filtros $\bm{F} \in \mathbb{R}^{m X d X f}$ com janela de tamanho $m = 2$. Cada filtro é aplicado a sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Figura do artigo \cite{martins2020concra}.}
     \label{fig:cnn-architecture-proposal}
 \end{figure}
 
