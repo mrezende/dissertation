@@ -10,18 +10,18 @@ Conforme citado no Capítulo~\ref{cap:fundamentacao-teorica}, uma técnica muito
     \item Função objetivo do modelo
 \end{itemize}
 
-Para a representação das palavras, optamos por uma representação distribuída através do uso do \textit{word2vec} com o algoritmo \textit{skip-gram}, que apresentou um bom desempenho em tarefas semânticas \citep{mikolov2013distributed}. No caso da representação das sentenças, utilizamos redes convolucionais com uma camada de \gls{max-pooling}, priorizando as interações locais e a invariância a pequenas translações (e.g. alteração da ordem de uma palavra na sentença). Com relação à função objetivo, optamos pela função de perda de articulação ou \textit{hinge loss}, que otimiza a relativa preferência das respostas, ao invés da sua correta classificação.
+Para a representação das palavras, optamos por uma representação distribuída através do uso do \textit{word2vec} com o algoritmo \textit{skip-gram}, que apresentou um bom desempenho em tarefas semânticas \citep{mikolov2013distributed}. No caso da representação das sentenças, utilizamos redes convolucionais com uma camada de \gls{max-pooling}, priorizando as interações locais e a invariância a pequenas translações (p. ex. alteração da ordem de uma palavra na sentença). Com relação à função objetivo, optamos pela função de perda de articulação ou \textit{hinge loss}, que otimiza a relativa preferência das respostas, ao invés da sua correta classificação.
 
 
 
 \section{Representação dos tokens ou palavras}
 \label{sec:abordagem-representacao-token}
 
-As questões e os trechos de código-fonte são compostos por palavras, pontuações, separadores. caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, iremos representá-las como um vetor formado por uma sequência de palavaras, apenas removendo os caracteres de acento e pontuação. No caso do código-fonte, acreditamos que os termos presentes no código-fonte contém informações suficientes para estabelecer uma relação semântica entre a questão e o trecho de código-fonte, mesma hipótese utilizada por \cite{Sachdev-neural-code-search:2018}. Neste caso, removemos os acentos e caracteres especiais dos trechos de código-fonte, tratando cada termo presente como um \gls{token}.
+As questões e os trechos de código-fonte são compostos por palavras, pontuações, separadores, caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, representamos através de um vetor formado por uma sequência de palavras, apenas removendo os caracteres de acento e pontuação. No caso do código-fonte, acreditamos que os termos presentes no código-fonte contém informações suficientes para estabelecer uma relação semântica entre a questão e o trecho de código-fonte, mesma hipótese utilizada por \cite{Sachdev-neural-code-search:2018}. Neste caso, removemos os acentos e caracteres especiais dos trechos de código-fonte, tratando cada termo presente como um \gls{token}.
 
 Uma boa representação para as palavras são os vetores contínuos. De acordo com \cite{Goodfellow-et-al-2016}, as redes neurais generalizam bem quando as palavras são representadas através de vetores contínuos. Conforme os próprios autores, uma boa representação deve auxiliar na aprendizagem de uma tarefa posterior. No nosso caso, as representações devem auxiliar o modelo a encontrar uma correlação entre as questões e os trechos de código-fonte mais relevantes.
 
-Mapeamos as palavras para vetores contínuos através do \gls{word2vec} com o algoritmo \gls{skip-gram}, que prediz as palavras do contexto a partir de uma palavra alvo. Segundo \cite{mikolov2013distributed}, \textit{skip-gram} obteve um melhor desempenho em problemas semânticos, e.g., relacionar uma palavra masculina com a equivalente feminina, relacionar o nome de uma capital a um país ou cidade a um estado. No caso do código-fonte, isto é uma característica importante, pois pode auxiliar no agrupamento dos \textit{tokens} por tipo. 
+Mapeamos as palavras para vetores contínuos através do \gls{word2vec} com o algoritmo \gls{skip-gram}, que prediz as palavras do contexto a partir de uma palavra alvo. Segundo \cite{mikolov2013distributed}, \textit{skip-gram} obteve um melhor desempenho em problemas semânticos, p .ex., relacionar uma palavra masculina com a equivalente feminina, relacionar o nome de uma capital a um país ou cidade a um estado. No caso do código-fonte, esta é uma característica importante, pois pode auxiliar no agrupamento dos \textit{tokens} por tipo. 
 
 No nosso caso, o \textit{word2vec} mapeou cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{V}$ o conjunto formado pelas palavras das questões e pelas palavras presentes nos trechos de código-fonte. Para cada palavra ${p} \in \mathbb{V}$ temos:
 
@@ -32,7 +32,7 @@ No nosso caso, o \textit{word2vec} mapeou cada palavra para um espaço vetorial 
 Onde $f$ é o \textit{word2vec} com o algoritmo \textit{skip-gram}. A função $f$ mapeia cada palavra pertencente ao vocabulário a uma matriz $\bm{T_{v}}$.
 Temos uma matriz $\bm{T}_{v}^{|\mathbb{V}| X d}$, onde $|\mathbb{V}|$ é o tamanho do vocabulário das questões e trechos de código-fonte, e $d$ é a dimensão do vetor contínuo.
 
-Com esta matriz $\bm{T}_{v}$, que contém as palavras das questões e dos trechos de código-fonte mapeadas, podemos representar uma sentença através de vetores contínuos. Dado uma questão $\bm{s} = \{ w_{0}, w_{1}, . . ., w_{n - 1}\}$, onde $w_{i}, 0 \leq i < n$ é uma palavra. Podemos representar $\bm{s}$ através de um outro vetor $\bm{x}$, tal que $\bm{x} = \{ x(w_{0}), x(w_{1}), . . ., x(w_{n - 1})\}$, onde $x(w_{i}) \in \bm{T}_{v}$ e $\bm{x}(w_{i}) \in \mathbb{R}^{d}$ é um vetor contínuo. O próximo passo é combinar os elementos do vetor $\bm{x}$ para obter uma representação da sentença.
+Com esta matriz $\bm{T}_{v}$, que contém as palavras das questões e dos trechos de código-fonte mapeadas, podemos representar uma sentença através de vetores contínuos. Dado uma questão $\bm{s} = \{ w_{0}, w_{1}, . . ., w_{n - 1}\}$, onde $w_{i}, 0 \leq i < n$ é uma palavra, podemos representar $\bm{s}$ através de um outro vetor $\bm{x}$, tal que $\bm{x} = \{ x(w_{0}), x(w_{1}), . . ., x(w_{n - 1})\}$, onde $x(w_{i}) \in \bm{T}_{v}$ e $\bm{x}(w_{i}) \in \mathbb{R}^{d}$ é um vetor contínuo. O próximo passo é combinar os elementos do vetor $\bm{x}$ para obter uma representação da sentença.
 
 \section{Representação das sentenças}
 \label{sec:representacao-sentenca}
@@ -50,7 +50,7 @@ A operação de convolução utiliza um filtro $\bm{F}  = [\bm{F}(0),· · ·, \
     \bm{c}(i) = tanh \left[\left(\sum_{j=0}^{m - 1} \bm{x}(i + j)^{T}\bm{F}(j)\right) + b\right]
 \end{equation}
 
-$\bm{F}$ e $b$ são os parâmetros a serem aprendidos pela rede neural. Para exemplificar esta operação, as Figuras~\ref{fig:first-step-convolutional} e \ref{fig:second-step-convolutional} ilustram um exemplo dos dois primeiros passos da aplicação de um filtro $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$. Este filtro é aplicado a uma sentença formado por 6 palavras, que é representado pelo vetor contínuo $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Pelas figuras, podemos perceber que o parâmetro $m$ do filtro $\bm{F}$ define como as palavras serão combinadas. Nesse caso, foram combinadas de duas em duas, um bi-grama.
+$\bm{F}$ e $b$ são os parâmetros a serem aprendidos pela rede neural. Para exemplificar esta operação, as Figuras~\ref{fig:first-step-convolutional} e \ref{fig:second-step-convolutional} ilustram um exemplo dos dois primeiros passos da aplicação de um filtro $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$. Este filtro é aplicado a uma sentença formado por 6 palavras, que é representada pelo vetor contínuo $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Pelas figuras, podemos perceber que o parâmetro $m$ do filtro $\bm{F}$ define como as palavras serão combinadas. Nesse caso, foram combinadas de duas em duas, um bi-grama.
 
 \begin{figure}[h]
     \centering
@@ -105,7 +105,7 @@ O nosso objetivo é ensinar o modelo a classificar os trechos de código anotado
 J = max(0, m - h_{\theta}(\bm{q}, \bm{c^{+}}) + h_{\theta}(\bm{q}, \bm{c^{-}}))
 \end{equation}
 
-Onde $m$ é uma margem e $h_{\theta}$ é uma função de similaridade, e.g., \textit{cosine}. Lembrando que o objetivo em uma rede neural é minimizar a função custo $J$. Desta maneira, o modelo vai ser incentivado a satisfazer a seguinte condição: $h_{\theta}(\bm{q}, \bm{c^{+}}) - h_{\theta}(\bm{q}, \bm{c^{-}}) \geq m$. Quer dizer, a função \textit{hinge} induz o modelo a classificar as respostas corretas com uma pontuação maior do que as incorretas por uma certa margem $m$. 
+Onde $m$ é uma margem e $h_{\theta}$ é uma função de similaridade, p. ex., \textit{cosine}. Lembrando que o objetivo em uma rede neural é minimizar a função custo $J$. Desta maneira, o modelo vai ser incentivado a satisfazer a seguinte condição: $h_{\theta}(\bm{q}, \bm{c^{+}}) - h_{\theta}(\bm{q}, \bm{c^{-}}) \geq m$. Quer dizer, a função \textit{hinge} induz o modelo a classificar as respostas corretas com uma pontuação maior do que as incorretas por uma certa margem $m$. 
 
 
 

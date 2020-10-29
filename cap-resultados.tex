@@ -7,7 +7,7 @@ Neste capítulo apresentamos os resultados da avaliação do uso das redes convo
 \section{Avaliação}
 \label{sec:resultados-avaliacao}
 
-Avaliamos a arquitetura CNN juntamente com outras duas arquiteturas, Embedding e \Gls{unif} na recuperação de trecho de código-fonte. Os resultados foram coletados a partir da amostra \emph{EVAL} e o valor final MRR é a média obtida após 20 iterações. Conforme a Tabela~\ref{table:resultados}, as arquiteturas CNNs compartilhadas com 4000 filtros convolucionais (linhas D3 e F3) obtiveram o melhor resultado. A arquitetura CNN obteve uma média MRR 5\% superior ao melhor resultado obtido pela arquitetura Unif (linha B1), atual estado da arte. Um resultado 11\% superior a arquitetura de referência Embedding (linha A1). 
+Avaliamos a arquitetura CNN juntamente com outras duas arquiteturas, Embedding e \Gls{unif} na recuperação de trecho de código-fonte. Os resultados foram coletados a partir da amostra \emph{EVAL} e o valor final MRR é a média obtida após 20 iterações. Conforme a Tabela~\ref{table:resultados}, as arquiteturas CNNs compartilhadas com 4000 filtros convolucionais (linhas D3 e F3) obtiveram o melhor resultado. A arquitetura CNN obteve uma média MRR 5\% superior ao melhor resultado obtido pela arquitetura Unif (linha B1), atual estado da arte. Um resultado 11\% superior foi obtido em relação à arquitetura de referência Embedding (linha A1). 
 
 \begin{table}[H]
 \centering
@@ -63,9 +63,9 @@ Avaliamos a arquitetura CNN juntamente com outras duas arquiteturas, Embedding e
 
 Conforme os resultados da Tabela~\ref{table:resultados}, o aumento da quantidade de filtros convolucionais resultou em uma melhora no desempenho do modelo (linhas D3 e F3). O aumento da quantidade de filtros aumenta o grau de liberdade do modelo, resultando em um aumento da capacidade de aprendizagem da rede convolucional (ver Equação~\ref{eq:feature-map}). As redes convolucionais que compartilharam os parâmetros (linhas D e F) obtiveram um desempenho superior aos modelos que utilizaram parâmetros independentes (linhas C e E). Para \cite{wen-joint-modeling-question-answer-2019}, as redes convolucionais que aprendem as representações de forma independente e postergam a interação entre elas para a última camada (cálculo da similaridade), exploram de forma ineficiente a correlação semântica entre as respectivas representações dos pares de questões e respostas. No nosso caso, verificamos que ao treinar por mais épocas, não houve melhora significativa no desempenho, salientando a dificuldade das redes convolucionais em encontrar uma correlação semântica entre os pares de questões e respostas.
 
-Durante o treinamento, para evitar o \textit{overfitting} dos modelos, adotamos a técnica de normalização em lote, que além de melhorar o desempenho, a velocidade e a estabilidade das redes neurais, ele mitiga o \textit{overfitting}, reduzindo a necessidade do uso de outra técnica de regularização como o \textit{dropout} \citep{sergey-batch-normalization-2015}. No nosso caso, verificamos a melhora no desempenho e robustez das redes convolucionais (ver linhas E e F da Tabela~\ref{table:resultados} e ver Apêndice~\ref{ape:ajuste-hiper-parametros-cnn}). No caso da arquitetura Unif, optamos por manter a arquitetura padrão proposta por \cite{cambronero-deep-learning-code-search:2019}. Para a arquitetura \textit{Embedding} não houve a necessidade de regularização.
+Durante o treinamento, para evitar o \textit{overfitting} dos modelos, adotamos a técnica de normalização em lote, que além de melhorar o desempenho, a velocidade e a estabilidade das redes neurais, mitiga o \textit{overfitting}, reduzindo a necessidade do uso de outra técnica de regularização como o \textit{dropout} \citep{sergey-batch-normalization-2015}. No nosso caso, verificamos a melhora no desempenho e robustez das redes convolucionais (ver linhas E e F da Tabela~\ref{table:resultados} e ver Apêndice~\ref{ape:ajuste-hiper-parametros-cnn}). No caso da arquitetura Unif, optamos por manter a arquitetura padrão proposta por \cite{cambronero-deep-learning-code-search:2019}. Para a arquitetura \textit{Embedding}, não houve a necessidade de regularização.
 
-A Figura~\ref{fig:histogram-mrr} exibe as posições da primeira ocorrência do trecho de código-fonte encontradas durante a avaliação dos modelos. Tanto o CNN quanto a arquitetura Unif conseguiram classificar os trechos de código-fonte entre as 3 (três) primeiras posições em 75\% dos casos. A nossa arquitetura proposta obteve uma precisão TOP-1 de aproximadamente 60\%, i.e., em aproximadamente 60\% das vezes, o trecho de código-fonte relevante foi observada na primeira posição. A arquitetura Unif e Embedding obtiveram uma precisão TOP-1 de pouco mais de 50\%. 
+A Figura~\ref{fig:histogram-mrr} exibe as posições da primeira ocorrência do trecho de código-fonte encontradas durante a avaliação dos modelos. Tanto o CNN quanto a arquitetura Unif conseguiram classificar os trechos de código-fonte entre as três primeiras posições em 75\% dos casos. A nossa arquitetura proposta obteve uma precisão TOP-1 de aproximadamente 60\%, i.e., em aproximadamente 60\% das vezes, o trecho de código-fonte relevante foi observada na primeira posição. A arquitetura Unif e Embedding obtiveram uma precisão TOP-1 de pouco mais de 50\%. 
 
 
 \begin{figure}[h]
@@ -75,14 +75,10 @@ A Figura~\ref{fig:histogram-mrr} exibe as posições da primeira ocorrência do 
     \label{fig:histogram-mrr}
 \end{figure}
 
-
-
-
-
-
 \section{Ameaças à validade}
 
 Conforme citado anteriormente, \cite{yao-2018} anotaram o conjunto de dados utilizando um framework proposto em seu artigo. Para anotá-los, os autores treinaram uma rede neural no conjunto de dados anotado manualmente. Em nosso trabalho, fizemos o caminho inverso. Treinamos os nossos modelos nos dados anotados automaticamente e avaliamos no conjunto anotado manualmente. Para diminuir o viés, adotamos o procedimento proposto por \cite{iyer-etal-2016-summarizing} descrito na Seções~\ref{sec:treinamento} e \ref{sec:avaliacao}.
+Além disso, utlizamos apenas a linguagem Python para os experimentos e coleta dos resultados. As suas principais características como sintaxe concisa e clara podem ter influenciados os resultados obtidos pela nossa arquitetura. 
 
 \section{Considerações}
 \label{sec:consideracoes-resultados}
@@ -90,13 +86,13 @@ Conforme citado anteriormente, \cite{yao-2018} anotaram o conjunto de dados util
 Os resultados são prominentes e a arquitetura proposta obteve um bom desempenho na recuperação de trecho de código-fonte. Algumas considerações a respeito do experimento e dos resultados das redes convolucionais:
 
 \begin{itemize}
-    \item Não houve a necessidade de um tratamento especial para os trechos de código em Python, devido as suas características como sintaxe mais concisa, clara e muito menos verbosa quando comparada a outras linguagens \citep{theodora-introductory-programming-python-2015}, facilitando a extração das palavras durante o pré-processamento. 
+    \item Não houve a necessidade de um tratamento especial para os trechos de código em Python, devido às suas características, como sintaxe mais concisa, clara e muito menos verbosa quando comparada a outras linguagens \citep{theodora-introductory-programming-python-2015}, facilitando a extração das palavras durante o pré-processamento. 
     
     \item Em nosso estudo, utilizamos \gls{word2vec} para mapear as palavras para vetores contínuos, porém recentes avanços em NLP apresentaram outras soluções como os \textit{transformers} \citep{attention-is-all-you-need-2017}. Trabalhos futuros podem investigar como esses recentes avanços podem auxiliar na recuperação de trecho de código-fonte.
     
     \item Segundo \cite{Goodfellow-et-al-2016}, as redes convolucionais não conseguem correlacionar palavras muito distantes em um sentença. No nosso caso, isto não foi um problema, pois conforme apontado na Tabela~\ref{table:statistical-descriptive-of-pythons-sample}, 75\% das questões das nossas amostras tem 11 palavras no máximo, enquanto 75\% dos trechos de código tem no máximo 55 palavras.
     
-    \item Adotamos a métrica MRR que indica o quanto um modelo está conseguindo classificar a informação relevante entre as primeiras posições. O CNN (linha F3 da Tabela~\ref{table:resultados}) conseguiu classificar o trecho anotado como correto entre as 3 primeiras posições em 78\% dos casos. Para nós, isto é um indício de que o modelo está atendendo a intenção do usuário, pois a informação relevante está aparecendo entre as primeiras posições. Porém, somente a métrica MRR não é suficiente, é necessário investigar e analisar estes resultados de forma qualitativa. Um estudo futuro pode verificar e validar estes resultados com usuários finais, por exemplo. 
+    \item Adotamos a métrica MRR que indica o quanto um modelo está conseguindo classificar a informação relevante entre as primeiras posições. O CNN (linha F3 da Tabela~\ref{table:resultados}) conseguiu classificar o trecho anotado como correto entre as 3 primeiras posições em 78\% dos casos. Porém, somente a métrica MRR não é suficiente, é necessário investigar e analisar estes resultados de forma qualitativa. Um estudo futuro pode verificar e validar estes resultados com usuários finais, por exemplo. 
 \end{itemize}
 
 

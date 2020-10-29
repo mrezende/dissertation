@@ -1,5 +1,5 @@
 %% ------------------------------------------------------------------------- %%
-\chapter{Experimento}
+\chapter{Metodologia do Experimento}
 \label{cap:experimento}
 
 
@@ -21,7 +21,7 @@ Conforme a Figura~\ref{fig:training-neural-network-cyclic}, este é um processo 
     \item Análise do desempenho da rede neural
 \end{itemize}
 
-As outras etapas já foram discutidas em outros capítulos ou estão fora do escopo do presente trabalho. A etapa de ''definição do tipo de rede neural e arquitetura'' já foi discutida no Capítulo~\ref{cap:abordagem} e a ''utilização do modelo'' está fora do escopo do trabalho neste momento. Em com relação a etapa de ''seleção do algoritmo de treinamento'', optamos por fixar o algoritmo de otimização \emph{Adam} para aprendizagem, utilizado por \cite{yao-2018}. 
+As outras etapas já foram discutidas em outros capítulos ou estão fora do escopo do presente trabalho. A etapa de ''definição do tipo de rede neural e arquitetura'' já foi discutida no Capítulo~\ref{cap:abordagem} e a ''utilização do modelo'' está fora do escopo do trabalho neste momento. Com relação à etapa de ''seleção do algoritmo de treinamento'', optamos por utilizar o algoritmo de otimização \emph{Adam} para aprendizagem, seguindo os experimentos feitos por \cite{yao-2018}. 
 
 
 
@@ -38,17 +38,17 @@ As outras etapas já foram discutidas em outros capítulos ou estão fora do esc
 Conforme \cite{nndesign:2014:pratical-training-issues}, o processo de treinamento e avaliação de uma rede neural inicia-se com a coleta e pré-processamento dos dados. Em nosso caso, não houve coleta, pois utilizamos parte do conjunto de dados disponibilizados por \cite{yao-2018}. Esses dados estão sob a licença \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons}, onde o uso é permitido desde que faça referência ao trabalho dos pesquisadores. Ressaltamos que utilizamos parte do conjunto, pois os pesquisadores coletaram questões e trechos de código-fonte em Python e SQL do site \Gls{sof}. Em nosso trabalho, optamos apenas por utilizar o conjunto de dados em Python. 
 
 
-Utilizamos os dados disponibilizados por \cite{yao-2018}, pois esses dados contém duas características importantes: Maior variabilidade das questões e trechos de código-fonte em relação a amostras anteriores \citep{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015} e questões do tipo \textit{how-to-do-it}. A amostra coletada por \cite{yao-2018} apresenta 30\% das questões com mais de um trecho de código-fonte como solução, enquanto os trabalhos de \cite{iyer-etal-2016-summarizing} e \cite{Allamanis-bimodal-source-code-natural-language:2015} coletaram questões que apresentavam apenas 1 (um) trecho de código como resposta. As questões do tipo \textit{how-to-do-it} costumam ser mais diretas e exibir um trecho de código-fonte como solução. Conforme experimentos realizados por \cite{yao-2018}, as questões do tipo \textit{how-to-do-it} auxiliam o modelo a correlacionar os trechos de código-fonte às intenções de busca do usuário.
+Utilizamos os dados disponibilizados por \cite{yao-2018}, pois esses dados contém duas características importantes: Maior variabilidade das questões e trechos de código-fonte em relação a amostras anteriores \citep{iyer-etal-2016-summarizing, Allamanis-bimodal-source-code-natural-language:2015} e questões do tipo \textit{how-to-do-it}. A amostra coletada por \cite{yao-2018} apresenta 30\% das questões com mais de um trecho de código-fonte como solução, enquanto os trabalhos de \cite{iyer-etal-2016-summarizing} e \cite{Allamanis-bimodal-source-code-natural-language:2015} coletaram questões que apresentavam apenas um trecho de código como resposta. As questões do tipo \textit{how-to-do-it} costumam ser mais diretas e exibir um trecho de código-fonte como solução. Conforme experimentos realizados por \cite{yao-2018}, as questões do tipo \textit{how-to-do-it} auxiliam o modelo a correlacionar os trechos de código-fonte às intenções de busca do usuário.
 
 
 \subsection{Conjunto de dados}
 \label{sec:conjunto-dados}
 
-O conjunto de dados disponibilizado por \cite{yao-2018} é formado por $\bm{147.546}$ pares de questões em inglês e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Eles foram coletados do site \Gls{sof} e contemplam questões do ano de 2008 a 2016\footnote{\url{https://github.com/LittleYUYU/StackOverflow-Question-Code-Dataset}}. Podemos dividi-los em 3 (três) subconjuntos distintos:
+O conjunto de dados disponibilizado por \cite{yao-2018} é formado por $\bm{147.546}$ pares de questões em inglês e trechos de código-fonte em Python e $\bm{119.519}$ em SQL. Eles foram coletados do site \Gls{sof} e contemplam questões dos anos de 2008 a 2016\footnote{\url{https://github.com/LittleYUYU/StackOverflow-Question-Code-Dataset}}. Podemos dividi-los em 3 (três) subconjuntos distintos:
 
 \begin{itemize}
-    \item N1: Questões coletadas do \Gls{sof} que continham apenas um trecho de código-fonte na descrição da resposta
-    \item N2: Questões que apresentavam mais de um trecho de código-fonte na descrição
+    \item N1: Questões coletadas do \Gls{sof} que contêm apenas um trecho de código-fonte na descrição da resposta
+    \item N2: Questões que apresentam mais de um trecho de código-fonte na descrição
     \item N3: Pares de questões e trechos de código-fonte anotados manualmente
 \end{itemize}
 
@@ -146,7 +146,7 @@ Com relação ao conjunto de dados, utilizamos os conjuntos $N_{2}$ e $N_{3}$ pa
 \end{table}
 
 
-Para avaliar a dificuldade do problema, analisamos a quantidade de palavras presentes nas questões e trechos de código-fonte das amostras utilizadas no treinamento e avaliação dos nossos modelos. De acordo com a Tabela~\ref{table:statistical-descriptive-of-pythons-sample}, as questões tem aproximadamente em média $9$ palavras com um desvio padrão de $\pm 3.71$. Já os trechos de código apresentam aproximadamente uma média de $44$ e um desvio padrão de $\pm 49$. O valor alto do desvio padrão para os trechos de código é um indicativo de maior variabilidade da quantidade de palavras. Este valor da média e desvio padrão alto podem ser influenciados por pontos fora da curva também, i.e., trechos de código com uma enorme quantidade de palavras. Para entender um pouco melhor como está distribuída esta quantidade, apresentamos os percentis na Tabela~\ref{table:statistical-descriptive-of-pythons-sample} e o diagrama de caixa com os respectivos quartis na Figura~\ref{fig:boxplot-number-of-words}.
+Para avaliar a dificuldade do problema, analisamos a quantidade de palavras presentes nas questões e trechos de código-fonte das amostras utilizadas no treinamento e avaliação dos nossos modelos. De acordo com a Tabela~\ref{table:statistical-descriptive-of-pythons-sample}, as questões tem aproximadamente em média $9$ palavras com um desvio padrão de $\pm 3.71$. Já os trechos de código apresentam aproximadamente uma média de $44$ e um desvio padrão de $\pm 49$. O valor alto do desvio padrão para os trechos de código é um indicativo de maior variabilidade da quantidade de palavras. Estes valores da média e desvio padrão alto podem ser influenciados por pontos fora da curva também, i.e., trechos de código com uma enorme quantidade de palavras. Para entender um pouco melhor como está distribuída esta quantidade, apresentamos os percentis na Tabela~\ref{table:statistical-descriptive-of-pythons-sample} e o diagrama de caixa com os respectivos quartis na Figura~\ref{fig:boxplot-number-of-words}.
 
 \begin{table}[h]
 \centering
@@ -229,7 +229,7 @@ Após as etapas de coleta de dados e pré-processamento, a próxima etapa é a d
     \item Função objetivo
 \end{itemize}
 
-Conforme apontado pela Tabela~\ref{table:training-decisions}, dividimos a nossa amostra durante o treinamento em 70\% / 30\%, 70\% é utilizada para treinamento e 30\% para a validação, mesma divisão adotada por \cite{yao-2018} e \cite{cambronero-deep-learning-code-search:2019}. Adotamos os mesmos critérios de \cite{iyer-etal-2016-summarizing} e \cite{yao-2018} para seleção do modelo, duração do treinamento e critério de parada. Com relação a função objetivo, utilizamos a função de perda de articulação comumente utilizada na área de recuperação de informação e classificação de documentos e que foi utilizado também por \cite{Gu-deep-code-search:2018} e \cite{cambronero-deep-learning-code-search:2019}.
+Conforme apontado pela Tabela~\ref{table:training-decisions}, dividimos a nossa amostra durante o treinamento em 70\% / 30\%, 70\% é utilizada para treinamento e 30\% para a validação, mesma divisão adotada por \cite{yao-2018} e \cite{cambronero-deep-learning-code-search:2019}. Adotamos os mesmos critérios de \cite{iyer-etal-2016-summarizing} e \cite{yao-2018} para seleção do modelo, duração do treinamento e critério de parada. Com relação à função objetivo, utilizamos a função de perda de articulação comumente utilizada na área de recuperação de informação e classificação de documentos e que foi utilizada também por \cite{Gu-deep-code-search:2018} e \cite{cambronero-deep-learning-code-search:2019}.
 
 
 \begin{table}[h]
@@ -271,13 +271,13 @@ Conforme citado anteriormente, adotamos o mesmo critério de seleção do modelo
 \label{fig:evaluation-process}
 \end{figure}
 
-De acordo com a Figura~\ref{fig:evaluation-process}, a cada época um modelo candidato é avaliado quanto a média MRR. Para calcular a média MRR, calculamos inicialmente a distância de similaridade entre cada questão da amostra DEV e 50 trechos de código-fonte, onde 1 trecho de código-fonte é a resposta anotada como correta e 49 são trechos de código distratores selecionados aleatoriamente da amostra de treinamento.  Posteriormente, os trechos de código-fonte são ordenados de forma decrescente, do mais similar (maior pontuação) ao menos similar (menor pontuação). Com os trechos ordenados, verificamos a posição do trecho anotado como correto para cálculo do \textit{reciprocal rank}, pois \textit{reciprocal rank} é o inverso da primeira posição encontrada para o trecho anotado como correto. Com o \textit{reciprocal rank}, podemos, finalmente, calcular o \acrshort{mrr}, que é a média do \textit{reciprocal rank} para a amostra inteira \citep{Gu-deep-code-search:2018}:
+De acordo com a Figura~\ref{fig:evaluation-process}, a cada época um modelo candidato é avaliado quanto a média MRR. Para calcular a média MRR, calculamos inicialmente a distância de similaridade entre cada questão da amostra DEV e 50 trechos de código-fonte, onde um trecho de código-fonte é a resposta anotada como correta e 49 são trechos de código distratores selecionados aleatoriamente da amostra de treinamento.  Posteriormente, os trechos de código-fonte são ordenados de forma decrescente, do mais similar (maior pontuação) ao menos similar (menor pontuação). Com os trechos ordenados, verificamos a posição do trecho anotado como correto para cálculo do \textit{reciprocal rank}, pois \textit{reciprocal rank} é o inverso da primeira posição encontrada para o trecho anotado como correto. Com o \textit{reciprocal rank}, podemos, finalmente, calcular o \acrshort{mrr}, que é a média do \textit{reciprocal rank} para a amostra inteira \citep{Gu-deep-code-search:2018}:
 
 \begin{equation}\label{eq:mrr}
 MRR = \frac{1}{n} * \sum_{i = 1}^{n}\frac{1}{p_{i}^{+}}    
 \end{equation}
 
-Onde $n$ é a quantidade de questões presentes na amostra, $p_{i}^{+}$ é a posição da primeira ocorrência do trecho anotado como correto entre os trechos ordenados. Este procedimento é repetido durante 20 iterações. A cada iteração, outros 49 distratores são selecionados e, ao final, obtém-se a média \emph{MRR} do modelo. Basicamente, a cada época verificamos o resultado MRR do modelo comparando a resposta anotada como correta com outros 49 distratores. E selecionamos o modelo que obtiver a melhor média MRR. Este modelo escolhido será utilizado na avaliação final.
+Onde $n$ é a quantidade de questões presentes na amostra, $p_{i}^{+}$ é a posição da primeira ocorrência do trecho anotado como correto entre os trechos ordenados. Este procedimento é repetido durante 20 iterações. A cada iteração, outros 49 distratores são selecionados e, ao final, obtém-se a média \emph{MRR} do modelo. Basicamente, a cada época verificamos o resultado MRR do modelo comparando a resposta anotada como correta com outros 49 distratores. Selecionamos o modelo com a melhor média MRR. Este modelo escolhido foi utilizado na avaliação final.
 
 
 
@@ -297,16 +297,16 @@ Para realizar a análise de desempenho da rede neural, três itens devem ser lev
 Avaliamos o nosso modelo utilizando a amostra EVAL, que contém 1084 pares de questões e trechos de código-fonte anotados manualmente. Utilizamos o mesmo procedimento de avaliação proposto por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018} juntamente com a métrica MRR. A métrica MRR é uma medida para sabermos se o modelo está conseguindo classificar o item relevante entre as primeiras posições de uma lista ordenada de itens. 
 No nosso trabalho, o item relevante é um trecho de código-fonte anotado como correto e a lista ordenada de itens é composta pelo trecho de código anotado como correto e outros 49 trechos de código-fonte distratores. 
 
-Pelo fato de termos apenas 1 trecho de código-fonte anotado, a métrica MRR torna-se uma medida apropriada para avaliar o nosso modelo, pois o cálculo do MRR leva apenas 1 (um) item relevante em consideração, desconsiderado todos outros itens da lista, conforme Equação~\ref{eq:mrr}. Outras métricas como \acrshort{map} e \acrshort{ndcg}, comumente utilizadas na avaliação de modelos na recuperação de informação \citep{kun-learning-to-rank:2018}, levam em consideração a relevância dos outros itens da lista, o que demandaria, no nosso caso, um trabalho de anotar e indicar quais trechos de código são relevantes a uma dada questão. Como a anotação e indicação da relevância dos trechos de código-fonte estão fora do escopo do presente trabalho, optamos por utilizar a mesma métrica MRR adotada por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}.
+Pelo fato de termos apenas um trecho de código-fonte anotado, a métrica MRR torna-se uma medida apropriada para avaliar o nosso modelo, pois o cálculo do MRR leva apenas um item relevante em consideração, desconsiderado todos outros itens da lista, conforme Equação~\ref{eq:mrr}. Outras métricas como \acrshort{map} e \acrshort{ndcg}, comumente utilizadas na avaliação de modelos na recuperação de informação \citep{kun-learning-to-rank:2018}, levam em consideração a relevância dos outros itens da lista, o que demandaria, no nosso caso, um trabalho de anotar e indicar quais trechos de código são relevantes a uma dada questão. Como a anotação e indicação da relevância dos trechos de código-fonte estão fora do escopo do presente trabalho, optamos por utilizar a mesma métrica MRR adotada por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}.
 
-Além da métrica de avaliação, é necessário comparar o nosso modelo com outras arquiteturas de referência para termos uma base de comparação. No nosso caso, iremos comparar o desempenho das redes convolucionais com outras duas arquiteturas: A arquitetura \textit{Embedding} e arquitetura \textit{Unif} proposta por \cite{cambronero-deep-learning-code-search:2019}. A arquitetura \textit{Embedding} será utilizada como base de comparação, pois é uma arquitetura mais simples, que consiste de uma camada de \gls{bag-of-words} seguida de uma camada \textit{maxpool}. A arquitetura \textit{Unif} utiliza um mecanismo de atenção para obter um vetor contínuo dos trechos de código-fonte e atualmente é o estado da arte na recuperação de trechos de código-fonte. 
+Além da métrica de avaliação, é necessário comparar o nosso modelo com outras arquiteturas de referência para termos uma base de comparação. No nosso caso, comparamos o desempenho das redes convolucionais com outras duas arquiteturas: A arquitetura \textit{Embedding} e arquitetura \textit{Unif} proposta por \cite{cambronero-deep-learning-code-search:2019}. A arquitetura \textit{Embedding} foi utilizada como base de comparação, pois é uma arquitetura mais simples, que consiste de uma camada de \gls{bag-of-words} seguida de uma camada \textit{maxpool}. A arquitetura \textit{Unif} utiliza um mecanismo de atenção para obter um vetor contínuo dos trechos de código-fonte e atualmente é o estado da arte na recuperação de trechos de código-fonte. 
 
 
 
 \subsection{Avaliação}
 \label{sec:avaliacao}
 
-Utilizamos o mesmo procedimento descrito na Seção~\ref{sec:criterio-selecao-modelo-treinamento} para avaliação final dos nossos modelos. Porém, a avaliação dos modelos com relação a métrica MRR foi feita na amostra EVAL. Calculamos o MRR para cada par $<q_{i}, c_{i}^{+}>$ da amostra \emph{EVAL} juntamente com outros 49 distratores $c'$ que são selecionados aleatoriamente da amostra de treinamento, tal que $c_{i}^{+} \neq c'$. Este procedimento de cálculo do MRR é repetido durante 20 iterações e ao final obtemos o resultado do nosso modelo na avaliação. A ilustração desse procedimento pode ser visualizada na Figura~\ref{fig:final-evaluation-process}.
+Utilizamos o mesmo procedimento descrito na Seção~\ref{sec:criterio-selecao-modelo-treinamento} para avaliação final dos nossos modelos. Porém, a avaliação dos modelos com relação à métrica MRR foi feita na amostra EVAL. Calculamos o MRR para cada par $<q_{i}, c_{i}^{+}>$ da amostra \emph{EVAL} juntamente com outros 49 distratores $c'$ que são selecionados aleatoriamente da amostra de treinamento, tal que $c_{i}^{+} \neq c'$. Este procedimento de cálculo do MRR é repetido durante 20 iterações e ao final obtemos o resultado do nosso modelo na avaliação. A ilustração desse procedimento pode ser visualizada na Figura~\ref{fig:final-evaluation-process}.
 
 \begin{figure}[h]
 \centering
@@ -319,7 +319,7 @@ Utilizamos o mesmo procedimento descrito na Seção~\ref{sec:criterio-selecao-mo
 
 \subsection{Arquiteturas}
 
-Para este estudo, comparamos a arquitetura CNN com outras duas arquiteturas: \textit{Unif} e \textit{Embedding}. A arquitetura \textit{Unif} proposta por \cite{cambronero-deep-learning-code-search:2019} utiliza duas abordagens diferentes para representação das questões e trechos de código-fonte. No caso das questões, os vetores contínuos de cada palavra são combinados através de uma média aritmética simples. Quanto aos trechos de código, aplica-se o \gls{mecanismo-atencao} que calcula uma média ponderada sobre os vetores contínuos e aprende a ``prestar atenção`` nas palavras mais importantes.  Já a arquitetura \textit{Embedding} combina os vetores de representação distribuída de cada palavra através de uma camada \textit{maxpool}. As figuras~\ref{fig:cnn-architecture}, \ref{fig:unif-architecture} e \ref{fig:embedding-architecture} ilustram as arquiteturas CNN, \textit{Unif} e \textit{Embedding}, respectivamente.
+Para este estudo, comparamos a arquitetura CNN com outras duas arquiteturas: \textit{Unif} e \textit{Embedding}. A arquitetura \textit{Unif} proposta por \cite{cambronero-deep-learning-code-search:2019} utiliza duas abordagens diferentes para representação das questões e trechos de código-fonte. No caso das questões, os vetores contínuos de cada palavra são combinados através de uma média aritmética simples. Quanto aos trechos de código, aplica-se o \gls{mecanismo-atencao}, que calcula uma média ponderada sobre os vetores contínuos e aprende a ``prestar atenção`` nas palavras mais importantes.  Já a arquitetura \textit{Embedding} combina os vetores de representação distribuída de cada palavra através de uma camada \textit{maxpool}. As figuras~\ref{fig:cnn-architecture}, \ref{fig:unif-architecture} e \ref{fig:embedding-architecture} ilustram as arquiteturas CNN, \textit{Unif} e \textit{Embedding}, respectivamente.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{figuras/cap-experimento/cnn-architecture-proposal.pdf}
