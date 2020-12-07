@@ -7,6 +7,13 @@ Com o advento dos repositórios de código-fonte aberto e das comunidades aberta
 
 Atualmente, a maioria dos desenvolvedores recorrem a ferramentas de busca como o Google, que utilizam estratégias de indexação e ranqueamento de páginas que não são otimizadas para código-fonte. Nesse caso, os buscadores não conseguem extrair a semântica por trás do código-fonte, a não ser que o código esteja acompanhado de um texto explicativo. Segundo \cite{masudur-developers-use-google-code-retrieval:2018}, os desenvolvedores demoram mais, visitam mais páginas web e alteram com mais frequência uma consulta para encontrar um resultado relevante para sua pesquisa relacionada a código-fonte quando comparada a uma busca não relacionada a código.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{figuras/cap-introducao/concrete_examples.pdf}
+\caption[Exemplo]{Exemplo comparativo de respostas dadas pelo Github e o nosso modelo à pergunta em inglês \emph{Q}, que verifica se um vetor é subconjunto de outro vetor. As respostas exibidas como resultado da busca do Github não conseguem atender à pergunta \textbf{Q} (respostas \textbf{R 1.x}) , enquanto o nosso modelo além de apresentar a resposta correta (R 2.2), apresenta uma outra solução para verificar subconjuntos em matrizes (R 2.1). } 
+\label{fig:concrete-example}
+\end{figure}
+
 A busca por trechos de código tem sido um desafio. Atualmente, o site do GitHub, que hospeda milhares de projetos de código-aberto, não possui um mecanismo de pesquisa que
 seja capaz de recuperar um trecho de código-fonte relevante a partir dos termos utilizados no campo de sua busca. Pesquisadores do GitHub tentaram criar uma busca semântica associando milhares de trechos de código a comentários \gls{docstring} extraídos de repositórios do próprio \Gls{github}. Porém, os resultados não foram satisfatórios, pois a busca somente retornava resultados relevantes quando o usuário utilizava palavras-chaves similares às palavras presentes nos comentários \gls{docstring} \citep{husain-github-semantic-search-code-2019}. 
 
