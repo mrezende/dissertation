@@ -90,6 +90,8 @@ Os resultados são prominentes e a arquitetura proposta obteve um bom desempenho
     
     \item Em nosso estudo, utilizamos \gls{word2vec} para mapear as palavras para vetores contínuos, porém recentes avanços em NLP apresentaram outras soluções como os \textit{transformers} \citep{attention-is-all-you-need-2017}. Trabalhos futuros podem investigar como esses recentes avanços podem auxiliar na recuperação de trecho de código-fonte.
     
+    \item No nosso trabalho, utilizamos questões em inglês extraídas do Stack Overflow. 
+    
     \item Segundo \cite{Goodfellow-et-al-2016}, as redes convolucionais não conseguem correlacionar palavras muito distantes em um sentença. No nosso caso, isto não foi um problema, pois conforme apontado na Tabela~\ref{table:statistical-descriptive-of-pythons-sample}, 75\% das questões das nossas amostras tem 11 palavras no máximo, enquanto 75\% dos trechos de código tem no máximo 55 palavras.
     
     \item Adotamos a métrica MRR que indica o quanto um modelo está conseguindo classificar a informação relevante entre as primeiras posições. O CNN (linha F3 da Tabela~\ref{table:resultados}) conseguiu classificar o trecho anotado como correto entre as 3 primeiras posições em 78\% dos casos. Porém, somente a métrica MRR não é suficiente, é necessário investigar e analisar estes resultados de forma qualitativa. Um estudo futuro pode verificar e validar estes resultados com usuários finais, por exemplo. 
