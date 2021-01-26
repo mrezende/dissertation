@@ -90,7 +90,7 @@ Os resultados são prominentes e a arquitetura proposta obteve um bom desempenho
     
     \item Em nosso estudo, utilizamos \gls{word2vec} para mapear as palavras para vetores contínuos, porém recentes avanços em NLP apresentaram outras soluções como os \textit{transformers} \citep{attention-is-all-you-need-2017}. Trabalhos futuros podem investigar como esses recentes avanços podem auxiliar na recuperação de trecho de código-fonte.
     
-    \item No nosso trabalho, utilizamos questões em inglês extraídas do Stack Overflow. 
+    \item No nosso trabalho, utilizamos questões em inglês extraídas do Stack Overflow. Isso facilitou bastante o treinamento das redes neurais, pois permitiu a criação de um vocabulário único formado pelo conjunto de palavras presentes nas questões e nos trechos de código-fonte. Trabalhos futuros podem explorar as questões e as respostas em português do Stack Overflow. Neste caso, acreditamos que será necessário a criação de vocabulários distintos, um para as questões e outro para os trechos de código-fonte, acarretando um tempo maior para o treinamento. Mais informações sobre os vocabulários estão presentes na Seção~\ref{sec:abordagem-representacao-token}.
     
     \item Segundo \cite{Goodfellow-et-al-2016}, as redes convolucionais não conseguem correlacionar palavras muito distantes em um sentença. No nosso caso, isto não foi um problema, pois conforme apontado na Tabela~\ref{table:statistical-descriptive-of-pythons-sample}, 75\% das questões das nossas amostras tem 11 palavras no máximo, enquanto 75\% dos trechos de código tem no máximo 55 palavras.
     
