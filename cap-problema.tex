@@ -14,7 +14,7 @@ Para a representação das palavras, optamos por uma representação distribuíd
 
 
 
-\section{Representação dos tokens ou palavras}
+\section{Representação dos \textit{tokens} ou palavras}
 \label{sec:abordagem-representacao-token}
 
 As questões e os trechos de código-fonte são compostos por palavras, pontuações, separadores, caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, representamos através de um vetor formado por uma sequência de palavras, apenas removendo os caracteres de acento e pontuação. No caso do código-fonte, acreditamos que os termos presentes no código-fonte contém informações suficientes para estabelecer uma relação semântica entre a questão e o trecho de código-fonte, mesma hipótese utilizada por \cite{Sachdev-neural-code-search:2018}. Neste caso, removemos os acentos e caracteres especiais dos trechos de código-fonte, tratando cada termo presente como um \gls{token}.
