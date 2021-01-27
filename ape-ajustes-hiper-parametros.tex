@@ -398,7 +398,7 @@ Além dos hiper-parâmetros das redes convolucionais, a função de perda \texti
 
 Notamos que não há um consenso sobre o valor da margem, conforme a Tabela~\ref{table:alteracao-margem}, pois cada arquitetura obteve um desempenho diferente para um valor diferente de margem. As redes convolucionais obtiveram o melhor desempenho para uma margem de valor $0,05$, exceto quando a quantidade de filtros convolucionais utilizadas é $1000$. Já a arquitetura Unif proposta por \cite{cambronero-deep-learning-code-search:2019} obteve o melhor desempenho para o valor $0,2$, enquanto a arquitetura \textit{Embedding} obteve com o valor $0,1$. Optamos por fixar estes valores específicos para cada arquitetura, definindo a margem em $0,5$ para a CNN, enquanto para Unif e \textit{Embedding} fixamos em $0,2$ e $0,1$, respectivamente. E conforme descrito na Tabela~\ref{table:alteracao-margem}, escolhemos o valor da margem baseado no valor mais alto da métrica MRR, que foi obtida através da avaliação do melhor modelo na amostra EVAL. Ver a Seção~\ref{sec:avaliacao} para mais detalhes sobre o procedimento de avaliação. 
 
-
+\section{}
 
 \section{Critério de seleção do modelo}
 \label{sec:ape-criterio-de-selecao-do-modelo-experimento}
