@@ -7,7 +7,7 @@
 %  
 % Obs: Leia previamente o texto do arquivo README.txt
 
-\documentclass[12pt,twoside,a4paper]{book} % utilizando extbook para atender ao modelo do IPT
+\documentclass[12pt,oneside,a4paper]{book} % utilizando extbook para atender ao modelo do IPT
 
 \usepackage{sectsty}
 \allsectionsfont{\Large\bfseries}
@@ -19,14 +19,14 @@
 %\usepackage{polyglossia}
 %\setdefaultlanguage{brazil}
 \usepackage[brazil]{babel}
-%\usepackage[bf,small,compact]{titlesec} % cabe?lhos dos t?ulos: menores e compactos
+\usepackage{titlesec} % cabe?lhos dos t?ulos: menores e compactos
 %\usepackage[fixlanguage]{babelbib}
 
 \usepackage[xetex]{graphicx}           % usamos arquivos pdf/png como figuras
 \usepackage{setspace}                   % espa?mento flex?el
 \usepackage{indentfirst}                % indenta?o do primeiro par?rafo
 \usepackage{makeidx}                    % ?dice remissivo
-\usepackage[nottoc]{tocbibind}          % acrescentamos a bibliografia/indice/conteudo no Table of Contents
+\usepackage[nottoc,notlof,notlot]{tocbibind}          % acrescentamos a bibliografia/indice/conteudo no Table of Contents
 \usepackage{courier}                    % usa o Adobe Courier no lugar de Computer Modern Typewriter
 \usepackage{type1cm}                    % fontes realmente escal?eis
 \usepackage{listings}                   % para formatar c?igo-fonte (ex. em Java)
@@ -66,7 +66,17 @@
 \usepackage{array}
 \newcolumntype{P}[1]{>{\raggedleft\arraybackslash}p{#1}}
 
-
+\makeatletter
+\newcommand{\emptypage}[1]{%
+  \cleardoublepage
+  \begingroup
+  \let\ps@plain\ps@empty
+  \pagestyle{empty}
+  #1
+  \cleardoublepage
+  \endgroup
+}
+\makeatletter
 
 \makenoidxglossaries
 \input{util/glossary.tex}
@@ -217,6 +227,10 @@ minted options= {escapeinside=||},
 listing only,
 title={#1}, fonttitle=\bfseries
   }
+  
+  
+\titleformat{\chapter}[block]
+{\normalfont\normalsize\bfseries}{\thechapter}{12pt}{\MakeUppercase}
 
 
 % Corpo do texto
@@ -299,14 +313,14 @@ title={#1}, fonttitle=\bfseries
     \hspace{6cm}\begin{minipage}{0.48\linewidth}
 	\rule{7cm}{0.4pt}\\
 	Prof. Dr. Marco Aurélio Gerosa\\
-	Nothern Arizona University (NAU)\\
+	Mestrado Engenharia de Computação\\
     \end{minipage}
 \\
 \\
 Membros da Banca Examinadora:\\ 
 \\
 Prof. Dr. Marco Aurélio Gerosa (Orientador)\\
-Nothern Arizona University (NAU)\\
+Mestrado Engenharia de Computação\\
 \\
 Prof. Dr. Marcelo Finger (Membro)\\
 Instituto de Matemática e Estatística da Universidade de São Paulo (IME-USP)\\
@@ -368,7 +382,7 @@ Mestrado Engenharia de Computação\\
     \begin{center}
         São Paulo\\
         
-        Fevereiro / \the\year
+        Dezembro / 2020
     \end{center}
 
 \pagebreak
@@ -379,12 +393,12 @@ Mestrado Engenharia de Computação\\
 \thispagestyle{empty}
 
 \begin{center}
-        \vspace*{18 cm}
-        \begin{quote}
-            \begin{flushright}
-            \textit{Dedico à Shyrlei e à Luzia.}
-            \end{flushright}
-        \end{quote}
+        \textbf{DEDICATÓRIA}
+        
+        
+        \vspace*{2 cm}
+        \textit{Dedico à Shyrlei e à Luzia.}    
+        
     \end{center}
 
 
@@ -395,7 +409,8 @@ Mestrado Engenharia de Computação\\
 % ---------------------------------------------------------------------------- %
 % Agradecimentos:
 % Se o candidato n? quer fazer agradecimentos, deve simplesmente eliminar esta p?ina 
-\chapter*{Agradecimentos}
+\chapter*{\begin{center} AGRADECIMENTOS \end{center}}
+\thispagestyle{empty}
 Agradeço à minha família por todo apoio e compreensão ao longo do mestrado.
 \\
 
@@ -424,7 +439,8 @@ Agradeço ao Professor Dr. Marco Aurélio Gerosa por ter aceitado me orientar e 
 \pagebreak
 % ---------------------------------------------------------------------------- %
 % Resumo
-\chapter*{Resumo}
+\chapter*{\begin{center} RESUMO \end{center}}
+\thispagestyle{empty}
 
 Os desenvolvedores realizam buscas por código-fonte diariamente através de buscadores de propósito geral (p. ex. Google). Entretanto, esses buscadores não são capazes de recuperar trechos de código-fonte semanticamente, a não ser que o código esteja acompanhado de um texto descritivo. O presente trabalho propõe uma nova abordagem de busca semântica de trechos de código-fonte através do uso de redes neurais convolucionais. As redes neurais convolucionais priorizam as interações locais (p. ex. palavras próximas) e são invariantes a translações (p. ex. deslocamento de um conjunto de palavras). Para verificar a eficácia da nossa proposta, comparamos o nosso modelo com dois outros métodos: um modelo de base de comparação e o atual estado da arte. Obtivemos, ao final, um resultado 5\% superior em relação ao atual estado da arte e 11\% superior ao método de comparação proposto. Além disso, o nosso modelo foi capaz de exibir o código-fonte correto nas 3 primeiras posições em 78\% das vezes e retornou na primeira posição em 60\% dos casos. Esses bons resultados permitem direcionar futuras pesquisas na recuperação de trecho de código-fonte para o uso e avaliação de técnicas que priorizem as interações locais.
 \\
@@ -433,18 +449,21 @@ Os desenvolvedores realizam buscas por código-fonte diariamente através de bus
 
 % ---------------------------------------------------------------------------- %
 % Abstract
-\chapter*{Abstract}
-\noindent \textbf{A Convolutional Neural Network approach to code retrieval}
+\chapter*{\begin{center}ABSTRACT\end{center}}
+\thispagestyle{empty}
+\begin{center}\textbf{A Convolutional Neural Network approach to code retrieval}
 \\
-
+\end{center}
 Developers search daily for code using general-purpose search engines (e.g. Google). These search engines cannot find code semantically, unless it has an accompanying description. Our work proposes a new approach to look for code semantically by using a convolutional neural network. Convolutional Neural Network (CNN), which prioritizes local interactions (e.g. words nearby) and is translation invariant (e.g. shifting a set of words), showed promising results. To verify the efficacy of our approach, we compared our model with two other methods: baseline one and a state-of-the-art (SOTA). We improved SOTA by 5\% on average and the baseline by 11\%. Our model could retrieve the correct code snippet in the top 3 positions in 78\% of the time and at first position in 60\%. These promising results give a new direction in code retrieval by applying and evaluating local interactions techniques in future work.
 \\
 
 \noindent \textbf{Keywords:} code retrieval, code search, neural network, convolutional neural network, cnn.
 
+\glstocfalse
 % ---------------------------------------------------------------------------- %
 % Sum?io
-\tableofcontents    % imprime o sum?io
+\renewcommand\contentsname{\begin{center}SUMÁRIO\end{center}}
+\emptypage\tableofcontents   % imprime o sum?io
 
 % ---------------------------------------------------------------------------- %
 
@@ -457,21 +476,32 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
 % \end{tabular}
 
 % \clearpage
-\glsaddall
-\printnoidxglossaries
+%\glsaddall
+
 \clearpage
+
 
 % ---------------------------------------------------------------------------- %
 % Listas de figuras e tabelas criadas automaticamente
-\listoffigures            
-\listoftables
+\renewcommand{\listfigurename}{\begin{center}Lista de ilustrações\end{center}}
+\renewcommand{\listtablename}{\begin{center}Lista de tabelas\end{center}}
+\emptypage\listoffigures
+\emptypage\listoftables
+\cleardoublepage
+  \begingroup
+  \let\ps@plain\ps@empty
+  \pagestyle{empty}
+  \printnoidxglossary[type=acronym,sort=word,nonumberlist,title={\begin{center}Lista de abreviaturas e siglas\end{center}}]
+  \cleardoublepage
+  \endgroup
+
 
 % ---------------------------------------------------------------------------- %
 % Cap?ulos do trabalho
 \mainmatter
 
 % cabe?lho para as p?inas de todos os cap?ulos
-\fancyhead[RE,LO]{\thesection}
+%\fancyhead[RE,LO]{\thesection}
 
 \doublespacing              % espa?mento duplo - IPT
 %\onehalfspacing            % espa?mento um e meio
@@ -484,6 +514,12 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
 \input cap-conclusoes        % associado ao arquivo: 'cap-conclusos.tex'
 % \input cap-conclusoes        % associado ao arquivo: 'cap-conclusoes.tex'
 
+% Bibliografia
+\renewcommand\bibname{REFERÊNCIAS}
+ \doublespacing   % espa?mento duplo
+\bibliographystyle{plainnat-ime} % cita?o bibliogr?ica textual
+\bibliography{bibliografia}  % associado ao arquivo: 'bibliografia.bib'
+
 % cabe?lho para os ap?dices
 \renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\appendixname\ \thechapter}} {\MakeUppercase{#1}} }
 \fancyhead[RE,LO]{}
@@ -493,10 +529,7 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
 %\include{ape-conjuntos}      % associado ao arquivo: 'ape-conjuntos.tex'
 
 % ---------------------------------------------------------------------------- %
-% Bibliografia
-\backmatter \doublespacing   % espa?mento duplo
-\bibliographystyle{plainnat-ime} % cita?o bibliogr?ica textual
-\bibliography{bibliografia}  % associado ao arquivo: 'bibliografia.bib'
+
 
 % ---------------------------------------------------------------------------- %
 % ?dice remissivo
@@ -507,5 +540,6 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
 % \index{Fourier!transformada|see{transformada de Fourier}}
 
 % \printindex   % imprime o ?dice remissivo no documento 
+\printnoidxglossary[sort=word]
 
 \end{document}
