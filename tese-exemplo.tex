@@ -18,6 +18,7 @@
 \setmainfont{Arial} % funciona com windows/mac
 %\usepackage{polyglossia}
 %\setdefaultlanguage{brazil}
+\usepackage[alf]{abntex2cite}
 \usepackage[brazil]{babel}
 \usepackage{titlesec} % cabe?lhos dos t?ulos: menores e compactos
 %\usepackage[fixlanguage]{babelbib}
@@ -26,22 +27,35 @@
 \usepackage{setspace}                   % espa?mento flex?el
 \usepackage{indentfirst}                % indenta?o do primeiro par?rafo
 \usepackage{makeidx}                    % ?dice remissivo
+
 \usepackage[nottoc,notlof,notlot]{tocbibind}          % acrescentamos a bibliografia/indice/conteudo no Table of Contents
 \usepackage{courier}                    % usa o Adobe Courier no lugar de Computer Modern Typewriter
 \usepackage{type1cm}                    % fontes realmente escal?eis
 \usepackage{listings}                   % para formatar c?igo-fonte (ex. em Java)
 \usepackage{titletoc}
-\usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
+\usepackage[font=small,format=plain,labelfont=bf,up]{caption}
 \usepackage[usenames,svgnames,dvipsnames, table]{xcolor}
 \usepackage[a4paper,top=2.54cm,bottom=2.0cm,left=2.0cm,right=2.54cm]{geometry} % margens
 %\usepackage[pdftex,plainpages=false,pdfpagelabels,pagebackref,colorlinks=true,citecolor=black,linkcolor=black,urlcolor=black,filecolor=black,bookmarksopen=true]{hyperref} % links em preto
 
+\usepackage[titles]{tocloft}
 
+\newlength{\mylen}
 
-\usepackage[breaklinks,plainpages=false,pdfpagelabels,pagebackref,colorlinks=true,citecolor=DarkGreen,linkcolor=NavyBlue,urlcolor=DarkRed,filecolor=green,bookmarksopen=true]{hyperref} % links coloridos
+\renewcommand{\cftfigpresnum}{\figurename\enspace}
+\renewcommand{\cftfigaftersnum}{\enspace-}
+\settowidth{\mylen}{\cftfigpresnum\cftfigaftersnum}
+\addtolength{\cftfignumwidth}{\mylen}
+
+\renewcommand{\cfttabpresnum}{\tablename\enspace}
+\renewcommand{\cfttabaftersnum}{\enspace-}
+\settowidth{\mylen}{\cfttabpresnum\cfttabaftersnum}
+\addtolength{\cfttabnumwidth}{\mylen}
+
+%\usepackage[breaklinks,plainpages=false,pdfpagelabels,bookmarksopen=true]{hyperref} % links coloridos
 \def\UrlBreaks{\do\/\do-}
-\usepackage[all]{hypcap}                    % soluciona o problema com o hyperref e capitulos
-\usepackage[round,sort]{natbib} % cita?o bibliogr?ica textual(plainnat-ime.bst)
+%\usepackage[all]{hypcap}                    % soluciona o problema com o hyperref e capitulos
+%\usepackage[round,sort]{natbib} % cita?o bibliogr?ica textual(plainnat-ime.bst)
 \fontsize{60}{62}\usefont{OT1}{cmr}{m}{n}{\selectfont}
 
 
@@ -86,8 +100,8 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{#1}}{}}
-\renewcommand{\sectionmark}[1]{\markright{\MakeUppercase{#1}}{}}
+\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{}}{}}
+\renewcommand{\sectionmark}[1]{\markright{\MakeUppercase{}}{}}
 \renewcommand{\headrulewidth}{0pt}
 
 % ---------------------------------------------------------------------------- %
@@ -147,7 +161,13 @@ framexrightmargin=10pt
   stringstyle=\color{mymauve},     % string literal style
   numbers=none,
 }
-
+\captionsetup{%
+   figurewithin=none,
+   tablewithin=none,
+   labelsep=endash
+}
+\captionsetup[figure]{labelfont={bf},labelformat={default},name={Figura}}
+\newcommand{\source}[1]{\caption*{\textbf{Fonte -} {#1}} }
 \renewcommand{\lstlistingname}{Trecho de código-fonte}% Listing -> Algorithm
 \renewcommand{\lstlistlistingname}{Lista de trechos de códigos-fontes}% List of Listings -> List of Algorithms
 
@@ -228,13 +248,22 @@ listing only,
 title={#1}, fonttitle=\bfseries
   }
   
-  
+
+
+% alterando seçoes para manter o padrao ABNT  
 \titleformat{\chapter}[block]
 {\normalfont\normalsize\bfseries}{\thechapter}{12pt}{\MakeUppercase}
+\titleformat{\section}[block]
+{\normalfont\normalsize\mdseries}{\thesection}{12pt}{}
+\titleformat{\subsection}[block]
+{\normalfont\normalsize\mdseries}{\thesubsection}{12pt}{}
+\titleformat{\subsubsection}[block]
+{\normalfont\normalsize\mdseries}{\thesubsubsection}{12pt}{}
 
 
 % Corpo do texto
 \begin{document}
+\fancypagestyle{plain}{\pagestyle{fancy}}
 \frontmatter 
 % cabe?lho para as p?inas das se?es anteriores ao cap?ulo 1 (frontmatter)
 \fancyhead[RO]{{\footnotesize\rightmark}\hspace{2em}\thepage}
@@ -269,7 +298,7 @@ title={#1}, fonttitle=\bfseries
    \vspace*{10cm}
    
     \large{\textbf{São Paulo}} \\
-    \large{\textbf{\the\year}}
+    \large{\textbf{2020}}
 \end{center}
 
 % ---------------------------------------------------------------------------- %
@@ -389,27 +418,18 @@ Mestrado Engenharia de Computação\\
 
 
 
-\newpage
+\chapter*{\makebox[\linewidth]{DEDICATÓRIA}}
 \thispagestyle{empty}
-
 \begin{center}
-        \textbf{DEDICATÓRIA}
-        
-        
-        \vspace*{2 cm}
-        \textit{Dedico à Shyrlei e à Luzia.}    
-        
-    \end{center}
-
-
-\pagebreak
+    \textit{Dedico à Shyrlei e à Luzia.}
+\end{center}
 
 \pagenumbering{roman}     % come?mos a numerar 
 
 % ---------------------------------------------------------------------------- %
 % Agradecimentos:
 % Se o candidato n? quer fazer agradecimentos, deve simplesmente eliminar esta p?ina 
-\chapter*{\begin{center} AGRADECIMENTOS \end{center}}
+\chapter*{\makebox[\linewidth]{AGRADECIMENTOS}}
 \thispagestyle{empty}
 Agradeço à minha família por todo apoio e compreensão ao longo do mestrado.
 \\
@@ -439,7 +459,7 @@ Agradeço ao Professor Dr. Marco Aurélio Gerosa por ter aceitado me orientar e 
 \pagebreak
 % ---------------------------------------------------------------------------- %
 % Resumo
-\chapter*{\begin{center} RESUMO \end{center}}
+\chapter*{\makebox[\linewidth]{RESUMO}}
 \thispagestyle{empty}
 
 Os desenvolvedores realizam buscas por código-fonte diariamente através de buscadores de propósito geral (p. ex. Google). Entretanto, esses buscadores não são capazes de recuperar trechos de código-fonte semanticamente, a não ser que o código esteja acompanhado de um texto descritivo. O presente trabalho propõe uma nova abordagem de busca semântica de trechos de código-fonte através do uso de redes neurais convolucionais. As redes neurais convolucionais priorizam as interações locais (p. ex. palavras próximas) e são invariantes a translações (p. ex. deslocamento de um conjunto de palavras). Para verificar a eficácia da nossa proposta, comparamos o nosso modelo com dois outros métodos: um modelo de base de comparação e o atual estado da arte. Obtivemos, ao final, um resultado 5\% superior em relação ao atual estado da arte e 11\% superior ao método de comparação proposto. Além disso, o nosso modelo foi capaz de exibir o código-fonte correto nas 3 primeiras posições em 78\% das vezes e retornou na primeira posição em 60\% dos casos. Esses bons resultados permitem direcionar futuras pesquisas na recuperação de trecho de código-fonte para o uso e avaliação de técnicas que priorizem as interações locais.
@@ -449,7 +469,7 @@ Os desenvolvedores realizam buscas por código-fonte diariamente através de bus
 
 % ---------------------------------------------------------------------------- %
 % Abstract
-\chapter*{\begin{center}ABSTRACT\end{center}}
+\chapter*{\makebox[\linewidth]{ABSTRACT}}
 \thispagestyle{empty}
 \begin{center}\textbf{A Convolutional Neural Network approach to code retrieval}
 \\
@@ -462,7 +482,7 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
 \glstocfalse
 % ---------------------------------------------------------------------------- %
 % Sum?io
-\renewcommand\contentsname{\begin{center}SUMÁRIO\end{center}}
+\renewcommand\contentsname{\makebox[\linewidth]{SUMÁRIO}}
 \emptypage\tableofcontents   % imprime o sum?io
 
 % ---------------------------------------------------------------------------- %
@@ -481,17 +501,19 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
 \clearpage
 
 
+
+
 % ---------------------------------------------------------------------------- %
 % Listas de figuras e tabelas criadas automaticamente
-\renewcommand{\listfigurename}{\begin{center}Lista de ilustrações\end{center}}
-\renewcommand{\listtablename}{\begin{center}Lista de tabelas\end{center}}
+\renewcommand{\listfigurename}{\makebox[\linewidth]{Lista de ilustrações}}
+\renewcommand{\listtablename}{\makebox[\linewidth]{Lista de tabelas}}
 \emptypage\listoffigures
 \emptypage\listoftables
 \cleardoublepage
   \begingroup
   \let\ps@plain\ps@empty
   \pagestyle{empty}
-  \printnoidxglossary[type=acronym,sort=word,nonumberlist,title={\begin{center}Lista de abreviaturas e siglas\end{center}}]
+  \printnoidxglossary[type=acronym,sort=word,nonumberlist,title={\makebox[\linewidth]{Lista de abreviaturas e siglas}}]
   \cleardoublepage
   \endgroup
 
@@ -515,13 +537,14 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
 % \input cap-conclusoes        % associado ao arquivo: 'cap-conclusoes.tex'
 
 % Bibliografia
+\renewcommand\@biblabel[1]{}
 \renewcommand\bibname{REFERÊNCIAS}
  \doublespacing   % espa?mento duplo
-\bibliographystyle{plainnat-ime} % cita?o bibliogr?ica textual
+%\bibliographystyle{abnt} % cita?o bibliogr?ica textual
 \bibliography{bibliografia}  % associado ao arquivo: 'bibliografia.bib'
 
 % cabe?lho para os ap?dices
-\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\appendixname\ \thechapter}} {\MakeUppercase{#1}} }
+\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\appendixname\ \thechapter}} {} }
 \fancyhead[RE,LO]{}
 \appendix
 \include{ape-ajustes-hiper-parametros}

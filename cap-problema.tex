@@ -10,18 +10,18 @@ Conforme citado no Capítulo~\ref{cap:fundamentacao-teorica}, uma técnica muito
     \item Função objetivo do modelo
 \end{itemize}
 
-Para a representação das palavras, optamos por uma representação distribuída através do uso do \textit{word2vec} com o algoritmo \textit{skip-gram}, que apresentou um bom desempenho em tarefas semânticas \citep{mikolov2013distributed}. No caso da representação das sentenças, utilizamos redes convolucionais com uma camada de \gls{max-pooling}, priorizando as interações locais e a invariância a pequenas translações (p. ex. alteração da ordem de uma palavra na sentença). Com relação à função objetivo, optamos pela função de perda de articulação ou \textit{hinge loss}, que otimiza a relativa preferência das respostas, ao invés da sua correta classificação.
+Para a representação das palavras, optamos por uma representação distribuída através do uso do \textit{word2vec} com o algoritmo \textit{skip-gram}, que apresentou um bom desempenho em tarefas semânticas \cite{mikolov2013distributed}. No caso da representação das sentenças, utilizamos redes convolucionais com uma camada de \gls{max-pooling}, priorizando as interações locais e a invariância a pequenas translações (p. ex. alteração da ordem de uma palavra na sentença). Com relação à função objetivo, optamos pela função de perda de articulação ou \textit{hinge loss}, que otimiza a relativa preferência das respostas, ao invés da sua correta classificação.
 
 
 
 \section{Representação dos \textit{tokens} ou palavras}
 \label{sec:abordagem-representacao-token}
 
-As questões e os trechos de código-fonte são compostos por palavras, pontuações, separadores, caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, representamos através de um vetor formado por uma sequência de palavras, apenas removendo os caracteres de acento e pontuação. No caso do código-fonte, acreditamos que os termos presentes no código-fonte contém informações suficientes para estabelecer uma relação semântica entre a questão e o trecho de código-fonte, mesma hipótese utilizada por \cite{Sachdev-neural-code-search:2018}. Neste caso, removemos os acentos e caracteres especiais dos trechos de código-fonte, tratando cada termo presente como um \gls{token}.
+As questões e os trechos de código-fonte são compostos por palavras, pontuações, separadores, caracteres de símbolos e operadores matemáticos. Para as questões, que são descritas em linguagem natural, representamos através de um vetor formado por uma sequência de palavras, apenas removendo os caracteres de acento e pontuação. No caso do código-fonte, acreditamos que os termos presentes no código-fonte contém informações suficientes para estabelecer uma relação semântica entre a questão e o trecho de código-fonte, mesma hipótese utilizada por \citeonline{Sachdev-neural-code-search:2018}. Neste caso, removemos os acentos e caracteres especiais dos trechos de código-fonte, tratando cada termo presente como um \gls{token}.
 
-Uma boa representação para as palavras são os vetores contínuos. De acordo com \cite{Goodfellow-et-al-2016}, as redes neurais generalizam bem quando as palavras são representadas através de vetores contínuos. Conforme os próprios autores, uma boa representação deve auxiliar na aprendizagem de uma tarefa posterior. No nosso caso, as representações devem auxiliar o modelo a encontrar uma correlação entre as questões e os trechos de código-fonte mais relevantes.
+Uma boa representação para as palavras são os vetores contínuos. De acordo com \citeonline{Goodfellow-et-al-2016}, as redes neurais generalizam bem quando as palavras são representadas através de vetores contínuos. Conforme os próprios autores, uma boa representação deve auxiliar na aprendizagem de uma tarefa posterior. No nosso caso, as representações devem auxiliar o modelo a encontrar uma correlação entre as questões e os trechos de código-fonte mais relevantes.
 
-Mapeamos as palavras para vetores contínuos através do \gls{word2vec} com o algoritmo \gls{skip-gram}, que prediz as palavras do contexto a partir de uma palavra alvo. Segundo \cite{mikolov2013distributed}, \textit{skip-gram} obteve um melhor desempenho em problemas semânticos, p .ex., relacionar uma palavra masculina com a equivalente feminina, relacionar o nome de uma capital a um país ou cidade a um estado. No caso do código-fonte, esta é uma característica importante, pois pode auxiliar no agrupamento dos \textit{tokens} por tipo. 
+Mapeamos as palavras para vetores contínuos através do \gls{word2vec} com o algoritmo \gls{skip-gram}, que prediz as palavras do contexto a partir de uma palavra alvo. Segundo \citeonline{mikolov2013distributed}, \textit{skip-gram} obteve um melhor desempenho em problemas semânticos, p .ex., relacionar uma palavra masculina com a equivalente feminina, relacionar o nome de uma capital a um país ou cidade a um estado. No caso do código-fonte, esta é uma característica importante, pois pode auxiliar no agrupamento dos \textit{tokens} por tipo. 
 
 No nosso caso, o \textit{word2vec} mapeou cada palavra para um espaço vetorial $\mathbb{R}^{d}$. Seja $\mathbb{V}$ o conjunto formado pelas palavras das questões e pelas palavras presentes nos trechos de código-fonte. Para cada palavra ${p} \in \mathbb{V}$ temos:
 
@@ -54,16 +54,18 @@ $\bm{F}$ e $b$ são os parâmetros a serem aprendidos pela rede neural. Para exe
 
 \begin{figure}[h]
     \centering
+    \caption[Primeiro passo da operação de convolução.]{Primeiro passo da operação de convolução. Aplica-se um filtro $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$, em uma sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Este primeiro passo é equivalente a seguinte operação: $\bm{c}(\bm{0}) = tanh \left[\left(\sum_{j=0}^{m - 1} \bm{x}(\bm{0} + j)^{T}\bm{F}(j)\right) + b\right]$. Figura adapatada a partir do texto de \citeonline{joshua-kim-cnn-understanding-word-embeddings-2019}.}
     \includegraphics[width=1\textwidth]{figuras/cap-problema/first-step-convolution.pdf}
-    \caption[Primeiro passo da operação de convolução.]{Primeiro passo da operação de convolução. Aplica-se um filtro $\bm{F} \in \mathbb{R}^{m X d}$, onde $m = 2$ e $d = 5$, em uma sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Este primeiro passo é equivalente a seguinte operação: $\bm{c}(\bm{0}) = tanh \left[\left(\sum_{j=0}^{m - 1} \bm{x}(\bm{0} + j)^{T}\bm{F}(j)\right) + b\right]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.} 
+     \source{Elaborado pelo autor.}
     \label{fig:first-step-convolutional}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{figuras/cap-problema/second-step-convolution.pdf}
-    \caption[Segundo passo da operação de convolução.]{Segundo passo da operação de convolução. Aplica-se o mesmo filtro $\bm{F} \in \mathbb{R}^{m X d}$ da Figura~\ref{fig:first-step-convolutional}. Neste segundo passo, deslocamos uma posição no eixo $0$. Este segundo passo é equivalente a: $\bm{c}(\bm{1}) = tanh [(\sum_{j=0}^{m - 1} \bm{x}(\bm{1} + j)^{T}\bm{F}(j)) + b]$. Figura adapatada a partir do texto de \cite{joshua-kim-cnn-understanding-word-embeddings-2019}.}
+    \caption[Segundo passo da operação de convolução.]{Segundo passo da operação de convolução. Aplica-se o mesmo filtro $\bm{F} \in \mathbb{R}^{m X d}$ da Figura~\ref{fig:first-step-convolutional}. Neste segundo passo, deslocamos uma posição no eixo $0$. Este segundo passo é equivalente a: $\bm{c}(\bm{1}) = tanh [(\sum_{j=0}^{m - 1} \bm{x}(\bm{1} + j)^{T}\bm{F}(j)) + b]$. Figura adapatada a partir do texto de \citeonline{joshua-kim-cnn-understanding-word-embeddings-2019}.}
     \label{fig:second-step-convolutional}
+    \includegraphics[width=1\textwidth]{figuras/cap-problema/second-step-convolution.pdf}
+    \source{Elaborado pelo autor.}
 \end{figure}
 
 
@@ -87,8 +89,9 @@ Para exemplificar a operação completa, a Figura~\ref{fig:cnn-architecture-prop
 
 \begin{figure}[h]
     \centering
+    \caption[Ilustração das 2 operações realizadas pela arquitetura CNN para obter o vetor de representação final $\bm{o}$.]{Ilustração das 2 operações realizadas pela arquitetura CNN para obter o vetor de representação final $\bm{o}$. Neste exemplo, utilizamos 4 filtros $\bm{F} \in \mathbb{R}^{m X d X f}$ com janela de tamanho $m = 2$. Cada filtro é aplicado a sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. }
     \includegraphics[width=1\textwidth]{figuras/cap-problema/cnn-steps-word-embedding-article.pdf}
-    \caption[Ilustração das 2 operações realizadas pela arquitetura CNN para obter o vetor de representação final $\bm{o}$.]{Ilustração das 2 operações realizadas pela arquitetura CNN para obter o vetor de representação final $\bm{o}$. Neste exemplo, utilizamos 4 filtros $\bm{F} \in \mathbb{R}^{m X d X f}$ com janela de tamanho $m = 2$. Cada filtro é aplicado a sentença $\bm{x} \in \mathbb{R}^{n X d}$, onde $n = 6$ e $d = 5$. Figura do artigo \cite{martins2020concra}.}
+    \source{Figura do artigo \citeonline{martins2020concra}.}
     \label{fig:cnn-architecture-proposal}
 \end{figure}
 
@@ -99,7 +102,7 @@ Para exemplificar a operação completa, a Figura~\ref{fig:cnn-architecture-prop
 \label{sec:funcao-objetivo}
 
 O nosso objetivo é ensinar o modelo a classificar os trechos de código anotados como corretos entre as primeiras posições de uma lista. Para isso, adotamos a função de comparação em pares ou \textit{pairwise}, que calcula a relativa preferência dos itens, ao invés da sua correta classificação. Seja $\mathbb{Q}$ um conjunto de questões e $\mathbb{C}$ um conjunto dos trechos de código-fonte. Dado uma tripla $<\bm{q}, \bm{c^{+}}, \bm{c^{-}}>$, onde $\bm{q}$ 
-é uma questão, $\bm{c^{+}} \in \mathbb{C}$ é uma resposta anotada como correta e $\bm{c^{-}} \in \mathbb{C}$ é uma resposta incorreta, o objetivo é induzir o modelo a classificar $\bm{c^{+}}$ com uma pontuação maior que $\bm{c^{-}}$. Neste caso, utilizamos função de custo de perda de articulação ou \textit{hinge loss} \citep{feng-2015}:
+é uma questão, $\bm{c^{+}} \in \mathbb{C}$ é uma resposta anotada como correta e $\bm{c^{-}} \in \mathbb{C}$ é uma resposta incorreta, o objetivo é induzir o modelo a classificar $\bm{c^{+}}$ com uma pontuação maior que $\bm{c^{-}}$. Neste caso, utilizamos função de custo de perda de articulação ou \textit{hinge loss} \cite{feng-2015}:
 
 \begin{equation}
 J = max(0, m - h_{\theta}(\bm{q}, \bm{c^{+}}) + h_{\theta}(\bm{q}, \bm{c^{-}}))

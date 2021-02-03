@@ -2,7 +2,7 @@
 \chapter{Código-fonte dos modelos}
 \label{ape:codigo-fonte-dos-modelos}
 
-Neste capítulo apresentamos parte do código-fonte utilizado em nossos experimentos. O código-fonte completo está disponível no seguinte endereço: \url{https://github.com/mrezende/concra}. Neste repositório estão disponíveis o código-fonte para treinamento, avaliação dos modelos, juntamente com os dados originais e os dados pré-preprocessados. Além disso, também estão disponíveis os arquivos word2vec utilizados como entrada em nossos modelos. Utilizamos a linguagem Python, versão 3.6.9 com as bibliotecas \Gls{keras} (versão 2.2.4-tf) e \Gls{tensorflow} (1.15.2). Todos os nossos experimentos foram executados na plataforma \Gls{colab} do Google. Optamos por apresentar neste capítulo apenas os códigos-fontes dos modelos propostos para o presente trabalho. Os códigos-fontes do pré-processamento, treinamento e avaliação estão disponíveis publicamente em nosso repositório. Os dados estão sob a licença \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons} e os códigos estão disponíveis sob a licença \href{https://opensource.org/licenses/MIT}{MIT}.
+Neste capítulo apresentamos parte do código-fonte utilizado em nossos experimentos. O código-fonte completo está disponível no seguinte endereço: \url{https://github.com/mrezende/concra}. Neste repositório estão disponíveis o código-fonte para treinamento, avaliação dos modelos, juntamente com os dados originais e os dados pré-preprocessados. Além disso, também estão disponíveis os arquivos word2vec utilizados como entrada em nossos modelos. Utilizamos a linguagem Python, versão 3.6.9 com as bibliotecas \Gls{keras} (versão 2.2.4-tf) e \Gls{tensorflow} (1.15.2). Todos os nossos experimentos foram executados na plataforma \Gls{colab} do Google. Optamos por apresentar neste capítulo apenas os códigos-fontes dos modelos propostos para o presente trabalho. Os códigos-fontes do pré-processamento, treinamento e avaliação estão disponíveis publicamente em nosso repositório. Os dados estão sob a licença \textit{Creative Commons}(\url{https://creativecommons.org/licenses/by/4.0/}) e os códigos estão disponíveis sob a licença \textit{MIT}(\url{https://opensource.org/licenses/MIT}).
 
 \section{Código do modelo de referência \textit{Embedding}}
 \label{sec:codigo-modelo-embedding}
@@ -50,7 +50,7 @@ class EmbeddingModel(LanguageModel):
 
 \section{Código do modelo \textit{Unif}}
 
-O código a seguir apresenta a camada da questão do modelo Unif proposto por \cite{cambronero-deep-learning-code-search:2019}. O vetor de representação final da questão é resultado da média aritmética dos vetores contínuos de cada palavra que fazem parte da sentença (linha 32).
+O código a seguir apresenta a camada da questão do modelo Unif proposto por \citeonline{cambronero-deep-learning-code-search:2019}. O vetor de representação final da questão é resultado da média aritmética dos vetores contínuos de cada palavra que fazem parte da sentença (linha 32).
 
 \begin{mypython-linenumber}{Camada da questão do modelo Unif}
 class AverageLayer(Layer):
@@ -400,7 +400,7 @@ class SharedConvolutionModel(LanguageModel):
 \vspace{2cm}
 \subsection{Normalização em lote}
 
-Durante os experimentos, verificamos que os modelos apresentavam sinais de \textit{overfitting}, onde havia um decréscimo rápido do erro na amostra de treinamento em comparação com o erro na amostra de validação (ver Seção~\ref{sec:regularizacao-normalizacao-lote}). Para mitigar este problema, criamos modelos que utilizam a normalização em lote. Durante a criação dos modelos, seguimos a recomendação dos próprios autores \cite{sergey-batch-normalization-2015} e adicionamos a normalização em lote antes da função de ativação.
+Durante os experimentos, verificamos que os modelos apresentavam sinais de \textit{overfitting}, onde havia um decréscimo rápido do erro na amostra de treinamento em comparação com o erro na amostra de validação (ver Seção~\ref{sec:regularizacao-normalizacao-lote}). Para mitigar este problema, criamos modelos que utilizam a normalização em lote. Durante a criação dos modelos, seguimos a recomendação dos próprios autores \citeonline{sergey-batch-normalization-2015} e adicionamos a normalização em lote antes da função de ativação.
 
 \subsubsection{Rede convolucional com parâmetros independentes entre as camadas}
 

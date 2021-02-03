@@ -7,14 +7,14 @@ Neste capítulo apresentamos os resultados dos ajustes dos hiper-parâmetros e d
 \section{Ajuste dos hiper-parâmetros da rede convolucional}
 \label{sec:ajuste-hiper-parametros-cnn}
 
-A rede convolucional exige alguns hiper-parâmetros que devem ser informados durante o treinamento. Estes hiper-parâmetros definem a capacidade do nosso modelo, o tipo de informação a ser extraída, a forma como as informações serão combinadas e o modo como as operações de convolução serão feitas. Os ajustes são importantes, pois auxiliam na obtenção de um modelo mais robusto, dado que alguns hiper-parâmetros controlam a capacidade do modelo, ou auxiliam na aprendizagem durante o treinamento, pois eles podem ajudar o modelo a correlacionar os dados, definindo o modo como as informações serão extraídas \citep{bengio-hyper-parameter-optimization-2012}. Para realizar estes ajustes, fizemos alguns experimentos alterando os hiper-parâmetros das redes convolucionais, juntamente com uma análise do comportamento dos modelos durante a aprendizagem. Além disso, verificamos o desempenho da redes convolucionais, com relação a métrica MRR, em uma amostra de pares de questões e trechos de códigos anotados manualmente, a fim de verificar se o modelo está conseguindo correlacionar os trechos de código-fonte relevantes às suas questões.
+A rede convolucional exige alguns hiper-parâmetros que devem ser informados durante o treinamento. Estes hiper-parâmetros definem a capacidade do nosso modelo, o tipo de informação a ser extraída, a forma como as informações serão combinadas e o modo como as operações de convolução serão feitas. Os ajustes são importantes, pois auxiliam na obtenção de um modelo mais robusto, dado que alguns hiper-parâmetros controlam a capacidade do modelo, ou auxiliam na aprendizagem durante o treinamento, pois eles podem ajudar o modelo a correlacionar os dados, definindo o modo como as informações serão extraídas \cite{bengio-hyper-parameter-optimization-2012}. Para realizar estes ajustes, fizemos alguns experimentos alterando os hiper-parâmetros das redes convolucionais, juntamente com uma análise do comportamento dos modelos durante a aprendizagem. Além disso, verificamos o desempenho da redes convolucionais, com relação a métrica MRR, em uma amostra de pares de questões e trechos de códigos anotados manualmente, a fim de verificar se o modelo está conseguindo correlacionar os trechos de código-fonte relevantes às suas questões.
 
 A rede convolucional exige três hiper-parâmetros: filtros, \textit{kernel} e \textit{stride}.
-O parâmetro \textit{kernel} ou janela do filtro convolucional define o tamanho do quadro da operação de convolução. No nosso caso, que estamos utilizando a operação de convolução de 1 dimensão, Conv1D, o \textit{kernel} define os n-grams a serem extraídos do vetor de entrada. O ajuste neste parâmetro irá definir como a rede convolucional irá combinar as informações. Um \textit{kernel} de tamanho 2, indica que o modelo irá extrair bi-grams, enquanto um de tamanho 3, irá extrair um tri-gram e assim por diante. Em nosso caso, avaliamos o comportamento do modelo para tamanhos de \textit{kernel} 2, 3 e 4 e a junção de \textit{kernels} de tamanhos diferentes: 2, 3, 5 e 7. Segundo \cite{wen-joint-modeling-question-answer-2019}, a junção de filtros convolucionais com tamanhos de janelas diferentes levou a uma melhor aprendizagem e um melhor desempenho em uma tarefa de seleção de respostas.
+O parâmetro \textit{kernel} ou janela do filtro convolucional define o tamanho do quadro da operação de convolução. No nosso caso, que estamos utilizando a operação de convolução de 1 dimensão, Conv1D, o \textit{kernel} define os n-grams a serem extraídos do vetor de entrada. O ajuste neste parâmetro irá definir como a rede convolucional irá combinar as informações. Um \textit{kernel} de tamanho 2, indica que o modelo irá extrair bi-grams, enquanto um de tamanho 3, irá extrair um tri-gram e assim por diante. Em nosso caso, avaliamos o comportamento do modelo para tamanhos de \textit{kernel} 2, 3 e 4 e a junção de \textit{kernels} de tamanhos diferentes: 2, 3, 5 e 7. Segundo \citeonline{wen-joint-modeling-question-answer-2019}, a junção de filtros convolucionais com tamanhos de janelas diferentes levou a uma melhor aprendizagem e um melhor desempenho em uma tarefa de seleção de respostas.
 
 
 
-Já o parâmetro filtros define a dimensão de saída da operação de convolução. Este parâmetro indica a quantidade de filtros no resultado da operação. E como cada filtro tenta extrair uma característica diferente do vetor de entrada, quanto maior a quantidade dos filtros, maior será a quantidade de características a serem extraídas pelo nosso modelo e maior será a sua capacidade. Para ajustar este parâmetro, analisamos a quantidade de filtros no intervalo de 1000 a 4000 conforme recomendação de \cite{feng-2015} e \cite{tan-lstm-qa}. Mas também avaliamos quantidades menores como 50, 100, 200 e 500. Os resultados podem ser visualizados na Seção~\ref{sec:ape-filtros}.
+Já o parâmetro filtros define a dimensão de saída da operação de convolução. Este parâmetro indica a quantidade de filtros no resultado da operação. E como cada filtro tenta extrair uma característica diferente do vetor de entrada, quanto maior a quantidade dos filtros, maior será a quantidade de características a serem extraídas pelo nosso modelo e maior será a sua capacidade. Para ajustar este parâmetro, analisamos a quantidade de filtros no intervalo de 1000 a 4000 conforme recomendação de \citeonline{feng-2015} e \citeonline{tan-lstm-qa}. Mas também avaliamos quantidades menores como 50, 100, 200 e 500. Os resultados podem ser visualizados na Seção~\ref{sec:ape-filtros}.
 
 
 E o parâmetro \textit{stride} ou passo define a quantidade de posições que o filtro deslocar-se-á durante a operação de convolução. Optamos, em nosso caso, por manter o valor padrão 1 para o passo, i.e., o filtro deslocar-se-á por todas as posições do vetor de entrada de 1 (uma) em 1 (uma) posição.
@@ -25,60 +25,69 @@ E o parâmetro \textit{stride} ou passo define a quantidade de posições que o 
 \subsection{Filtros}
 \label{sec:ape-filtros}
 
-Para analisar como os filtros afetam o comportamento e desempenho das redes convolucionais, fixamos o parâmetro \textit{kernel} com o valor $2$, recomendação feita por \cite{tan-lstm-qa}, e executamos os testes com diferentes quantidades de filtros. Neste experimento, analisamos as seguintes quantidades: 50, 100, 200, 500, 1000, 2000, 4000. Conforme citado no capítulo~\ref{cap:experimento}, foram utilizadas $60.083$ amostras, sendo que $42058$ foram utilizadas para o conjunto de treinamento e $18025$ para o conjunto de validação. E a avaliação final foi feita conforme o procedimento descrito na Seção~\ref{sec:avaliacao}.
+Para analisar como os filtros afetam o comportamento e desempenho das redes convolucionais, fixamos o parâmetro \textit{kernel} com o valor $2$, recomendação feita por \citeonline{tan-lstm-qa}, e executamos os testes com diferentes quantidades de filtros. Neste experimento, analisamos as seguintes quantidades: 50, 100, 200, 500, 1000, 2000, 4000. Conforme citado no capítulo~\ref{cap:experimento}, foram utilizadas $60.083$ amostras, sendo que $42058$ foram utilizadas para o conjunto de treinamento e $18025$ para o conjunto de validação. E a avaliação final foi feita conforme o procedimento descrito na Seção~\ref{sec:avaliacao}.
 
 
 
 \begin{figure}[p]
+\caption[Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros.]{Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros. Mais detalhes sobre o treinamento, ver a Seção~\ref{sec:treinamento}. Arquitetura de rede convolucional proposta no Capítulo~\ref{cap:abordagem}, ver Figura~\ref{fig:cnn-architecture}. Hiper-parâmetros: $m = 0.009$, $k = 2$. O parâmetro F indica a quantidade de filtros convolucionais. Nas figuras de \emph{a} a \emph{g}, o eixo \emph{y} indica o valor de erro da função de perda \textit{hinge}, já o eixo \emph{x} indica as épocas de treinamento. A legenda \emph{val\_loss} das figuras de \emph{a} a \emph{g} indica o erro na amostra de validação e a legenda \emph{loss} indica o valor do erro na amostra de treinamento. }
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-50-k-2.png}
   \caption{Rede convolucional com parâmetro $F = 50$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-50-k-2.png}
+  
   \label{fig:cnn-50-k-2}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-100-k-2.png}
   \caption{Rede convolucional com parâmetro $F = 100$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-100-k-2.png}
+  
   \label{fig:cnn-100-k-2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-200-k-2.png}
   \caption{Rede convolucional com parâmetro $F = 200$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-200-k-2.png}
+  
   \label{fig:cnn-200-k-2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-500-k-2.png}
   \caption{Rede convolucional com parâmetro $F = 500$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-500-k-2.png}
+  
   \label{fig:cnn-500-k-2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000-k-2.png}
   \caption{Rede convolucional com parâmetro $F = 1000$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000-k-2.png}
+  
   \label{fig:cnn-1000-k-2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000-k-2.png}
   \caption{Rede convolucional com parâmetro $F = 2000$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000-k-2.png}
+  
   \label{fig:cnn-2000-k-2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000-k-2.png}
   \caption{Rede convolucional com parâmetro $F = 4000$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000-k-2.png}
+  
   \label{fig:cnn-4000-k-2}
 \end{subfigure}
-\caption[Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros.]{Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros. Mais detalhes sobre o treinamento, ver a Seção~\ref{sec:treinamento}. Arquitetura de rede convolucional proposta no Capítulo~\ref{cap:abordagem}, ver Figura~\ref{fig:cnn-architecture}. Hiper-parâmetros: $m = 0.009$, $k = 2$. O parâmetro F indica a quantidade de filtros convolucionais. Nas figuras de \emph{a} a \emph{g}, o eixo \emph{y} indica o valor de erro da função de perda \textit{hinge}, já o eixo \emph{x} indica as épocas de treinamento. A legenda \emph{val\_loss} das figuras de \emph{a} a \emph{g} indica o erro na amostra de validação e a legenda \emph{loss} indica o valor do erro na amostra de treinamento. }
+\source{Elaborado pelo autor.}
 \label{fig:treinamento-cnn-k-2-m-0009}
 \end{figure}
 
 
 \begin{table}[H]
 \centering
+\caption[Resultado da avaliação dos modelos CNN na amostra EVAL para diferentes filtros.]{Resultado da avaliação dos modelos CNN na amostra EVAL para diferentes filtros. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. Os hiper-parâmetros utilizados foram: $K = 2$ e  $m = 0,009$.}
 \begin{tabular}{ p{1cm} p{4cm} P{4cm} }
  \hline
    & Modelos & \textbf{Resultados MRR}\\
@@ -100,7 +109,7 @@ Para analisar como os filtros afetam o comportamento e desempenho das redes conv
  
 \hline
 \end{tabular}
-\caption[Resultado da avaliação dos modelos CNN na amostra EVAL para diferentes filtros.]{Resultado da avaliação dos modelos CNN na amostra EVAL para diferentes filtros. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. Os hiper-parâmetros utilizados foram: $K = 2$ e  $m = 0,009$.}
+\source{Elaborado pelo autor.}
 \label{table:cnn-filtros}
 \end{table}
 
@@ -112,6 +121,7 @@ Conforme exibido no Capítulo~\ref{cap:abordagem}, o \textit{kernel} define na r
 
 \begin{table}[H]
 \centering
+\caption[Resultado da avaliação dos modelos CNN na amostra EVAL para diferentes \textit{kernels}.]{Resultado da avaliação dos modelos CNN na amostra EVAL para diferentes \textit{kernels}. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. Utilizamos o parâmetro $m = 0,009$ para a função de perda \textit{hinge}.}
 \begin{tabular}{ p{1cm} p{3cm} P{2.2cm} P{2.2cm} P{2.2cm} P{2.8cm} }
  \hline
     & & \multicolumn{4}{c}{\textbf{Resultados MRR}}\\
@@ -127,145 +137,166 @@ Conforme exibido no Capítulo~\ref{cap:abordagem}, o \textit{kernel} define na r
  
 \hline
 \end{tabular}
-\caption[Resultado da avaliação dos modelos CNN na amostra EVAL para diferentes \textit{kernels}.]{Resultado da avaliação dos modelos CNN na amostra EVAL para diferentes \textit{kernels}. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. Utilizamos o parâmetro $m = 0,009$ para a função de perda \textit{hinge}.}
+\source{Elaborado pelo autor.}
 \label{table:cnn-kernel}
 \end{table}
 
 
 \begin{figure}[H]
+\caption[Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros e \textit{kernels}.]{Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros e \textit{kernels}. Mais detalhes sobre o treinamento, ver a Seção~\ref{sec:treinamento}. Arquitetura de rede convolucional proposta no Capítulo~\ref{cap:abordagem}, ver Figura~\ref{fig:cnn-architecture}. Hiper-parâmetros: $m = 0.009$. O parâmetro F indica a quantidade de filtros convolucionais, o parâmetro K indica o tamanho da janela do filtro convolucional. Nas figuras de \emph{a} a \emph{f}, o eixo \emph{y} indica o valor de erro da função de perda \textit{hinge}, já o eixo \emph{x} indica as épocas de treinamento. A legenda \emph{val\_loss} das figuras de \emph{a} a \emph{g} indica o erro na amostra de validação e a legenda \emph{loss} indica o valor do erro na amostra de treinamento. }
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000.png}
   \caption{Rede convolucional com parâmetros $F = 1000$ e $K = [2,3,5,7]$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000.png}
+  
   \label{fig:cnn-1000}
 \end{subfigure}%
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000.png}
   \caption{Rede convolucional com parâmetros $F = 2000$ e $K = [2, 3, 5, 7]$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000.png}
+  
   \label{fig:cnn-2000}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000.png}
   \caption{Rede convolucional com parâmetros $F = 4000$ e $K = [2, 3, 5, 7]$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000.png}
+  
   \label{fig:cnn-4000}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000-k-2.png}
   \caption{Rede convolucional com parâmetros $F = 1000$ e $K = 2$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000-k-2.png}
+  
   \label{fig:cnn-1000-k-2-v2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000-k-2.png}
   \caption{Rede convolucional com parâmetros $F = 2000$ e $K = 2$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000-k-2.png}
+  
   \label{fig:cnn-2000-k-2-v2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000-k-2.png}
   \caption{Rede convolucional com parâmetros $F = 4000$ e $K = 2$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000-k-2.png}
+  
   \label{fig:cnn-4000-k-2-v2}
 \end{subfigure}
-\caption[Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros e \textit{kernels}.]{Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros e \textit{kernels}. Mais detalhes sobre o treinamento, ver a Seção~\ref{sec:treinamento}. Arquitetura de rede convolucional proposta no Capítulo~\ref{cap:abordagem}, ver Figura~\ref{fig:cnn-architecture}. Hiper-parâmetros: $m = 0.009$. O parâmetro F indica a quantidade de filtros convolucionais, o parâmetro K indica o tamanho da janela do filtro convolucional. Nas figuras de \emph{a} a \emph{f}, o eixo \emph{y} indica o valor de erro da função de perda \textit{hinge}, já o eixo \emph{x} indica as épocas de treinamento. A legenda \emph{val\_loss} das figuras de \emph{a} a \emph{g} indica o erro na amostra de validação e a legenda \emph{loss} indica o valor do erro na amostra de treinamento. }
+\source{Elaborado pelo autor.}
 \label{fig:treinamento-cnn-diferentes-kernels}
 \end{figure}
 
 \begin{figure}[H]
+\caption[Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros e \textit{kernels}.]{Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros e \textit{kernels}. Mais detalhes sobre o treinamento, ver a Seção~\ref{sec:treinamento}. Arquitetura de rede convolucional proposta no Capítulo~\ref{cap:abordagem}, ver Figura~\ref{fig:cnn-architecture}. Hiper-parâmetros: $m = 0.009$. O parâmetro F indica a quantidade de filtros convolucionais, o parâmetro K indica o tamanho da janela do filtro convolucional. Nas figuras de \emph{a} a \emph{f}, o eixo \emph{y} indica o valor de erro da função de perda \textit{hinge}, já o eixo \emph{x} indica as épocas de treinamento. A legenda \emph{val\_loss} das figuras de \emph{a} a \emph{g} indica o erro na amostra de validação e a legenda \emph{loss} indica o valor do erro na amostra de treinamento. }
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000-k-3.png}
   \caption{Rede convolucional com parâmetros $F = 1000$ e $K = 3$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000-k-3.png}
+  
   \label{fig:cnn-1000-k-3}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000-k-3.png}
   \caption{Rede convolucional com parâmetros $F = 2000$ e $K = 3$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000-k-3.png}
+  
   \label{fig:cnn-2000-k-3}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000-k-3.png}
   \caption{Rede convolucional com parâmetros $F = 4000$ e $K = 3$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000-k-3.png}
+  
   \label{fig:cnn-4000-k-3}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000-k-4.png}
   \caption{Rede convolucional com parâmetros $F = 1000$ e $K = 4$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000-k-4.png}
+  
   \label{fig:cnn-1000-k-4}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000-k-4.png}
   \caption{Rede convolucional com parâmetros $F = 2000$ e $K = 4$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000-k-4.png}
+  
   \label{fig:cnn-2000-k-4}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000-k-4.png}
   \caption{Rede convolucional com parâmetros $F = 4000$ e $K = 4$}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000-k-4.png}
+  
   \label{fig:cnn-4000-k-4}
 \end{subfigure}
-\caption[Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros e \textit{kernels}.]{Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento para diferentes filtros e \textit{kernels}. Mais detalhes sobre o treinamento, ver a Seção~\ref{sec:treinamento}. Arquitetura de rede convolucional proposta no Capítulo~\ref{cap:abordagem}, ver Figura~\ref{fig:cnn-architecture}. Hiper-parâmetros: $m = 0.009$. O parâmetro F indica a quantidade de filtros convolucionais, o parâmetro K indica o tamanho da janela do filtro convolucional. Nas figuras de \emph{a} a \emph{f}, o eixo \emph{y} indica o valor de erro da função de perda \textit{hinge}, já o eixo \emph{x} indica as épocas de treinamento. A legenda \emph{val\_loss} das figuras de \emph{a} a \emph{g} indica o erro na amostra de validação e a legenda \emph{loss} indica o valor do erro na amostra de treinamento. }
+\source{Elaborado pelo autor.}
 \label{fig:treinamento-cnn-diferentes-kernels-2}
 \end{figure}
 
 
-Verificamos o comportamento para os tamanhos 2, 3, 4 e a combinação de tamanhos 2, 3, 5 e 7. Conforme as Figuras~\ref{fig:treinamento-cnn-diferentes-kernels} e \ref{fig:treinamento-cnn-diferentes-kernels-2}, não houve melhora significativa na diferença entre o erro de validação e o erro de treinamento para kernels de tamanho 3 e 4 em comparação com o kernel de tamanho 2. A diferença entre o erro de validação e erro de treinamento é um indicativo para sabermos se o modelo está conseguindo aprender ou se temos um problema de \textit{overfitting} ou \textit{underfitting}. Em nosso caso, podemos ver pelas Figuras~\ref{fig:treinamento-cnn-diferentes-kernels} e \ref{fig:treinamento-cnn-diferentes-kernels-2}, que o nosso modelo está com problema de \textit{overfitting}, onde há uma grande diferença entre o erro de validação e erro de treinamento. Para sabermos qual \textit{kernel} escolher, verificamos também o desempenho dos modelos na amostra EVAL (mais detalhes sobre esta amostra na Seção~\ref{sec:conjunto-dados-avaliacao-treinamento}). Conforme os resultados apontados na Tabela~\ref{table:cnn-kernel}, não houve uma melhora significativa entre o \textit{kernel} de tamanho 2 e o restante dos \textit{kernels}. Neste caso, optamos por manter o kernel fixado em $2$, conforme \cite{tan-lstm-qa} haviam recomendado.
+Verificamos o comportamento para os tamanhos 2, 3, 4 e a combinação de tamanhos 2, 3, 5 e 7. Conforme as Figuras~\ref{fig:treinamento-cnn-diferentes-kernels} e \ref{fig:treinamento-cnn-diferentes-kernels-2}, não houve melhora significativa na diferença entre o erro de validação e o erro de treinamento para kernels de tamanho 3 e 4 em comparação com o kernel de tamanho 2. A diferença entre o erro de validação e erro de treinamento é um indicativo para sabermos se o modelo está conseguindo aprender ou se temos um problema de \textit{overfitting} ou \textit{underfitting}. Em nosso caso, podemos ver pelas Figuras~\ref{fig:treinamento-cnn-diferentes-kernels} e \ref{fig:treinamento-cnn-diferentes-kernels-2}, que o nosso modelo está com problema de \textit{overfitting}, onde há uma grande diferença entre o erro de validação e erro de treinamento. Para sabermos qual \textit{kernel} escolher, verificamos também o desempenho dos modelos na amostra EVAL (mais detalhes sobre esta amostra na Seção~\ref{sec:conjunto-dados-avaliacao-treinamento}). Conforme os resultados apontados na Tabela~\ref{table:cnn-kernel}, não houve uma melhora significativa entre o \textit{kernel} de tamanho 2 e o restante dos \textit{kernels}. Neste caso, optamos por manter o kernel fixado em $2$, conforme \citeonline{tan-lstm-qa} haviam recomendado.
 
 
 \subsection{Regularização - Normalização em Lote}
 \label{sec:regularizacao-normalizacao-lote}
 
-Conforme as Figuras~\ref{fig:cnn-1000-k-2-v2}, \ref{fig:cnn-2000-k-2-v2} e \ref{fig:cnn-4000-k-2-v2}, as redes convolucionais estão dando sinais de \textit{overfitting}, onde o valor do erro na amostra de treinamento está diminuindo rapidamente, enquanto o valor do erro na amostra de validação está estável e aumentando ao longo do tempo. Para tentar redimir este problema, aplicamos a normalização em lote para regularizar o nosso modelo. Conforme \cite{sergey-batch-normalization-2015}, a aprendizagem em redes neurais profundas é complicada, pois a distribuição de cada camada é alterada, conforme os parâmetros são atualizados ao longo do treinamento. Isto requer uma otimização e ajuste dos parâmetros a fim de evitar a saturação das funções de ativação. Para mitigar este problema e auxiliar o modelo a aprender de maneira mais rápida, os pesquisadores apresentaram a normalização em lote, que permite utilizarmos taxas de aprendizagem mais altas e não requer muitos cuidados na inicialização do modelo. Além disso, segundo os próprios pesquisadores, a normalização em lote auxilia numa aprendizagem mais rápida, diminuindo o número de épocas de treinamento, além de ajudar na melhora do desempenho e na obtenção de um modelo mais robusto, não necessitando de outras técnicas de regularização como \textit{dropout} \citep{sergey-batch-normalization-2015}.
+Conforme as Figuras~\ref{fig:cnn-1000-k-2-v2}, \ref{fig:cnn-2000-k-2-v2} e \ref{fig:cnn-4000-k-2-v2}, as redes convolucionais estão dando sinais de \textit{overfitting}, onde o valor do erro na amostra de treinamento está diminuindo rapidamente, enquanto o valor do erro na amostra de validação está estável e aumentando ao longo do tempo. Para tentar redimir este problema, aplicamos a normalização em lote para regularizar o nosso modelo. Conforme \citeonline{sergey-batch-normalization-2015}, a aprendizagem em redes neurais profundas é complicada, pois a distribuição de cada camada é alterada, conforme os parâmetros são atualizados ao longo do treinamento. Isto requer uma otimização e ajuste dos parâmetros a fim de evitar a saturação das funções de ativação. Para mitigar este problema e auxiliar o modelo a aprender de maneira mais rápida, os pesquisadores apresentaram a normalização em lote, que permite utilizarmos taxas de aprendizagem mais altas e não requer muitos cuidados na inicialização do modelo. Além disso, segundo os próprios pesquisadores, a normalização em lote auxilia numa aprendizagem mais rápida, diminuindo o número de épocas de treinamento, além de ajudar na melhora do desempenho e na obtenção de um modelo mais robusto, não necessitando de outras técnicas de regularização como \textit{dropout} \cite{sergey-batch-normalization-2015}.
 
 Aplicamos a normalização em lote nas redes convolucionais e podemos notar uma sutil melhora na aprendizagem de acordo com as Figuras~\ref{fig:treinamento-cnn-normalizacao-em-lote}. Houve uma melhora principalmente para as primeiras 25 épocas iniciais, onde há uma leve diminuição entre o valor do erro na amostra de treinamento em comparação com o erro na amostra de validação. Esta sutil melhora ocorre principalmente para os modelos com uma quantidade maior de filtros. Em nosso caso, quando os valores estão entre 2000 e 4000.
 
 Podemos notar também que a normalização em lote auxiliou as redes convolucionais com 1000 e 2000 filtros a tornaram-se mais estáveis (Figuras~\ref{fig:cnn-1000-k-2-m-005-normalizacao-em-lote} e \ref{fig:cnn-2000-k-2-m-005-normalizacao-em-lote}), mas isto não ocorreu para a rede convolucional com 4000 filtros (Figura~\ref{fig:cnn-4000-k-2-m-005-normalizacao-em-lote}). Ao analisarmos o comportamento da rede convolucional com 4000 filtros, percebemos que aprendizagem ocorreu de forma mais estável para as 15 primeiras épocas iniciais. Porém, na época 25 ocorre um ''grande salto'' e temos uma enorme diferença entre o erro de validação e o erro de treinamento. Para mitigar este problema, adotamos a parada antecipada do treinamento. Conforme explicado na Seção~\ref{sec:treinamento}, caso não haja diminuição do valor do erro na amostra de validação durante 25 épocas consecutivas, o treinamento é interrompido e o modelo que obtiver a maior média MRR na amostra DEV (mais detalhes sobre esta amostra na Seção~\ref{sec:conjunto-dados}) é escolhido.
 
 \begin{figure}[H]
+\caption[Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento utilizando normalização em lote.]{Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento utilizando normalização em lote. Mais detalhes sobre o treinamento, ver a Seção~\ref{sec:treinamento}. O parâmetro F indica a quantidade de filtros convolucionais, o parâmetro K indica o tamanho da janela do filtro convolucional e o parâmetro \emph{m} é a margem utilizada na função de perda \textit{hinge}. Nas figuras de \emph{a} a \emph{f}, o eixo \emph{y} indica o valor de erro da função de perda \textit{hinge}, já o eixo \emph{x} indica as épocas de treinamento. A legenda \emph{val\_loss} das figuras de \emph{a} a \emph{g} indica o erro na amostra de validação e a legenda \emph{loss} indica o valor do erro na amostra de treinamento. Nas figuras do lado esquerdo: \emph{a}, \emph{c} e \emph{e} apresentam o comportamento das redes convolucionais durante o treinamento sem utilização de regularização. As figuras do lado direito: \emph{b}, \emph{d} e \emph{f} apresentam o comportamento das redes convolucionais utilizando normalização em lote. }
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 1000$, $K = 2$ e $m = 0,05$.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-1000-k-2-m-005.png}
+  
   \label{fig:cnn-1000-k-2-m-005}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-1000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 1000$, $K = 2$ e $m = 0,05$ e normalização em lote.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-1000-k-2-m-005.png}
+  
   \label{fig:cnn-1000-k-2-m-005-normalizacao-em-lote}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 2000$, $K = 2$ e $m = 0,05$.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-2000-k-2-m-005.png}
+  
   \label{fig:cnn-2000-k-2-m-005}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-2000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 2000$, $K = 2$ e $m = 0,05$ e normalização em lote.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-2000-k-2-m-005.png}
+  
   \label{fig:cnn-2000-k-2-m-005-normalizacao-em-lote}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 4000$, $K = 2$ e $m = 0,05$.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-4000-k-2-m-005.png}
+  
   \label{fig:cnn-4000-k-2-m-005}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-4000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 4000$, $K = 2$ e $m = 0,05$ e normalização em lote.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-4000-k-2-m-005.png}
+  
   \label{fig:cnn-4000-k-2-m-005-normalizacao-em-lote}
 \end{subfigure}
 
-\caption[Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento utilizando normalização em lote.]{Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento utilizando normalização em lote. Mais detalhes sobre o treinamento, ver a Seção~\ref{sec:treinamento}. O parâmetro F indica a quantidade de filtros convolucionais, o parâmetro K indica o tamanho da janela do filtro convolucional e o parâmetro \emph{m} é a margem utilizada na função de perda \textit{hinge}. Nas figuras de \emph{a} a \emph{f}, o eixo \emph{y} indica o valor de erro da função de perda \textit{hinge}, já o eixo \emph{x} indica as épocas de treinamento. A legenda \emph{val\_loss} das figuras de \emph{a} a \emph{g} indica o erro na amostra de validação e a legenda \emph{loss} indica o valor do erro na amostra de treinamento. Nas figuras do lado esquerdo: \emph{a}, \emph{c} e \emph{e} apresentam o comportamento das redes convolucionais durante o treinamento sem utilização de regularização. As figuras do lado direito: \emph{b}, \emph{d} e \emph{f} apresentam o comportamento das redes convolucionais utilizando normalização em lote. }
+\source{Elaborado pelo autor.}
 \label{fig:treinamento-cnn-normalizacao-em-lote}
 \end{figure}
 
@@ -273,6 +304,7 @@ Apesar do ''grande salto'' para a rede convolucional com 4000 filtros, a normali
 
 \begin{table}[H]
 \centering
+\caption[Resultado da avaliação dos modelos CNN na amostra EVAL com e sem normalização em lote.]{Resultado da avaliação dos modelos CNN na amostra EVAL com e sem normalização em lote. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. \emph{NL} é o acrônimo de Normalização em Lote. As células destacadas indicam qual o modelo obteve o melhor desempenho durante a avaliação. Os hiper-parâmetros utilizados foram: $K = 2$ e  $m = 0,05$.}
 \begin{tabular}{ p{1cm} p{4cm} P{4cm} P{4cm} }
  \hline
     & & \multicolumn{2}{c}{\textbf{Resultados MRR}}\\
@@ -288,58 +320,66 @@ Apesar do ''grande salto'' para a rede convolucional com 4000 filtros, a normali
  
 \hline
 \end{tabular}
-\caption[Resultado da avaliação dos modelos CNN na amostra EVAL com e sem normalização em lote.]{Resultado da avaliação dos modelos CNN na amostra EVAL com e sem normalização em lote. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. \emph{NL} é o acrônimo de Normalização em Lote. As células destacadas indicam qual o modelo obteve o melhor desempenho durante a avaliação. Os hiper-parâmetros utilizados foram: $K = 2$ e  $m = 0,05$.}
+\source{Elaborado pelo autor.}
 \label{table:tabela-normalizacao-em-lote-cnn}
 \end{table}
 
 \subsection{Compartilhamento de parâmetros}
 
-Em nossos experimentos, comparamos o desempenho das redes convolucionais que compartilham os parâmetros entre as camadas das questões e trechos de código-fonte com as redes convolucionais que aprendem as representações de forma independente. Conforme as Figuras~\ref{fig:treinamento-shared-cnn}, podemos perceber que não houve uma alteração significativa no comportamento dos modelos durante a aprendizagem. Porém, ao analisarmos o desempenho com relação a métrica MRR, verificamos que houve uma melhora. Esta melhora de desempenho foi notada também por \cite{wen-joint-modeling-question-answer-2019}, onde eles apontaram que as redes convolucionais que aprendem as representações de forma independente, exploram de forma ineficiente a correlação semântica entre os pares de questões e respostas. E segundo os resultados apontados na Tabela~\ref{table:tabela-shared-cnn} e também na Seção~\ref{sec:resultados-avaliacao}, os modelos que compartilharam os parâmetros tiveram um desempenho, em média, 3\% superior. Para termos um comparativo, exibimos na Seção~\ref{sec:resultados-avaliacao} os resultados dos modelos que compartilham os parâmetros e também os resultados dos modelos que aprendem as representações de forma indepedente.
+Em nossos experimentos, comparamos o desempenho das redes convolucionais que compartilham os parâmetros entre as camadas das questões e trechos de código-fonte com as redes convolucionais que aprendem as representações de forma independente. Conforme as Figuras~\ref{fig:treinamento-shared-cnn}, podemos perceber que não houve uma alteração significativa no comportamento dos modelos durante a aprendizagem. Porém, ao analisarmos o desempenho com relação a métrica MRR, verificamos que houve uma melhora. Esta melhora de desempenho foi notada também por \citeonline{wen-joint-modeling-question-answer-2019}, onde eles apontaram que as redes convolucionais que aprendem as representações de forma independente, exploram de forma ineficiente a correlação semântica entre os pares de questões e respostas. E segundo os resultados apontados na Tabela~\ref{table:tabela-shared-cnn} e também na Seção~\ref{sec:resultados-avaliacao}, os modelos que compartilharam os parâmetros tiveram um desempenho, em média, 3\% superior. Para termos um comparativo, exibimos na Seção~\ref{sec:resultados-avaliacao} os resultados dos modelos que compartilham os parâmetros e também os resultados dos modelos que aprendem as representações de forma indepedente.
 
 \begin{figure}[H]
+\caption[Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento com compartilhamento de parâmetros.]{Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento com compartilhamento de parâmetros. Mais detalhes sobre o treinamento, ver a Seção~\ref{sec:treinamento}. O parâmetro F indica a quantidade de filtros convolucionais, o parâmetro K indica o tamanho da janela do filtro convolucional e o parâmetro \emph{m} é a margem utilizada na função de perda \textit{hinge}. Nas figuras de \emph{a} a \emph{f}, o eixo \emph{y} indica o valor de erro da função de perda \textit{hinge}, já o eixo \emph{x} indica as épocas de treinamento. A legenda \emph{val\_loss} das figuras de \emph{a} a \emph{g} indica o erro na amostra de validação e a legenda \emph{loss} indica o valor do erro na amostra de treinamento. Nas figuras do lado esquerdo: \emph{a}, \emph{c} e \emph{e} apresentam o comportamento das redes convolucionais que aprenderam as representações de forma independente, sem o compartilhamento de parâmetros. As figuras do lado direito: \emph{b}, \emph{d} e \emph{f} apresentam o comportamento das redes convolucionais que compartilharam os parâmetros durante a aprendizagem de representação das questões e trechos de código-fonte. }
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-1000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 1000$, $K = 2$ e $m = 0,05$ e normalização em lote.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-1000-k-2-m-005.png}
+  
   \label{fig:cnn-1000-k-2-m-005-normalizacao-em-lote-v2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/shared-cnn-with-bn-1000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 1000$, $K = 2$ e $m = 0,05$, normalização em lote e parâmetros compartilhado.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/shared-cnn-with-bn-1000-k-2-m-005.png}
+  
   \label{fig:shared-cnn-1000-k-2-m-005-normalizacao-em-lote}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-2000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 2000$, $K = 2$ e $m = 0,05$ e normalização em lote.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-2000-k-2-m-005.png}
+  
   \label{fig:cnn-2000-k-2-m-005-normalizacao-em-lote-v2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/shared-cnn-with-bn-2000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 2000$, $K = 2$ e $m = 0,05$, normalização em lote e parâmetros compartilhados.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/shared-cnn-with-bn-2000-k-2-m-005.png}
+  
   \label{fig:shared-cnn-2000-k-2-m-005-normalizacao-em-lote}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-4000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 4000$, $K = 2$ e $m = 0,05$ e normalização em lote.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/cnn-with-bn-4000-k-2-m-005.png}
+  
   \label{fig:cnn-4000-k-2-m-005-normalizacao-em-lote-v2}
 \end{subfigure}
 \begin{subfigure}{.5\textwidth}
   \centering
-  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/shared-cnn-with-bn-4000-k-2-m-005.png}
   \caption{Rede convolucional com parâmetros $F = 4000$, $K = 2$ e $m = 0,05$, normalização em lote e parâmetros compartilhados.}
+  \includegraphics[width=.8\linewidth]{figuras/ape-ajustes-hiper-parametros/shared-cnn-with-bn-4000-k-2-m-005.png}
+  
   \label{fig:shared-cnn-4000-k-2-m-005-normalizacao-em-lote}
 \end{subfigure}
 
-\caption[Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento com compartilhamento de parâmetros.]{Gráfico comparativo do erro no conjunto de validação em comparação com o erro no conjunto de treinamento com compartilhamento de parâmetros. Mais detalhes sobre o treinamento, ver a Seção~\ref{sec:treinamento}. O parâmetro F indica a quantidade de filtros convolucionais, o parâmetro K indica o tamanho da janela do filtro convolucional e o parâmetro \emph{m} é a margem utilizada na função de perda \textit{hinge}. Nas figuras de \emph{a} a \emph{f}, o eixo \emph{y} indica o valor de erro da função de perda \textit{hinge}, já o eixo \emph{x} indica as épocas de treinamento. A legenda \emph{val\_loss} das figuras de \emph{a} a \emph{g} indica o erro na amostra de validação e a legenda \emph{loss} indica o valor do erro na amostra de treinamento. Nas figuras do lado esquerdo: \emph{a}, \emph{c} e \emph{e} apresentam o comportamento das redes convolucionais que aprenderam as representações de forma independente, sem o compartilhamento de parâmetros. As figuras do lado direito: \emph{b}, \emph{d} e \emph{f} apresentam o comportamento das redes convolucionais que compartilharam os parâmetros durante a aprendizagem de representação das questões e trechos de código-fonte. }
+\source{Elaborado pelo autor.}
 \label{fig:treinamento-shared-cnn}
 \end{figure}
 
 \begin{table}[H]
 \centering
+\caption[Resultado da avaliação dos modelos CNN na amostra EVAL com compartilhamento de parâmetros.]{Resultado da avaliação dos modelos CNN na amostra EVAL com compartilhamento de parâmetros. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. \emph{NL} é o acrônimo de Normalização em Lote. As células destacadas indicam qual o modelo obteve o melhor desempenho durante a avaliação. Os hiper-parâmetros utilizados foram: $K = 2$ e  $m = 0,05$. A coluna \emph{Independente} indicam os modelos que não compartilharam os parâmetros na aprendizagem de representação das questões e trechos de código-fonte. A coluna \emph{Compartilhado} apontam para os modelos que compartilharam os parâmetros durante a aprendizagem de representação dos pares.}
 \begin{tabular}{ p{1cm} p{4cm} P{4cm} P{4cm} }
  \hline
     & & \multicolumn{2}{c}{\textbf{Resultados MRR}}\\
@@ -355,7 +395,7 @@ Em nossos experimentos, comparamos o desempenho das redes convolucionais que com
  
 \hline
 \end{tabular}
-\caption[Resultado da avaliação dos modelos CNN na amostra EVAL com compartilhamento de parâmetros.]{Resultado da avaliação dos modelos CNN na amostra EVAL com compartilhamento de parâmetros. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. \emph{NL} é o acrônimo de Normalização em Lote. As células destacadas indicam qual o modelo obteve o melhor desempenho durante a avaliação. Os hiper-parâmetros utilizados foram: $K = 2$ e  $m = 0,05$. A coluna \emph{Independente} indicam os modelos que não compartilharam os parâmetros na aprendizagem de representação das questões e trechos de código-fonte. A coluna \emph{Compartilhado} apontam para os modelos que compartilharam os parâmetros durante a aprendizagem de representação dos pares.}
+\source{Elaborado pelo autor.}
 \label{table:tabela-shared-cnn}
 \end{table}
 
@@ -363,11 +403,12 @@ Em nossos experimentos, comparamos o desempenho das redes convolucionais que com
 
 \section{Ajuste da margem - Função de perda \textit{hinge}}
 
-Além dos hiper-parâmetros das redes convolucionais, a função de perda \textit{hinge} conforme descrito na Seção~\ref{sec:funcao-objetivo}, exige um parâmetro \emph{margem}. Este parâmetro define a magnitude da diferença da distância de similaridade entre os trechos de códigos anotados como corretos e os trechos que não são respostas com relação às questões. Os pesquisadores \cite{feng-2015} recomendaram uma margem de $0,009$, enquanto \cite{tan-lstm-qa} utilizaram uma margem de $0,2$. Em nosso caso, fizemos alguns experimentos com os valores $0,009$, $0,05$, $0,1$ e $0,2$. 
+Além dos hiper-parâmetros das redes convolucionais, a função de perda \textit{hinge} conforme descrito na Seção~\ref{sec:funcao-objetivo}, exige um parâmetro \emph{margem}. Este parâmetro define a magnitude da diferença da distância de similaridade entre os trechos de códigos anotados como corretos e os trechos que não são respostas com relação às questões. Os pesquisadores \citeonline{feng-2015} recomendaram uma margem de $0,009$, enquanto \citeonline{tan-lstm-qa} utilizaram uma margem de $0,2$. Em nosso caso, fizemos alguns experimentos com os valores $0,009$, $0,05$, $0,1$ e $0,2$. 
 
 
 \begin{table}[H]
 \centering
+\caption[Resultado da avaliação dos modelos CNN, \Gls{unif} e Embedding na amostra EVAL para diferentes margens.]{Resultado da avaliação dos modelos CNN, \Gls{unif} e Embedding na amostra EVAL para diferentes margens. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). O hiper-parâmetro \emph{m} indica a margem utilizada na função de perda \textit{hinge}. F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. As células destacadas indicam a margem na qual o modelo obteve o melhor desempenho durante a avaliação.}
 \begin{tabular}{ p{1cm} p{4cm} P{2.2cm} P{2.2cm} P{2.2cm} P{2.2cm} }
  \hline
     & & \multicolumn{4}{c}{\textbf{Resultados MRR}}\\
@@ -390,22 +431,23 @@ Além dos hiper-parâmetros das redes convolucionais, a função de perda \texti
  
 \hline
 \end{tabular}
-\caption[Resultado da avaliação dos modelos CNN, \Gls{unif} e Embedding na amostra EVAL para diferentes margens.]{Resultado da avaliação dos modelos CNN, \Gls{unif} e Embedding na amostra EVAL para diferentes margens. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). O hiper-parâmetro \emph{m} indica a margem utilizada na função de perda \textit{hinge}. F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. As células destacadas indicam a margem na qual o modelo obteve o melhor desempenho durante a avaliação.}
+\source{Elaborado pelo autor.}
 \label{table:alteracao-margem}
 \end{table}
 
 
 
-Notamos que não há um consenso sobre o valor da margem, conforme a Tabela~\ref{table:alteracao-margem}, pois cada arquitetura obteve um desempenho diferente para um valor diferente de margem. As redes convolucionais obtiveram o melhor desempenho para uma margem de valor $0,05$, exceto quando a quantidade de filtros convolucionais utilizadas é $1000$. Já a arquitetura Unif proposta por \cite{cambronero-deep-learning-code-search:2019} obteve o melhor desempenho para o valor $0,2$, enquanto a arquitetura \textit{Embedding} obteve com o valor $0,1$. Optamos por fixar estes valores específicos para cada arquitetura, definindo a margem em $0,5$ para a CNN, enquanto para Unif e \textit{Embedding} fixamos em $0,2$ e $0,1$, respectivamente. E conforme descrito na Tabela~\ref{table:alteracao-margem}, escolhemos o valor da margem baseado no valor mais alto da métrica MRR, que foi obtida através da avaliação do melhor modelo na amostra EVAL. Ver a Seção~\ref{sec:avaliacao} para mais detalhes sobre o procedimento de avaliação. 
+Notamos que não há um consenso sobre o valor da margem, conforme a Tabela~\ref{table:alteracao-margem}, pois cada arquitetura obteve um desempenho diferente para um valor diferente de margem. As redes convolucionais obtiveram o melhor desempenho para uma margem de valor $0,05$, exceto quando a quantidade de filtros convolucionais utilizadas é $1000$. Já a arquitetura Unif proposta por \citeonline{cambronero-deep-learning-code-search:2019} obteve o melhor desempenho para o valor $0,2$, enquanto a arquitetura \textit{Embedding} obteve com o valor $0,1$. Optamos por fixar estes valores específicos para cada arquitetura, definindo a margem em $0,5$ para a CNN, enquanto para Unif e \textit{Embedding} fixamos em $0,2$ e $0,1$, respectivamente. E conforme descrito na Tabela~\ref{table:alteracao-margem}, escolhemos o valor da margem baseado no valor mais alto da métrica MRR, que foi obtida através da avaliação do melhor modelo na amostra EVAL. Ver a Seção~\ref{sec:avaliacao} para mais detalhes sobre o procedimento de avaliação. 
 
 \section{Critério de seleção do modelo}
 \label{sec:ape-criterio-de-selecao-do-modelo-experimento}
 
-Ao final do treinamento, um modelo deve ser selecionado para ser utilizado na avaliação final. Um critério de seleção comumente utilizado é selecionar o modelo com o menor erro na amostra de validação. Porém, \cite{iyer-etal-2016-summarizing} e \cite{yao-2018} adotaram um outro critério, no qual, ao final de cada época, o modelo é avaliado em uma amostra anotada manualmente e o modelo que obtiver a maior média MRR é selecionado. Segundo os pesquisadores, este procedimento levaram à escolha do melhor modelo com relação a métrica MRR. Para verificar esta afirmação, avaliamos os modelos selecionados por ambos os critérios na amostra EVAL (Mais informações sobre essa amostra, ver Seção~\ref{sec:conjunto-dados-avaliacao-treinamento}). Diferentemente dos resultados apontados pelos pesquisadores, no nosso caso, não houve uma diferença significativa no desempenho entre os diferentes critérios de seleção do modelo conforme apontado na Tabela~\ref{table:escolha-melhor-modelo}. No nosso caso, optamos por manter o mesmo procedimento adotado por \cite{iyer-etal-2016-summarizing} e \cite{yao-2018}.
+Ao final do treinamento, um modelo deve ser selecionado para ser utilizado na avaliação final. Um critério de seleção comumente utilizado é selecionar o modelo com o menor erro na amostra de validação. Porém, \citeonline{iyer-etal-2016-summarizing} e \citeonline{yao-2018} adotaram um outro critério, no qual, ao final de cada época, o modelo é avaliado em uma amostra anotada manualmente e o modelo que obtiver a maior média MRR é selecionado. Segundo os pesquisadores, este procedimento levaram à escolha do melhor modelo com relação a métrica MRR. Para verificar esta afirmação, avaliamos os modelos selecionados por ambos os critérios na amostra EVAL (Mais informações sobre essa amostra, ver Seção~\ref{sec:conjunto-dados-avaliacao-treinamento}). Diferentemente dos resultados apontados pelos pesquisadores, no nosso caso, não houve uma diferença significativa no desempenho entre os diferentes critérios de seleção do modelo conforme apontado na Tabela~\ref{table:escolha-melhor-modelo}. No nosso caso, optamos por manter o mesmo procedimento adotado por \citeonline{iyer-etal-2016-summarizing} e \citeonline{yao-2018}.
 
 
 \begin{table}[H]
 \centering
+\caption[Resultado da avaliação dos modelos CNN, \Gls{unif} e Embedding na amostra EVAL para diferentes tipos de seleção do modelo.]{Resultado da avaliação dos modelos CNN, \Gls{unif} e Embedding na amostra EVAL para diferentes tipos de seleção do modelo. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). Utilizamos normalização em lote e compartilhamento de parâmetros nas redes convolucionais. Os hiper-parâmetros utilizados nas redes convolucionais foram: $K = 2$ e $m = 0,05$. Já a rede \emph{Embedding} utilizou o parâmetro $m = 0,1$. E a arquitetura \emph{Unif} utilizou o parâmetro $m = 0,2$. F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. A coluna \emph{Erro de validação} indica os resultados dos modelos que foram escolhidos com base no erro na amostra de validação. A coluna \emph{MRR} indicam os resultados dos modelos que foram escolhidos com base na métrica MRR.}
 \begin{tabular}{ p{1cm} p{4cm} P{4cm} P{4cm} }
  \hline
     & & \multicolumn{2}{c}{\textbf{Resultados MRR}}\\
@@ -428,6 +470,6 @@ Ao final do treinamento, um modelo deve ser selecionado para ser utilizado na av
  
 \hline
 \end{tabular}
-\caption[Resultado da avaliação dos modelos CNN, \Gls{unif} e Embedding na amostra EVAL para diferentes tipos de seleção do modelo.]{Resultado da avaliação dos modelos CNN, \Gls{unif} e Embedding na amostra EVAL para diferentes tipos de seleção do modelo. MRR refere-se a média do resultado do Mean Reciprocal Rank (equação~\ref{eq:mrr}). Utilizamos normalização em lote e compartilhamento de parâmetros nas redes convolucionais. Os hiper-parâmetros utilizados nas redes convolucionais foram: $K = 2$ e $m = 0,05$. Já a rede \emph{Embedding} utilizou o parâmetro $m = 0,1$. E a arquitetura \emph{Unif} utilizou o parâmetro $m = 0,2$. F indica a quantidade de filtros convolucionais utilizados durante o treinamento das redes convolucionais. A coluna \emph{Erro de validação} indica os resultados dos modelos que foram escolhidos com base no erro na amostra de validação. A coluna \emph{MRR} indicam os resultados dos modelos que foram escolhidos com base na métrica MRR.}
+\source{Elaborado pelo autor.}
 \label{table:escolha-melhor-modelo}
-\end{table}t
+\end{table}

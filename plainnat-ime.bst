@@ -132,7 +132,7 @@ FUNCTION {output.check}
 FUNCTION {fin.entry}
 { add.period$
   write$
-  "   {\scriptsize Citado na p\'{a}g.}" write$
+  " " write$
   newline$
 }
 
