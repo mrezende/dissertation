@@ -40,6 +40,12 @@
 
 \usepackage[titles]{tocloft}
 
+\setlength{\cftpartindent}{0em}
+\setlength{\cftchapindent}{0em}
+\setlength{\cftsecindent}{0em}
+\setlength{\cftsubsecindent}{0em}
+\setlength{\cftsubsubsecindent}{0em}
+
 \newlength{\mylen}
 
 \renewcommand{\cftfigpresnum}{\figurename\enspace}
@@ -537,9 +543,16 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
 % \input cap-conclusoes        % associado ao arquivo: 'cap-conclusoes.tex'
 
 % Bibliografia
+\clearpage
 \renewcommand\@biblabel[1]{}
 \renewcommand\bibname{REFERÊNCIAS}
  \doublespacing   % espa?mento duplo
+ 
+ 
+\fancyhf{}
+
+\fancyhead[LE]{}
+\fancyhead[RO]{\thepage}
 %\bibliographystyle{abnt} % cita?o bibliogr?ica textual
 \bibliography{bibliografia}  % associado ao arquivo: 'bibliografia.bib'
 
