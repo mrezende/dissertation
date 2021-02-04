@@ -9,6 +9,10 @@
 
 \documentclass[12pt,oneside,a4paper]{book} % utilizando extbook para atender ao modelo do IPT
 
+\usepackage[acronym, toc, xindy]{glossaries}
+\usepackage{hyperref}
+
+
 \usepackage{sectsty}
 \allsectionsfont{\Large\bfseries}
 
@@ -18,7 +22,7 @@
 \setmainfont{Arial} % funciona com windows/mac
 %\usepackage{polyglossia}
 %\setdefaultlanguage{brazil}
-\usepackage[alf]{abntex2cite}
+\usepackage[alf,abnt-etal-list=0]{abntex2cite}
 \usepackage[brazil]{babel}
 \usepackage{titlesec} % cabe?lhos dos t?ulos: menores e compactos
 %\usepackage[fixlanguage]{babelbib}
@@ -37,7 +41,7 @@
 \usepackage[usenames,svgnames,dvipsnames, table]{xcolor}
 \usepackage[a4paper,top=2.54cm,bottom=2.0cm,left=2.0cm,right=2.54cm]{geometry} % margens
 %\usepackage[pdftex,plainpages=false,pdfpagelabels,pagebackref,colorlinks=true,citecolor=black,linkcolor=black,urlcolor=black,filecolor=black,bookmarksopen=true]{hyperref} % links em preto
-
+\usepackage{pdfpages}
 \usepackage[titles]{tocloft}
 
 \setlength{\cftpartindent}{0em}
@@ -72,7 +76,7 @@
 \usepackage[colorinlistoftodos]{todonotes}
 
 
-\usepackage[acronym, toc, xindy]{glossaries}
+
 \usepackage{amssymb}
 \usepackage{multirow}
 \usepackage{bm}
@@ -422,7 +426,7 @@ Mestrado Engenharia de Computação\\
 
 \pagebreak
 
-
+\includepdf[pages=-]{docs/ficha-catalografica.pdf}
 
 \chapter*{\makebox[\linewidth]{DEDICATÓRIA}}
 \thispagestyle{empty}
