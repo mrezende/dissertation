@@ -44,6 +44,8 @@
 \usepackage{pdfpages}
 \usepackage[titles]{tocloft}
 
+
+
 \setlength{\cftpartindent}{0em}
 \setlength{\cftchapindent}{0em}
 \setlength{\cftsecindent}{0em}
@@ -426,6 +428,8 @@ Mestrado Engenharia de Computação\\
 
 \pagebreak
 
+%\pagenumbering{arabic}     % come?mos a numerar 
+
 \includepdf[pages=-]{docs/ficha-catalografica.pdf}
 
 \chapter*{\makebox[\linewidth]{DEDICATÓRIA}}
@@ -434,7 +438,7 @@ Mestrado Engenharia de Computação\\
     \textit{Dedico à Shyrlei e à Luzia.}
 \end{center}
 
-\pagenumbering{roman}     % come?mos a numerar 
+
 
 % ---------------------------------------------------------------------------- %
 % Agradecimentos:
@@ -489,11 +493,7 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
 
 \noindent \textbf{Keywords:} code retrieval, code search, neural network, convolutional neural network, cnn.
 
-\glstocfalse
-% ---------------------------------------------------------------------------- %
-% Sum?io
-\renewcommand\contentsname{\makebox[\linewidth]{SUMÁRIO}}
-\emptypage\tableofcontents   % imprime o sum?io
+
 
 % ---------------------------------------------------------------------------- %
 
@@ -508,10 +508,12 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
 % \clearpage
 %\glsaddall
 
-\clearpage
 
 
 
+
+% do not show up glossaries, abbreviations at toc
+\glstocfalse
 
 % ---------------------------------------------------------------------------- %
 % Listas de figuras e tabelas criadas automaticamente
@@ -528,9 +530,32 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
   \endgroup
 
 
+\makeatletter
+\let\oldcontentsline\contentsline
+\def\contentsline#1#2{%
+  \expandafter\ifx\csname l@#1\endcsname\l@chapter
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi
+  {%
+    \oldcontentsline{#1}{\MakeTextUppercase{#2}}%
+  }{%
+    \oldcontentsline{#1}{#2}%
+  }%
+}
+\makeatother
+
 % ---------------------------------------------------------------------------- %
+% Sum?io
+\renewcommand\contentsname{\makebox[\linewidth]{SUMÁRIO}}
+\emptypage\tableofcontents   % imprime o sum?io
+% ---------------------------------------------------------------------------- %
+
 % Cap?ulos do trabalho
 \mainmatter
+
+\setcounter{page}{13}
 
 % cabe?lho para as p?inas de todos os cap?ulos
 %\fancyhead[RE,LO]{\thesection}
@@ -548,7 +573,7 @@ Developers search daily for code using general-purpose search engines (e.g. Goog
 
 % Bibliografia
 \clearpage
-\renewcommand\@biblabel[1]{}
+%\renewcommand\@biblabel[1]{}
 \renewcommand\bibname{REFERÊNCIAS}
  \doublespacing   % espa?mento duplo
  
